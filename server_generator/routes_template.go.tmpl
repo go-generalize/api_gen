@@ -1,0 +1,44 @@
+// THIS FILE IS A GENERATED CODE. DO NOT EDIT
+package {{ .Package }}
+
+import (
+	"github.com/labstack/echo/v4"
+	"net/http"
+)
+
+type Routes struct {
+	router *echo.Group
+}
+
+func NewRoutes (router *echo.Group) *Routes {
+	r := &Routes{
+		router: router,
+	}
+	{{ range .Controllers }}router.{{ .HTTPMethod }}("{{ .Endpoint }}", r.{{ .HandlerName }}())
+	{{ end }}
+	return r
+}
+{{ range .Controllers }}
+func (r *Routes) {{ .HandlerName }}() echo.HandlerFunc {
+	i := New{{ .ControllerName }}()
+	return func(c echo.Context) error {
+		req := new({{ .RequestStructName }})
+		if err := c.Bind(req); err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":	http.StatusBadRequest,
+				"message": "invalid request.",
+			})
+		}
+		res, err := i.{{ .HandlerName }}(c, req)
+		if err != nil {
+		   return err
+		}
+		return c.JSON(http.StatusOK, res)
+	}
+}
+{{ end }}
+{{ range .Controllers }}
+type I{{ .ControllerName }} interface {
+	{{ .HandlerName }}(c echo.Context, req *{{ .RequestStructName }}) (res *{{ .ResponseStructName }}, err error)
+}
+{{ end }}

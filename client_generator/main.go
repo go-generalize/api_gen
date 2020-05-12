@@ -1,0 +1,258 @@
+package main
+
+import (
+	"fmt"
+	"go/ast"
+	"go/parser"
+	"go/token"
+	"io/ioutil"
+	"log"
+	"os"
+	"os/exec"
+	"path"
+	"path/filepath"
+	"strings"
+
+	"github.com/iancoleman/strcase"
+)
+
+var supportedMethods = []string{
+	"get",
+	"post",
+	"put",
+	"delete",
+	"patch",
+}
+
+type endpoint struct {
+	methodEndpoint string
+	path           string
+	rawName        string
+
+	method            string
+	request, response bool
+}
+
+type pkgParser struct {
+	endpoints map[string]*endpoint
+
+	structs []string
+}
+
+func newPkgParser() *pkgParser {
+	return &pkgParser{
+		endpoints: map[string]*endpoint{},
+	}
+}
+
+func (p *pkgParser) parseFile(pathName string, fset *token.FileSet, file *ast.File) {
+	for _, decl := range file.Decls {
+		genDecl, ok := decl.(*ast.GenDecl)
+		if !ok {
+			continue
+		}
+		if genDecl.Tok != token.TYPE {
+			continue
+		}
+
+		for _, spec := range genDecl.Specs {
+			// 型定義
+			typeSpec, ok := spec.(*ast.TypeSpec)
+			if !ok {
+				continue
+			}
+			name := typeSpec.Name.Name
+
+			lowered := strings.ToLower(name)
+			method := ""
+			for i := range supportedMethods {
+				if strings.HasPrefix(lowered, supportedMethods[i]) {
+					method = supportedMethods[i]
+
+					break
+				}
+			}
+
+			if len(method) == 0 {
+				continue
+			}
+
+			var me string
+			if strings.HasSuffix(name, "Request") {
+				me = strings.TrimSuffix(name, "Request")
+			} else if strings.HasSuffix(name, "Response") {
+				me = strings.TrimSuffix(name, "Response")
+			} else {
+				continue
+			}
+
+			if _, ok := p.endpoints[me]; !ok {
+				p.endpoints[me] = &endpoint{}
+			}
+
+			p.endpoints[me].method = method
+			p.endpoints[me].methodEndpoint = me
+
+			if strings.HasSuffix(name, "Request") {
+				p.endpoints[me].request = true
+
+				p.endpoints[me].rawName = strings.TrimSuffix(name, "Request")
+				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(strings.TrimSuffix(name[len(method):], "Request")))
+			} else {
+				p.endpoints[me].response = true
+
+				p.endpoints[me].rawName = strings.TrimSuffix(name, "Response")
+				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(strings.TrimSuffix(name[len(method):], "Response")))
+			}
+
+			p.structs = append(p.structs, name)
+		}
+	}
+}
+
+func (p *pkgParser) parsePackage(pathName string, fset *token.FileSet, pkg *ast.Package) {
+	for name, file := range pkg.Files {
+		stem := strings.TrimSuffix(filepath.Base(name), filepath.Ext(name))
+
+		if strings.HasSuffix(stem, "_test") {
+			continue
+		}
+
+		p.parseFile(pathName, fset, file)
+	}
+}
+
+func (p *pkgParser) parseDir(pathName, dir string) {
+	var fset = token.NewFileSet()
+
+	pkgs, err := parser.ParseDir(fset, dir, nil, parser.AllErrors)
+
+	if err != nil {
+		log.Fatalf("failed to parse dir: %+v", err)
+	}
+
+	for name, v := range pkgs {
+		if strings.HasSuffix(name, "_test") {
+			continue
+		}
+
+		p.parsePackage(pathName, fset, v)
+	}
+}
+
+func walk(p, url string, generator *clientGenerator, parent *clientType) {
+	parser := newPkgParser()
+
+	parser.parseDir(url, p)
+
+	for k, v := range parser.endpoints {
+		fmt.Println(k, *v)
+	}
+
+	parent.Name = strcase.ToCamel(strings.ReplaceAll(url, "/", "-")) + "Client"
+
+	for i := range parser.structs {
+		generator.Imports = append(
+			generator.Imports,
+			importType{
+				Path:   "./classes" + url + "/" + parser.structs[i],
+				Name:   parser.structs[i],
+				NameAs: strcase.ToCamel(strings.ReplaceAll(url+"/"+parser.structs[i], "/", "-")),
+			},
+		)
+	}
+
+	for _, ep := range parser.endpoints {
+		if !(ep.request && ep.response) {
+			continue
+		}
+
+		replaced := strcase.ToCamel(strings.ReplaceAll(url+"/"+ep.rawName, "/", "-"))
+
+		parent.Methods = append(
+			parent.Methods,
+			methodType{
+				Name:         strcase.ToLowerCamel(ep.methodEndpoint),
+				RequestType:  replaced + "Request",
+				ResponseType: replaced + "Response",
+				Method:       strings.ToUpper(ep.method),
+				Endpoint:     ep.path,
+			},
+		)
+	}
+
+	goPkg, err := GetPackage(p)
+
+	if err != nil {
+		log.Fatalf("failed to get package: %+v", err)
+	}
+
+	if len(parser.structs) != 0 {
+		if err = os.MkdirAll("./classes/"+url, 0774); err != nil {
+			log.Fatalf("failed to MkdirAll: %+v", err)
+		}
+	}
+
+	var b []byte
+	for i := range parser.structs {
+		b, err = exec.Command(
+			"struct2ts",
+			"-o",
+			"./classes/"+url+"/"+parser.structs[i]+".ts",
+			goPkg+"."+parser.structs[i],
+		).CombinedOutput()
+
+		if err != nil {
+			log.Fatalf("struct2ts failed for %s(out: %s): %+v", parser.structs[i], string(b), err)
+		}
+	}
+
+	fifos, err := ioutil.ReadDir(p)
+
+	if err != nil {
+		log.Fatalf("failed to list files: %+v", err)
+	}
+
+	for i := range fifos {
+		if !fifos[i].IsDir() {
+			continue
+		}
+
+		client := clientType{}
+
+		nextURL := path.Join(url, fifos[i].Name())
+
+		parent.Children = append(
+			parent.Children,
+			childrenType{
+				Name:      fifos[i].Name(),
+				ClassName: strcase.ToCamel(strings.ReplaceAll(nextURL, "/", "-")) + "Client",
+			},
+		)
+
+		walk(filepath.Join(p, fifos[i].Name()), nextURL, generator, &client)
+
+		generator.ChildrenClients = append(generator.ChildrenClients, client)
+	}
+}
+
+func main() {
+	l := len(os.Args)
+	if l < 2 {
+		fmt.Println("You have to specify the path of target go file")
+		os.Exit(1)
+	}
+
+	if err := os.RemoveAll("./classes"); err != nil {
+		log.Fatalf("failed to run RemoveAll: %+v", err)
+	}
+	if err := os.MkdirAll("./classes", 0774); err != nil {
+		log.Fatalf("failed to run MkdirAll: %+v", err)
+	}
+
+	generator := &clientGenerator{}
+
+	walk(os.Args[1], "/", generator, &generator.clientType)
+
+	generator.generate()
+}

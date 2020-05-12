@@ -1,0 +1,64 @@
+package {{ .PackageName }}
+
+import ({{ range $i, $v := .Bootstraps }}{{ if ne .PackagePath "" }}
+	"log"
+	p{{ $i }} "{{ $v.PackagePath }}"{{ end }}{{ end }}
+	"github.com/labstack/echo/v4"
+)
+
+type MiddlewareList []*MiddlewareSet
+type MiddlewareMap map[string][]echo.MiddlewareFunc
+
+type MiddlewareSet struct {
+	Path           string
+	MiddlewareFunc []echo.MiddlewareFunc
+}
+
+func (m MiddlewareList) ToMap() MiddlewareMap {
+	mf := make(map[string][]echo.MiddlewareFunc)
+	for _, middleware := range m {
+		mf[middleware.Path] = middleware.MiddlewareFunc
+	}
+	return mf
+}
+
+func Bootstrap(e *echo.Echo, middlewareList MiddlewareList) {
+	middleware := middlewareList.ToMap()
+
+	// error handling
+	e.Use(func(before echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) (err error) {
+			defer func() {
+				recoverErr := recover()
+				if recoverErr == nil {
+					return
+				}
+				if httpErr, ok := recoverErr.(*echo.HTTPError); ok {
+					err = c.JSON(httpErr.Code, httpErr.Message)
+				}
+				log.Printf("panic: %#v", recoverErr)
+				err = c.JSON(http.StatusInternalServerError, map[string]interface{}{
+					"code":    http.StatusInternalServerError,
+					"message": "internal server error.",
+				})
+			}()
+
+			err = before(c)
+			return err
+		}
+	})
+
+{{ range $i, $v := .Bootstraps }}
+
+	g{{ $i }} := {{ if eq $v.ParentIndex -1 }}e{{ else }}g{{ $v.ParentIndex }}{{ end }}.Group("{{ $v.Endpoint }}")
+	setMiddleware(g{{ $i }}, "{{ $v.EndpointPath }}", middleware)
+	{{ $c := .Controller }}{{ if eq $v.Endpoint "" }}NewRoutes(g{{ $i }}){{ else }}p{{ $i }}.NewRoutes(g{{ $i }}){{ end }}{{ end }}
+}
+
+func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {
+	if ms, ok := list[path]; ok {
+		for _, m := range ms {
+			group.Use(m)
+		}
+	}
+}

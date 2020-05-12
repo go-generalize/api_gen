@@ -1,0 +1,46 @@
+name: Go
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis
+        ports:
+        - 6379:6379
+        options: --entrypoint redis-server
+      datastore:
+        image: google/cloud-sdk
+        ports:
+          - 8000:8000
+        options: -ti
+
+    env:
+      GO111MODULE: on
+      DOCKER_BUILDKIT: 1
+      REDIS_ADDR: 127.0.0.1:6379
+      DATASTORE_EMULATOR_HOST: 127.0.0.1:8000
+
+    steps:
+    - name: Start datastore emulator
+      run: docker exec -d $(docker ps -f "ancestor=google/cloud-sdk" -q) gcloud beta emulators datastore start --project=pname --host-port 0.0.0.0:8000 --no-store-on-disk
+
+    - name: Set up Go 1.12
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.12
+      id: go
+    
+    - uses: actions/checkout@v2
+
+    - uses: actions/cache@v1
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Run tests
+      run: |
+        make test TEST_OPT='-tags="redis emulator"'

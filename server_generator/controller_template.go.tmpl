@@ -1,0 +1,21 @@
+package {{ .Package }}
+
+import (
+	"github.com/labstack/echo/v4"
+)
+
+type {{ .ControllerName }} struct {
+}
+
+func New{{ .ControllerName }}() *{{ .ControllerName }} {
+	{{ .ControllerNameInitial }} := &{{ .ControllerName }}{}
+	return {{ .ControllerNameInitial }}
+}
+
+
+func ({{ .ControllerNameInitial }} *{{ .ControllerName }}) {{ .HandlerName }}(c echo.Context,
+	req *{{ .RequestStructName }}) (
+	res *{{ .ResponseStructName }},
+	err error) {
+	panic("require implements.")
+}
