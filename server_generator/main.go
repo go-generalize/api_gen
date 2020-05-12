@@ -9,7 +9,7 @@ import (
 	"strings"
 	"text/template"
 
-	_ "github.com/gcp-kit/api_gen/server_generator/statik"
+	_ "github.com/go-generalize/api_gen/server_generator/statik"
 	"github.com/iancoleman/strcase"
 	"github.com/rakyll/statik/fs"
 )

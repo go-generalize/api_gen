@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/gcp-kit/api_gen/server_generator/sample"
+	"github.com/go-generalize/api_gen/server_generator/sample"
 	"github.com/labstack/echo/v4"
 )
 

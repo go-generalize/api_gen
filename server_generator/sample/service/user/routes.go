@@ -15,28 +15,10 @@ func NewRoutes(router *echo.Group) *Routes {
 	r := &Routes{
 		router: router,
 	}
-	router.POST("update_user_password", r.PostUpdateUserPassword())
 	router.POST("update_user_name", r.PostUpdateUserName())
+	router.POST("update_user_password", r.PostUpdateUserPassword())
 
 	return r
-}
-
-func (r *Routes) PostUpdateUserPassword() echo.HandlerFunc {
-	i := NewPostUpdateUserPasswordController()
-	return func(c echo.Context) error {
-		req := new(PostUpdateUserPasswordRequest)
-		if err := c.Bind(req); err != nil {
-			return c.JSON(http.StatusBadRequest, map[string]interface{}{
-				"code":    http.StatusBadRequest,
-				"message": "invalid request.",
-			})
-		}
-		res, err := i.PostUpdateUserPassword(c, req)
-		if err != nil {
-			return err
-		}
-		return c.JSON(http.StatusOK, res)
-	}
 }
 
 func (r *Routes) PostUpdateUserName() echo.HandlerFunc {
@@ -57,10 +39,28 @@ func (r *Routes) PostUpdateUserName() echo.HandlerFunc {
 	}
 }
 
-type IPostUpdateUserPasswordController interface {
-	PostUpdateUserPassword(c echo.Context, req *PostUpdateUserPasswordRequest) (res *PostUpdateUserPasswordResponse, err error)
+func (r *Routes) PostUpdateUserPassword() echo.HandlerFunc {
+	i := NewPostUpdateUserPasswordController()
+	return func(c echo.Context) error {
+		req := new(PostUpdateUserPasswordRequest)
+		if err := c.Bind(req); err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    http.StatusBadRequest,
+				"message": "invalid request.",
+			})
+		}
+		res, err := i.PostUpdateUserPassword(c, req)
+		if err != nil {
+			return err
+		}
+		return c.JSON(http.StatusOK, res)
+	}
 }
 
 type IPostUpdateUserNameController interface {
 	PostUpdateUserName(c echo.Context, req *PostUpdateUserNameRequest) (res *PostUpdateUserNameResponse, err error)
+}
+
+type IPostUpdateUserPasswordController interface {
+	PostUpdateUserPassword(c echo.Context, req *PostUpdateUserPasswordRequest) (res *PostUpdateUserPasswordResponse, err error)
 }

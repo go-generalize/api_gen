@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	p1 "github.com/gcp-kit/api_gen/server_generator/sample/service"
-	p2 "github.com/gcp-kit/api_gen/server_generator/sample/service/user"
-	p3 "github.com/gcp-kit/api_gen/server_generator/sample/service/user2"
+	p1 "github.com/go-generalize/api_gen/server_generator/sample/service"
+	p2 "github.com/go-generalize/api_gen/server_generator/sample/service/user"
+	p3 "github.com/go-generalize/api_gen/server_generator/sample/service/user2"
 	"github.com/labstack/echo/v4"
 )
 

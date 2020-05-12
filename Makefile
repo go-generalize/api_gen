@@ -1,6 +1,3 @@
-PORT=8080
-TEST_OPT=""
-
 .PHONY: dev
 dev: export LOCAL_ENV = 1
 dev:

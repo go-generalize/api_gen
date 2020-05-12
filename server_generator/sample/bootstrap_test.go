@@ -12,7 +12,7 @@ import (
 
 	"github.com/labstack/echo/v4/middleware"
 
-	"github.com/gcp-kit/api_gen/server_generator/sample/service"
+	"github.com/go-generalize/api_gen/server_generator/sample/service"
 
 	"github.com/labstack/echo/v4"
 )
