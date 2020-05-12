@@ -1,4 +1,4 @@
-module github.com/gcp-kit/api_gen
+module github.com/go-generalize/api_gen
 
 go 1.14
 
