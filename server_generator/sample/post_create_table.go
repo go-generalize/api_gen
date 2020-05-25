@@ -1,6 +1,6 @@
 package sample
 
-import "github.com/gcp-kit/api_gen/server_generator/sample/service/table"
+import "github.com/go-generalize/api_gen/server_generator/sample/service/table"
 
 type PostCreateTableRequest struct {
 	ID   string
