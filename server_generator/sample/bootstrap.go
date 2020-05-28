@@ -1,6 +1,7 @@
 package sample
 
 import (
+	"context"
 	"log"
 	"net/http"
 
@@ -26,7 +27,7 @@ func (m MiddlewareList) ToMap() MiddlewareMap {
 	return mf
 }
 
-func Bootstrap(e *echo.Echo, middlewareList MiddlewareList) {
+func Bootstrap(ctx context.Context, e *echo.Echo, middlewareList MiddlewareList) {
 	middleware := middlewareList.ToMap()
 
 	// error handling
@@ -54,19 +55,19 @@ func Bootstrap(e *echo.Echo, middlewareList MiddlewareList) {
 
 	g0 := e.Group("")
 	setMiddleware(g0, "/", middleware)
-	NewRoutes(g0)
+	NewRoutes(ctx, g0)
 
 	g1 := g0.Group("service/")
 	setMiddleware(g1, "/service/", middleware)
-	p1.NewRoutes(g1)
+	p1.NewRoutes(ctx, g1)
 
 	g2 := g1.Group("user/")
 	setMiddleware(g2, "/service/user/", middleware)
-	p2.NewRoutes(g2)
+	p2.NewRoutes(ctx, g2)
 
 	g3 := g1.Group("user2/")
 	setMiddleware(g3, "/service/user2/", middleware)
-	p3.NewRoutes(g3)
+	p3.NewRoutes(ctx, g3)
 }
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {

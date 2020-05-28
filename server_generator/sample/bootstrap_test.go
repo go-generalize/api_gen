@@ -2,6 +2,7 @@ package sample
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -10,11 +11,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/labstack/echo/v4/middleware"
-
 	"github.com/go-generalize/api_gen/server_generator/sample/service"
-
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 const PORT = "7899"
@@ -65,7 +64,13 @@ func TestBootstrap(t *testing.T) {
 			},
 		},
 	})
-	Bootstrap(e, m)
+
+	const testKeyValue = "hogehoge"
+
+	ctx := context.Background()
+	ctx = context.WithValue(ctx, testKey, testKeyValue)
+
+	Bootstrap(ctx, e, m)
 
 	go func() {
 		if err := e.Start(":" + PORT); err != nil {
@@ -101,8 +106,8 @@ func TestBootstrap(t *testing.T) {
 		if res.ID != 500 {
 			t.Fatalf("unexpected ID: %d (expected:%d)", res.ID, 500)
 		}
-		if res.Body != "hogehoge" {
-			t.Fatalf("unexpected Body: %s (expected:%s)", res.Body, "hogehoge")
+		if res.Body != testKeyValue {
+			t.Fatalf("unexpected Body: %s (expected:%s)", res.Body, testKeyValue)
 		}
 		if len(res.Group) != 3 {
 			t.Fatalf("unexpected Group length: %d (expected:%d)", len(res.Group), 3)
@@ -142,6 +147,36 @@ func TestBootstrap(t *testing.T) {
 		}
 		if res.CreatedType != CreatedTypeMember {
 			t.Fatalf("unexpected CreatedType: %v (expected:%v)", res.CreatedType, CreatedTypeMember)
+		}
+	})
+
+	t.Run("testBootstrap context test request", func(t *testing.T) {
+		req := map[string]interface{}{
+			"id":       "hoge",
+			"password": "passwd",
+			"gender":   2,
+		}
+
+		resp, err := httpPOST("/create_table", req)
+		if err != nil {
+			t.Fatalf("server http get error: %s", err.Error())
+		}
+
+		defer resp.Body.Close()
+
+		resByte, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			t.Fatalf("server http response read error: %s", err.Error())
+		}
+
+		res := new(PostCreateTableResponse)
+		err = json.Unmarshal(resByte, res)
+		if err != nil {
+			t.Fatalf("server http get response parse error: %s", err.Error())
+		}
+
+		if res.ID != "hogehoge" {
+			t.Fatalf("unexpected ID: %s (expected:%s)", res.ID, "hogehoge")
 		}
 	})
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -9,8 +10,9 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	e := echo.New()
-	sample.Bootstrap(e, sample.MiddlewareList{
+	sample.Bootstrap(ctx, e, sample.MiddlewareList{
 		{
 			Path: "/service/user2/",
 			MiddlewareFunc: []echo.MiddlewareFunc{

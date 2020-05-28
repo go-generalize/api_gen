@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"reflect"
 	"strings"
 )
 
@@ -37,12 +39,47 @@ func findStructPairList(path string) (map[string]*PackageStructPair, error) {
 		switch structMode {
 		case StructModeRequest:
 			structPair[controllerName].Request = s
+
+			if strings.HasPrefix(strings.ToLower(controllerName), "get") {
+				if err = validateGetRequestTags(fset, s.StructObject); err != nil {
+					return nil, err
+				}
+			}
 		case StructModeResponse:
 			structPair[controllerName].Response = s
 		}
 	}
 
 	return structPair, err
+}
+
+func validateGetRequestTags(fset *token.FileSet, structType *ast.StructType) error {
+	fieldList := structType.Fields.List
+
+	for i := range fieldList {
+		if fieldList[i].Tag == nil {
+			continue
+		}
+
+		tags := reflect.StructTag(strings.Trim(fieldList[i].Tag.Value, "`"))
+
+		jsonTag, ok := tags.Lookup("json")
+
+		if !ok {
+			continue
+		}
+
+		queryTag, ok := tags.Lookup("query")
+
+		if !ok || jsonTag != queryTag {
+			return fmt.Errorf(
+				"%s: GETのRequest structはjsonタグをqueryタグに同じ値を指定する必要があります",
+				fset.Position(fieldList[i].Tag.Pos()).String(),
+			)
+		}
+	}
+
+	return nil
 }
 
 func findStructList(pkgs map[string]*ast.Package) []*PackageStruct {
