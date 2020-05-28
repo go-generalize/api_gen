@@ -1,6 +1,8 @@
 package service
 
 import (
+	"context"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -12,7 +14,8 @@ func NewGetArticleController() *GetArticleController {
 	return g
 }
 
-func (g *GetArticleController) GetArticle(c echo.Context,
+func (g *GetArticleController) GetArticle(ctx context.Context,
+	c echo.Context,
 	req *GetArticleRequest) (
 	res *GetArticleResponse,
 	err error) {

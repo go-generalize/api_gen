@@ -2,6 +2,7 @@
 package service
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -11,16 +12,16 @@ type Routes struct {
 	router *echo.Group
 }
 
-func NewRoutes(router *echo.Group) *Routes {
+func NewRoutes(ctx context.Context, router *echo.Group) *Routes {
 	r := &Routes{
 		router: router,
 	}
-	router.GET("article", r.GetArticle())
+	router.GET("article", r.GetArticle(ctx))
 
 	return r
 }
 
-func (r *Routes) GetArticle() echo.HandlerFunc {
+func (r *Routes) GetArticle(ctx context.Context) echo.HandlerFunc {
 	i := NewGetArticleController()
 	return func(c echo.Context) error {
 		req := new(GetArticleRequest)
@@ -30,7 +31,7 @@ func (r *Routes) GetArticle() echo.HandlerFunc {
 				"message": "invalid request.",
 			})
 		}
-		res, err := i.GetArticle(c, req)
+		res, err := i.GetArticle(ctx, c, req)
 		if err != nil {
 			return err
 		}

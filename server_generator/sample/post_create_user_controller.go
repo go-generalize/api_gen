@@ -1,6 +1,7 @@
 package sample
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/labstack/echo/v4"
@@ -14,7 +15,8 @@ func NewPostCreateUserController() *PostCreateUserController {
 	return p
 }
 
-func (p *PostCreateUserController) PostCreateUser(c echo.Context,
+func (p *PostCreateUserController) PostCreateUser(ctx context.Context,
+	c echo.Context,
 	req *PostCreateUserRequest) (
 	res *PostCreateUserResponse,
 	err error) {

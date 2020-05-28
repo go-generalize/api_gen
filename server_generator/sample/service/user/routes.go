@@ -2,6 +2,7 @@
 package user
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -11,17 +12,17 @@ type Routes struct {
 	router *echo.Group
 }
 
-func NewRoutes(router *echo.Group) *Routes {
+func NewRoutes(ctx context.Context, router *echo.Group) *Routes {
 	r := &Routes{
 		router: router,
 	}
-	router.POST("update_user_name", r.PostUpdateUserName())
-	router.POST("update_user_password", r.PostUpdateUserPassword())
+	router.POST("update_user_name", r.PostUpdateUserName(ctx))
+	router.POST("update_user_password", r.PostUpdateUserPassword(ctx))
 
 	return r
 }
 
-func (r *Routes) PostUpdateUserName() echo.HandlerFunc {
+func (r *Routes) PostUpdateUserName(ctx context.Context) echo.HandlerFunc {
 	i := NewPostUpdateUserNameController()
 	return func(c echo.Context) error {
 		req := new(PostUpdateUserNameRequest)
@@ -31,7 +32,7 @@ func (r *Routes) PostUpdateUserName() echo.HandlerFunc {
 				"message": "invalid request.",
 			})
 		}
-		res, err := i.PostUpdateUserName(c, req)
+		res, err := i.PostUpdateUserName(ctx, c, req)
 		if err != nil {
 			return err
 		}
@@ -39,7 +40,7 @@ func (r *Routes) PostUpdateUserName() echo.HandlerFunc {
 	}
 }
 
-func (r *Routes) PostUpdateUserPassword() echo.HandlerFunc {
+func (r *Routes) PostUpdateUserPassword(ctx context.Context) echo.HandlerFunc {
 	i := NewPostUpdateUserPasswordController()
 	return func(c echo.Context) error {
 		req := new(PostUpdateUserPasswordRequest)
@@ -49,7 +50,7 @@ func (r *Routes) PostUpdateUserPassword() echo.HandlerFunc {
 				"message": "invalid request.",
 			})
 		}
-		res, err := i.PostUpdateUserPassword(c, req)
+		res, err := i.PostUpdateUserPassword(ctx, c, req)
 		if err != nil {
 			return err
 		}

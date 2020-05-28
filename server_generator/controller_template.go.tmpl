@@ -1,6 +1,8 @@
 package {{ .Package }}
 
 import (
+	"context"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -13,7 +15,8 @@ func New{{ .ControllerName }}() *{{ .ControllerName }} {
 }
 
 
-func ({{ .ControllerNameInitial }} *{{ .ControllerName }}) {{ .HandlerName }}(c echo.Context,
+func ({{ .ControllerNameInitial }} *{{ .ControllerName }}) {{ .HandlerName }}(ctx context.Context,
+	c echo.Context,
 	req *{{ .RequestStructName }}) (
 	res *{{ .ResponseStructName }},
 	err error) {

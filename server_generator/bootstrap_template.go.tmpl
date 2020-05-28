@@ -1,6 +1,7 @@
 package {{ .PackageName }}
 
 import ({{ range $i, $v := .Bootstraps }}{{ if ne .PackagePath "" }}
+	"context"
 	"log"
 	p{{ $i }} "{{ $v.PackagePath }}"{{ end }}{{ end }}
 	"github.com/labstack/echo/v4"
@@ -22,7 +23,7 @@ func (m MiddlewareList) ToMap() MiddlewareMap {
 	return mf
 }
 
-func Bootstrap(e *echo.Echo, middlewareList MiddlewareList) {
+func Bootstrap(ctx context.Context, e *echo.Echo, middlewareList MiddlewareList) {
 	middleware := middlewareList.ToMap()
 
 	// error handling
@@ -52,7 +53,7 @@ func Bootstrap(e *echo.Echo, middlewareList MiddlewareList) {
 
 	g{{ $i }} := {{ if eq $v.ParentIndex -1 }}e{{ else }}g{{ $v.ParentIndex }}{{ end }}.Group("{{ $v.Endpoint }}")
 	setMiddleware(g{{ $i }}, "{{ $v.EndpointPath }}", middleware)
-	{{ $c := .Controller }}{{ if eq $v.Endpoint "" }}NewRoutes(g{{ $i }}){{ else }}p{{ $i }}.NewRoutes(g{{ $i }}){{ end }}{{ end }}
+	{{ $c := .Controller }}{{ if eq $v.Endpoint "" }}NewRoutes(ctx, g{{ $i }}){{ else }}p{{ $i }}.NewRoutes(ctx, g{{ $i }}){{ end }}{{ end }}
 }
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {

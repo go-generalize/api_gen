@@ -1,6 +1,8 @@
 package user
 
 import (
+	"context"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -12,7 +14,8 @@ func NewPostUpdateUserPasswordController() *PostUpdateUserPasswordController {
 	return p
 }
 
-func (p *PostUpdateUserPasswordController) PostUpdateUserPassword(c echo.Context,
+func (p *PostUpdateUserPasswordController) PostUpdateUserPassword(ctx context.Context,
+	c echo.Context,
 	req *PostUpdateUserPasswordRequest) (
 	res *PostUpdateUserPasswordResponse,
 	err error) {
