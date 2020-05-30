@@ -85,7 +85,7 @@ func validateGetRequestTags(fset *token.FileSet, structType *ast.StructType) err
 
 var (
 	epMap    = make(map[string]string)
-	assigned = regexp.MustCompile(`//\s(.+)endpoint"(.+)"$`)
+	assigned = regexp.MustCompile(`//\s(.+)ep="(.+)"$`)
 )
 
 func findCommentList(commentGroup *ast.CommentGroup) {
