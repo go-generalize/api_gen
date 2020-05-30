@@ -1,7 +1,8 @@
 package sample
 
+// PostCreateUserRequest Description endpoint"user/:userID/create"
 type PostCreateUserRequest struct {
-	ID       string
+	ID       string `json:"userID" param:"userID"`
 	Password string
 	Gender   int
 }
