@@ -1,6 +1,6 @@
 package sample
 
-// PostCreateUserRequest Description endpoint"create_user/:id"
+// PostCreateUserRequest Description ep="create_user/:id"
 type PostCreateUserRequest struct {
 	ID       string `param:"id"`
 	Password string
