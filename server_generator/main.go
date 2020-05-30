@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"text/template"
 
@@ -209,6 +210,10 @@ func parsePackages(path string) ([]*ControllerTemplate, error) {
 		if len(cs) > 0 {
 			packageName = cs[0].Package
 		}
+
+		sort.Slice(cs, func(i, j int) bool {
+			return cs[i].Endpoint < cs[j].Endpoint
+		})
 
 		controllers = append(controllers, cs...)
 
