@@ -214,10 +214,12 @@ func parsePackages(path string) ([]*ControllerTemplate, error) {
 		}
 
 		sort.Slice(cs, func(i, j int) bool {
+			// nolint:scopelint
 			return cs[i].Endpoint < cs[j].Endpoint
 		})
 
 		sort.SliceStable(cs, func(i, j int) bool {
+			// nolint:scopelint
 			return cs[i].HTTPMethod < cs[j].HTTPMethod
 		})
 
