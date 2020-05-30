@@ -153,7 +153,9 @@ func parsePackages(path string) ([]*ControllerTemplate, error) {
 			continue
 		}
 
-		lowerStructName := strings.ToLower(req.StructName)
+		structName := req.StructName
+
+		lowerStructName := strings.ToLower(structName)
 
 		httpMethod := ""
 		for _, m := range supportHTTPMethod {
@@ -173,6 +175,10 @@ func parsePackages(path string) ([]*ControllerTemplate, error) {
 		}
 
 		endpoint := string([]rune(cn)[len(httpMethod):])
+		if ep, ok := epMap[structName]; ok && ep != "" {
+			endpoint = ep
+		}
+
 		ct := &ControllerTemplate{
 			Package:               req.PackageName,
 			ControllerName:        fmt.Sprintf("%sController", cn),
