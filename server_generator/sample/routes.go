@@ -16,28 +16,10 @@ func NewRoutes(ctx context.Context, router *echo.Group) *Routes {
 	r := &Routes{
 		router: router,
 	}
-	router.POST("create_user/:id", r.PostCreateUser(ctx))
 	router.POST("create_table", r.PostCreateTable(ctx))
+	router.POST("create_user/:id", r.PostCreateUser(ctx))
 
 	return r
-}
-
-func (r *Routes) PostCreateUser(ctx context.Context) echo.HandlerFunc {
-	i := NewPostCreateUserController()
-	return func(c echo.Context) error {
-		req := new(PostCreateUserRequest)
-		if err := c.Bind(req); err != nil {
-			return c.JSON(http.StatusBadRequest, map[string]interface{}{
-				"code":    http.StatusBadRequest,
-				"message": "invalid request.",
-			})
-		}
-		res, err := i.PostCreateUser(ctx, c, req)
-		if err != nil {
-			return err
-		}
-		return c.JSON(http.StatusOK, res)
-	}
 }
 
 func (r *Routes) PostCreateTable(ctx context.Context) echo.HandlerFunc {
@@ -58,10 +40,28 @@ func (r *Routes) PostCreateTable(ctx context.Context) echo.HandlerFunc {
 	}
 }
 
-type IPostCreateUserController interface {
-	PostCreateUser(c echo.Context, req *PostCreateUserRequest) (res *PostCreateUserResponse, err error)
+func (r *Routes) PostCreateUser(ctx context.Context) echo.HandlerFunc {
+	i := NewPostCreateUserController()
+	return func(c echo.Context) error {
+		req := new(PostCreateUserRequest)
+		if err := c.Bind(req); err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    http.StatusBadRequest,
+				"message": "invalid request.",
+			})
+		}
+		res, err := i.PostCreateUser(ctx, c, req)
+		if err != nil {
+			return err
+		}
+		return c.JSON(http.StatusOK, res)
+	}
 }
 
 type IPostCreateTableController interface {
 	PostCreateTable(c echo.Context, req *PostCreateTableRequest) (res *PostCreateTableResponse, err error)
+}
+
+type IPostCreateUserController interface {
+	PostCreateUser(c echo.Context, req *PostCreateUserRequest) (res *PostCreateUserResponse, err error)
 }
