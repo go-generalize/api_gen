@@ -182,6 +182,8 @@ func parsePackages(path string) ([]*ControllerTemplate, error) {
 		endpoint := string([]rune(cn)[len(httpMethod):])
 		if ep, ok := epMap[structName]; ok && ep != "" {
 			endpoint = ep
+		} else {
+			endpoint = strcase.ToSnake(endpoint)
 		}
 
 		ct := &ControllerTemplate{
@@ -189,7 +191,7 @@ func parsePackages(path string) ([]*ControllerTemplate, error) {
 			ControllerName:        fmt.Sprintf("%sController", cn),
 			ControllerNameInitial: strings.ToLower(string([]rune(cn)[0])),
 			HandlerName:           cn,
-			Endpoint:              strcase.ToSnake(endpoint),
+			Endpoint:              endpoint,
 			HTTPMethod:            strings.ToUpper(httpMethod),
 			RequestStructName:     req.StructName,
 			ResponseStructName:    res.StructName,
