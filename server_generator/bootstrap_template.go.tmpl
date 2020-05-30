@@ -1,8 +1,10 @@
 package {{ .PackageName }}
 
-import ({{ range $i, $v := .Bootstraps }}{{ if ne .PackagePath "" }}
+import (
 	"context"
 	"log"
+	"net/http"
+{{ range $i, $v := .Bootstraps }}{{ if ne .PackagePath "" }}
 	p{{ $i }} "{{ $v.PackagePath }}"{{ end }}{{ end }}
 	"github.com/labstack/echo/v4"
 )

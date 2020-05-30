@@ -15,6 +15,7 @@ func NewRoutes (ctx context.Context, router *echo.Group) *Routes {
 	r := &Routes{
 		router: router,
 	}
+
 	{{ range .Controllers }}router.{{ .HTTPMethod }}("{{ .Endpoint }}", r.{{ .HandlerName }}(ctx))
 	{{ end }}
 	return r
