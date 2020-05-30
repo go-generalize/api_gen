@@ -215,6 +215,10 @@ func parsePackages(path string) ([]*ControllerTemplate, error) {
 			return cs[i].Endpoint < cs[j].Endpoint
 		})
 
+		sort.SliceStable(cs, func(i, j int) bool {
+			return cs[i].HTTPMethod < cs[j].HTTPMethod
+		})
+
 		controllers = append(controllers, cs...)
 
 		err := createFromTemplate("/routes_template.go.tmpl", routePath, &RoutesTemplate{
