@@ -16,28 +16,10 @@ func NewRoutes(ctx context.Context, router *echo.Group) *Routes {
 	r := &Routes{
 		router: router,
 	}
-	router.POST("create_table", r.PostCreateTable(ctx))
 	router.POST("create_user", r.PostCreateUser(ctx))
+	router.POST("create_table", r.PostCreateTable(ctx))
 
 	return r
-}
-
-func (r *Routes) PostCreateTable(ctx context.Context) echo.HandlerFunc {
-	i := NewPostCreateTableController()
-	return func(c echo.Context) error {
-		req := new(PostCreateTableRequest)
-		if err := c.Bind(req); err != nil {
-			return c.JSON(http.StatusBadRequest, map[string]interface{}{
-				"code":    http.StatusBadRequest,
-				"message": "invalid request.",
-			})
-		}
-		res, err := i.PostCreateTable(ctx, c, req)
-		if err != nil {
-			return err
-		}
-		return c.JSON(http.StatusOK, res)
-	}
 }
 
 func (r *Routes) PostCreateUser(ctx context.Context) echo.HandlerFunc {
@@ -54,14 +36,40 @@ func (r *Routes) PostCreateUser(ctx context.Context) echo.HandlerFunc {
 		if err != nil {
 			return err
 		}
+		if res == nil {
+			return nil
+		}
+
 		return c.JSON(http.StatusOK, res)
 	}
 }
 
-type IPostCreateTableController interface {
-	PostCreateTable(c echo.Context, req *PostCreateTableRequest) (res *PostCreateTableResponse, err error)
+func (r *Routes) PostCreateTable(ctx context.Context) echo.HandlerFunc {
+	i := NewPostCreateTableController()
+	return func(c echo.Context) error {
+		req := new(PostCreateTableRequest)
+		if err := c.Bind(req); err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    http.StatusBadRequest,
+				"message": "invalid request.",
+			})
+		}
+		res, err := i.PostCreateTable(ctx, c, req)
+		if err != nil {
+			return err
+		}
+		if res == nil {
+			return nil
+		}
+
+		return c.JSON(http.StatusOK, res)
+	}
 }
 
 type IPostCreateUserController interface {
 	PostCreateUser(c echo.Context, req *PostCreateUserRequest) (res *PostCreateUserResponse, err error)
+}
+
+type IPostCreateTableController interface {
+	PostCreateTable(c echo.Context, req *PostCreateTableRequest) (res *PostCreateTableResponse, err error)
 }

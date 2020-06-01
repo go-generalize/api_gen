@@ -16,28 +16,10 @@ func NewRoutes(ctx context.Context, router *echo.Group) *Routes {
 	r := &Routes{
 		router: router,
 	}
-	router.POST("update_user_name", r.PostUpdateUserName(ctx))
 	router.POST("update_user_password", r.PostUpdateUserPassword(ctx))
+	router.POST("update_user_name", r.PostUpdateUserName(ctx))
 
 	return r
-}
-
-func (r *Routes) PostUpdateUserName(ctx context.Context) echo.HandlerFunc {
-	i := NewPostUpdateUserNameController()
-	return func(c echo.Context) error {
-		req := new(PostUpdateUserNameRequest)
-		if err := c.Bind(req); err != nil {
-			return c.JSON(http.StatusBadRequest, map[string]interface{}{
-				"code":    http.StatusBadRequest,
-				"message": "invalid request.",
-			})
-		}
-		res, err := i.PostUpdateUserName(ctx, c, req)
-		if err != nil {
-			return err
-		}
-		return c.JSON(http.StatusOK, res)
-	}
 }
 
 func (r *Routes) PostUpdateUserPassword(ctx context.Context) echo.HandlerFunc {
@@ -54,14 +36,40 @@ func (r *Routes) PostUpdateUserPassword(ctx context.Context) echo.HandlerFunc {
 		if err != nil {
 			return err
 		}
+		if res == nil {
+			return nil
+		}
+
 		return c.JSON(http.StatusOK, res)
 	}
 }
 
-type IPostUpdateUserNameController interface {
-	PostUpdateUserName(c echo.Context, req *PostUpdateUserNameRequest) (res *PostUpdateUserNameResponse, err error)
+func (r *Routes) PostUpdateUserName(ctx context.Context) echo.HandlerFunc {
+	i := NewPostUpdateUserNameController()
+	return func(c echo.Context) error {
+		req := new(PostUpdateUserNameRequest)
+		if err := c.Bind(req); err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    http.StatusBadRequest,
+				"message": "invalid request.",
+			})
+		}
+		res, err := i.PostUpdateUserName(ctx, c, req)
+		if err != nil {
+			return err
+		}
+		if res == nil {
+			return nil
+		}
+
+		return c.JSON(http.StatusOK, res)
+	}
 }
 
 type IPostUpdateUserPasswordController interface {
 	PostUpdateUserPassword(c echo.Context, req *PostUpdateUserPasswordRequest) (res *PostUpdateUserPasswordResponse, err error)
+}
+
+type IPostUpdateUserNameController interface {
+	PostUpdateUserName(c echo.Context, req *PostUpdateUserNameRequest) (res *PostUpdateUserNameResponse, err error)
 }
