@@ -6,12 +6,13 @@ import (
 	"go/parser"
 	"go/token"
 	"reflect"
+	"regexp"
 	"strings"
 )
 
 func findStructPairList(path string) (map[string]*PackageStructPair, error) {
 	fset := token.NewFileSet()
-	pkgs, err := parser.ParseDir(fset, path, nil, parser.AllErrors)
+	pkgs, err := parser.ParseDir(fset, path, nil, parser.AllErrors|parser.ParseComments)
 	if err != nil {
 		return nil, err
 	}
@@ -82,6 +83,24 @@ func validateGetRequestTags(fset *token.FileSet, structType *ast.StructType) err
 	return nil
 }
 
+var (
+	epMap    = make(map[string]string)
+	assigned = regexp.MustCompile(`//\s(.+)ep="(.+)"$`)
+)
+
+func findCommentList(commentGroup *ast.CommentGroup) {
+	for _, comment := range commentGroup.List {
+		group := assigned.FindStringSubmatch(comment.Text)
+		if len(group) == 0 {
+			continue
+		}
+		name := strings.Split(group[1], " ")[0]
+		if val, ok := epMap[name]; ok && val == "" {
+			epMap[name] = group[len(group)-1]
+		}
+	}
+}
+
 func findStructList(pkgs map[string]*ast.Package) []*PackageStruct {
 	structList := make([]*PackageStruct, 0)
 
@@ -94,6 +113,9 @@ func findStructList(pkgs map[string]*ast.Package) []*PackageStruct {
 				}
 
 				name := object.Name
+				if strings.HasSuffix(name, "Request") {
+					epMap[name] = ""
+				}
 				tSpec, ok := object.Decl.(*ast.TypeSpec)
 				if !ok {
 					continue
@@ -112,6 +134,11 @@ func findStructList(pkgs map[string]*ast.Package) []*PackageStruct {
 					//log.Printf("<IDENT> %s (%s)", name, t.(*ast.Ident).Name)
 				default:
 					//log.Printf("name=%s , %#v\n", name, tSpec)
+				}
+			}
+			if f.Comments != nil {
+				for _, c := range f.Comments {
+					findCommentList(c)
 				}
 			}
 		}

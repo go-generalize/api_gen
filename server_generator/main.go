@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"text/template"
 
@@ -49,6 +50,10 @@ func run(arg string) error {
 	packageName := ""
 
 	err = filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
 		if !info.IsDir() {
 			return nil
 		}
@@ -153,7 +158,9 @@ func parsePackages(path string) ([]*ControllerTemplate, error) {
 			continue
 		}
 
-		lowerStructName := strings.ToLower(req.StructName)
+		structName := req.StructName
+
+		lowerStructName := strings.ToLower(structName)
 
 		httpMethod := ""
 		for _, m := range supportHTTPMethod {
@@ -173,12 +180,18 @@ func parsePackages(path string) ([]*ControllerTemplate, error) {
 		}
 
 		endpoint := string([]rune(cn)[len(httpMethod):])
+		if ep, ok := epMap[structName]; ok && ep != "" {
+			endpoint = ep
+		} else {
+			endpoint = strcase.ToSnake(endpoint)
+		}
+
 		ct := &ControllerTemplate{
 			Package:               req.PackageName,
 			ControllerName:        fmt.Sprintf("%sController", cn),
 			ControllerNameInitial: strings.ToLower(string([]rune(cn)[0])),
 			HandlerName:           cn,
-			Endpoint:              strcase.ToSnake(endpoint),
+			Endpoint:              endpoint,
 			HTTPMethod:            strings.ToUpper(httpMethod),
 			RequestStructName:     req.StructName,
 			ResponseStructName:    res.StructName,
@@ -199,6 +212,16 @@ func parsePackages(path string) ([]*ControllerTemplate, error) {
 		if len(cs) > 0 {
 			packageName = cs[0].Package
 		}
+
+		sort.Slice(cs, func(i, j int) bool {
+			// nolint:scopelint
+			return cs[i].Endpoint < cs[j].Endpoint
+		})
+
+		sort.SliceStable(cs, func(i, j int) bool {
+			// nolint:scopelint
+			return cs[i].HTTPMethod < cs[j].HTTPMethod
+		})
 
 		controllers = append(controllers, cs...)
 

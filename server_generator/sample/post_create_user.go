@@ -1,7 +1,8 @@
 package sample
 
+// PostCreateUserRequest Description ep="create_user/:id"
 type PostCreateUserRequest struct {
-	ID       string
+	ID       string `param:"id"`
 	Password string
 	Gender   int
 }
