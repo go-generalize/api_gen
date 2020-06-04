@@ -45,7 +45,7 @@ func newPkgParser() *pkgParser {
 	}
 }
 
-func (p *pkgParser) parseFile(pathName string, fset *token.FileSet, file *ast.File) {
+func (p *pkgParser) parseFile(pathName string, _ *token.FileSet, file *ast.File) {
 	for _, decl := range file.Decls {
 		genDecl, ok := decl.(*ast.GenDecl)
 		if !ok {
@@ -141,28 +141,28 @@ func (p *pkgParser) parseDir(pathName, dir string) {
 }
 
 func walk(p, url string, generator *clientGenerator, parent *clientType) {
-	parser := newPkgParser()
+	pkgParser := newPkgParser()
 
-	parser.parseDir(url, p)
+	pkgParser.parseDir(url, p)
 
-	for k, v := range parser.endpoints {
+	for k, v := range pkgParser.endpoints {
 		fmt.Println(k, *v)
 	}
 
 	parent.Name = strcase.ToCamel(strings.ReplaceAll(url, "/", "-")) + "Client"
 
-	for i := range parser.structs {
+	for i := range pkgParser.structs {
 		generator.Imports = append(
 			generator.Imports,
 			importType{
-				Path:   "./classes" + url + "/" + parser.structs[i],
-				Name:   parser.structs[i],
-				NameAs: strcase.ToCamel(strings.ReplaceAll(url+"/"+parser.structs[i], "/", "-")),
+				Path:   "./classes" + url + "/" + pkgParser.structs[i],
+				Name:   pkgParser.structs[i],
+				NameAs: strcase.ToCamel(strings.ReplaceAll(url+"/"+pkgParser.structs[i], "/", "-")),
 			},
 		)
 	}
 
-	for _, ep := range parser.endpoints {
+	for _, ep := range pkgParser.endpoints {
 		if !(ep.request && ep.response) {
 			continue
 		}
@@ -187,23 +187,23 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 		log.Fatalf("failed to get package: %+v", err)
 	}
 
-	if len(parser.structs) != 0 {
+	if len(pkgParser.structs) != 0 {
 		if err = os.MkdirAll("./classes/"+url, 0774); err != nil {
 			log.Fatalf("failed to MkdirAll: %+v", err)
 		}
 	}
 
 	var b []byte
-	for i := range parser.structs {
+	for i := range pkgParser.structs {
 		b, err = exec.Command(
 			"struct2ts",
 			"-o",
-			"./classes/"+url+"/"+parser.structs[i]+".ts",
-			goPkg+"."+parser.structs[i],
+			"./classes/"+url+"/"+pkgParser.structs[i]+".ts",
+			goPkg+"."+pkgParser.structs[i],
 		).CombinedOutput()
 
 		if err != nil {
-			log.Fatalf("struct2ts failed for %s(out: %s): %+v", parser.structs[i], string(b), err)
+			log.Fatalf("struct2ts failed for %s(out: %s): %+v", pkgParser.structs[i], string(b), err)
 		}
 	}
 

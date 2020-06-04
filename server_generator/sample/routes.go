@@ -37,6 +37,10 @@ func (r *Routes) PostCreateTable(ctx context.Context) echo.HandlerFunc {
 		if err != nil {
 			return err
 		}
+		if res == nil {
+			return nil
+		}
+
 		return c.JSON(http.StatusOK, res)
 	}
 }
@@ -55,6 +59,10 @@ func (r *Routes) PostCreateUser(ctx context.Context) echo.HandlerFunc {
 		if err != nil {
 			return err
 		}
+		if res == nil {
+			return nil
+		}
+
 		return c.JSON(http.StatusOK, res)
 	}
 }

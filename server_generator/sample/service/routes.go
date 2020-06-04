@@ -36,6 +36,10 @@ func (r *Routes) GetArticle(ctx context.Context) echo.HandlerFunc {
 		if err != nil {
 			return err
 		}
+		if res == nil {
+			return nil
+		}
+
 		return c.JSON(http.StatusOK, res)
 	}
 }

@@ -95,6 +95,10 @@ class {{$elem.Name}} {
 			}
 		);
 {{end}}
+		if (Math.floor(resp.status / 100) !== 2) {
+			throw new Error(resp.statusText + ": " + await resp.text());
+		}
+
 		return new {{$method.ResponseType}}(await resp.json());
 	}{{end}}
 }
@@ -118,7 +122,7 @@ export class APIClient {
 			...commonHeaders,
 		};
 
-		if(token !== undefined)  {
+		if (token !== undefined) {
 			headers['Authorization'] = 'Bearer ' + token;
 		}
 		
@@ -161,6 +165,10 @@ export class APIClient {
 			}
 		);
 {{end}}
+		if (Math.floor(resp.status / 100) !== 2) {
+			throw new Error(resp.statusText + ": " + await resp.text());
+		}
+
 		return new {{$method.ResponseType}}(await resp.json());
 	}{{end}}
 }
