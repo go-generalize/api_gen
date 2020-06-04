@@ -111,7 +111,7 @@ export class APIClient {
 		token?: string,
 		commonHeaders?: {[key: string]: string},
 		baseURL?: string,
-		commonOptions?: {[key: string]: any}
+		commonOptions: {[key: string]: any} = {}
 	) {
 		const headers: {[key: string]: string} =  {
 			'Content-Type': 'application/json',
