@@ -16,6 +16,7 @@ func NewRoutes(ctx context.Context, router *echo.Group) *Routes {
 	r := &Routes{
 		router: router,
 	}
+
 	router.GET("article", r.GetArticle(ctx))
 
 	return r

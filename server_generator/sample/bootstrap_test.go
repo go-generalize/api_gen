@@ -116,12 +116,11 @@ func TestBootstrap(t *testing.T) {
 
 	t.Run("testBootstrap post request", func(t *testing.T) {
 		req := map[string]interface{}{
-			"id":       "hoge",
 			"password": "passwd",
 			"gender":   2,
 		}
 
-		resp, err := httpPOST("/create_user", req)
+		resp, err := httpPOST("/create_user/hoge", req)
 		if err != nil {
 			t.Fatalf("server http get error: %s", err.Error())
 		}

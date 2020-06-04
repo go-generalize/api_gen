@@ -16,6 +16,7 @@ func NewRoutes(ctx context.Context, router *echo.Group) *Routes {
 	r := &Routes{
 		router: router,
 	}
+
 	router.POST("update_user_name", r.PostUpdateUserName(ctx))
 	router.POST("update_user_password", r.PostUpdateUserPassword(ctx))
 

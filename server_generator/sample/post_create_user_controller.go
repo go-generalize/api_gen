@@ -20,7 +20,6 @@ func (p *PostCreateUserController) PostCreateUser(ctx context.Context,
 	req *PostCreateUserRequest) (
 	res *PostCreateUserResponse,
 	err error) {
-
 	return &PostCreateUserResponse{
 		Status:      true,
 		Message:     fmt.Sprintf("password is %s", req.Password),
