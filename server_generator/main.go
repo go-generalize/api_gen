@@ -69,6 +69,19 @@ func run(arg string) error {
 			packagePath = ""
 		}
 
+		importPackageName := ""
+		for i, p := range strings.Split(relPath, "/") {
+			if i < 2 {
+				continue
+			}
+
+			if importPackageName == "" {
+				importPackageName += p
+			} else {
+				importPackageName += strings.ToUpper(p[:1]) + p[1:]
+			}
+		}
+
 		cs, err := parsePackages(path)
 		if err != nil {
 			return err
@@ -94,10 +107,11 @@ func run(arg string) error {
 		}
 
 		bootstrapTemplates = append(bootstrapTemplates, &BootstrapTemplates{
-			PackagePath:  packagePath,
-			EndpointPath: endpointPath,
-			Endpoint:     endpoint,
-			Controller:   cs[0],
+			PackagePath:       packagePath,
+			ImportPackageName: importPackageName,
+			EndpointPath:      endpointPath,
+			Endpoint:          endpoint,
+			Controller:        cs[0],
 		})
 
 		return nil

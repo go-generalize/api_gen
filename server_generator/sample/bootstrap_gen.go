@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	p1 "github.com/go-generalize/api_gen/server_generator/sample/service"
-	p2 "github.com/go-generalize/api_gen/server_generator/sample/service/user"
-	p3 "github.com/go-generalize/api_gen/server_generator/sample/service/user2"
+	"github.com/go-generalize/api_gen/server_generator/sample/service"
+	serviceUser "github.com/go-generalize/api_gen/server_generator/sample/service/user"
+	serviceUser2 "github.com/go-generalize/api_gen/server_generator/sample/service/user2"
 	"github.com/labstack/echo/v4"
 )
 
@@ -59,15 +59,15 @@ func Bootstrap(ctx context.Context, e *echo.Echo, middlewareList MiddlewareList)
 
 	g1 := g0.Group("service/")
 	setMiddleware(g1, "/service/", middleware)
-	p1.NewRoutes(ctx, g1)
+	service.NewRoutes(ctx, g1)
 
 	g2 := g1.Group("user/")
 	setMiddleware(g2, "/service/user/", middleware)
-	p2.NewRoutes(ctx, g2)
+	serviceUser.NewRoutes(ctx, g2)
 
 	g3 := g1.Group("user2/")
 	setMiddleware(g3, "/service/user2/", middleware)
-	p3.NewRoutes(ctx, g3)
+	serviceUser2.NewRoutes(ctx, g3)
 }
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {

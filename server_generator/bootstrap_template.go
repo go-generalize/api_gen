@@ -6,9 +6,10 @@ type BootstrapTemplate struct {
 }
 
 type BootstrapTemplates struct {
-	ParentIndex  int
-	PackagePath  string
-	Endpoint     string
-	EndpointPath string
-	Controller   *ControllerTemplate
+	ParentIndex       int
+	PackagePath       string
+	ImportPackageName string
+	Endpoint          string
+	EndpointPath      string
+	Controller        *ControllerTemplate
 }
