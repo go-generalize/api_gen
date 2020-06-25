@@ -44,6 +44,8 @@ func run(arg string) error {
 	packageRootPath := GetGoRootPath()
 	basePackagePath, err := GetGoRootPackageName()
 	if err != nil {
+		fmt.Println("Make sure go.mod exists")
+
 		return err
 	}
 	bootstrapTemplates := make([]*BootstrapTemplates, 0)
