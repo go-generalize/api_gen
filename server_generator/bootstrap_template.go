@@ -6,7 +6,7 @@ type BootstrapTemplate struct {
 }
 
 type BootstrapTemplates struct {
-	ParentIndex       int
+	ParentPackageName string
 	PackagePath       string
 	ImportPackageName string
 	Endpoint          string

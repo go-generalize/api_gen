@@ -123,11 +123,11 @@ func run(arg string) error {
 	for _, b := range bootstrapTemplates {
 		ep := b.EndpointPath
 		if ep == "/" {
-			b.ParentIndex = -1
+			b.ParentPackageName = ""
 			continue
 		}
 
-		for i, b2 := range bootstrapTemplates {
+		for _, b2 := range bootstrapTemplates {
 			rel := ""
 			rel, err = filepath.Rel(b2.EndpointPath, ep)
 			if err != nil {
@@ -137,7 +137,7 @@ func run(arg string) error {
 				continue
 			}
 
-			b.ParentIndex = i
+			b.ParentPackageName = b2.ImportPackageName
 			b.Endpoint = rel + "/"
 
 			if !strings.HasSuffix(b.EndpointPath, "/") {

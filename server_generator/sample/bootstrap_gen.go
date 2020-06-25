@@ -53,21 +53,21 @@ func Bootstrap(ctx context.Context, e *echo.Echo, middlewareList MiddlewareList)
 		}
 	})
 
-	g0 := e.Group("")
-	setMiddleware(g0, "/", middleware)
-	NewRoutes(ctx, g0)
+	Group := e.Group("")
+	setMiddleware(Group, "/", middleware)
+	NewRoutes(ctx, Group)
 
-	g1 := g0.Group("service/")
-	setMiddleware(g1, "/service/", middleware)
-	service.NewRoutes(ctx, g1)
+	serviceGroup := e.Group("service/")
+	setMiddleware(serviceGroup, "/service/", middleware)
+	service.NewRoutes(ctx, serviceGroup)
 
-	g2 := g1.Group("user/")
-	setMiddleware(g2, "/service/user/", middleware)
-	serviceUser.NewRoutes(ctx, g2)
+	serviceUserGroup := serviceGroup.Group("user/")
+	setMiddleware(serviceUserGroup, "/service/user/", middleware)
+	serviceUser.NewRoutes(ctx, serviceUserGroup)
 
-	g3 := g1.Group("user2/")
-	setMiddleware(g3, "/service/user2/", middleware)
-	serviceUser2.NewRoutes(ctx, g3)
+	serviceUser2Group := serviceGroup.Group("user2/")
+	setMiddleware(serviceUser2Group, "/service/user2/", middleware)
+	serviceUser2.NewRoutes(ctx, serviceUser2Group)
 }
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {
