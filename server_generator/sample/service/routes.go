@@ -18,6 +18,7 @@ func NewRoutes(ctx context.Context, router *echo.Group) *Routes {
 	}
 
 	router.GET("article", r.GetArticle(ctx))
+	router.GET("info", r.GetInfo(ctx))
 
 	return r
 }
@@ -44,6 +45,32 @@ func (r *Routes) GetArticle(ctx context.Context) echo.HandlerFunc {
 	}
 }
 
+func (r *Routes) GetInfo(ctx context.Context) echo.HandlerFunc {
+	i := NewGetInfoController()
+	return func(c echo.Context) error {
+		req := new(GetInfoRequest)
+		if err := c.Bind(req); err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    http.StatusBadRequest,
+				"message": "invalid request.",
+			})
+		}
+		res, err := i.GetInfo(ctx, c, req)
+		if err != nil {
+			return err
+		}
+		if res == nil {
+			return nil
+		}
+
+		return c.JSON(http.StatusOK, res)
+	}
+}
+
 type IGetArticleController interface {
 	GetArticle(c echo.Context, req *GetArticleRequest) (res *GetArticleResponse, err error)
+}
+
+type IGetInfoController interface {
+	GetInfo(c echo.Context, req *GetInfoRequest) (res *GetInfoResponse, err error)
 }

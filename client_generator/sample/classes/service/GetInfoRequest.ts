@@ -54,13 +54,11 @@ function ToObject(o: any, typeOrCfg: any = {}, child = false): any {
 }
 
 // classes
-// struct2ts:github.com/go-generalize/api_gen/server_generator/sample/service/user.PostUpdateUserNameRequest
-class PostUpdateUserNameRequest {
-	Name: string;
+// struct2ts:github.com/go-generalize/api_gen/server_generator/sample/service.GetInfoRequest
+class GetInfoRequest {
 
 	constructor(data?: any) {
 		const d: any = (data && typeof data === 'object') ? ToObject(data) : {};
-		this.Name = ('Name' in d) ? d.Name as string : '';
 	}
 
 	toObject(): any {
@@ -71,7 +69,7 @@ class PostUpdateUserNameRequest {
 
 // exports
 export {
-	PostUpdateUserNameRequest,
+	GetInfoRequest,
 	ParseDate,
 	ParseNumber,
 	FromArray,
