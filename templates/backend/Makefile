@@ -1,3 +1,4 @@
+.PHONY: generate
 generate:
 	server_generator ./interfaces
 	go generate ./...
