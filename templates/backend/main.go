@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-generalize/api_gen/templates/backend/interfaces"
@@ -34,6 +35,11 @@ func main() {
 	e.Use(middleware.Recover())
 
 	interfaces.Bootstrap(ctx, e, nil)
+
+	fmt.Println("All routes are...")
+	for _, r := range e.Routes() {
+		fmt.Printf("%s %s: %s\n", r.Method, r.Path, r.Name)
+	}
 
 	if err := e.Start(":8080"); err != nil {
 		panic(err)
