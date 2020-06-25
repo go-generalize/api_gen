@@ -44,6 +44,8 @@ func run(arg string) error {
 	packageRootPath := GetGoRootPath()
 	basePackagePath, err := GetGoRootPackageName()
 	if err != nil {
+		fmt.Println("Make sure go.mod exists")
+
 		return err
 	}
 	bootstrapTemplates := make([]*BootstrapTemplates, 0)
@@ -130,7 +132,7 @@ func run(arg string) error {
 		}
 	}
 
-	bootstrapFilePath := filepath.Join(rootPath+"/", "bootstrap.go")
+	bootstrapFilePath := filepath.Join(rootPath+"/", "bootstrap_gen.go")
 	err = createFromTemplate(
 		"/bootstrap_template.go.tmpl",
 		bootstrapFilePath, &BootstrapTemplate{
@@ -172,7 +174,7 @@ func parsePackages(path string) ([]*ControllerTemplate, error) {
 		}
 
 		createDir := filepath.Clean(path + "/")
-		createFileName := strcase.ToSnake(cn) + "_controller.go"
+		createFileName := strcase.ToSnake(cn) + "_controller_gen.go"
 		createPath := filepath.Join(createDir, createFileName)
 
 		if _, ok := routes[createDir]; !ok {
@@ -207,7 +209,7 @@ func parsePackages(path string) ([]*ControllerTemplate, error) {
 
 	controllers := make([]*ControllerTemplate, 0)
 	for dir, cs := range routes {
-		routePath := filepath.Join(dir+"/", "routes.go")
+		routePath := filepath.Join(dir+"/", "routes_gen.go")
 		packageName := ""
 		if len(cs) > 0 {
 			packageName = cs[0].Package
