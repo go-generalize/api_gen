@@ -23,6 +23,8 @@ var supportHTTPMethod = []string{
 	"patch",
 }
 
+const rootPackageName = "root"
+
 func main() {
 	l := len(os.Args)
 	if l < 2 {
@@ -125,7 +127,7 @@ func run(arg string) error {
 		if ep == "/" {
 			b.ParentPackageName = ""
 			b.HasParent = false
-			b.RouteGroupName = "root"
+			b.RouteGroupName = rootPackageName
 			continue
 		}
 
@@ -141,7 +143,7 @@ func run(arg string) error {
 
 			b.ParentPackageName = b2.ImportPackageName
 			if b.ParentPackageName == "" {
-				b.ParentPackageName = "root"
+				b.ParentPackageName = rootPackageName
 			}
 
 			b.RouteGroupName = b.ImportPackageName
