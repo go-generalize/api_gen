@@ -30,5 +30,12 @@ installdeps:
 	mkdir -p ./bin
 	go build -o ./bin/ ./tools/...
 
+.PHONY: test
 test:
 	go test ./... -v
+
+.PHONY: statik
+statik:
+	cd server_generator && \
+	statik "-include=*.tmpl" -src=. && \
+	gofmt -w ./statik/statik.go
