@@ -23,6 +23,8 @@ var supportHTTPMethod = []string{
 	"patch",
 }
 
+const rootPackageName = "root"
+
 func main() {
 	l := len(os.Args)
 	if l < 2 {
@@ -69,6 +71,19 @@ func run(arg string) error {
 			packagePath = ""
 		}
 
+		importPackageName := ""
+		for i, p := range strings.Split(relPath, "/") {
+			if i < 2 {
+				continue
+			}
+
+			if importPackageName == "" {
+				importPackageName += p
+			} else {
+				importPackageName += strings.ToUpper(p[:1]) + p[1:]
+			}
+		}
+
 		cs, err := parsePackages(path)
 		if err != nil {
 			return err
@@ -94,10 +109,11 @@ func run(arg string) error {
 		}
 
 		bootstrapTemplates = append(bootstrapTemplates, &BootstrapTemplates{
-			PackagePath:  packagePath,
-			EndpointPath: endpointPath,
-			Endpoint:     endpoint,
-			Controller:   cs[0],
+			PackagePath:       packagePath,
+			ImportPackageName: importPackageName,
+			EndpointPath:      endpointPath,
+			Endpoint:          endpoint,
+			Controller:        cs[0],
 		})
 
 		return nil
@@ -109,11 +125,13 @@ func run(arg string) error {
 	for _, b := range bootstrapTemplates {
 		ep := b.EndpointPath
 		if ep == "/" {
-			b.ParentIndex = -1
+			b.ParentPackageName = ""
+			b.HasParent = false
+			b.RouteGroupName = rootPackageName
 			continue
 		}
 
-		for i, b2 := range bootstrapTemplates {
+		for _, b2 := range bootstrapTemplates {
 			rel := ""
 			rel, err = filepath.Rel(b2.EndpointPath, ep)
 			if err != nil {
@@ -123,7 +141,13 @@ func run(arg string) error {
 				continue
 			}
 
-			b.ParentIndex = i
+			b.ParentPackageName = b2.ImportPackageName
+			if b.ParentPackageName == "" {
+				b.ParentPackageName = rootPackageName
+			}
+
+			b.RouteGroupName = b.ImportPackageName
+			b.HasParent = true
 			b.Endpoint = rel + "/"
 
 			if !strings.HasSuffix(b.EndpointPath, "/") {

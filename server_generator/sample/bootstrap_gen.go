@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	p1 "github.com/go-generalize/api_gen/server_generator/sample/service"
-	p2 "github.com/go-generalize/api_gen/server_generator/sample/service/user"
-	p3 "github.com/go-generalize/api_gen/server_generator/sample/service/user2"
+	"github.com/go-generalize/api_gen/server_generator/sample/service"
+	serviceUser "github.com/go-generalize/api_gen/server_generator/sample/service/user"
+	serviceUser2 "github.com/go-generalize/api_gen/server_generator/sample/service/user2"
 	"github.com/labstack/echo/v4"
 )
 
@@ -53,21 +53,21 @@ func Bootstrap(ctx context.Context, e *echo.Echo, middlewareList MiddlewareList)
 		}
 	})
 
-	g0 := e.Group("")
-	setMiddleware(g0, "/", middleware)
-	NewRoutes(ctx, g0)
+	rootGroup := e.Group("")
+	setMiddleware(rootGroup, "/", middleware)
+	NewRoutes(ctx, rootGroup)
 
-	g1 := g0.Group("service/")
-	setMiddleware(g1, "/service/", middleware)
-	p1.NewRoutes(ctx, g1)
+	serviceGroup := rootGroup.Group("service/")
+	setMiddleware(serviceGroup, "/service/", middleware)
+	service.NewRoutes(ctx, serviceGroup)
 
-	g2 := g1.Group("user/")
-	setMiddleware(g2, "/service/user/", middleware)
-	p2.NewRoutes(ctx, g2)
+	serviceUserGroup := serviceGroup.Group("user/")
+	setMiddleware(serviceUserGroup, "/service/user/", middleware)
+	serviceUser.NewRoutes(ctx, serviceUserGroup)
 
-	g3 := g1.Group("user2/")
-	setMiddleware(g3, "/service/user2/", middleware)
-	p3.NewRoutes(ctx, g3)
+	serviceUser2Group := serviceGroup.Group("user2/")
+	setMiddleware(serviceUser2Group, "/service/user2/", middleware)
+	serviceUser2.NewRoutes(ctx, serviceUser2Group)
 }
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {
