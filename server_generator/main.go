@@ -124,6 +124,8 @@ func run(arg string) error {
 		ep := b.EndpointPath
 		if ep == "/" {
 			b.ParentPackageName = ""
+			b.HasParent = false
+			b.RouteGroupName = "root"
 			continue
 		}
 
@@ -138,6 +140,12 @@ func run(arg string) error {
 			}
 
 			b.ParentPackageName = b2.ImportPackageName
+			if b.ParentPackageName == "" {
+				b.ParentPackageName = "root"
+			}
+
+			b.RouteGroupName = b.ImportPackageName
+			b.HasParent = true
 			b.Endpoint = rel + "/"
 
 			if !strings.HasSuffix(b.EndpointPath, "/") {

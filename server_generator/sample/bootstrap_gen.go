@@ -53,11 +53,11 @@ func Bootstrap(ctx context.Context, e *echo.Echo, middlewareList MiddlewareList)
 		}
 	})
 
-	Group := e.Group("")
-	setMiddleware(Group, "/", middleware)
-	NewRoutes(ctx, Group)
+	rootGroup := e.Group("")
+	setMiddleware(rootGroup, "/", middleware)
+	NewRoutes(ctx, rootGroup)
 
-	serviceGroup := e.Group("service/")
+	serviceGroup := rootGroup.Group("service/")
 	setMiddleware(serviceGroup, "/service/", middleware)
 	service.NewRoutes(ctx, serviceGroup)
 

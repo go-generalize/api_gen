@@ -53,9 +53,9 @@ func Bootstrap(ctx context.Context, e *echo.Echo, middlewareList MiddlewareList)
 
 {{ range $i, $v := .Bootstraps }}
 
-	{{ $v.ImportPackageName }}Group := {{ if eq $v.ParentPackageName "" }}e{{ else }}{{ $v.ParentPackageName }}Group{{ end }}.Group("{{ $v.Endpoint }}")
-	setMiddleware({{ $v.ImportPackageName }}Group, "{{ $v.EndpointPath }}", middleware)
-	{{ $c := .Controller }}{{ if eq $v.Endpoint "" }}NewRoutes(ctx, {{ $v.ImportPackageName }}Group){{ else }}{{ $v.ImportPackageName }}.NewRoutes(ctx, {{ $v.ImportPackageName }}Group){{ end }}{{ end }}
+	{{ $v.RouteGroupName }}Group := {{ if eq $v.HasParent false }}e{{ else }}{{ $v.ParentPackageName }}Group{{ end }}.Group("{{ $v.Endpoint }}")
+	setMiddleware({{ $v.RouteGroupName }}Group, "{{ $v.EndpointPath }}", middleware)
+	{{ $c := .Controller }}{{ if eq $v.Endpoint "" }}NewRoutes(ctx, {{ $v.RouteGroupName }}Group){{ else }}{{ $v.RouteGroupName }}.NewRoutes(ctx, {{ $v.RouteGroupName }}Group){{ end }}{{ end }}
 }
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {

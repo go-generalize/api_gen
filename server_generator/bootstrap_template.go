@@ -7,6 +7,8 @@ type BootstrapTemplate struct {
 
 type BootstrapTemplates struct {
 	ParentPackageName string
+	RouteGroupName    string
+	HasParent         bool
 	PackagePath       string
 	ImportPackageName string
 	Endpoint          string
