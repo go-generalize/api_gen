@@ -54,7 +54,7 @@ function ToObject(o: any, typeOrCfg: any = {}, child = false): any {
 }
 
 // classes
-// struct2ts:github.com/ORG_NAME/REPO_NAME/server/tools/api_generator/sample/service/user.PostUpdateUserPasswordResponse
+// struct2ts:github.com/go-generalize/api_gen/server_generator/sample/service/user.PostUpdateUserPasswordResponse
 class PostUpdateUserPasswordResponse {
 	Status: boolean;
 	Message: string;

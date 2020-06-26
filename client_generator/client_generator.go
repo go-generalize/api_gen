@@ -1,9 +1,12 @@
 package main
 
 import (
+	"io/ioutil"
 	"log"
 	"os"
 	"text/template"
+
+	"github.com/rakyll/statik/fs"
 )
 
 type methodType struct {
@@ -33,8 +36,23 @@ type clientGenerator struct {
 	ChildrenClients []clientType
 }
 
-func (g *clientGenerator) generate() {
-	t := template.Must(template.New("").Parse(tmpl))
+func (g *clientGenerator) generate() error {
+	statikFs, err := fs.New()
+	if err != nil {
+		return err
+	}
+
+	f, err := statikFs.Open("/templates/api.ts.tmpl")
+	if err != nil {
+		return err
+	}
+
+	templ, err := ioutil.ReadAll(f)
+	if err != nil {
+		return err
+	}
+
+	t := template.Must(template.New("tmpl").Parse(string(templ)))
 
 	fp, err := os.Create("api_client.ts")
 
@@ -46,130 +64,6 @@ func (g *clientGenerator) generate() {
 	if err := t.Execute(fp, g); err != nil {
 		log.Fatalf("failed to execute template: %+v", err)
 	}
+
+	return nil
 }
-
-const tmpl = `// THIS CODE WAS GENERATED AUTOMATICALLY
-// DO NOT EDIT THIS CODE BY YOUR OWN HANDS
-
-{{range $index, $elem := .Imports}}import {{"{"}} {{$elem.Name}} as {{$elem.NameAs}} {{"}"}} from '{{$elem.Path}}';
-export {{"{"}} {{$elem.Name}} as {{$elem.NameAs}} {{"}"}} from '{{$elem.Path}}';
-{{end}}
-
-{{range $index, $elem := .ChildrenClients}}
-class {{$elem.Name}} {
-{{range $index, $elem := .Children}}
-	public {{$elem.Name}}: {{$elem.ClassName}};{{end}}
-	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
-{{range $index, $elem := $elem.Children}}
-		this.{{$elem.Name}} = new {{$elem.ClassName}}(headers, options, baseURL);{{end}}
-	}
-{{range $index, $method := $elem.Methods}}
-	async {{$method.Name}}(
-		param: {{$method.RequestType}},
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<{{$method.ResponseType}}> {
-{{if eq $method.Method "GET"}}		const resp = await fetch(
-			this.baseURL + "{{$method.Endpoint}}?" + (new URLSearchParams(param.toObject())).toString(),
-			{
-				method: "{{$method.Method}}",
-				headers: {
-					...this.headers,
-					...headers,
-				},
-				...this.options,
-				...options,
-			}
-		);
-{{else}}		const resp = await fetch(
-			this.baseURL + "{{$method.Endpoint}}",
-			{
-				method: "{{$method.Method}}",
-				body: JSON.stringify(param),
-				headers: {
-					...this.headers,
-					...headers,
-				},
-				...this.options,
-				...options,
-			}
-		);
-{{end}}
-		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
-		}
-
-		return new {{$method.ResponseType}}(await resp.json());
-	}{{end}}
-}
-{{end}}
-
-export class APIClient {
-	private headers: {[key: string]: string};
-	private options: {[key: string]: any};
-	private baseURL: string;
-{{range $index, $elem := .Children}}
-	public {{$elem.Name}}: {{$elem.ClassName}};{{end}}
-
-	constructor(
-		token?: string,
-		commonHeaders?: {[key: string]: string},
-		baseURL?: string,
-		commonOptions: {[key: string]: any} = {}
-	) {
-		const headers: {[key: string]: string} =  {
-			'Content-Type': 'application/json',
-			...commonHeaders,
-		};
-
-		if (token !== undefined) {
-			headers['Authorization'] = 'Bearer ' + token;
-		}
-		
-		this.baseURL =  (baseURL === undefined) ? "" : baseURL;
-		this.options = commonOptions;
-		this.headers = headers;
-
-{{range $index, $elem := .Children}}
-		this.{{$elem.Name}} = new {{$elem.ClassName}}(headers, this.options, this.baseURL);{{end}}
-	}
-{{range $index, $method := .Methods}}
-	async {{$method.Name}}(
-		param: {{$method.RequestType}},
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<{{$method.ResponseType}}> {
-{{if eq $method.Method "GET"}}		const resp = await fetch(
-			this.baseURL + "{{$method.Endpoint}}?" + (new URLSearchParams(param.toObject())).toString(),
-			{
-				method: "{{$method.Method}}",
-				headers: {
-					...this.headers,
-					...headers,
-				},
-				...this.options,
-				...options,
-			}
-		);
-{{else}}		const resp = await fetch(
-			this.baseURL + "{{$method.Endpoint}}",
-			{
-				method: "{{$method.Method}}",
-				body: JSON.stringify(param),
-				headers: {
-					...this.headers,
-					...headers,
-				},
-				...this.options,
-				...options,
-			}
-		);
-{{end}}
-		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
-		}
-
-		return new {{$method.ResponseType}}(await resp.json());
-	}{{end}}
-}
-`

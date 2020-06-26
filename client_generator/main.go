@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	_ "github.com/go-generalize/api_gen/client_generator/statik"
 	"github.com/iancoleman/strcase"
 )
 
@@ -254,5 +255,7 @@ func main() {
 
 	walk(os.Args[1], "/", generator, &generator.clientType)
 
-	generator.generate()
+	if err := generator.generate(); err != nil {
+		log.Fatalf("failed to run generate: %+v", err)
+	}
 }
