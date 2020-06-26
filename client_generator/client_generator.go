@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"sort"
 	"text/template"
 
 	"github.com/rakyll/statik/fs"
@@ -37,6 +38,8 @@ type clientGenerator struct {
 }
 
 func (g *clientGenerator) generate() error {
+	g.sort()
+
 	statikFs, err := fs.New()
 	if err != nil {
 		return err
@@ -66,4 +69,14 @@ func (g *clientGenerator) generate() error {
 	}
 
 	return nil
+}
+
+func (g *clientGenerator) sort() {
+	sort.Slice(g.Imports, func(i, j int) bool {
+		return g.Imports[i].Name < g.Imports[j].Name
+	})
+
+	sort.Slice(g.ChildrenClients, func(i, j int) bool {
+		return g.ChildrenClients[i].Name < g.ChildrenClients[j].Name
+	})
 }
