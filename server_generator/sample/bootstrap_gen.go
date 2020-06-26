@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/go-generalize/api_gen/server_generator/sample/service"
+	serviceStaticPage "github.com/go-generalize/api_gen/server_generator/sample/service/static_page"
 	serviceUser "github.com/go-generalize/api_gen/server_generator/sample/service/user"
 	serviceUser2 "github.com/go-generalize/api_gen/server_generator/sample/service/user2"
 	"github.com/labstack/echo/v4"
@@ -60,6 +61,10 @@ func Bootstrap(ctx context.Context, e *echo.Echo, middlewareList MiddlewareList)
 	serviceGroup := rootGroup.Group("service/")
 	setMiddleware(serviceGroup, "/service/", middleware)
 	service.NewRoutes(ctx, serviceGroup)
+
+	serviceStaticPageGroup := serviceGroup.Group("static_page/")
+	setMiddleware(serviceStaticPageGroup, "/service/static_page/", middleware)
+	serviceStaticPage.NewRoutes(ctx, serviceStaticPageGroup)
 
 	serviceUserGroup := serviceGroup.Group("user/")
 	setMiddleware(serviceUserGroup, "/service/user/", middleware)

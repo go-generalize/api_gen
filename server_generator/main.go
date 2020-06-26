@@ -110,7 +110,7 @@ func run(arg string) error {
 
 		bootstrapTemplates = append(bootstrapTemplates, &BootstrapTemplates{
 			PackagePath:       packagePath,
-			ImportPackageName: importPackageName,
+			ImportPackageName: strcase.ToLowerCamel(importPackageName),
 			EndpointPath:      endpointPath,
 			Endpoint:          endpoint,
 			Controller:        cs[0],
