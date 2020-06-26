@@ -109,7 +109,9 @@ func (p *pkgParser) parseFile(pathName, dir string, _ *token.FileSet, file *ast.
 
 			packageNameFromFilePath := filepath.Base(dir)
 			if packageName != packageNameFromFilePath {
-				fmt.Printf("\x1b[31mskip: %s/.%s \n  The file path and the actual package name must match.\n  package name=%s, require=%s\x1b[0m\n",
+				fmt.Printf("\x1b[31mskip: %s/.%s \n"+
+					"  The file path and the actual package name must match.\n"+
+					"  package name=%s, require=%s\x1b[0m\n",
 					p.endpoints[me].path, p.endpoints[me].rawName, packageNameFromFilePath, packageName)
 				continue
 			}
