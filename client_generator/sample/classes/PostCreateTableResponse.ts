@@ -54,7 +54,7 @@ function ToObject(o: any, typeOrCfg: any = {}, child = false): any {
 }
 
 // classes
-// struct2ts:github.com/ORG_NAME/REPO_NAME/server/tools/api_generator/sample/service/table.PostCreateTableResponseTablePos
+// struct2ts:github.com/go-generalize/api_gen/server_generator/sample/service/table.PostCreateTableResponseTablePos
 class PostCreateTableResponseTablePos {
 	X: number;
 	Y: number;
@@ -73,7 +73,7 @@ class PostCreateTableResponseTablePos {
 	}
 }
 
-// struct2ts:github.com/ORG_NAME/REPO_NAME/server/tools/api_generator/sample/service/table.PostCreateTableResponseTable
+// struct2ts:github.com/go-generalize/api_gen/server_generator/sample/service/table.PostCreateTableResponseTable
 class PostCreateTableResponseTable {
 	Pos: PostCreateTableResponseTablePos;
 
@@ -88,7 +88,7 @@ class PostCreateTableResponseTable {
 	}
 }
 
-// struct2ts:github.com/ORG_NAME/REPO_NAME/server/tools/api_generator/sample.PostCreateTableResponse
+// struct2ts:github.com/go-generalize/api_gen/server_generator/sample.PostCreateTableResponse
 class PostCreateTableResponse {
 	ID: string;
 	Payload: PostCreateTableResponseTable;

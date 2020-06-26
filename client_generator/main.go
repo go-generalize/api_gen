@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	_ "github.com/go-generalize/api_gen/client_generator/statik"
 	"github.com/iancoleman/strcase"
 )
 
@@ -45,7 +46,7 @@ func newPkgParser() *pkgParser {
 	}
 }
 
-func (p *pkgParser) parseFile(pathName string, _ *token.FileSet, file *ast.File) {
+func (p *pkgParser) parseFile(pathName, dir string, _ *token.FileSet, file *ast.File) {
 	for _, decl := range file.Decls {
 		genDecl, ok := decl.(*ast.GenDecl)
 		if !ok {
@@ -54,6 +55,7 @@ func (p *pkgParser) parseFile(pathName string, _ *token.FileSet, file *ast.File)
 		if genDecl.Tok != token.TYPE {
 			continue
 		}
+		packageName := file.Name.Name
 
 		for _, spec := range genDecl.Specs {
 			// 型定義
@@ -105,12 +107,21 @@ func (p *pkgParser) parseFile(pathName string, _ *token.FileSet, file *ast.File)
 				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(strings.TrimSuffix(name[len(method):], "Response")))
 			}
 
+			packageNameFromFilePath := filepath.Base(dir)
+			if packageName != packageNameFromFilePath {
+				fmt.Printf("\x1b[31mskip: %s/.%s \n"+
+					"  The file path and the actual package name must match.\n"+
+					"  package name=%s, require=%s\x1b[0m\n",
+					p.endpoints[me].path, p.endpoints[me].rawName, packageNameFromFilePath, packageName)
+				continue
+			}
+
 			p.structs = append(p.structs, name)
 		}
 	}
 }
 
-func (p *pkgParser) parsePackage(pathName string, fset *token.FileSet, pkg *ast.Package) {
+func (p *pkgParser) parsePackage(pathName, dir string, fset *token.FileSet, pkg *ast.Package) {
 	for name, file := range pkg.Files {
 		stem := strings.TrimSuffix(filepath.Base(name), filepath.Ext(name))
 
@@ -118,7 +129,7 @@ func (p *pkgParser) parsePackage(pathName string, fset *token.FileSet, pkg *ast.
 			continue
 		}
 
-		p.parseFile(pathName, fset, file)
+		p.parseFile(pathName, dir, fset, file)
 	}
 }
 
@@ -136,7 +147,7 @@ func (p *pkgParser) parseDir(pathName, dir string) {
 			continue
 		}
 
-		p.parsePackage(pathName, fset, v)
+		p.parsePackage(pathName, dir, fset, v)
 	}
 }
 
@@ -252,7 +263,14 @@ func main() {
 
 	generator := &clientGenerator{}
 
-	walk(os.Args[1], "/", generator, &generator.clientType)
+	fullPath, err := filepath.Abs(os.Args[1])
+	if err != nil {
+		log.Fatalf("failed to run filepath.Abs: %+v", err)
+	}
 
-	generator.generate()
+	walk(fullPath, "/", generator, &generator.clientType)
+
+	if err := generator.generate(); err != nil {
+		log.Fatalf("failed to run generate: %+v", err)
+	}
 }
