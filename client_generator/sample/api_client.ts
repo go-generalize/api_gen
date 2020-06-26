@@ -1,22 +1,18 @@
 // THIS CODE WAS GENERATED AUTOMATICALLY
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
 
-import { PostCreateTableRequest as PostCreateTableRequest } from './classes//PostCreateTableRequest';
-export { PostCreateTableRequest as PostCreateTableRequest } from './classes//PostCreateTableRequest';
-import { PostCreateTableResponse as PostCreateTableResponse } from './classes//PostCreateTableResponse';
-export { PostCreateTableResponse as PostCreateTableResponse } from './classes//PostCreateTableResponse';
 import { PostCreateUserRequest as PostCreateUserRequest } from './classes//PostCreateUserRequest';
 export { PostCreateUserRequest as PostCreateUserRequest } from './classes//PostCreateUserRequest';
 import { PostCreateUserResponse as PostCreateUserResponse } from './classes//PostCreateUserResponse';
 export { PostCreateUserResponse as PostCreateUserResponse } from './classes//PostCreateUserResponse';
+import { PostCreateTableRequest as PostCreateTableRequest } from './classes//PostCreateTableRequest';
+export { PostCreateTableRequest as PostCreateTableRequest } from './classes//PostCreateTableRequest';
+import { PostCreateTableResponse as PostCreateTableResponse } from './classes//PostCreateTableResponse';
+export { PostCreateTableResponse as PostCreateTableResponse } from './classes//PostCreateTableResponse';
 import { GetArticleRequest as ServiceGetArticleRequest } from './classes/service/GetArticleRequest';
 export { GetArticleRequest as ServiceGetArticleRequest } from './classes/service/GetArticleRequest';
 import { GetArticleResponse as ServiceGetArticleResponse } from './classes/service/GetArticleResponse';
 export { GetArticleResponse as ServiceGetArticleResponse } from './classes/service/GetArticleResponse';
-import { GetStaticPageRequest as ServiceStaticPageGetStaticPageRequest } from './classes/service/static_page/GetStaticPageRequest';
-export { GetStaticPageRequest as ServiceStaticPageGetStaticPageRequest } from './classes/service/static_page/GetStaticPageRequest';
-import { GetStaticPageResponse as ServiceStaticPageGetStaticPageResponse } from './classes/service/static_page/GetStaticPageResponse';
-export { GetStaticPageResponse as ServiceStaticPageGetStaticPageResponse } from './classes/service/static_page/GetStaticPageResponse';
 import { PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest } from './classes/service/user/PostUpdateUserNameRequest';
 export { PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest } from './classes/service/user/PostUpdateUserNameRequest';
 import { PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse } from './classes/service/user/PostUpdateUserNameResponse';
@@ -82,31 +78,6 @@ class ServiceUserClient {
 
 	}
 
-	async postUpdateUserName(
-		param: ServiceUserPostUpdateUserNameRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<ServiceUserPostUpdateUserNameResponse> {
-		const resp = await fetch(
-			this.baseURL + "/service/user/update_user_name",
-			{
-				method: "POST",
-				body: JSON.stringify(param),
-				headers: {
-					...this.headers,
-					...headers,
-				},
-				...this.options,
-				...options,
-			}
-		);
-
-		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
-		}
-
-		return new ServiceUserPostUpdateUserNameResponse(await resp.json());
-	}
 	async postUpdateUserPassword(
 		param: ServiceUserPostUpdateUserPasswordRequest,
 		headers?: {[key: string]: string},
@@ -131,6 +102,31 @@ class ServiceUserClient {
 		}
 
 		return new ServiceUserPostUpdateUserPasswordResponse(await resp.json());
+	}
+	async postUpdateUserName(
+		param: ServiceUserPostUpdateUserNameRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
+	): Promise<ServiceUserPostUpdateUserNameResponse> {
+		const resp = await fetch(
+			this.baseURL + "/service/user/update_user_name",
+			{
+				method: "POST",
+				body: JSON.stringify(param),
+				headers: {
+					...this.headers,
+					...headers,
+				},
+				...this.options,
+				...options,
+			}
+		);
+
+		if (Math.floor(resp.status / 100) !== 2) {
+			throw new Error(resp.statusText + ": " + await resp.text());
+		}
+
+		return new ServiceUserPostUpdateUserNameResponse(await resp.json());
 	}
 }
 
@@ -263,31 +259,6 @@ export class APIClient {
 		this.service = new ServiceClient(headers, this.options, this.baseURL);
 	}
 
-	async postCreateTable(
-		param: PostCreateTableRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<PostCreateTableResponse> {
-		const resp = await fetch(
-			this.baseURL + "/create_table",
-			{
-				method: "POST",
-				body: JSON.stringify(param),
-				headers: {
-					...this.headers,
-					...headers,
-				},
-				...this.options,
-				...options,
-			}
-		);
-
-		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
-		}
-
-		return new PostCreateTableResponse(await resp.json());
-	}
 	async postCreateUser(
 		param: PostCreateUserRequest,
 		headers?: {[key: string]: string},
@@ -312,5 +283,30 @@ export class APIClient {
 		}
 
 		return new PostCreateUserResponse(await resp.json());
+	}
+	async postCreateTable(
+		param: PostCreateTableRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
+	): Promise<PostCreateTableResponse> {
+		const resp = await fetch(
+			this.baseURL + "/create_table",
+			{
+				method: "POST",
+				body: JSON.stringify(param),
+				headers: {
+					...this.headers,
+					...headers,
+				},
+				...this.options,
+				...options,
+			}
+		);
+
+		if (Math.floor(resp.status / 100) !== 2) {
+			throw new Error(resp.statusText + ": " + await resp.text());
+		}
+
+		return new PostCreateTableResponse(await resp.json());
 	}
 }
