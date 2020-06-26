@@ -39,3 +39,6 @@ statik:
 	cd server_generator && \
 	statik "-include=*.tmpl" -src=. && \
 	gofmt -w ./statik/statik.go
+	cd client_generator && \
+	statik "-include=*.tmpl" -src=. && \
+	gofmt -w ./statik/statik.go
