@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -9,6 +10,8 @@ import (
 	"sort"
 	"strings"
 	"text/template"
+
+	"github.com/go-generalize/api_gen/common"
 
 	_ "github.com/go-generalize/api_gen/server_generator/statik"
 	"github.com/iancoleman/strcase"
@@ -31,6 +34,16 @@ func main() {
 		fmt.Println("Specify the target directory.")
 		os.Exit(1)
 	}
+
+	versionFlag := flag.Bool("v", false, "print version")
+
+	flag.Parse()
+
+	if *versionFlag {
+		fmt.Printf(common.AppVersion)
+		return
+	}
+
 	err := run(os.Args[1])
 	if err != nil {
 		log.Fatal(err)
