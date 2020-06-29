@@ -11,6 +11,7 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	_ "github.com/go-generalize/api_gen/client_generator/statik"
@@ -152,6 +153,7 @@ func (p *pkgParser) parseDir(pathName, dir string) {
 }
 
 func walk(p, url string, generator *clientGenerator, parent *clientType) {
+	endpointReplaceMatchRule := regexp.MustCompile(`/_(.*?)/`)
 	pkgParser := newPkgParser()
 
 	pkgParser.parseDir(url, p)
@@ -179,6 +181,8 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 		}
 
 		replaced := strcase.ToCamel(strings.ReplaceAll(url+"/"+ep.rawName, "/", "-"))
+		endpointPath := ep.path
+		endpointPath = endpointReplaceMatchRule.ReplaceAllString(endpointPath, "/${encodeURI(param.$1)}/")
 
 		parent.Methods = append(
 			parent.Methods,
@@ -187,7 +191,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 				RequestType:  replaced + "Request",
 				ResponseType: replaced + "Response",
 				Method:       strings.ToUpper(ep.method),
-				Endpoint:     ep.path,
+				Endpoint:     endpointPath,
 			},
 		)
 	}

@@ -20,7 +20,7 @@ class {{$elem.Name}} {
 		options?: {[key: string]: any}
 	): Promise<{{$method.ResponseType}}> {
 {{if eq $method.Method "GET"}}		const resp = await fetch(
-			this.baseURL + "{{$method.Endpoint}}?" + (new URLSearchParams(param.toObject())).toString(),
+			`${this.baseURL}{{$method.Endpoint}}?` + (new URLSearchParams(param.toObject())).toString(),
 			{
 				method: "{{$method.Method}}",
 				headers: {
@@ -32,7 +32,7 @@ class {{$elem.Name}} {
 			}
 		);
 {{else}}		const resp = await fetch(
-			this.baseURL + "{{$method.Endpoint}}",
+			`${this.baseURL}{{$method.Endpoint}}`,
 			{
 				method: "{{$method.Method}}",
 				body: JSON.stringify(param),
@@ -90,7 +90,7 @@ export class APIClient {
 		options?: {[key: string]: any}
 	): Promise<{{$method.ResponseType}}> {
 {{if eq $method.Method "GET"}}		const resp = await fetch(
-			this.baseURL + "{{$method.Endpoint}}?" + (new URLSearchParams(param.toObject())).toString(),
+			`${this.baseURL}{{$method.Endpoint}}?` + (new URLSearchParams(param.toObject())).toString(),
 			{
 				method: "{{$method.Method}}",
 				headers: {
@@ -102,7 +102,7 @@ export class APIClient {
 			}
 		);
 {{else}}		const resp = await fetch(
-			this.baseURL + "{{$method.Endpoint}}",
+			`${this.baseURL}{{$method.Endpoint}}`,
 			{
 				method: "{{$method.Method}}",
 				body: JSON.stringify(param),

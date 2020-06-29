@@ -108,6 +108,8 @@ func run(arg string) error {
 			endpointPath = "/" + endpointPath
 		}
 
+		endpointPath = strings.Replace(endpointPath, "/_", "/:", -1)
+
 		bootstrapTemplates = append(bootstrapTemplates, &BootstrapTemplates{
 			PackagePath:       packagePath,
 			ImportPackageName: strcase.ToLowerCamel(importPackageName),
