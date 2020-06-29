@@ -63,3 +63,7 @@ import { APIClient } from "./api/api_client";
     console.log(resp);
 })();
 ```
+
+### FAQ
+- Use `{credentials: "include"}` to send Cookie
+    - FYI: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API

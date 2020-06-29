@@ -1,8 +1,10 @@
 # api_gen
 ## client_generator
 
-server_generator向けの用意したフォルダのrootに対して実行する。
+server_generator向けの用意したフォルダに対して実行する。
 ライブラリは今いるディレクトリに対して生成される。
+
+Typescript+fetchを利用したライブラリが生成される。
 
 [templates](../templates) を利用した場合、[templates/frontend](../templates/frontend)にて `make generate`を実行することで簡単に生成できる。
 
@@ -61,3 +63,8 @@ import { APIClient } from "./api/api_client";
     console.log(resp);
 })();
 ```
+
+### FAQ
+#### Cookieを送信したい
+- `{credentials: "include"}` をfetch APIのオプションに設定
+    - FYI: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
