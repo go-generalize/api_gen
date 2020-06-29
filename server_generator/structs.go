@@ -65,11 +65,20 @@ func validateRequestByEndpointParams(fset *token.FileSet, structType *ast.Struct
 	}
 
 	for _, fields := range fieldList {
-		for _, field := range fields.Names {
-			fieldName := field.Name
-			if _, ok := hasEndpoints[fieldName]; ok {
-				hasEndpoints[fieldName] = true
+		if len(fields.Names) > 1 {
+			return fmt.Errorf("%+v: 同じ行に複数のパラメータを記述することはできません。", fields.Names)
+		}
+
+		fieldName := fields.Names[0].Name
+		if fields.Tag != nil {
+			tags := reflect.StructTag(strings.Trim(fields.Tag.Value, "`"))
+			if paramTag, ok := tags.Lookup("param"); ok {
+				fieldName = paramTag
 			}
+		}
+
+		if _, ok := hasEndpoints[fieldName]; ok {
+			hasEndpoints[fieldName] = true
 		}
 	}
 

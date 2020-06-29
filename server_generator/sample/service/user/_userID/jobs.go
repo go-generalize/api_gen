@@ -1,7 +1,7 @@
-package _UserID
+package _userID
 
 type GetUserJobGetRequest struct {
-	UserID string
+	UserID string `param:"userID"`
 }
 
 type GetUserJobGetResponse struct {

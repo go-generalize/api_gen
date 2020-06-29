@@ -1,5 +1,5 @@
 // THIS FILE IS A GENERATED CODE. DO NOT EDIT
-package _UserID
+package _userID
 
 import (
 	"context"

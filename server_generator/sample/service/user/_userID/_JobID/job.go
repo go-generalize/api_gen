@@ -1,7 +1,8 @@
 package _JobID
 
 type PutJobRequest struct {
-	ID string
+	UserID string `param:"userID"`
+	JobID  string
 }
 
 type PutJobResponse struct {
