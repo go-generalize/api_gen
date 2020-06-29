@@ -153,7 +153,7 @@ func (p *pkgParser) parseDir(pathName, dir string) {
 }
 
 func walk(p, url string, generator *clientGenerator, parent *clientType) {
-	endpointReplaceMatchRule := regexp.MustCompile(`/_(.*?)/`)
+	endpointReplaceMatchRule := regexp.MustCompile(`:(.*?)/`)
 	pkgParser := newPkgParser()
 
 	pkgParser.parseDir(url, p)
@@ -183,10 +183,11 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 		replaced := strcase.ToCamel(strings.ReplaceAll(url+"/"+ep.rawName, "/", "-"))
 		urlParams := make([]string, 0)
 		endpointPath := ep.path
+		endpointPath = strings.Replace(endpointPath, "/_", "/:", -1)
 		endpointPath = endpointReplaceMatchRule.ReplaceAllStringFunc(endpointPath, func(s string) string {
-			param := s[2 : len(s)-1]
+			param := s[1 : len(s)-1]
 			urlParams = append(urlParams, param)
-			return fmt.Sprintf("/${encodeURI(param.%s)}/", param)
+			return fmt.Sprintf("${encodeURI(param.%s)}/", param)
 		})
 
 		parent.Methods = append(

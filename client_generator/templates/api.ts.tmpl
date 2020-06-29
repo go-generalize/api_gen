@@ -26,7 +26,7 @@ class {{$elem.Name}} {
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<{{$method.ResponseType}}> {
-	    const excludeParams = [{{ range $param := $method.URLParams }}'{{ $param }}'{{ end }}];
+	    const excludeParams = [{{ range $param := $method.URLParams }}'{{ $param }}', {{ end }}];
 {{if eq $method.Method "GET"}}		const resp = await fetch(
 			`${this.baseURL}{{$method.Endpoint}}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
 			{
@@ -104,7 +104,7 @@ export class APIClient {
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<{{$method.ResponseType}}> {
-	    const excludeParams = [{{ range $param := $method.URLParams }}'{{ $param }}'{{ end }}];
+	    const excludeParams = [{{ range $param := $method.URLParams }}'{{ $param }}', {{ end }}];
 {{if eq $method.Method "GET"}}		const resp = await fetch(
 			`${this.baseURL}{{$method.Endpoint}}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
 			{

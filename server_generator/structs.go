@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func findStructPairList(path string) (map[string]*PackageStructPair, error) {
+func findStructPairList(path string, endpointParams []string) (map[string]*PackageStructPair, error) {
 	fset := token.NewFileSet()
 	pkgs, err := parser.ParseDir(fset, path, nil, parser.AllErrors|parser.ParseComments)
 	if err != nil {
@@ -40,6 +40,10 @@ func findStructPairList(path string) (map[string]*PackageStructPair, error) {
 		case StructModeRequest:
 			structPair[controllerName].Request = s
 
+			if err := validateRequestByEndpointParams(fset, s.StructObject, endpointParams); err != nil {
+				return nil, err
+			}
+
 			if strings.HasPrefix(strings.ToLower(controllerName), "get") {
 				if err = validateGetRequestTags(fset, s.StructObject); err != nil {
 					return nil, err
@@ -51,6 +55,41 @@ func findStructPairList(path string) (map[string]*PackageStructPair, error) {
 	}
 
 	return structPair, err
+}
+
+func validateRequestByEndpointParams(fset *token.FileSet, structType *ast.StructType, endpointParams []string) error {
+	fieldList := structType.Fields.List
+	hasEndpoints := make(map[string]bool)
+	for _, e := range endpointParams {
+		hasEndpoints[e] = false
+	}
+
+	for _, fields := range fieldList {
+		for _, field := range fields.Names {
+			fieldName := field.Name
+			if _, ok := hasEndpoints[fieldName]; ok {
+				hasEndpoints[fieldName] = true
+			}
+		}
+	}
+
+	requireParams := ""
+	for name, e := range hasEndpoints {
+		if e {
+			continue
+		}
+		if len(requireParams) > 0 {
+			requireParams += ", "
+		}
+		requireParams += name
+	}
+
+	if len(requireParams) == 0 {
+		return nil
+	}
+
+	return fmt.Errorf("%s: Pathマッチング用のパラメータが不足しています。不足しているパラメータ[%s]",
+		fset.Position(structType.Pos()).String(), requireParams)
 }
 
 func validateGetRequestTags(fset *token.FileSet, structType *ast.StructType) error {

@@ -17,10 +17,10 @@ import { PostCreateUserRequest as PostCreateUserRequest } from './classes//PostC
 export { PostCreateUserRequest as PostCreateUserRequest } from './classes//PostCreateUserRequest';
 import { PostCreateUserResponse as PostCreateUserResponse } from './classes//PostCreateUserResponse';
 export { PostCreateUserResponse as PostCreateUserResponse } from './classes//PostCreateUserResponse';
-import { PostUpdateUserNameRequest as ServiceUser2PostUpdateUserNameRequest } from './classes/service/user2/PostUpdateUserNameRequest';
-export { PostUpdateUserNameRequest as ServiceUser2PostUpdateUserNameRequest } from './classes/service/user2/PostUpdateUserNameRequest';
 import { PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest } from './classes/service/user/PostUpdateUserNameRequest';
 export { PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest } from './classes/service/user/PostUpdateUserNameRequest';
+import { PostUpdateUserNameRequest as ServiceUser2PostUpdateUserNameRequest } from './classes/service/user2/PostUpdateUserNameRequest';
+export { PostUpdateUserNameRequest as ServiceUser2PostUpdateUserNameRequest } from './classes/service/user2/PostUpdateUserNameRequest';
 import { PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse } from './classes/service/user/PostUpdateUserNameResponse';
 export { PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse } from './classes/service/user/PostUpdateUserNameResponse';
 import { PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse } from './classes/service/user2/PostUpdateUserNameResponse';
@@ -33,6 +33,10 @@ import { PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResp
 export { PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse } from './classes/service/user/PostUpdateUserPasswordResponse';
 import { PostUpdateUserPasswordResponse as ServiceUser2PostUpdateUserPasswordResponse } from './classes/service/user2/PostUpdateUserPasswordResponse';
 export { PostUpdateUserPasswordResponse as ServiceUser2PostUpdateUserPasswordResponse } from './classes/service/user2/PostUpdateUserPasswordResponse';
+import { PutJobRequest as ServiceUserUserIDJobIDPutJobRequest } from './classes/service/user/_UserID/_JobID/PutJobRequest';
+export { PutJobRequest as ServiceUserUserIDJobIDPutJobRequest } from './classes/service/user/_UserID/_JobID/PutJobRequest';
+import { PutJobResponse as ServiceUserUserIDJobIDPutJobResponse } from './classes/service/user/_UserID/_JobID/PutJobResponse';
+export { PutJobResponse as ServiceUserUserIDJobIDPutJobResponse } from './classes/service/user/_UserID/_JobID/PutJobResponse';
 
 
 
@@ -221,32 +225,6 @@ class ServiceUserClient {
 		});
 	}
 
-	async postUpdateUserPassword(
-		param: ServiceUserPostUpdateUserPasswordRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<ServiceUserPostUpdateUserPasswordResponse> {
-	    const excludeParams = [];
-		const resp = await fetch(
-			`${this.baseURL}/service/user/update_user_password`,
-			{
-				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
-				headers: {
-					...this.headers,
-					...headers,
-				},
-				...this.options,
-				...options,
-			}
-		);
-
-		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
-		}
-
-		return new ServiceUserPostUpdateUserPasswordResponse(await resp.json());
-	}
 	async postUpdateUserName(
 		param: ServiceUserPostUpdateUserNameRequest,
 		headers?: {[key: string]: string},
@@ -273,12 +251,40 @@ class ServiceUserClient {
 
 		return new ServiceUserPostUpdateUserNameResponse(await resp.json());
 	}
+	async postUpdateUserPassword(
+		param: ServiceUserPostUpdateUserPasswordRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
+	): Promise<ServiceUserPostUpdateUserPasswordResponse> {
+	    const excludeParams = [];
+		const resp = await fetch(
+			`${this.baseURL}/service/user/update_user_password`,
+			{
+				method: "POST",
+				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				headers: {
+					...this.headers,
+					...headers,
+				},
+				...this.options,
+				...options,
+			}
+		);
+
+		if (Math.floor(resp.status / 100) !== 2) {
+			throw new Error(resp.statusText + ": " + await resp.text());
+		}
+
+		return new ServiceUserPostUpdateUserPasswordResponse(await resp.json());
+	}
 }
 
 class ServiceUserUserIDClient {
 
+	public _JobID: ServiceUserUserIDJobIDClient;
 	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
 
+		this._JobID = new ServiceUserUserIDJobIDClient(headers, options, baseURL);
 	}
 
 	getRequestObject(param: any, routingPath: string[]): any {
@@ -293,7 +299,7 @@ class ServiceUserUserIDClient {
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceUserUserIDGetUserJobGetResponse> {
-	    const excludeParams = ['UserID'];
+	    const excludeParams = ['UserID', ];
 		const resp = await fetch(
 			`${this.baseURL}/service/user/${encodeURI(param.UserID)}/user_job_get?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
 			{
@@ -312,6 +318,47 @@ class ServiceUserUserIDClient {
 		}
 
 		return new ServiceUserUserIDGetUserJobGetResponse(await resp.json());
+	}
+}
+
+class ServiceUserUserIDJobIDClient {
+
+	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
+
+	}
+
+	getRequestObject(param: any, routingPath: string[]): any {
+		const obj = param.toObject();
+		return Object.keys(obj).filter((key) =>{
+			return routingPath.indexOf(key) !== -1;
+		});
+	}
+
+	async putJob(
+		param: ServiceUserUserIDJobIDPutJobRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
+	): Promise<ServiceUserUserIDJobIDPutJobResponse> {
+	    const excludeParams = ['UserID', 'JobID', ];
+		const resp = await fetch(
+			`${this.baseURL}/service/user/${encodeURI(param.UserID)}/${encodeURI(param.JobID)}/job`,
+			{
+				method: "PUT",
+				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				headers: {
+					...this.headers,
+					...headers,
+				},
+				...this.options,
+				...options,
+			}
+		);
+
+		if (Math.floor(resp.status / 100) !== 2) {
+			throw new Error(resp.statusText + ": " + await resp.text());
+		}
+
+		return new ServiceUserUserIDJobIDPutJobResponse(await resp.json());
 	}
 }
 
@@ -353,33 +400,6 @@ export class APIClient {
 		});
 	}
 
-	async postCreateTable(
-		param: PostCreateTableRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<PostCreateTableResponse> {
-	    const excludeParams = [];
-		const resp = await fetch(
-			`${this.baseURL}/create_table`,
-			{
-				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
-				headers: {
-					...this.headers,
-					...headers,
-				},
-				...this.options,
-				...options,
-			}
-		);
-
-		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
-		}
-
-		return new PostCreateTableResponse(await resp.json());
-	}
-
 	async postCreateUser(
 		param: PostCreateUserRequest,
 		headers?: {[key: string]: string},
@@ -405,6 +425,33 @@ export class APIClient {
 		}
 
 		return new PostCreateUserResponse(await resp.json());
+	}
+
+	async postCreateTable(
+		param: PostCreateTableRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
+	): Promise<PostCreateTableResponse> {
+	    const excludeParams = [];
+		const resp = await fetch(
+			`${this.baseURL}/create_table`,
+			{
+				method: "POST",
+				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				headers: {
+					...this.headers,
+					...headers,
+				},
+				...this.options,
+				...options,
+			}
+		);
+
+		if (Math.floor(resp.status / 100) !== 2) {
+			throw new Error(resp.statusText + ": " + await resp.text());
+		}
+
+		return new PostCreateTableResponse(await resp.json());
 	}
 
 }
