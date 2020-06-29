@@ -19,17 +19,17 @@ export class APIClient {
 		token?: string,
 		commonHeaders?: {[key: string]: string},
 		baseURL?: string,
-		commonOptions?: {[key: string]: any}
+		commonOptions: {[key: string]: any} = {}
 	) {
 		const headers: {[key: string]: string} =  {
 			'Content-Type': 'application/json',
 			...commonHeaders,
 		};
 
-		if(token !== undefined)  {
+		if (token !== undefined) {
 			headers['Authorization'] = 'Bearer ' + token;
 		}
-		
+
 		this.baseURL =  (baseURL === undefined) ? "" : baseURL;
 		this.options = commonOptions;
 		this.headers = headers;
@@ -55,6 +55,10 @@ export class APIClient {
 				...options,
 			}
 		);
+
+		if (Math.floor(resp.status / 100) !== 2) {
+			throw new Error(resp.statusText + ": " + await resp.text());
+		}
 
 		return new PostCreateUserResponse(await resp.json());
 	}

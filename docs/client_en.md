@@ -1,21 +1,21 @@
 # api_gen
 ## client_generator
 
-server_generator向けの用意したフォルダに対して実行する。
-ライブラリは今いるディレクトリに対して生成される。
+Execute client_generator for the same root directory as server_generator.
+The library will generated in the current working directory.
 
-Typescript+fetchを利用したライブラリが生成される。
+The library uses TypeScript+fetch API
 
-[templates](../templates) を利用した場合、[templates/frontend](../templates/frontend)にて `make generate`を実行することで簡単に生成できる。
+In [templates,](../templates) the library can be generated with `make generate` in [templates/frontend.](../templates/frontend)
 
-生成されるファイルは以下のファイルである。
+The following files are generated:
 - api/
     - api_client.ts
     - classes/
         - {HTTP Method}{Endpoint Name}{Request/Response}.ts
 
-以下が実装例です。
 
+Example implementation:
 ```typescript
 import { PostCreateUserRequest } from "./api/classes/PostCreateUserRequest";
 import { APIClient } from "./api/api_client";
@@ -65,6 +65,5 @@ import { APIClient } from "./api/api_client";
 ```
 
 ### FAQ
-#### Cookieを送信したい
-- `{credentials: "include"}` をfetch APIのオプションに設定
+- Use `{credentials: "include"}` to send Cookie
     - FYI: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API

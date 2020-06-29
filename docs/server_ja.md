@@ -1,4 +1,5 @@
-## api-generator
+# api_gen
+## server_generator
 
 - APIのRootingやControllerを階層から自動的に判定し、生成する。
 - 自動生成されたControllerに対して実際の処理を書いていく。
