@@ -191,6 +191,9 @@ func parsePackages(path string, endpointParams []string) ([]*ControllerTemplate,
 	for cn, s := range structPair {
 		req := s.Request
 		res := s.Response
+		structFilePath := s.FileName
+		fileName := filepath.Base(structFilePath)
+		fileName = fileName[:len(fileName)-len(filepath.Ext(structFilePath))]
 
 		if req == nil || res == nil {
 			continue
@@ -222,6 +225,15 @@ func parsePackages(path string, endpointParams []string) ([]*ControllerTemplate,
 			endpoint = ep
 		} else {
 			endpoint = strcase.ToSnake(endpoint)
+		}
+
+		if strings.HasPrefix(fileName, "0_") {
+			fileName = fileName[2:]
+			if !strings.HasPrefix(strings.ToLower(fileName), ":id") {
+				fileName = strings.Replace(fileName, "_id", "ID", -1)
+			}
+			endpoint = strcase.ToCamel(fileName)
+			endpoint = fmt.Sprintf(":%s", strings.ToLower(string(endpoint[0]))+endpoint[1:])
 		}
 
 		ct := &ControllerTemplate{

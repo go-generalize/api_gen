@@ -19,6 +19,8 @@ func findStructPairList(path string, endpointParams []string) (map[string]*Packa
 	structList := findStructList(pkgs)
 	structPair := make(map[string]*PackageStructPair, 0)
 	for _, s := range structList {
+		fineName := fset.File(s.StructObject.Struct).Name()
+
 		controllerName := s.StructName
 		var structMode StructMode
 
@@ -35,6 +37,7 @@ func findStructPairList(path string, endpointParams []string) (map[string]*Packa
 		if _, ok := structPair[controllerName]; !ok {
 			structPair[controllerName] = new(PackageStructPair)
 		}
+		structPair[controllerName].FileName = fineName
 
 		switch structMode {
 		case StructModeRequest:
