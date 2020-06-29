@@ -30,9 +30,13 @@ $ server_generator ./sample/
 You can define middlewares in `map[endpoint]middleware`.
 Middlewares will be applied to all endpoints under the specified path
 
+To start a new project with api_gen, a boilerplate is available at [templates](../templates).
+
 ```go
 e := echo.New()
+// Show access logs
 e.Use(middleware.Logger())
+// Recover from panic()
 e.Use(middleware.Recover())
 
 m := make([]*MiddlewareSet, 0)
@@ -41,11 +45,14 @@ m = append(m, &MiddlewareSet{
 	MiddlewareFunc: []echo.MiddlewareFunc{
 		func(handlerFunc echo.HandlerFunc) echo.HandlerFunc {
 			return func(context echo.Context) error {
-				// some middleware code
+				// Apply this function as a middleware
+				//     for all paths under /service/user/
 			}
 		},
 	},
 })
+
+// Initialize all handlers
 service.Bootstrap(e, m)
 
 if err := e.Start(":" + PORT); err != nil {

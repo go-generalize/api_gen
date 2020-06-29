@@ -1,5 +1,7 @@
 package interfaces
 
+// Example endpoint
+
 // PostCreateUserRequest Description ep="create_user/:id"
 type PostCreateUserRequest struct {
 	ID       string `param:"id"`

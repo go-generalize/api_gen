@@ -24,9 +24,13 @@ $ server_generator ./sample/
 
 middlewareは `map[endpoint]middleware` の形式で追加していく。指定したmiddlewareはendpoint以下のすべてに適用される。
 
+[templates](../templates)にapi_genでプロジェクトを始める時のテンプレートを参照できます。
+
 ```go
 e := echo.New()
+// アクセスログを表示
 e.Use(middleware.Logger())
+// panic時に自動でrecoverする
 e.Use(middleware.Recover())
 
 m := make([]*MiddlewareSet, 0)
@@ -35,11 +39,13 @@ m = append(m, &MiddlewareSet{
 	MiddlewareFunc: []echo.MiddlewareFunc{
 		func(handlerFunc echo.HandlerFunc) echo.HandlerFunc {
 			return func(context echo.Context) error {
-				// some middleware code
+				// /service/user/以下の全てのハンドラーにこの関数を適用
 			}
 		},
 	},
 })
+
+// 全てのハンドラーを初期化する
 service.Bootstrap(e, m)
 
 if err := e.Start(":" + PORT); err != nil {
