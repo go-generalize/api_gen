@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"go/ast"
 	"go/parser"
@@ -12,6 +13,8 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+
+	"github.com/go-generalize/api_gen/common"
 
 	_ "github.com/go-generalize/api_gen/client_generator/statik"
 	"github.com/iancoleman/strcase"
@@ -252,6 +255,15 @@ func main() {
 	if l < 2 {
 		fmt.Println("You have to specify the path of target go file")
 		os.Exit(1)
+	}
+
+	versionFlag := flag.Bool("v", false, "print version")
+
+	flag.Parse()
+
+	if *versionFlag {
+		fmt.Printf(common.AppVersion)
+		return
 	}
 
 	if err := os.RemoveAll("./classes"); err != nil {
