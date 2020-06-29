@@ -13,14 +13,22 @@ class {{$elem.Name}} {
 {{range $index, $elem := $elem.Children}}
 		this.{{$elem.Name}} = new {{$elem.ClassName}}(headers, options, baseURL);{{end}}
 	}
+
+	getRequestObject(param: any, routingPath: string[]): any {
+		const obj = param.toObject();
+		return Object.keys(obj).filter((key) =>{
+			return routingPath.indexOf(key) !== -1;
+		});
+	}
 {{range $index, $method := $elem.Methods}}
 	async {{$method.Name}}(
 		param: {{$method.RequestType}},
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<{{$method.ResponseType}}> {
+	    const excludeParams = [{{ range $param := $method.URLParams }}'{{ $param }}'{{ end }}];
 {{if eq $method.Method "GET"}}		const resp = await fetch(
-			`${this.baseURL}{{$method.Endpoint}}?` + (new URLSearchParams(param.toObject())).toString(),
+			`${this.baseURL}{{$method.Endpoint}}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
 			{
 				method: "{{$method.Method}}",
 				headers: {
@@ -35,7 +43,7 @@ class {{$elem.Name}} {
 			`${this.baseURL}{{$method.Endpoint}}`,
 			{
 				method: "{{$method.Method}}",
-				body: JSON.stringify(param),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
 					...headers,
@@ -83,14 +91,22 @@ export class APIClient {
 {{range $index, $elem := .Children}}
 		this.{{$elem.Name}} = new {{$elem.ClassName}}(headers, this.options, this.baseURL);{{end}}
 	}
+
+	getRequestObject(param: any, routingPath: string[]): any {
+		const obj = param.toObject();
+		return Object.keys(obj).filter((key) =>{
+			return routingPath.indexOf(key) !== -1;
+		});
+	}
 {{range $index, $method := .Methods}}
 	async {{$method.Name}}(
 		param: {{$method.RequestType}},
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<{{$method.ResponseType}}> {
+	    const excludeParams = [{{ range $param := $method.URLParams }}'{{ $param }}'{{ end }}];
 {{if eq $method.Method "GET"}}		const resp = await fetch(
-			`${this.baseURL}{{$method.Endpoint}}?` + (new URLSearchParams(param.toObject())).toString(),
+			`${this.baseURL}{{$method.Endpoint}}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
 			{
 				method: "{{$method.Method}}",
 				headers: {
@@ -105,7 +121,7 @@ export class APIClient {
 			`${this.baseURL}{{$method.Endpoint}}`,
 			{
 				method: "{{$method.Method}}",
-				body: JSON.stringify(param),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
 					...headers,
@@ -120,5 +136,6 @@ export class APIClient {
 		}
 
 		return new {{$method.ResponseType}}(await resp.json());
-	}{{end}}
+	}
+{{end}}
 }

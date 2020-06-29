@@ -181,8 +181,13 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 		}
 
 		replaced := strcase.ToCamel(strings.ReplaceAll(url+"/"+ep.rawName, "/", "-"))
+		urlParams := make([]string, 0)
 		endpointPath := ep.path
-		endpointPath = endpointReplaceMatchRule.ReplaceAllString(endpointPath, "/${encodeURI(param.$1)}/")
+		endpointPath = endpointReplaceMatchRule.ReplaceAllStringFunc(endpointPath, func(s string) string {
+			param := s[2 : len(s)-1]
+			urlParams = append(urlParams, param)
+			return fmt.Sprintf("/${encodeURI(param.%s)}/", param)
+		})
 
 		parent.Methods = append(
 			parent.Methods,
@@ -192,6 +197,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 				ResponseType: replaced + "Response",
 				Method:       strings.ToUpper(ep.method),
 				Endpoint:     endpointPath,
+				URLParams:    urlParams,
 			},
 		)
 	}

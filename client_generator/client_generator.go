@@ -14,6 +14,7 @@ type methodType struct {
 	Name                      string
 	RequestType, ResponseType string
 	Method, Endpoint          string
+	URLParams                 []string
 }
 
 type childrenType struct {

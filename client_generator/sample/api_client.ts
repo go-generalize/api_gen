@@ -50,13 +50,21 @@ class ServiceClient {
 		this.user2 = new ServiceUser2Client(headers, options, baseURL);
 	}
 
+	getRequestObject(param: any, routingPath: string[]): any {
+		const obj = param.toObject();
+		return Object.keys(obj).filter((key) =>{
+			return routingPath.indexOf(key) !== -1;
+		});
+	}
+
 	async getArticle(
 		param: ServiceGetArticleRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceGetArticleResponse> {
+	    const excludeParams = [];
 		const resp = await fetch(
-			`${this.baseURL}/service/article?` + (new URLSearchParams(param.toObject())).toString(),
+			`${this.baseURL}/service/article?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
 			{
 				method: "GET",
 				headers: {
@@ -82,13 +90,21 @@ class ServiceStaticPageClient {
 
 	}
 
+	getRequestObject(param: any, routingPath: string[]): any {
+		const obj = param.toObject();
+		return Object.keys(obj).filter((key) =>{
+			return routingPath.indexOf(key) !== -1;
+		});
+	}
+
 	async getStaticPage(
 		param: ServiceStaticPageGetStaticPageRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceStaticPageGetStaticPageResponse> {
+	    const excludeParams = [];
 		const resp = await fetch(
-			`${this.baseURL}/service/static_page/static_page?` + (new URLSearchParams(param.toObject())).toString(),
+			`${this.baseURL}/service/static_page/static_page?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
 			{
 				method: "GET",
 				headers: {
@@ -114,6 +130,13 @@ class ServiceTableClient {
 
 	}
 
+	getRequestObject(param: any, routingPath: string[]): any {
+		const obj = param.toObject();
+		return Object.keys(obj).filter((key) =>{
+			return routingPath.indexOf(key) !== -1;
+		});
+	}
+
 }
 
 class ServiceUser2Client {
@@ -122,16 +145,24 @@ class ServiceUser2Client {
 
 	}
 
+	getRequestObject(param: any, routingPath: string[]): any {
+		const obj = param.toObject();
+		return Object.keys(obj).filter((key) =>{
+			return routingPath.indexOf(key) !== -1;
+		});
+	}
+
 	async postUpdateUserName(
 		param: ServiceUser2PostUpdateUserNameRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceUser2PostUpdateUserNameResponse> {
+	    const excludeParams = [];
 		const resp = await fetch(
 			`${this.baseURL}/service/user2/update_user_name`,
 			{
 				method: "POST",
-				body: JSON.stringify(param),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
 					...headers,
@@ -152,11 +183,12 @@ class ServiceUser2Client {
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceUser2PostUpdateUserPasswordResponse> {
+	    const excludeParams = [];
 		const resp = await fetch(
 			`${this.baseURL}/service/user2/update_user_password`,
 			{
 				method: "POST",
-				body: JSON.stringify(param),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
 					...headers,
@@ -182,16 +214,24 @@ class ServiceUserClient {
 		this._UserID = new ServiceUserUserIDClient(headers, options, baseURL);
 	}
 
+	getRequestObject(param: any, routingPath: string[]): any {
+		const obj = param.toObject();
+		return Object.keys(obj).filter((key) =>{
+			return routingPath.indexOf(key) !== -1;
+		});
+	}
+
 	async postUpdateUserPassword(
 		param: ServiceUserPostUpdateUserPasswordRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceUserPostUpdateUserPasswordResponse> {
+	    const excludeParams = [];
 		const resp = await fetch(
 			`${this.baseURL}/service/user/update_user_password`,
 			{
 				method: "POST",
-				body: JSON.stringify(param),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
 					...headers,
@@ -212,11 +252,12 @@ class ServiceUserClient {
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceUserPostUpdateUserNameResponse> {
+	    const excludeParams = [];
 		const resp = await fetch(
 			`${this.baseURL}/service/user/update_user_name`,
 			{
 				method: "POST",
-				body: JSON.stringify(param),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
 					...headers,
@@ -240,13 +281,21 @@ class ServiceUserUserIDClient {
 
 	}
 
+	getRequestObject(param: any, routingPath: string[]): any {
+		const obj = param.toObject();
+		return Object.keys(obj).filter((key) =>{
+			return routingPath.indexOf(key) !== -1;
+		});
+	}
+
 	async getUserJobGet(
 		param: ServiceUserUserIDGetUserJobGetRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceUserUserIDGetUserJobGetResponse> {
+	    const excludeParams = ['UserID'];
 		const resp = await fetch(
-			`${this.baseURL}/service/user/${encodeURI(param.UserID)}/user_job_get?` + (new URLSearchParams(param.toObject())).toString(),
+			`${this.baseURL}/service/user/${encodeURI(param.UserID)}/user_job_get?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
 			{
 				method: "GET",
 				headers: {
@@ -297,41 +346,24 @@ export class APIClient {
 		this.service = new ServiceClient(headers, this.options, this.baseURL);
 	}
 
-	async postCreateUser(
-		param: PostCreateUserRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<PostCreateUserResponse> {
-		const resp = await fetch(
-			`${this.baseURL}/create_user`,
-			{
-				method: "POST",
-				body: JSON.stringify(param),
-				headers: {
-					...this.headers,
-					...headers,
-				},
-				...this.options,
-				...options,
-			}
-		);
-
-		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
-		}
-
-		return new PostCreateUserResponse(await resp.json());
+	getRequestObject(param: any, routingPath: string[]): any {
+		const obj = param.toObject();
+		return Object.keys(obj).filter((key) =>{
+			return routingPath.indexOf(key) !== -1;
+		});
 	}
+
 	async postCreateTable(
 		param: PostCreateTableRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<PostCreateTableResponse> {
+	    const excludeParams = [];
 		const resp = await fetch(
 			`${this.baseURL}/create_table`,
 			{
 				method: "POST",
-				body: JSON.stringify(param),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
 					...headers,
@@ -347,4 +379,32 @@ export class APIClient {
 
 		return new PostCreateTableResponse(await resp.json());
 	}
+
+	async postCreateUser(
+		param: PostCreateUserRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
+	): Promise<PostCreateUserResponse> {
+	    const excludeParams = [];
+		const resp = await fetch(
+			`${this.baseURL}/create_user`,
+			{
+				method: "POST",
+				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				headers: {
+					...this.headers,
+					...headers,
+				},
+				...this.options,
+				...options,
+			}
+		);
+
+		if (Math.floor(resp.status / 100) !== 2) {
+			throw new Error(resp.statusText + ": " + await resp.text());
+		}
+
+		return new PostCreateUserResponse(await resp.json());
+	}
+
 }
