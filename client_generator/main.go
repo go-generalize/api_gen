@@ -126,7 +126,7 @@ func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *a
 				goFileName = goFileName[2:]
 				endpointPath := p.endpoints[me].path
 				if !strings.HasPrefix(strings.ToLower(goFileName), ":id") {
-					goFileName = strings.Replace(goFileName, "_id", "ID", -1)
+					goFileName = strings.ReplaceAll(goFileName, "_id", "ID")
 				}
 				endpointPath = strcase.ToCamel(goFileName)
 				endpointPath = fmt.Sprintf("/_%s", strings.ToLower(string(endpointPath[0]))+endpointPath[1:])
@@ -208,7 +208,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 		replaced := strcase.ToCamel(strings.ReplaceAll(url+"/"+ep.rawName, "/", "-"))
 		urlParams := make([]string, 0)
 		endpointPath := ep.path
-		endpointPath = strings.Replace(endpointPath, "/_", "/:", -1)
+		endpointPath = strings.ReplaceAll(endpointPath, "/_", "/:")
 		requestStruct := ep.requestStructObject
 		endpointPath = endpointReplaceMatchRule.ReplaceAllStringFunc(endpointPath, func(s string) string {
 			hasSuffixSlash := strings.HasSuffix(s, "/")

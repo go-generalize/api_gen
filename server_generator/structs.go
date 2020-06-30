@@ -50,7 +50,7 @@ func findStructPairList(path string, endpointParams []string) (map[string]*Packa
 		if strings.HasPrefix(fileName, "0_") {
 			fileName = fileName[2:]
 			if !strings.HasPrefix(strings.ToLower(fileName), ":id") {
-				fileName = strings.Replace(fileName, "_id", "ID", -1)
+				fileName = strings.ReplaceAll(fileName, "_id", "ID")
 			}
 			endpoint := strcase.ToCamel(fileName)
 			param := strings.ToLower(string(endpoint[0])) + endpoint[1:]
