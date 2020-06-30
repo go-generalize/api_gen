@@ -14,7 +14,7 @@ func NewPostUpdateUserPasswordController() *PostUpdateUserPasswordController {
 	return p
 }
 
-// PostUpdateUserPasswordController
+// PostUpdateUserPassword
 // @Summary WIP
 // @Description WIP
 // @Accept json
@@ -22,7 +22,7 @@ func NewPostUpdateUserPasswordController() *PostUpdateUserPasswordController {
 // @Param
 // @Success 200 {object} PostUpdateUserPasswordResponse
 // @Failure 400 {object} WIP
-// @Router service/user/update_user_password [POST]
+// @Router /service/user/update_user_password [POST]
 func (p *PostUpdateUserPasswordController) PostUpdateUserPassword(
 	ctx context.Context, c echo.Context, req *PostUpdateUserPasswordRequest,
 ) (res *PostUpdateUserPasswordResponse, err error) {

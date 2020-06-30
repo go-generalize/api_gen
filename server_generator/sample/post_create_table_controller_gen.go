@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/go-generalize/api_gen/server_generator/sample/service/table"
-
 	"github.com/labstack/echo/v4"
 )
 

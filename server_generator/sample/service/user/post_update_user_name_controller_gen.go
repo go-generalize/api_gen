@@ -14,7 +14,7 @@ func NewPostUpdateUserNameController() *PostUpdateUserNameController {
 	return p
 }
 
-// PostUpdateUserNameController
+// PostUpdateUserName
 // @Summary WIP
 // @Description WIP
 // @Accept json
@@ -22,7 +22,7 @@ func NewPostUpdateUserNameController() *PostUpdateUserNameController {
 // @Param
 // @Success 200 {object} PostUpdateUserNameResponse
 // @Failure 400 {object} WIP
-// @Router service/user/update_user_name [POST]
+// @Router /service/user/update_user_name [POST]
 func (p *PostUpdateUserNameController) PostUpdateUserName(
 	ctx context.Context, c echo.Context, req *PostUpdateUserNameRequest,
 ) (res *PostUpdateUserNameResponse, err error) {
