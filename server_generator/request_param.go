@@ -19,5 +19,4 @@ const (
 	IntegerRequestDataType string = "integer" // int, uint, uint32, uint64
 	NumberRequestDataType  string = "number"  // float32
 	BooleanRequestDataType string = "boolean" // bool
-	StructRequestDataType  string = "struct"  // any struct
 )

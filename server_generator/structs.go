@@ -194,15 +194,15 @@ func createRequestParams(structName string, fset *token.FileSet, st *ast.StructT
 
 		switch types.ExprString(f.Type) {
 		case "string":
-			fDataType = "string"
+			fDataType = StringRequestDataType
 			break
 		case "int", "int8", "int16", "int32", "int64",
 			"uint", "uint8", "uint16", "uint32", "uint64":
-			fDataType = "integer"
+			fDataType = IntegerRequestDataType
 		case "float32", "float64":
-			fDataType = "number"
+			fDataType = NumberRequestDataType
 		case "bool":
-			fDataType = "boolean"
+			fDataType = BooleanRequestDataType
 		default:
 			fDataType = types.ExprString(f.Type)
 		}
