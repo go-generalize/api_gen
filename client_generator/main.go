@@ -30,6 +30,7 @@ type endpoint struct {
 	methodEndpoint string
 	path           string
 	rawName        string
+	fileName       string
 
 	method            string
 	request, response bool
@@ -47,7 +48,7 @@ func newPkgParser() *pkgParser {
 	}
 }
 
-func (p *pkgParser) parseFile(pathName, dir string, _ *token.FileSet, file *ast.File) {
+func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *ast.File) {
 	for _, decl := range file.Decls {
 		genDecl, ok := decl.(*ast.GenDecl)
 		if !ok {
@@ -89,10 +90,15 @@ func (p *pkgParser) parseFile(pathName, dir string, _ *token.FileSet, file *ast.
 				continue
 			}
 
+			goFilePath := fset.File(spec.Pos()).Name()
+			goFileName := filepath.Base(goFilePath)
+			goFileName = goFileName[:len(goFileName)-len(filepath.Ext(goFileName))]
+
 			if _, ok := p.endpoints[me]; !ok {
 				p.endpoints[me] = &endpoint{}
 			}
 
+			p.endpoints[me].fileName = goFilePath
 			p.endpoints[me].method = method
 			p.endpoints[me].methodEndpoint = me
 
@@ -107,6 +113,18 @@ func (p *pkgParser) parseFile(pathName, dir string, _ *token.FileSet, file *ast.
 				p.endpoints[me].rawName = strings.TrimSuffix(name, "Response")
 				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(strings.TrimSuffix(name[len(method):], "Response")))
 			}
+
+			if strings.HasPrefix(goFileName, "0_") {
+				goFileName = goFileName[2:]
+				endpointPath := p.endpoints[me].path
+				if !strings.HasPrefix(strings.ToLower(goFileName), ":id") {
+					goFileName = strings.Replace(goFileName, "_id", "ID", -1)
+				}
+				endpointPath = strcase.ToCamel(goFileName)
+				endpointPath = fmt.Sprintf("/_%s", strings.ToLower(string(endpointPath[0]))+endpointPath[1:])
+				p.endpoints[me].path = filepath.Join(filepath.Dir(p.endpoints[me].path), endpointPath)
+			}
+			fmt.Printf("%+v\n", p.endpoints[me])
 
 			packageNameFromFilePath := filepath.Base(dir)
 			if packageName != packageNameFromFilePath {
@@ -153,7 +171,7 @@ func (p *pkgParser) parseDir(pathName, dir string) {
 }
 
 func walk(p, url string, generator *clientGenerator, parent *clientType) {
-	endpointReplaceMatchRule := regexp.MustCompile(`:(.*?)/`)
+	endpointReplaceMatchRule := regexp.MustCompile(`(?m):(.*?)(/|$)`)
 	pkgParser := newPkgParser()
 
 	pkgParser.parseDir(url, p)
@@ -185,9 +203,14 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 		endpointPath := ep.path
 		endpointPath = strings.Replace(endpointPath, "/_", "/:", -1)
 		endpointPath = endpointReplaceMatchRule.ReplaceAllStringFunc(endpointPath, func(s string) string {
-			param := s[1 : len(s)-1]
+			if strings.HasSuffix(s, "/") {
+				param := s[1 : len(s)-1]
+				urlParams = append(urlParams, param)
+				return fmt.Sprintf("${encodeURI(param.%s)}/", param)
+			}
+			param := s[1:len(s)]
 			urlParams = append(urlParams, param)
-			return fmt.Sprintf("${encodeURI(param.%s)}/", param)
+			return fmt.Sprintf("${encodeURI(param.%s)}", param)
 		})
 
 		parent.Methods = append(

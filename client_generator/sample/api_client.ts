@@ -5,10 +5,14 @@ import { GetArticleRequest as ServiceGetArticleRequest } from './classes/service
 export { GetArticleRequest as ServiceGetArticleRequest } from './classes/service/GetArticleRequest';
 import { GetArticleResponse as ServiceGetArticleResponse } from './classes/service/GetArticleResponse';
 export { GetArticleResponse as ServiceGetArticleResponse } from './classes/service/GetArticleResponse';
-import { GetUserJobGetRequest as ServiceUserUserIDGetUserJobGetRequest } from './classes/service/user/_UserID/GetUserJobGetRequest';
-export { GetUserJobGetRequest as ServiceUserUserIDGetUserJobGetRequest } from './classes/service/user/_UserID/GetUserJobGetRequest';
-import { GetUserJobGetResponse as ServiceUserUserIDGetUserJobGetResponse } from './classes/service/user/_UserID/GetUserJobGetResponse';
-export { GetUserJobGetResponse as ServiceUserUserIDGetUserJobGetResponse } from './classes/service/user/_UserID/GetUserJobGetResponse';
+import { GetUserJobGetRequest as ServiceUserUserIDGetUserJobGetRequest } from './classes/service/user/_userID/GetUserJobGetRequest';
+export { GetUserJobGetRequest as ServiceUserUserIDGetUserJobGetRequest } from './classes/service/user/_userID/GetUserJobGetRequest';
+import { GetUserJobGetResponse as ServiceUserUserIDGetUserJobGetResponse } from './classes/service/user/_userID/GetUserJobGetResponse';
+export { GetUserJobGetResponse as ServiceUserUserIDGetUserJobGetResponse } from './classes/service/user/_userID/GetUserJobGetResponse';
+import { GetUserRequest as ServiceUser2GetUserRequest } from './classes/service/user2/GetUserRequest';
+export { GetUserRequest as ServiceUser2GetUserRequest } from './classes/service/user2/GetUserRequest';
+import { GetUserResponse as ServiceUser2GetUserResponse } from './classes/service/user2/GetUserResponse';
+export { GetUserResponse as ServiceUser2GetUserResponse } from './classes/service/user2/GetUserResponse';
 import { PostCreateTableRequest as PostCreateTableRequest } from './classes//PostCreateTableRequest';
 export { PostCreateTableRequest as PostCreateTableRequest } from './classes//PostCreateTableRequest';
 import { PostCreateTableResponse as PostCreateTableResponse } from './classes//PostCreateTableResponse';
@@ -21,22 +25,22 @@ import { PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest } fro
 export { PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest } from './classes/service/user/PostUpdateUserNameRequest';
 import { PostUpdateUserNameRequest as ServiceUser2PostUpdateUserNameRequest } from './classes/service/user2/PostUpdateUserNameRequest';
 export { PostUpdateUserNameRequest as ServiceUser2PostUpdateUserNameRequest } from './classes/service/user2/PostUpdateUserNameRequest';
-import { PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse } from './classes/service/user/PostUpdateUserNameResponse';
-export { PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse } from './classes/service/user/PostUpdateUserNameResponse';
 import { PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse } from './classes/service/user2/PostUpdateUserNameResponse';
 export { PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse } from './classes/service/user2/PostUpdateUserNameResponse';
-import { PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest } from './classes/service/user/PostUpdateUserPasswordRequest';
-export { PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest } from './classes/service/user/PostUpdateUserPasswordRequest';
+import { PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse } from './classes/service/user/PostUpdateUserNameResponse';
+export { PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse } from './classes/service/user/PostUpdateUserNameResponse';
 import { PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest } from './classes/service/user2/PostUpdateUserPasswordRequest';
 export { PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest } from './classes/service/user2/PostUpdateUserPasswordRequest';
+import { PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest } from './classes/service/user/PostUpdateUserPasswordRequest';
+export { PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest } from './classes/service/user/PostUpdateUserPasswordRequest';
 import { PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse } from './classes/service/user/PostUpdateUserPasswordResponse';
 export { PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse } from './classes/service/user/PostUpdateUserPasswordResponse';
 import { PostUpdateUserPasswordResponse as ServiceUser2PostUpdateUserPasswordResponse } from './classes/service/user2/PostUpdateUserPasswordResponse';
 export { PostUpdateUserPasswordResponse as ServiceUser2PostUpdateUserPasswordResponse } from './classes/service/user2/PostUpdateUserPasswordResponse';
-import { PutJobRequest as ServiceUserUserIDJobIDPutJobRequest } from './classes/service/user/_UserID/_JobID/PutJobRequest';
-export { PutJobRequest as ServiceUserUserIDJobIDPutJobRequest } from './classes/service/user/_UserID/_JobID/PutJobRequest';
-import { PutJobResponse as ServiceUserUserIDJobIDPutJobResponse } from './classes/service/user/_UserID/_JobID/PutJobResponse';
-export { PutJobResponse as ServiceUserUserIDJobIDPutJobResponse } from './classes/service/user/_UserID/_JobID/PutJobResponse';
+import { PutJobRequest as ServiceUserUserIDJobIDPutJobRequest } from './classes/service/user/_userID/_JobID/PutJobRequest';
+export { PutJobRequest as ServiceUserUserIDJobIDPutJobRequest } from './classes/service/user/_userID/_JobID/PutJobRequest';
+import { PutJobResponse as ServiceUserUserIDJobIDPutJobResponse } from './classes/service/user/_userID/_JobID/PutJobResponse';
+export { PutJobResponse as ServiceUserUserIDJobIDPutJobResponse } from './classes/service/user/_userID/_JobID/PutJobResponse';
 
 
 
@@ -208,14 +212,39 @@ class ServiceUser2Client {
 
 		return new ServiceUser2PostUpdateUserPasswordResponse(await resp.json());
 	}
+	async getUser(
+		param: ServiceUser2GetUserRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
+	): Promise<ServiceUser2GetUserResponse> {
+	    const excludeParams = ['userID', ];
+		const resp = await fetch(
+			`${this.baseURL}/service/user2/${encodeURI(param.userID)}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
+			{
+				method: "GET",
+				headers: {
+					...this.headers,
+					...headers,
+				},
+				...this.options,
+				...options,
+			}
+		);
+
+		if (Math.floor(resp.status / 100) !== 2) {
+			throw new Error(resp.statusText + ": " + await resp.text());
+		}
+
+		return new ServiceUser2GetUserResponse(await resp.json());
+	}
 }
 
 class ServiceUserClient {
 
-	public _UserID: ServiceUserUserIDClient;
+	public _userID: ServiceUserUserIDClient;
 	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
 
-		this._UserID = new ServiceUserUserIDClient(headers, options, baseURL);
+		this._userID = new ServiceUserUserIDClient(headers, options, baseURL);
 	}
 
 	getRequestObject(param: any, routingPath: string[]): any {
@@ -299,9 +328,9 @@ class ServiceUserUserIDClient {
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceUserUserIDGetUserJobGetResponse> {
-	    const excludeParams = ['UserID', ];
+	    const excludeParams = ['userID', ];
 		const resp = await fetch(
-			`${this.baseURL}/service/user/${encodeURI(param.UserID)}/user_job_get?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
+			`${this.baseURL}/service/user/${encodeURI(param.userID)}/user_job_get?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
 			{
 				method: "GET",
 				headers: {
@@ -339,9 +368,9 @@ class ServiceUserUserIDJobIDClient {
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceUserUserIDJobIDPutJobResponse> {
-	    const excludeParams = ['UserID', 'JobID', ];
+	    const excludeParams = ['userID', 'JobID', ];
 		const resp = await fetch(
-			`${this.baseURL}/service/user/${encodeURI(param.UserID)}/${encodeURI(param.JobID)}/job`,
+			`${this.baseURL}/service/user/${encodeURI(param.userID)}/${encodeURI(param.JobID)}/job`,
 			{
 				method: "PUT",
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
@@ -400,33 +429,6 @@ export class APIClient {
 		});
 	}
 
-	async postCreateUser(
-		param: PostCreateUserRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<PostCreateUserResponse> {
-	    const excludeParams = [];
-		const resp = await fetch(
-			`${this.baseURL}/create_user`,
-			{
-				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
-				headers: {
-					...this.headers,
-					...headers,
-				},
-				...this.options,
-				...options,
-			}
-		);
-
-		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
-		}
-
-		return new PostCreateUserResponse(await resp.json());
-	}
-
 	async postCreateTable(
 		param: PostCreateTableRequest,
 		headers?: {[key: string]: string},
@@ -452,6 +454,33 @@ export class APIClient {
 		}
 
 		return new PostCreateTableResponse(await resp.json());
+	}
+
+	async postCreateUser(
+		param: PostCreateUserRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
+	): Promise<PostCreateUserResponse> {
+	    const excludeParams = [];
+		const resp = await fetch(
+			`${this.baseURL}/create_user`,
+			{
+				method: "POST",
+				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				headers: {
+					...this.headers,
+					...headers,
+				},
+				...this.options,
+				...options,
+			}
+		);
+
+		if (Math.floor(resp.status / 100) !== 2) {
+			throw new Error(resp.statusText + ": " + await resp.text());
+		}
+
+		return new PostCreateUserResponse(await resp.json());
 	}
 
 }

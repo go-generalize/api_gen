@@ -54,7 +54,7 @@ function ToObject(o: any, typeOrCfg: any = {}, child = false): any {
 }
 
 // classes
-// struct2ts:github.com/go-generalize/api_gen/server_generator/sample/service/user/_UserID/_JobID.PutJobResponse
+// struct2ts:github.com/go-generalize/api_gen/server_generator/sample/service/user/_userID/_JobID.PutJobResponse
 class PutJobResponse {
 
 	constructor(data?: any) {

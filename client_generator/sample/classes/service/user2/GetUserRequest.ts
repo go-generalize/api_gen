@@ -54,13 +54,13 @@ function ToObject(o: any, typeOrCfg: any = {}, child = false): any {
 }
 
 // classes
-// struct2ts:github.com/go-generalize/api_gen/server_generator/sample/service/user/_userID.GetUserJobGetRequest
-class GetUserJobGetRequest {
-	UserID: string;
+// struct2ts:github.com/go-generalize/api_gen/server_generator/sample/service/user2.GetUserRequest
+class GetUserRequest {
+	ID: string;
 
 	constructor(data?: any) {
 		const d: any = (data && typeof data === 'object') ? ToObject(data) : {};
-		this.UserID = ('UserID' in d) ? d.UserID as string : '';
+		this.ID = ('ID' in d) ? d.ID as string : '';
 	}
 
 	toObject(): any {
@@ -71,7 +71,7 @@ class GetUserJobGetRequest {
 
 // exports
 export {
-	GetUserJobGetRequest,
+	GetUserRequest,
 	ParseDate,
 	ParseNumber,
 	FromArray,
