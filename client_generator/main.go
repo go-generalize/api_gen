@@ -12,6 +12,8 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"reflect"
+	"regexp"
 	"strings"
 
 	"github.com/go-generalize/api_gen/common"
@@ -32,6 +34,9 @@ type endpoint struct {
 	methodEndpoint string
 	path           string
 	rawName        string
+	fileName       string
+
+	requestStructObject *ast.StructType
 
 	method            string
 	request, response bool
@@ -49,7 +54,7 @@ func newPkgParser() *pkgParser {
 	}
 }
 
-func (p *pkgParser) parseFile(pathName, dir string, _ *token.FileSet, file *ast.File) {
+func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *ast.File) {
 	for _, decl := range file.Decls {
 		genDecl, ok := decl.(*ast.GenDecl)
 		if !ok {
@@ -91,10 +96,15 @@ func (p *pkgParser) parseFile(pathName, dir string, _ *token.FileSet, file *ast.
 				continue
 			}
 
+			goFilePath := fset.File(spec.Pos()).Name()
+			goFileName := filepath.Base(goFilePath)
+			goFileName = goFileName[:len(goFileName)-len(filepath.Ext(goFileName))]
+
 			if _, ok := p.endpoints[me]; !ok {
 				p.endpoints[me] = &endpoint{}
 			}
 
+			p.endpoints[me].fileName = goFilePath
 			p.endpoints[me].method = method
 			p.endpoints[me].methodEndpoint = me
 
@@ -103,11 +113,23 @@ func (p *pkgParser) parseFile(pathName, dir string, _ *token.FileSet, file *ast.
 
 				p.endpoints[me].rawName = strings.TrimSuffix(name, "Request")
 				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(strings.TrimSuffix(name[len(method):], "Request")))
+				p.endpoints[me].requestStructObject = typeSpec.Type.(*ast.StructType)
 			} else {
 				p.endpoints[me].response = true
 
 				p.endpoints[me].rawName = strings.TrimSuffix(name, "Response")
 				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(strings.TrimSuffix(name[len(method):], "Response")))
+			}
+
+			if strings.HasPrefix(goFileName, "0_") {
+				goFileName = goFileName[2:]
+				endpointPath := p.endpoints[me].path
+				if !strings.HasPrefix(strings.ToLower(goFileName), ":id") {
+					goFileName = strings.Replace(goFileName, "_id", "ID", -1)
+				}
+				endpointPath = strcase.ToCamel(goFileName)
+				endpointPath = fmt.Sprintf("/_%s", strings.ToLower(string(endpointPath[0]))+endpointPath[1:])
+				p.endpoints[me].path = filepath.Join(filepath.Dir(p.endpoints[me].path), endpointPath)
 			}
 
 			packageNameFromFilePath := filepath.Base(dir)
@@ -155,6 +177,7 @@ func (p *pkgParser) parseDir(pathName, dir string) {
 }
 
 func walk(p, url string, generator *clientGenerator, parent *clientType) {
+	endpointReplaceMatchRule := regexp.MustCompile(`(?m):(.*?)(/|$)`)
 	pkgParser := newPkgParser()
 
 	pkgParser.parseDir(url, p)
@@ -182,6 +205,48 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 		}
 
 		replaced := strcase.ToCamel(strings.ReplaceAll(url+"/"+ep.rawName, "/", "-"))
+		urlParams := make([]string, 0)
+		endpointPath := ep.path
+		endpointPath = strings.Replace(endpointPath, "/_", "/:", -1)
+		requestStruct := ep.requestStructObject
+		endpointPath = endpointReplaceMatchRule.ReplaceAllStringFunc(endpointPath, func(s string) string {
+			hasSuffixSlash := strings.HasSuffix(s, "/")
+			param := ""
+			if hasSuffixSlash {
+				param = s[1 : len(s)-1]
+			} else {
+				param = s[1:]
+			}
+
+			st := requestStruct
+			fieldList := st.Fields.List
+			for _, fields := range fieldList {
+				if fields.Tag == nil {
+					continue
+				}
+				tags := reflect.StructTag(strings.Trim(fields.Tag.Value, "`"))
+
+				jsonTag, jsonOk := tags.Lookup("json")
+
+				if paramTag, ok := tags.Lookup("param"); ok {
+					if paramTag == param {
+						if jsonOk {
+							param = jsonTag
+						} else {
+							param = fields.Names[0].Name
+						}
+					}
+				}
+			}
+
+			urlParams = append(urlParams, param)
+
+			suffix := ""
+			if hasSuffixSlash {
+				suffix = "/"
+			}
+			return fmt.Sprintf("${encodeURI(param.%s)}%s", param, suffix)
+		})
 
 		parent.Methods = append(
 			parent.Methods,
@@ -190,7 +255,8 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 				RequestType:  replaced + "Request",
 				ResponseType: replaced + "Response",
 				Method:       strings.ToUpper(ep.method),
-				Endpoint:     ep.path,
+				Endpoint:     endpointPath,
+				URLParams:    urlParams,
 			},
 		)
 	}

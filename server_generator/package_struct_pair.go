@@ -1,6 +1,8 @@
 package main
 
 type PackageStructPair struct {
-	Request  *PackageStruct
-	Response *PackageStruct
+	FileName  string
+	LastParam string
+	Request   *PackageStruct
+	Response  *PackageStruct
 }

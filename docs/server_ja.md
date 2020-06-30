@@ -16,6 +16,11 @@
      - 対応しているHTTPメソッドは、 `get` , `post` , `put` , `delete` , `patch`
      - GETメソッドでは、Requestの、json tagとquery tagの両方に同じ値を入れなくてはならない。
 - 必ず、 Request と Response がそれぞれ対になるようになっていなければならない。
+- パスルーティングをする場合。
+    - ディレクトリは `_` 始まりしなければならない。
+        - 例: `/service/:id/hogehoge` にしたい場合は `/service/_id/*.go` のようにする。
+    - ファイルは `0_` 始まりしなければならない。
+        - 例: `/service/:id` にしたい場合は `/service/0_id.go` のようにする。
 
 ```console
 $ server_generator ./sample/

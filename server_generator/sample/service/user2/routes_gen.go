@@ -17,10 +17,33 @@ func NewRoutes(ctx context.Context, router *echo.Group) *Routes {
 		router: router,
 	}
 
+	router.GET(":userID", r.GetUser(ctx))
 	router.POST("update_user_name", r.PostUpdateUserName(ctx))
 	router.POST("update_user_password", r.PostUpdateUserPassword(ctx))
 
 	return r
+}
+
+func (r *Routes) GetUser(ctx context.Context) echo.HandlerFunc {
+	i := NewGetUserController()
+	return func(c echo.Context) error {
+		req := new(GetUserRequest)
+		if err := c.Bind(req); err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    http.StatusBadRequest,
+				"message": "invalid request.",
+			})
+		}
+		res, err := i.GetUser(ctx, c, req)
+		if err != nil {
+			return err
+		}
+		if res == nil {
+			return nil
+		}
+
+		return c.JSON(http.StatusOK, res)
+	}
 }
 
 func (r *Routes) PostUpdateUserName(ctx context.Context) echo.HandlerFunc {
@@ -65,6 +88,10 @@ func (r *Routes) PostUpdateUserPassword(ctx context.Context) echo.HandlerFunc {
 
 		return c.JSON(http.StatusOK, res)
 	}
+}
+
+type IGetUserController interface {
+	GetUser(c echo.Context, req *GetUserRequest) (res *GetUserResponse, err error)
 }
 
 type IPostUpdateUserNameController interface {

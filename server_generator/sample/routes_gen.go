@@ -18,7 +18,7 @@ func NewRoutes(ctx context.Context, router *echo.Group) *Routes {
 	}
 
 	router.POST("create_table", r.PostCreateTable(ctx))
-	router.POST("create_user/:id", r.PostCreateUser(ctx))
+	router.POST("create_user", r.PostCreateUser(ctx))
 
 	return r
 }
