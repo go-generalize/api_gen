@@ -60,8 +60,8 @@ func findStructPairList(path string, endpointParams []string) (map[string]*Packa
 		switch structMode {
 		case StructModeRequest:
 			structPair[controllerName].Request = s
-			if len(endpointParams) > 0 {
-				structPair[controllerName].LastParam = endpointParams[len(endpointParams)-1]
+			if len(structEndpointParams) > 0 {
+				structPair[controllerName].LastParam = structEndpointParams[len(structEndpointParams)-1]
 			}
 
 			if err = validateRequestByEndpointParams(fset, s.StructObject, structEndpointParams); err != nil {

@@ -17,7 +17,7 @@ func NewRoutes(ctx context.Context, router *echo.Group) *Routes {
 		router: router,
 	}
 
-	router.GET(":", r.GetUser(ctx))
+	router.GET(":userID", r.GetUser(ctx))
 	router.POST("update_user_name", r.PostUpdateUserName(ctx))
 	router.POST("update_user_password", r.PostUpdateUserPassword(ctx))
 
