@@ -120,7 +120,7 @@ func TestBootstrap(t *testing.T) {
 			"gender":   2,
 		}
 
-		resp, err := httpPOST("/create_user/hoge", req)
+		resp, err := httpPOST("/create_user", req)
 		if err != nil {
 			t.Fatalf("server http get error: %s", err.Error())
 		}
