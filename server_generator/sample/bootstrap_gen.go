@@ -9,6 +9,8 @@ import (
 	serviceStaticPage "github.com/go-generalize/api_gen/server_generator/sample/service/static_page"
 	serviceUser "github.com/go-generalize/api_gen/server_generator/sample/service/user"
 	serviceUser2 "github.com/go-generalize/api_gen/server_generator/sample/service/user2"
+	serviceUser2UserID "github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID"
+	serviceUser2UserIDJobID "github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID/_JobID"
 	"github.com/labstack/echo/v4"
 )
 
@@ -73,6 +75,14 @@ func Bootstrap(ctx context.Context, e *echo.Echo, middlewareList MiddlewareList)
 	serviceUser2Group := serviceGroup.Group("user2/")
 	setMiddleware(serviceUser2Group, "/service/user2/", middleware)
 	serviceUser2.NewRoutes(ctx, serviceUser2Group)
+
+	serviceUser2UserIDGroup := serviceUser2Group.Group(":userID/")
+	setMiddleware(serviceUser2UserIDGroup, "/service/user2/:userID/", middleware)
+	serviceUser2UserID.NewRoutes(ctx, serviceUser2UserIDGroup)
+
+	serviceUser2UserIDJobIDGroup := serviceUser2UserIDGroup.Group(":JobID/")
+	setMiddleware(serviceUser2UserIDJobIDGroup, "/service/user2/:userID/:JobID/", middleware)
+	serviceUser2UserIDJobID.NewRoutes(ctx, serviceUser2UserIDJobIDGroup)
 }
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {

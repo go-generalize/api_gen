@@ -37,16 +37,24 @@ export class APIClient {
 
 	}
 
+	getRequestObject(param: any, routingPath: string[]): any {
+		const obj = param.toObject();
+		return Object.keys(obj).filter((key) =>{
+			return routingPath.indexOf(key) !== -1;
+		});
+	}
+
 	async postCreateUser(
 		param: PostCreateUserRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<PostCreateUserResponse> {
+	    const excludeParams = ['ID', ];
 		const resp = await fetch(
-			this.baseURL + "/create_user",
+			`${this.baseURL}/${encodeURI(param.ID)}`,
 			{
 				method: "POST",
-				body: JSON.stringify(param),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
 					...headers,
@@ -62,4 +70,5 @@ export class APIClient {
 
 		return new PostCreateUserResponse(await resp.json());
 	}
+
 }

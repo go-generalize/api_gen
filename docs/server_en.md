@@ -20,6 +20,11 @@
         - Available methods: `get` , `post` , `put` , `delete` , `patch`
     - If `json` tags are specified for `GET` endpoints,  specify also `query` tags with the same name
     - Both `*Request` and `*Response` structs are necessary.
+- For path routing.
+    - The directory must start with `_`.
+        - Example: If you want to use `/service/:id/hogehoge`, use `/service/_id/*.go`.
+    - The file must start with `0_`.
+        - Example: If you want to use `/service/:id`, use `/service/0_id.go`.
 
 ```console
 $ server_generator ./sample/

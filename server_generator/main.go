@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"text/template"
@@ -65,6 +66,7 @@ func run(arg string) error {
 	}
 	bootstrapTemplates := make([]*BootstrapTemplates, 0)
 	packageName := ""
+	endpointReplaceMatchRule := regexp.MustCompile(`:(.*?)/`)
 
 	err = filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -97,28 +99,38 @@ func run(arg string) error {
 			}
 		}
 
-		cs, err := parsePackages(path)
+		endpointPath, err := filepath.Rel(rootPath, path)
 		if err != nil {
 			return err
 		}
 
-		endpointPath, err := filepath.Rel(rootPath, path)
+		endpointPath = filepath.Join(endpointPath, "/")
+		endpoint := endpointPath
+		if endpointPath == "." {
+			endpoint = ""
+			endpointPath = "/"
+		} else {
+			endpoint += "/"
+			endpointPath = "/" + endpointPath
+		}
+
+		endpointParams := make([]string, 0)
+		endpointPath = strings.ReplaceAll(endpointPath, "/_", "/:")
+		endPointParamsFromRegexp := endpointReplaceMatchRule.FindAllStringSubmatch(endpointPath+"/", -1)
+
+		for _, e := range endPointParamsFromRegexp {
+			endpointParams = append(endpointParams, e[1])
+		}
+
+		cs, err := parsePackages(path, endpointParams)
 		if err != nil {
 			return err
 		}
 		if len(cs) == 0 {
 			return nil
 		}
-
-		endpointPath = filepath.Join(endpointPath, "/")
-		endpoint := endpointPath
-		if endpointPath == "." {
+		if endpointPath == "/" {
 			packageName = cs[0].Package
-			endpoint = ""
-			endpointPath = "/"
-		} else {
-			endpoint += "/"
-			endpointPath = "/" + endpointPath
 		}
 
 		bootstrapTemplates = append(bootstrapTemplates, &BootstrapTemplates{
@@ -183,15 +195,18 @@ func run(arg string) error {
 	return nil
 }
 
-func parsePackages(path string) ([]*ControllerTemplate, error) {
+func parsePackages(path string, endpointParams []string) ([]*ControllerTemplate, error) {
 	routes := make(map[string][]*ControllerTemplate)
-	structPair, err := findStructPairList(path)
+	structPair, err := findStructPairList(path, endpointParams)
 	if err != nil {
 		return nil, err
 	}
 	for cn, s := range structPair {
 		req := s.Request
 		res := s.Response
+		structFilePath := s.FileName
+		fileName := filepath.Base(structFilePath)
+		fileName = fileName[:len(fileName)-len(filepath.Ext(structFilePath))]
 
 		if req == nil || res == nil {
 			continue
@@ -223,6 +238,11 @@ func parsePackages(path string) ([]*ControllerTemplate, error) {
 			endpoint = ep
 		} else {
 			endpoint = strcase.ToSnake(endpoint)
+		}
+
+		if strings.HasPrefix(fileName, "0_") {
+			param := s.LastParam
+			endpoint = fmt.Sprintf(":%s", param)
 		}
 
 		ct := &ControllerTemplate{
