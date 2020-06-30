@@ -112,7 +112,6 @@ func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *a
 				p.endpoints[me].request = true
 
 				p.endpoints[me].rawName = strings.TrimSuffix(name, "Request")
-				fmt.Printf("\u001B[31m%s\u001B[0m\n", pathName)
 				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(strings.TrimSuffix(name[len(method):], "Request")))
 				p.endpoints[me].requestStructObject = typeSpec.Type.(*ast.StructType)
 			} else {
