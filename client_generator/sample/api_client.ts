@@ -21,18 +21,18 @@ import { PostCreateUserRequest as PostCreateUserRequest } from './classes//PostC
 export { PostCreateUserRequest as PostCreateUserRequest } from './classes//PostCreateUserRequest';
 import { PostCreateUserResponse as PostCreateUserResponse } from './classes//PostCreateUserResponse';
 export { PostCreateUserResponse as PostCreateUserResponse } from './classes//PostCreateUserResponse';
-import { PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest } from './classes/service/user/PostUpdateUserNameRequest';
-export { PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest } from './classes/service/user/PostUpdateUserNameRequest';
 import { PostUpdateUserNameRequest as ServiceUser2PostUpdateUserNameRequest } from './classes/service/user2/PostUpdateUserNameRequest';
 export { PostUpdateUserNameRequest as ServiceUser2PostUpdateUserNameRequest } from './classes/service/user2/PostUpdateUserNameRequest';
-import { PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse } from './classes/service/user2/PostUpdateUserNameResponse';
-export { PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse } from './classes/service/user2/PostUpdateUserNameResponse';
+import { PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest } from './classes/service/user/PostUpdateUserNameRequest';
+export { PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest } from './classes/service/user/PostUpdateUserNameRequest';
 import { PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse } from './classes/service/user/PostUpdateUserNameResponse';
 export { PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse } from './classes/service/user/PostUpdateUserNameResponse';
-import { PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest } from './classes/service/user2/PostUpdateUserPasswordRequest';
-export { PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest } from './classes/service/user2/PostUpdateUserPasswordRequest';
+import { PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse } from './classes/service/user2/PostUpdateUserNameResponse';
+export { PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse } from './classes/service/user2/PostUpdateUserNameResponse';
 import { PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest } from './classes/service/user/PostUpdateUserPasswordRequest';
 export { PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest } from './classes/service/user/PostUpdateUserPasswordRequest';
+import { PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest } from './classes/service/user2/PostUpdateUserPasswordRequest';
+export { PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest } from './classes/service/user2/PostUpdateUserPasswordRequest';
 import { PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse } from './classes/service/user/PostUpdateUserPasswordResponse';
 export { PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse } from './classes/service/user/PostUpdateUserPasswordResponse';
 import { PostUpdateUserPasswordResponse as ServiceUser2PostUpdateUserPasswordResponse } from './classes/service/user2/PostUpdateUserPasswordResponse';
@@ -217,9 +217,9 @@ class ServiceUser2Client {
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceUser2GetUserResponse> {
-	    const excludeParams = ['userID', ];
+	    const excludeParams = ['id', ];
 		const resp = await fetch(
-			`${this.baseURL}/service/user2/${encodeURI(param.userID)}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
+			`${this.baseURL}/service/user2/${encodeURI(param.id)}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
 			{
 				method: "GET",
 				headers: {
@@ -328,9 +328,9 @@ class ServiceUserUserIDClient {
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceUserUserIDGetUserJobGetResponse> {
-	    const excludeParams = ['userID', ];
+	    const excludeParams = ['UserID', ];
 		const resp = await fetch(
-			`${this.baseURL}/service/user/${encodeURI(param.userID)}/user_job_get?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
+			`${this.baseURL}/service/user/${encodeURI(param.UserID)}/user_job_get?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
 			{
 				method: "GET",
 				headers: {
@@ -368,9 +368,9 @@ class ServiceUserUserIDJobIDClient {
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceUserUserIDJobIDPutJobResponse> {
-	    const excludeParams = ['userID', 'JobID', ];
+	    const excludeParams = ['UserID', 'JobID', ];
 		const resp = await fetch(
-			`${this.baseURL}/service/user/${encodeURI(param.userID)}/${encodeURI(param.JobID)}/job`,
+			`${this.baseURL}/service/user/${encodeURI(param.UserID)}/${encodeURI(param.JobID)}/job`,
 			{
 				method: "PUT",
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
@@ -429,33 +429,6 @@ export class APIClient {
 		});
 	}
 
-	async postCreateTable(
-		param: PostCreateTableRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<PostCreateTableResponse> {
-	    const excludeParams = [];
-		const resp = await fetch(
-			`${this.baseURL}/create_table`,
-			{
-				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
-				headers: {
-					...this.headers,
-					...headers,
-				},
-				...this.options,
-				...options,
-			}
-		);
-
-		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
-		}
-
-		return new PostCreateTableResponse(await resp.json());
-	}
-
 	async postCreateUser(
 		param: PostCreateUserRequest,
 		headers?: {[key: string]: string},
@@ -481,6 +454,33 @@ export class APIClient {
 		}
 
 		return new PostCreateUserResponse(await resp.json());
+	}
+
+	async postCreateTable(
+		param: PostCreateTableRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
+	): Promise<PostCreateTableResponse> {
+	    const excludeParams = [];
+		const resp = await fetch(
+			`${this.baseURL}/create_table`,
+			{
+				method: "POST",
+				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				headers: {
+					...this.headers,
+					...headers,
+				},
+				...this.options,
+				...options,
+			}
+		);
+
+		if (Math.floor(resp.status / 100) !== 2) {
+			throw new Error(resp.statusText + ": " + await resp.text());
+		}
+
+		return new PostCreateTableResponse(await resp.json());
 	}
 
 }

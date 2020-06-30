@@ -11,6 +11,7 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"strings"
 
@@ -31,6 +32,8 @@ type endpoint struct {
 	path           string
 	rawName        string
 	fileName       string
+
+	requestStructObject *ast.StructType
 
 	method            string
 	request, response bool
@@ -107,6 +110,7 @@ func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *a
 
 				p.endpoints[me].rawName = strings.TrimSuffix(name, "Request")
 				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(strings.TrimSuffix(name[len(method):], "Request")))
+				p.endpoints[me].requestStructObject = typeSpec.Type.(*ast.StructType)
 			} else {
 				p.endpoints[me].response = true
 
@@ -124,7 +128,6 @@ func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *a
 				endpointPath = fmt.Sprintf("/_%s", strings.ToLower(string(endpointPath[0]))+endpointPath[1:])
 				p.endpoints[me].path = filepath.Join(filepath.Dir(p.endpoints[me].path), endpointPath)
 			}
-			fmt.Printf("%+v\n", p.endpoints[me])
 
 			packageNameFromFilePath := filepath.Base(dir)
 			if packageName != packageNameFromFilePath {
@@ -203,14 +206,47 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 		endpointPath := ep.path
 		endpointPath = strings.Replace(endpointPath, "/_", "/:", -1)
 		endpointPath = endpointReplaceMatchRule.ReplaceAllStringFunc(endpointPath, func(s string) string {
-			if strings.HasSuffix(s, "/") {
-				param := s[1 : len(s)-1]
-				urlParams = append(urlParams, param)
-				return fmt.Sprintf("${encodeURI(param.%s)}/", param)
+			hasSuffixSlash := strings.HasSuffix(s, "/")
+			param := ""
+			if hasSuffixSlash {
+				param = s[1 : len(s)-1]
+			} else {
+				param = s[1:]
 			}
-			param := s[1:len(s)]
+
+			st := ep.requestStructObject
+			fieldList := st.Fields.List
+			for _, fields := range fieldList {
+				if fields.Tag == nil {
+					continue
+				}
+				tags := reflect.StructTag(strings.Trim(fields.Tag.Value, "`"))
+
+				var (
+					jsonTag = ""
+					jsonOk  = false
+				)
+
+				jsonTag, jsonOk = tags.Lookup("json")
+
+				if paramTag, ok := tags.Lookup("param"); ok {
+					if paramTag == param {
+						if jsonOk {
+							param = jsonTag
+						} else {
+							param = fields.Names[0].Name
+						}
+					}
+				}
+			}
+
 			urlParams = append(urlParams, param)
-			return fmt.Sprintf("${encodeURI(param.%s)}", param)
+
+			suffix := ""
+			if hasSuffixSlash {
+				suffix = "/"
+			}
+			return fmt.Sprintf("${encodeURI(param.%s)}%s", param, suffix)
 		})
 
 		parent.Methods = append(
