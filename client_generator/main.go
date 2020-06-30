@@ -205,6 +205,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 		urlParams := make([]string, 0)
 		endpointPath := ep.path
 		endpointPath = strings.Replace(endpointPath, "/_", "/:", -1)
+		requestStruct := ep.requestStructObject
 		endpointPath = endpointReplaceMatchRule.ReplaceAllStringFunc(endpointPath, func(s string) string {
 			hasSuffixSlash := strings.HasSuffix(s, "/")
 			param := ""
@@ -214,7 +215,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 				param = s[1:]
 			}
 
-			st := ep.requestStructObject
+			st := requestStruct
 			fieldList := st.Fields.List
 			for _, fields := range fieldList {
 				if fields.Tag == nil {
@@ -222,12 +223,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 				}
 				tags := reflect.StructTag(strings.Trim(fields.Tag.Value, "`"))
 
-				var (
-					jsonTag = ""
-					jsonOk  = false
-				)
-
-				jsonTag, jsonOk = tags.Lookup("json")
+				jsonTag, jsonOk := tags.Lookup("json")
 
 				if paramTag, ok := tags.Lookup("param"); ok {
 					if paramTag == param {

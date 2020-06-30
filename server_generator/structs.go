@@ -64,7 +64,7 @@ func findStructPairList(path string, endpointParams []string) (map[string]*Packa
 				structPair[controllerName].LastParam = endpointParams[len(endpointParams)-1]
 			}
 
-			if err := validateRequestByEndpointParams(fset, s.StructObject, structEndpointParams); err != nil {
+			if err = validateRequestByEndpointParams(fset, s.StructObject, structEndpointParams); err != nil {
 				return nil, err
 			}
 
@@ -141,7 +141,7 @@ func validateGetRequestTags(fset *token.FileSet, structType *ast.StructType, end
 
 		paramTag, ok := tags.Lookup("param")
 		if ok {
-			_, ok := ep[paramTag]
+			_, ok = ep[paramTag]
 			if ok {
 				continue
 			}
