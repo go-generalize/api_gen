@@ -15,6 +15,15 @@ func New{{ .ControllerName }}() *{{ .ControllerName }} {
 }
 
 
+// {{ .HandlerName }}
+// @Summary WIP
+// @Description WIP
+// @Accept json
+// @Produce json
+// @Param
+// @Success 200 {object} {{ .ResponseStructName }}
+// @Failure 400 {object} WIP
+// @Router {{ .RawEndpointPath }} [{{ .HTTPMethod }}]
 func ({{ .ControllerNameInitial }} *{{ .ControllerName }}) {{ .HandlerName }}(
 	ctx context.Context, c echo.Context, req *{{ .RequestStructName }},
 ) (res *{{ .ResponseStructName }}, err error) {

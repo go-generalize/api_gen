@@ -14,8 +14,17 @@ func NewGetStaticPageController() *GetStaticPageController {
 	return g
 }
 
+// GetStaticPageController
+// @Summary WIP
+// @Description WIP
+// @Accept json
+// @Produce json
+// @Param
+// @Success 200 {object} GetStaticPageResponse
+// @Failure 400 {object} WIP
+// @Router /service/static_page/static_page [GET]
 func (g *GetStaticPageController) GetStaticPage(
-	_ context.Context, _ echo.Context, _ *GetStaticPageRequest,
+	ctx context.Context, c echo.Context, req *GetStaticPageRequest,
 ) (res *GetStaticPageResponse, err error) {
 	panic("require implements.")
 }

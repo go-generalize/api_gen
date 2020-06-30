@@ -14,6 +14,15 @@ func NewGetUserController() *GetUserController {
 	return g
 }
 
+// GetUserController
+// @Summary WIP
+// @Description WIP
+// @Accept json
+// @Produce json
+// @Param
+// @Success 200 {object} GetUserResponse
+// @Failure 400 {object} WIP
+// @Router /service/user2/{userID} [GET]
 func (g *GetUserController) GetUser(
 	ctx context.Context, c echo.Context, req *GetUserRequest,
 ) (res *GetUserResponse, err error) {

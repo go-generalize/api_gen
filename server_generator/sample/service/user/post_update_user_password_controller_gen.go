@@ -14,10 +14,17 @@ func NewPostUpdateUserPasswordController() *PostUpdateUserPasswordController {
 	return p
 }
 
-func (p *PostUpdateUserPasswordController) PostUpdateUserPassword(ctx context.Context,
-	c echo.Context,
-	req *PostUpdateUserPasswordRequest) (
-	res *PostUpdateUserPasswordResponse,
-	err error) {
+// PostUpdateUserPassword
+// @Summary WIP
+// @Description WIP
+// @Accept json
+// @Produce json
+// @Param
+// @Success 200 {object} PostUpdateUserPasswordResponse
+// @Failure 400 {object} WIP
+// @Router /service/user/update_user_password [POST]
+func (p *PostUpdateUserPasswordController) PostUpdateUserPassword(
+	ctx context.Context, c echo.Context, req *PostUpdateUserPasswordRequest,
+) (res *PostUpdateUserPasswordResponse, err error) {
 	panic("require implements.")
 }

@@ -14,6 +14,15 @@ func NewPutJobController() *PutJobController {
 	return p
 }
 
+// PutJob
+// @Summary WIP
+// @Description WIP
+// @Accept json
+// @Produce json
+// @Param
+// @Success 200 {object} PutJobResponse
+// @Failure 400 {object} WIP
+// @Router /service/user2/{userID}/{JobID}/job [PUT]
 func (p *PutJobController) PutJob(
 	ctx context.Context, c echo.Context, req *PutJobRequest,
 ) (res *PutJobResponse, err error) {

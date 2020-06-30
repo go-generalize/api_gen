@@ -127,8 +127,6 @@ func TestBootstrap(t *testing.T) {
 			t.Fatalf("server http get error: %s", err.Error())
 		}
 
-		fmt.Printf("FFFF %s\n", string(resByte))
-
 		res := new(user2.GetUserResponse)
 		err = json.Unmarshal(resByte, res)
 		if err != nil {
