@@ -115,8 +115,8 @@ func run(arg string) error {
 		}
 
 		endpointParams := make([]string, 0)
-		endpointPath = strings.ReplaceAll(endpointPath, "/_", "/:", -1)
-		endpointParam := strings.ReplaceAll(endpoint, "/_", "/:", -1)
+		endpointPath = strings.ReplaceAll(endpointPath, "/_", "/:")
+		endpointParam := strings.ReplaceAll(endpoint, "/_", "/:")
 		endPointParamsFromRegexp := endpointReplaceMatchRule.FindAllStringSubmatch(endpointPath+"/", -1)
 
 		for _, e := range endPointParamsFromRegexp {
