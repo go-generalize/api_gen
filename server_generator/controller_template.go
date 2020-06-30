@@ -10,4 +10,5 @@ type ControllerTemplate struct {
 	HTTPMethod            string
 	RequestStructName     string
 	ResponseStructName    string
+	RequestParams         []RequestParam
 }

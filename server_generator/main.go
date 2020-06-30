@@ -260,6 +260,7 @@ func parsePackages(path, endpointBase string, endpointParams []string) ([]*Contr
 			HTTPMethod:            strings.ToUpper(httpMethod),
 			RequestStructName:     req.StructName,
 			ResponseStructName:    res.StructName,
+			RequestParams:         req.RequestParams,
 		}
 
 		routes[createDir] = append(routes[createDir], ct)

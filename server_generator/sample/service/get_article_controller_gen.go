@@ -14,12 +14,12 @@ func NewGetArticleController() *GetArticleController {
 	return g
 }
 
-// GetArticleController
+// GetArticle
 // @Summary WIP
 // @Description WIP
 // @Accept json
 // @Produce json
-// @Param
+// @Param ID query integer WIP:${isRequire} WIP:${description}
 // @Success 200 {object} GetArticleResponse
 // @Failure 400 {object} WIP
 // @Router /service/article [GET]

@@ -14,12 +14,11 @@ func NewGetStaticPageController() *GetStaticPageController {
 	return g
 }
 
-// GetStaticPageController
+// GetStaticPage
 // @Summary WIP
 // @Description WIP
 // @Accept json
 // @Produce json
-// @Param
 // @Success 200 {object} GetStaticPageResponse
 // @Failure 400 {object} WIP
 // @Router /service/static_page/static_page [GET]

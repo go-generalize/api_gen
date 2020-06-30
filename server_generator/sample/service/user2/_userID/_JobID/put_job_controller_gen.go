@@ -19,7 +19,8 @@ func NewPutJobController() *PutJobController {
 // @Description WIP
 // @Accept json
 // @Produce json
-// @Param
+// @Param userID path string WIP:${isRequire} WIP:${description}
+// @Param JobID path string WIP:${isRequire} WIP:${description}
 // @Success 200 {object} PutJobResponse
 // @Failure 400 {object} WIP
 // @Router /service/user2/{userID}/{JobID}/job [PUT]
