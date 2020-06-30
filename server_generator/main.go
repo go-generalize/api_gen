@@ -116,13 +116,14 @@ func run(arg string) error {
 
 		endpointParams := make([]string, 0)
 		endpointPath = strings.Replace(endpointPath, "/_", "/:", -1)
+		endpointParam := strings.Replace(endpoint, "/_", "/:", -1)
 		endPointParamsFromRegexp := endpointReplaceMatchRule.FindAllStringSubmatch(endpointPath+"/", -1)
 
 		for _, e := range endPointParamsFromRegexp {
 			endpointParams = append(endpointParams, e[1])
 		}
 
-		cs, err := parsePackages(path, endpointParams)
+		cs, err := parsePackages(path, endpointParam, endpointParams)
 		if err != nil {
 			return err
 		}
@@ -195,7 +196,8 @@ func run(arg string) error {
 	return nil
 }
 
-func parsePackages(path string, endpointParams []string) ([]*ControllerTemplate, error) {
+func parsePackages(path, endpointBase string, endpointParams []string) ([]*ControllerTemplate, error) {
+	replaceRule := regexp.MustCompile(`:(.*?)(/|$)`)
 	routes := make(map[string][]*ControllerTemplate)
 	structPair, err := findStructPairList(path, endpointParams)
 	if err != nil {
@@ -245,11 +247,15 @@ func parsePackages(path string, endpointParams []string) ([]*ControllerTemplate,
 			endpoint = fmt.Sprintf(":%s", param)
 		}
 
+		fullEndpoint := "/" + filepath.Join(endpointBase, endpoint)
+		fullEndpoint = replaceRule.ReplaceAllString(fullEndpoint, "{$1}$2")
+
 		ct := &ControllerTemplate{
 			Package:               req.PackageName,
 			ControllerName:        fmt.Sprintf("%sController", cn),
 			ControllerNameInitial: strings.ToLower(string([]rune(cn)[0])),
 			HandlerName:           cn,
+			RawEndpointPath:       fullEndpoint,
 			Endpoint:              endpoint,
 			HTTPMethod:            strings.ToUpper(httpMethod),
 			RequestStructName:     req.StructName,

@@ -14,11 +14,18 @@ func NewGetArticleController() *GetArticleController {
 	return g
 }
 
-func (g *GetArticleController) GetArticle(ctx context.Context,
-	c echo.Context,
-	req *GetArticleRequest) (
-	res *GetArticleResponse,
-	err error) {
+// GetArticleController
+// @Summary WIP
+// @Description WIP
+// @Accept json
+// @Produce json
+// @Param
+// @Success 200 {object} GetArticleResponse
+// @Failure 400 {object} WIP
+// @Router /service/article [GET]
+func (g *GetArticleController) GetArticle(
+	ctx context.Context, c echo.Context, req *GetArticleRequest,
+) (res *GetArticleResponse, err error) {
 	return &GetArticleResponse{
 		ID:    req.ID * 2,
 		Group: []string{"a", "b", "c"},

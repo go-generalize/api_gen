@@ -5,6 +5,7 @@ type ControllerTemplate struct {
 	ControllerName        string
 	ControllerNameInitial string
 	HandlerName           string
+	RawEndpointPath       string
 	Endpoint              string
 	HTTPMethod            string
 	RequestStructName     string
