@@ -14,12 +14,12 @@ func NewGetUserJobGetController() *GetUserJobGetController {
 	return g
 }
 
-// GetUserJobGetController
+// GetUserJobGet
 // @Summary WIP
 // @Description WIP
 // @Accept json
 // @Produce json
-// @Param
+// @Param userID path string WIP:${isRequire} WIP:${description}
 // @Success 200 {object} GetUserJobGetResponse
 // @Failure 400 {object} WIP
 // @Router /service/user2/{userID}/user_job_get [GET]

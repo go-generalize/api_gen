@@ -14,12 +14,13 @@ func NewGetUserController() *GetUserController {
 	return g
 }
 
-// GetUserController
+// GetUser
 // @Summary WIP
 // @Description WIP
 // @Accept json
 // @Produce json
-// @Param
+// @Param userID path string WIP:${isRequire} WIP:${description}
+// @Param search_request query string WIP:${isRequire} WIP:${description}
 // @Success 200 {object} GetUserResponse
 // @Failure 400 {object} WIP
 // @Router /service/user2/{userID} [GET]

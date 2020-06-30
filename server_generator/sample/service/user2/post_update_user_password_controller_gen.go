@@ -19,7 +19,8 @@ func NewPostUpdateUserPasswordController() *PostUpdateUserPasswordController {
 // @Description WIP
 // @Accept json
 // @Produce json
-// @Param
+// @Param Password body string WIP:${isRequire} WIP:${description}
+// @Param PasswordConfirm body string WIP:${isRequire} WIP:${description}
 // @Success 200 {object} PostUpdateUserPasswordResponse
 // @Failure 400 {object} WIP
 // @Router /service/user2/update_user_password [POST]

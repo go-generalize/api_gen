@@ -19,8 +19,8 @@ func New{{ .ControllerName }}() *{{ .ControllerName }} {
 // @Summary WIP
 // @Description WIP
 // @Accept json
-// @Produce json
-// @Param
+// @Produce json{{range $p := .RequestParams }}
+// @Param {{ $p.Name }} {{ $p.Type }} {{ $p.DataType }} WIP:${isRequire} WIP:${description}{{ end }}
 // @Success 200 {object} {{ .ResponseStructName }}
 // @Failure 400 {object} WIP
 // @Router {{ .RawEndpointPath }} [{{ .HTTPMethod }}]

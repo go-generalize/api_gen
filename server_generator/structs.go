@@ -5,6 +5,7 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"go/types"
 	"path/filepath"
 	"reflect"
 	"strings"
@@ -63,6 +64,11 @@ func findStructPairList(path string, endpointParams []string) (map[string]*Packa
 			if len(structEndpointParams) > 0 {
 				structPair[controllerName].LastParam = structEndpointParams[len(structEndpointParams)-1]
 			}
+			requestParams, err := createRequestParams(s.StructName, fset, s.StructObject, structEndpointParams)
+			if err != nil {
+				return nil, err
+			}
+			structPair[controllerName].Request.RequestParams = requestParams
 
 			if err = validateRequestByEndpointParams(fset, s.StructObject, structEndpointParams); err != nil {
 				return nil, err
@@ -164,6 +170,89 @@ func validateGetRequestTags(fset *token.FileSet, structType *ast.StructType, end
 	}
 
 	return nil
+}
+
+func createRequestParams(structName string, fset *token.FileSet, st *ast.StructType, endpointParams []string) ([]RequestParam, error) {
+	ep := make(map[string]struct{})
+	for _, e := range endpointParams {
+		ep[e] = struct{}{}
+	}
+
+	fl := st.Fields.List
+	result := make([]RequestParam, 0, len(fl))
+
+	for _, f := range fl {
+		if len(f.Names) > 1 {
+			return nil, fmt.Errorf("%s: %+v: 同じ行に複数のパラメータを記述することはできません。",
+				fset.Position(f.Pos()).String(), f.Names)
+		}
+		fName := f.Names[0].Name
+		fType := QueryRequestName
+		fDataType := ""
+
+		fType, fName = getFieldNameFromStructAndEndpointParams(structName, f, ep)
+
+		switch types.ExprString(f.Type) {
+		case "string":
+			fDataType = "string"
+			break
+		case "int", "int8", "int16", "int32", "int64",
+			"uint", "uint8", "uint16", "uint32", "uint64":
+			fDataType = "integer"
+		case "float32", "float64":
+			fDataType = "number"
+		case "bool":
+			fDataType = "boolean"
+		default:
+			fDataType = types.ExprString(f.Type)
+		}
+
+		param := RequestParam{}
+		param.Name = fName
+		param.Type = fType
+		param.DataType = fDataType
+
+		result = append(result, param)
+	}
+	return result, nil
+}
+
+func getFieldNameFromStructAndEndpointParams(structName string, f *ast.Field, ep map[string]struct{}) (RequestParamType, string) {
+	targetTag := ""
+	var tags reflect.StructTag
+
+	fName := f.Names[0].Name
+	fType := QueryRequestName
+
+	if f.Tag != nil {
+		tags = reflect.StructTag(strings.Trim(f.Tag.Value, "`"))
+		if nameFromTag, ok := tags.Lookup("param"); ok {
+			if _, ok := ep[nameFromTag]; ok {
+				return PathRequestName, nameFromTag
+			}
+		}
+	}
+
+	if _, ok := ep[fName]; ok {
+		return PathRequestName, fName
+	}
+
+	if strings.HasPrefix(strings.ToLower(structName), "get") {
+		fType = QueryRequestName
+		targetTag = "query"
+	} else {
+		fType = BodyRequestName
+		targetTag = "json"
+	}
+
+	if f.Tag == nil {
+		return fType, fName
+	}
+
+	if nameFromTag, ok := tags.Lookup(targetTag); ok {
+		fName = nameFromTag
+	}
+	return fType, fName
 }
 
 var (

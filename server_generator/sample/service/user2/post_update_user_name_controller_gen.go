@@ -19,7 +19,7 @@ func NewPostUpdateUserNameController() *PostUpdateUserNameController {
 // @Description WIP
 // @Accept json
 // @Produce json
-// @Param
+// @Param Name body string WIP:${isRequire} WIP:${description}
 // @Success 200 {object} PostUpdateUserNameResponse
 // @Failure 400 {object} WIP
 // @Router /service/user2/update_user_name [POST]

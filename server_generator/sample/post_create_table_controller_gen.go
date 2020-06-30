@@ -15,12 +15,13 @@ func NewPostCreateTableController() *PostCreateTableController {
 	return p
 }
 
-// PostCreateTableController
+// PostCreateTable
 // @Summary WIP
 // @Description WIP
 // @Accept json
 // @Produce json
-// @Param
+// @Param ID body string WIP:${isRequire} WIP:${description}
+// @Param Text body string WIP:${isRequire} WIP:${description}
 // @Success 200 {object} PostCreateTableResponse
 // @Failure 400 {object} WIP
 // @Router /create_table [POST]
