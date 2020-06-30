@@ -172,7 +172,9 @@ func validateGetRequestTags(fset *token.FileSet, structType *ast.StructType, end
 	return nil
 }
 
-func createRequestParams(structName string, fset *token.FileSet, st *ast.StructType, endpointParams []string) ([]RequestParam, error) {
+func createRequestParams(
+	structName string, fset *token.FileSet, st *ast.StructType, endpointParams []string) (
+	[]RequestParam, error) {
 	ep := make(map[string]struct{})
 	for _, e := range endpointParams {
 		ep[e] = struct{}{}
@@ -217,7 +219,9 @@ func createRequestParams(structName string, fset *token.FileSet, st *ast.StructT
 	return result, nil
 }
 
-func getFieldNameFromStructAndEndpointParams(structName string, f *ast.Field, ep map[string]struct{}) (RequestParamType, string) {
+func getFieldNameFromStructAndEndpointParams(
+	structName string, f *ast.Field, ep map[string]struct{}) (
+	RequestParamType, string) {
 	targetTag := ""
 	var tags reflect.StructTag
 
