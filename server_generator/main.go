@@ -2,12 +2,10 @@ package main
 
 import (
 	"fmt"
-	"go/ast"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
-	"reflect"
 	"regexp"
 	"sort"
 	"strings"
@@ -230,18 +228,8 @@ func parsePackages(path string, endpointParams []string) ([]*ControllerTemplate,
 		}
 
 		if strings.HasPrefix(fileName, "0_") {
-			fileName = fileName[2:]
-			if !strings.HasPrefix(strings.ToLower(fileName), ":id") {
-				fileName = strings.Replace(fileName, "_id", "ID", -1)
-			}
-			endpoint = strcase.ToCamel(fileName)
-			param := strings.ToLower(string(endpoint[0])) + endpoint[1:]
+			param := s.LastParam
 			endpoint = fmt.Sprintf(":%s", param)
-
-			err := validatePathRouting(s.Request.StructObject, param, structFilePath)
-			if err != nil {
-				return nil, err
-			}
 		}
 
 		ct := &ControllerTemplate{
@@ -338,41 +326,6 @@ func createFromTemplate(templatePath, path string, m interface{}, isOverRide boo
 	_, err = ExecCommand("goimports", "-w", path)
 	if err != nil {
 		return err
-	}
-
-	return nil
-}
-
-func validatePathRouting(structObject *ast.StructType, routingParam, filePath string) error {
-	fieldList := structObject.Fields.List
-	hasRouteParam := false
-
-	for _, fields := range fieldList {
-		if len(fields.Names) > 1 {
-			return fmt.Errorf("%+v: 同じ行に複数のパラメータを記述することはできません。", fields.Names)
-		}
-
-		fieldName := fields.Names[0].Name
-
-		if fieldName == routingParam {
-			hasRouteParam = true
-			break
-		}
-
-		if fields.Tag != nil {
-			tags := reflect.StructTag(strings.Trim(fields.Tag.Value, "`"))
-			if paramTag, ok := tags.Lookup("param"); ok {
-				if paramTag == routingParam {
-					hasRouteParam = true
-					break
-				}
-			}
-		}
-	}
-
-	if !hasRouteParam {
-		return fmt.Errorf("%s: Pathマッチング用のパラメータが不足しています。不足しているパラメータ[%s]",
-			filePath, routingParam)
 	}
 
 	return nil

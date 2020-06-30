@@ -5,8 +5,11 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"path/filepath"
 	"reflect"
 	"strings"
+
+	"github.com/iancoleman/strcase"
 )
 
 func findStructPairList(path string, endpointParams []string) (map[string]*PackageStructPair, error) {
@@ -19,7 +22,12 @@ func findStructPairList(path string, endpointParams []string) (map[string]*Packa
 	structList := findStructList(pkgs)
 	structPair := make(map[string]*PackageStructPair, 0)
 	for _, s := range structList {
-		fineName := fset.File(s.StructObject.Struct).Name()
+		structEndpointParams := make([]string, len(endpointParams))
+		copy(structEndpointParams, endpointParams)
+
+		filePath := fset.File(s.StructObject.Struct).Name()
+		fileName := filepath.Base(filePath)
+		fileName = fileName[:len(fileName)-len(filepath.Ext(filePath))]
 
 		controllerName := s.StructName
 		var structMode StructMode
@@ -37,18 +45,31 @@ func findStructPairList(path string, endpointParams []string) (map[string]*Packa
 		if _, ok := structPair[controllerName]; !ok {
 			structPair[controllerName] = new(PackageStructPair)
 		}
-		structPair[controllerName].FileName = fineName
+		structPair[controllerName].FileName = filePath
+
+		if strings.HasPrefix(fileName, "0_") {
+			fileName = fileName[2:]
+			if !strings.HasPrefix(strings.ToLower(fileName), ":id") {
+				fileName = strings.Replace(fileName, "_id", "ID", -1)
+			}
+			endpoint := strcase.ToCamel(fileName)
+			param := strings.ToLower(string(endpoint[0])) + endpoint[1:]
+			structEndpointParams = append(structEndpointParams, param)
+		}
 
 		switch structMode {
 		case StructModeRequest:
 			structPair[controllerName].Request = s
+			if len(endpointParams) > 0 {
+				structPair[controllerName].LastParam = endpointParams[len(endpointParams)-1]
+			}
 
-			if err := validateRequestByEndpointParams(fset, s.StructObject, endpointParams); err != nil {
+			if err := validateRequestByEndpointParams(fset, s.StructObject, structEndpointParams); err != nil {
 				return nil, err
 			}
 
 			if strings.HasPrefix(strings.ToLower(controllerName), "get") {
-				if err = validateGetRequestTags(fset, s.StructObject); err != nil {
+				if err = validateGetRequestTags(fset, s.StructObject, structEndpointParams); err != nil {
 					return nil, err
 				}
 			}
@@ -104,8 +125,12 @@ func validateRequestByEndpointParams(fset *token.FileSet, structType *ast.Struct
 		fset.Position(structType.Pos()).String(), requireParams)
 }
 
-func validateGetRequestTags(fset *token.FileSet, structType *ast.StructType) error {
+func validateGetRequestTags(fset *token.FileSet, structType *ast.StructType, endpointParams []string) error {
 	fieldList := structType.Fields.List
+	ep := make(map[string]struct{})
+	for _, e := range endpointParams {
+		ep[e] = struct{}{}
+	}
 
 	for i := range fieldList {
 		if fieldList[i].Tag == nil {
@@ -113,6 +138,14 @@ func validateGetRequestTags(fset *token.FileSet, structType *ast.StructType) err
 		}
 
 		tags := reflect.StructTag(strings.Trim(fieldList[i].Tag.Value, "`"))
+
+		paramTag, ok := tags.Lookup("param")
+		if ok {
+			_, ok := ep[paramTag]
+			if ok {
+				continue
+			}
+		}
 
 		jsonTag, ok := tags.Lookup("json")
 
