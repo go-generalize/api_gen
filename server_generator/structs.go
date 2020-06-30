@@ -64,7 +64,9 @@ func findStructPairList(path string, endpointParams []string) (map[string]*Packa
 			if len(structEndpointParams) > 0 {
 				structPair[controllerName].LastParam = structEndpointParams[len(structEndpointParams)-1]
 			}
-			requestParams, err := createRequestParams(s.StructName, fset, s.StructObject, structEndpointParams)
+
+			var requestParams []RequestParam
+			requestParams, err = createRequestParams(s.StructName, fset, s.StructObject, structEndpointParams)
 			if err != nil {
 				return nil, err
 			}
@@ -188,11 +190,9 @@ func createRequestParams(
 			return nil, fmt.Errorf("%s: %+v: 同じ行に複数のパラメータを記述することはできません。",
 				fset.Position(f.Pos()).String(), f.Names)
 		}
-		fName := f.Names[0].Name
-		fType := QueryRequestName
 		fDataType := ""
 
-		fType, fName = getFieldNameFromStructAndEndpointParams(structName, f, ep)
+		fType, fName := getFieldNameFromStructAndEndpointParams(structName, f, ep)
 
 		switch types.ExprString(f.Type) {
 		case "string":
@@ -226,7 +226,7 @@ func getFieldNameFromStructAndEndpointParams(
 	var tags reflect.StructTag
 
 	fName := f.Names[0].Name
-	fType := QueryRequestName
+	var fType RequestParamType
 
 	if f.Tag != nil {
 		tags = reflect.StructTag(strings.Trim(f.Tag.Value, "`"))
