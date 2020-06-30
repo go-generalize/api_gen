@@ -122,7 +122,7 @@ func TestBootstrap(t *testing.T) {
 		q := url.Values{}
 		q.Add("search_request", "aabbccdd")
 
-		resByte, err := httpGET("/service/user2/userIDSample", q)
+		resByte, err := httpGET("/service/user2/1204", q)
 		if err != nil {
 			t.Fatalf("server http get error: %s", err.Error())
 		}
@@ -135,8 +135,8 @@ func TestBootstrap(t *testing.T) {
 			t.Fatalf("server http get response parse error: %s", err.Error())
 		}
 
-		if res.ID != "userIDSample" {
-			t.Fatalf("unexpected ID: %s (expected:%s)", res.ID, "userIDSample")
+		if res.ID != "1204" {
+			t.Fatalf("unexpected ID: %s (expected:%s)", res.ID, "1204")
 		}
 		if res.SearchRequest != "aabbccdd" {
 			t.Fatalf("unexpected SearchRequest: %s (expected:%s)", res.SearchRequest, "aabbccdd")
