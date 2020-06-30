@@ -11,6 +11,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/go-generalize/api_gen/server_generator/sample/service/user2"
+
+	"github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID/_JobID"
+
 	"github.com/go-generalize/api_gen/server_generator/sample/service"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -111,6 +115,55 @@ func TestBootstrap(t *testing.T) {
 		}
 		if len(res.Group) != 3 {
 			t.Fatalf("unexpected Group length: %d (expected:%d)", len(res.Group), 3)
+		}
+	})
+
+	t.Run("testBootstrap get path matching request(single)", func(t *testing.T) {
+		q := url.Values{}
+		q.Add("search_request", "aabbccdd")
+
+		resByte, err := httpGET("/service/user2/userIDSample", q)
+		if err != nil {
+			t.Fatalf("server http get error: %s", err.Error())
+		}
+
+		fmt.Printf("FFFF %s\n", string(resByte))
+
+		res := new(user2.GetUserResponse)
+		err = json.Unmarshal(resByte, res)
+		if err != nil {
+			t.Fatalf("server http get response parse error: %s", err.Error())
+		}
+
+		if res.ID != "userIDSample" {
+			t.Fatalf("unexpected ID: %s (expected:%s)", res.ID, "userIDSample")
+		}
+		if res.SearchRequest != "aabbccdd" {
+			t.Fatalf("unexpected SearchRequest: %s (expected:%s)", res.SearchRequest, "aabbccdd")
+		}
+	})
+
+	t.Run("testBootstrap put path matching request", func(t *testing.T) {
+		req := map[string]interface{}{}
+
+		resp, err := httpPUT("/service/user2/userIDSample/JobIDSample/job", req)
+		if err != nil {
+			t.Fatalf("server http get error: %s", err.Error())
+		}
+		defer resp.Body.Close()
+		resByte, err := ioutil.ReadAll(resp.Body)
+
+		res := new(_JobID.PutJobResponse)
+		err = json.Unmarshal(resByte, res)
+		if err != nil {
+			t.Fatalf("server http get response parse error: %s", err.Error())
+		}
+
+		if res.UserID != "userIDSample" {
+			t.Fatalf("unexpected UserID: %s (expected:%s)", res.UserID, "userIDSample")
+		}
+		if res.JobID != "JobIDSample" {
+			t.Fatalf("unexpected JobID: %s (expected:%s)", res.JobID, "JobIDSample")
 		}
 	})
 
@@ -237,13 +290,21 @@ func httpGET(endpoint string, query url.Values) ([]byte, error) {
 }
 
 func httpPOST(endpoint string, j map[string]interface{}) (*http.Response, error) {
+	return httpAccessWithMethod("POST", endpoint, j)
+}
+
+func httpPUT(endpoint string, j map[string]interface{}) (*http.Response, error) {
+	return httpAccessWithMethod("PUT", endpoint, j)
+}
+
+func httpAccessWithMethod(method, endpoint string, j map[string]interface{}) (*http.Response, error) {
 	body, err := json.Marshal(j)
 	if err != nil {
 		return nil, err
 	}
 
 	u := fmt.Sprintf("http://localhost:%s%s", PORT, endpoint)
-	req, err := http.NewRequest("POST", u, bytes.NewBuffer(body))
+	req, err := http.NewRequest(method, u, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
 	}

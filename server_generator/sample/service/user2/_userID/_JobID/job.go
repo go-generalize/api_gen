@@ -6,4 +6,6 @@ type PutJobRequest struct {
 }
 
 type PutJobResponse struct {
+	UserID string
+	JobID  string
 }

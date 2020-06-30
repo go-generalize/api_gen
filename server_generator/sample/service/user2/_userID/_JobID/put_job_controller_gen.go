@@ -17,5 +17,9 @@ func NewPutJobController() *PutJobController {
 func (p *PutJobController) PutJob(
 	ctx context.Context, c echo.Context, req *PutJobRequest,
 ) (res *PutJobResponse, err error) {
-	panic("require implements.")
+	res = new(PutJobResponse)
+	res.UserID = req.UserID
+	res.JobID = req.JobID
+
+	return res, nil
 }

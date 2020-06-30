@@ -17,5 +17,8 @@ func NewGetUserController() *GetUserController {
 func (g *GetUserController) GetUser(
 	ctx context.Context, c echo.Context, req *GetUserRequest,
 ) (res *GetUserResponse, err error) {
-	panic("require implements.")
+	return &GetUserResponse{
+		ID:            req.ID,
+		SearchRequest: req.SearchRequest,
+	}, nil
 }
