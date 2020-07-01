@@ -26,3 +26,4 @@ bin/
 .DS_Store
 
 .go-version
+dist/

@@ -42,3 +42,6 @@ statik:
 	cd client_generator && \
 	statik "-include=*.tmpl" -src=. && \
 	gofmt -w ./statik/statik.go
+
+build-release:
+	$(shell bash ./scripts/build_release.sh)
