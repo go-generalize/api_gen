@@ -1,9 +1,6 @@
 project_name: server_generator
 env:
   - GO111MODULE=on
-before:
-  hooks:
-    - go mod tidy
 builds:
   - main: .
     binary: server_generator
