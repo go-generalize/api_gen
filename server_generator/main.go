@@ -180,7 +180,9 @@ func run(arg string) error {
 				b.EndpointPath = b.EndpointPath + "/"
 			}
 		}
+	}
 
+	for _, b := range bootstrapTemplates {
 		if b.ImportPackageName == filepath.Base(b.PackagePath) {
 			b.ImportPackageName = ""
 		}

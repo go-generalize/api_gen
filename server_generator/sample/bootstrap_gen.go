@@ -64,15 +64,15 @@ func Bootstrap(ctx context.Context, e *echo.Echo, middlewareList MiddlewareList)
 	setMiddleware(serviceGroup, "/service/", middleware)
 	service.NewRoutes(ctx, serviceGroup)
 
-	serviceStaticPageGroup := rootGroup.Group("static_page/")
+	serviceStaticPageGroup := serviceGroup.Group("static_page/")
 	setMiddleware(serviceStaticPageGroup, "/service/static_page/", middleware)
 	serviceStaticPage.NewRoutes(ctx, serviceStaticPageGroup)
 
-	serviceUserGroup := rootGroup.Group("user/")
+	serviceUserGroup := serviceGroup.Group("user/")
 	setMiddleware(serviceUserGroup, "/service/user/", middleware)
 	serviceUser.NewRoutes(ctx, serviceUserGroup)
 
-	serviceUser2Group := rootGroup.Group("user2/")
+	serviceUser2Group := serviceGroup.Group("user2/")
 	setMiddleware(serviceUser2Group, "/service/user2/", middleware)
 	serviceUser2.NewRoutes(ctx, serviceUser2Group)
 
