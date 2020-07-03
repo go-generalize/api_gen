@@ -180,6 +180,10 @@ func run(arg string) error {
 				b.EndpointPath = b.EndpointPath + "/"
 			}
 		}
+
+		if b.ImportPackageName == filepath.Base(b.PackagePath) {
+			b.ImportPackageName = ""
+		}
 	}
 
 	bootstrapFilePath := filepath.Join(rootPath+"/", "bootstrap_gen.go")

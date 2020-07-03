@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 {{ range $i, $v := .Bootstraps }}{{ if ne .PackagePath "" }}
-	{{ if gt $i 1 }}{{ $v.ImportPackageName }} {{ end }}"{{ $v.PackagePath }}"{{ end }}{{ end }}
+	{{ if ne $v.ImportPackageName "" }}{{ $v.ImportPackageName }} {{ end }}"{{ $v.PackagePath }}"{{ end }}{{ end }}
 	"github.com/labstack/echo/v4"
 )
 
