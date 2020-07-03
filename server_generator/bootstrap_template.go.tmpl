@@ -55,7 +55,7 @@ func Bootstrap(ctx context.Context, e *echo.Echo, middlewareList MiddlewareList)
 
 	{{ $v.RouteGroupName }}Group := {{ GetGroupName $v }}.Group("{{ $v.Endpoint }}")
 	setMiddleware({{ $v.RouteGroupName }}Group, "{{ $v.EndpointPath }}", middleware)
-	{{ GetNewRoute $v}} {{ end }}
+	{{ GetNewRoute $v}}{{ end }}
 }
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {
