@@ -21,12 +21,12 @@ do
 
     BUILD_PATH=${DIST_DIR}${target}_${GOOS}_${GOARCH}
     if [ "$GOOS" = "darwin" ]; then
-      BUILD_PATH=${DIST_DIR}${target}r_macOS_${GOARCH}
+      BUILD_PATH=${DIST_DIR}${target}_macOS_${GOARCH}
     fi
     if [ "$GOOS" = "windows" ]; then
-      BUILD_PATH=${DIST_DIR}${target}r_${GOOS}_${GOARCH}.exe
+      BUILD_PATH=${DIST_DIR}${target}_${GOOS}_${GOARCH}.exe
     fi
 
-    env GOOS=${GOOS} GOARCH=${GOARCH}  go build -o ${BUILD_PATH}
+    env GOOS=${GOOS} GOARCH=${GOARCH} go build -o ${BUILD_PATH}
   done
 done
