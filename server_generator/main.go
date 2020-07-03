@@ -68,6 +68,7 @@ func run(arg string) error {
 	packageName := ""
 	endpointReplaceMatchRule := regexp.MustCompile(`:(.*?)/`)
 
+	isExistRoot := false
 	err = filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -132,6 +133,7 @@ func run(arg string) error {
 		}
 		if endpointPath == "/" {
 			packageName = cs[0].Package
+			isExistRoot = true
 		}
 
 		bootstrapTemplates = append(bootstrapTemplates, &BootstrapTemplates{
@@ -146,6 +148,19 @@ func run(arg string) error {
 	})
 	if err != nil {
 		return err
+	}
+
+	if !isExistRoot {
+		packageName = filepath.Base(rootPath)
+		bootstrapTemplates = append([]*BootstrapTemplates{
+			{
+				PackagePath:       "",
+				ImportPackageName: "",
+				EndpointPath:      "/",
+				Endpoint:          "/",
+				Controller:        nil,
+			},
+		}, bootstrapTemplates...)
 	}
 
 	for _, b := range bootstrapTemplates {
@@ -182,6 +197,12 @@ func run(arg string) error {
 		}
 	}
 
+	for _, b := range bootstrapTemplates {
+		if b.ImportPackageName == filepath.Base(b.PackagePath) {
+			b.ImportPackageName = ""
+		}
+	}
+
 	bootstrapFilePath := filepath.Join(rootPath+"/", "bootstrap_gen.go")
 	err = createFromTemplate(
 		"/bootstrap_template.go.tmpl",
@@ -189,7 +210,10 @@ func run(arg string) error {
 			PackageName: packageName,
 			Bootstraps:  bootstrapTemplates,
 		},
-		true)
+		true, template.FuncMap{
+			"GetGroupName": getGroupName,
+			"GetNewRoute":  getNewRoute,
+		})
 	if err != nil {
 		return err
 	}
@@ -265,7 +289,8 @@ func parsePackages(path, endpointBase string, endpointParams []string) ([]*Contr
 
 		routes[createDir] = append(routes[createDir], ct)
 
-		err = createFromTemplate("/controller_template.go.tmpl", createPath, ct, false)
+		err = createFromTemplate("/controller_template.go.tmpl",
+			createPath, ct, false, template.FuncMap{})
 		if err != nil {
 			return nil, err
 		}
@@ -294,7 +319,7 @@ func parsePackages(path, endpointBase string, endpointParams []string) ([]*Contr
 		err := createFromTemplate("/routes_template.go.tmpl", routePath, &RoutesTemplate{
 			Package:     packageName,
 			Controllers: cs,
-		}, true)
+		}, true, template.FuncMap{})
 		if err != nil {
 			return nil, err
 		}
@@ -303,7 +328,7 @@ func parsePackages(path, endpointBase string, endpointParams []string) ([]*Contr
 	return controllers, nil
 }
 
-func createFromTemplate(templatePath, path string, m interface{}, isOverRide bool) error {
+func createFromTemplate(templatePath, path string, m interface{}, isOverRide bool, funcMap template.FuncMap) error {
 	_, err := os.Stat(path)
 	if err == nil {
 		if !isOverRide {
@@ -330,7 +355,7 @@ func createFromTemplate(templatePath, path string, m interface{}, isOverRide boo
 		return err
 	}
 
-	tpl := template.Must(template.New("tmpl").Parse(string(t)))
+	tpl := template.Must(template.New("tmpl").Funcs(funcMap).Parse(string(t)))
 
 	w, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE, 0664)
 	if err != nil {
