@@ -1,11 +1,11 @@
-package {{ .PackageName }}
+package sample2
 
 import (
 	"context"
 	"log"
 	"net/http"
-{{ range $i, $v := .Bootstraps }}{{ if ne .PackagePath "" }}
-	{{ if ne $v.ImportPackageName "" }}{{ $v.ImportPackageName }} {{ end }}"{{ $v.PackagePath }}"{{ end }}{{ end }}
+
+	apiEventEventIDRoom "github.com/go-generalize/api_gen/server_generator/sample2/api/event/_eventID/room"
 	"github.com/labstack/echo/v4"
 )
 
@@ -51,11 +51,12 @@ func Bootstrap(ctx context.Context, e *echo.Echo, middlewareList MiddlewareList)
 		}
 	})
 
-{{ range $i, $v := .Bootstraps }}
+	rootGroup := e.Group("/")
+	setMiddleware(rootGroup, "/", middleware)
 
-	{{ $v.RouteGroupName }}Group := {{ GetGroupName $v }}.Group("{{ $v.Endpoint }}")
-	setMiddleware({{ $v.RouteGroupName }}Group, "{{ $v.EndpointPath }}", middleware)
-	{{ GetNewRoute $v}} {{ end }}
+	apiEventEventIDRoomGroup := rootGroup.Group("api/event/:eventID/room/")
+	setMiddleware(apiEventEventIDRoomGroup, "/api/event/:eventID/room/", middleware)
+	apiEventEventIDRoom.NewRoutes(ctx, apiEventEventIDRoomGroup)
 }
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {
