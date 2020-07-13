@@ -245,7 +245,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 			if hasSuffixSlash {
 				suffix = "/"
 			}
-			return fmt.Sprintf("${encodeURI(param.%s)}%s", param, suffix)
+			return fmt.Sprintf("${encodeURI(param.%s.toString())}%s", param, suffix)
 		})
 
 		parent.Methods = append(
