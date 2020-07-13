@@ -56,9 +56,13 @@ function ToObject(o: any, typeOrCfg: any = {}, child = false): any {
 // classes
 // struct2ts:github.com/go-generalize/api_gen/server_generator/sample/service/user2.GetUserResponse
 class GetUserResponse {
+	ID: string;
+	SearchRequest: string;
 
 	constructor(data?: any) {
 		const d: any = (data && typeof data === 'object') ? ToObject(data) : {};
+		this.ID = ('ID' in d) ? d.ID as string : '';
+		this.SearchRequest = ('SearchRequest' in d) ? d.SearchRequest as string : '';
 	}
 
 	toObject(): any {
