@@ -1,3 +1,3 @@
 package common
 
-const AppVersion = "0.3.1"
+const AppVersion = "0.3.2"

@@ -54,7 +54,7 @@ function ToObject(o: any, typeOrCfg: any = {}, child = false): any {
 }
 
 // classes
-// struct2ts:github.com/go-generalize/api_gen/server_generator/sample/service/user/_userID/_JobID.PutJobRequest
+// struct2ts:github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID/_JobID.PutJobRequest
 class PutJobRequest {
 	UserID: string;
 	JobID: string;
