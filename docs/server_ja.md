@@ -16,6 +16,7 @@
      - 対応しているHTTPメソッドは、 `get` , `post` , `put` , `delete` , `patch`
      - GETメソッドでは、Requestの、json tagとquery tagの両方に同じ値を入れなくてはならない。
 - 必ず、 Request と Response がそれぞれ対になるようになっていなければならない。
+- **`json:"-"` のタグを指定すると、内部で利用してる struct2ts がClassの生成対象から除外するため、注意。**
 - パスルーティングをする場合。
     - ディレクトリは `_` 始まりしなければならない。
         - 例: `/service/:id/hogehoge` にしたい場合は `/service/_id/*.go` のようにする。
