@@ -16,9 +16,13 @@ class {{$elem.Name}} {
 
 	getRequestObject(param: any, routingPath: string[]): any {
 		const obj = param.toObject();
-		return Object.keys(obj).filter((key) =>{
-			return routingPath.indexOf(key) !== -1;
+		let res = {};
+		Object.keys(obj).forEach((key) => {
+			if (routingPath.indexOf(key) === -1) {
+				res[key] = obj[key];
+			}
 		});
+		return res;
 	}
 {{range $index, $method := $elem.Methods}}
 	async {{$method.Name}}(
@@ -94,9 +98,13 @@ export class APIClient {
 
 	getRequestObject(param: any, routingPath: string[]): any {
 		const obj = param.toObject();
-		return Object.keys(obj).filter((key) =>{
-			return routingPath.indexOf(key) !== -1;
+		let res = {};
+		Object.keys(obj).forEach((key) => {
+			if (routingPath.indexOf(key) === -1) {
+				res[key] = obj[key];
+			}
 		});
+		return res;
 	}
 {{range $index, $method := .Methods}}
 	async {{$method.Name}}(
