@@ -339,7 +339,9 @@ func main() {
 		log.Fatalf("failed to run MkdirAll: %+v", err)
 	}
 
-	generator := &clientGenerator{}
+	generator := &clientGenerator{
+		AppVersion: common.AppVersion,
+	}
 
 	fullPath, err := filepath.Abs(os.Args[1])
 	if err != nil {

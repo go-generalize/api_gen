@@ -1,6 +1,7 @@
 package main
 
 type ControllerTemplate struct {
+	AppVersion            string
 	Package               string
 	ControllerName        string
 	ControllerNameInitial string

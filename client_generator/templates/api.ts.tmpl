@@ -1,5 +1,6 @@
-// THIS CODE WAS GENERATED AUTOMATICALLY
+// THIS FILE IS A GENERATED CODE. DO NOT EDIT
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
+// generated version: {{ .AppVersion }}
 
 {{range $index, $elem := .Imports}}import {{"{"}} {{$elem.Name}} as {{$elem.NameAs}} {{"}"}} from '{{$elem.Path}}';
 export {{"{"}} {{$elem.Name}} as {{$elem.NameAs}} {{"}"}} from '{{$elem.Path}}';
