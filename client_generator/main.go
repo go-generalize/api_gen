@@ -328,7 +328,7 @@ func main() {
 	flag.Parse()
 
 	if *versionFlag {
-		fmt.Printf(common.AppVersion)
+		fmt.Println(common.AppVersion)
 		return
 	}
 
@@ -339,7 +339,9 @@ func main() {
 		log.Fatalf("failed to run MkdirAll: %+v", err)
 	}
 
-	generator := &clientGenerator{}
+	generator := &clientGenerator{
+		AppVersion: common.AppVersion,
+	}
 
 	fullPath, err := filepath.Abs(os.Args[1])
 	if err != nil {

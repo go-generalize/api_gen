@@ -1,6 +1,7 @@
 package main
 
 type BootstrapTemplate struct {
+	AppVersion  string
 	PackageName string
 	Bootstraps  []*BootstrapTemplates
 }

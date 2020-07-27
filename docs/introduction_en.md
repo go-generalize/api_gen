@@ -1,6 +1,17 @@
 # api_gen
 ## Introduction
 
+### Prerequisites
+
+You must install [struct2ts](https://github.com/OneOfOne/struct2ts).
+Required by client_generate.
+
+```shell script
+go get -u -v github.com/OneOfOne/struct2ts/...
+```
+
+
+
 ### Install
 
 #### For Release download

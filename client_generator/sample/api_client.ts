@@ -1,5 +1,6 @@
-// THIS CODE WAS GENERATED AUTOMATICALLY
+// THIS FILE IS A GENERATED CODE. DO NOT EDIT
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
+// generated version: 0.3.4
 
 import { GetArticleRequest as ServiceGetArticleRequest } from './classes/service/GetArticleRequest';
 export { GetArticleRequest as ServiceGetArticleRequest } from './classes/service/GetArticleRequest';

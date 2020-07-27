@@ -13,7 +13,6 @@ import (
 	"text/template"
 
 	"github.com/go-generalize/api_gen/common"
-
 	_ "github.com/go-generalize/api_gen/server_generator/statik"
 	"github.com/iancoleman/strcase"
 	"github.com/rakyll/statik/fs"
@@ -41,7 +40,7 @@ func main() {
 	flag.Parse()
 
 	if *versionFlag {
-		fmt.Printf(common.AppVersion)
+		fmt.Println(common.AppVersion)
 		return
 	}
 
@@ -207,6 +206,7 @@ func run(arg string) error {
 	err = createFromTemplate(
 		"/bootstrap_template.go.tmpl",
 		bootstrapFilePath, &BootstrapTemplate{
+			AppVersion:  common.AppVersion,
 			PackageName: packageName,
 			Bootstraps:  bootstrapTemplates,
 		},
@@ -275,6 +275,7 @@ func parsePackages(path, endpointBase string, endpointParams []string) ([]*Contr
 		fullEndpoint = replaceRule.ReplaceAllString(fullEndpoint, "{$1}$2")
 
 		ct := &ControllerTemplate{
+			AppVersion:            common.AppVersion,
 			Package:               req.PackageName,
 			ControllerName:        fmt.Sprintf("%sController", cn),
 			ControllerNameInitial: strings.ToLower(string([]rune(cn)[0])),
@@ -317,6 +318,7 @@ func parsePackages(path, endpointBase string, endpointParams []string) ([]*Contr
 		controllers = append(controllers, cs...)
 
 		err := createFromTemplate("/routes_template.go.tmpl", routePath, &RoutesTemplate{
+			AppVersion:  common.AppVersion,
 			Package:     packageName,
 			Controllers: cs,
 		}, true, template.FuncMap{})

@@ -33,7 +33,8 @@ type importType struct {
 }
 
 type clientGenerator struct {
-	Imports []importType
+	AppVersion string
+	Imports    []importType
 	clientType
 	ChildrenClients []clientType
 }
