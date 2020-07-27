@@ -328,7 +328,7 @@ func main() {
 	flag.Parse()
 
 	if *versionFlag {
-		fmt.Printf(common.AppVersion)
+		fmt.Printf("%s\n", common.AppVersion)
 		return
 	}
 
