@@ -1,3 +1,4 @@
+// generated version: 0.3.4
 package room
 
 import (

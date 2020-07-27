@@ -1,4 +1,6 @@
 // THIS FILE IS A GENERATED CODE. DO NOT EDIT
+// DO NOT EDIT THIS CODE BY YOUR OWN HANDS
+// generated version: 0.3.4
 package _JobID
 
 import (
