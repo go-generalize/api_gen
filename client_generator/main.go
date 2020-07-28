@@ -113,6 +113,7 @@ func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *a
 			if !ok {
 				fmt.Printf("\x1b[31mskip: %s \n"+
 					"  must be Struct.\x1b[0m\n", fset.Position(typeSpec.Type.Pos()).String())
+				continue
 			}
 
 			if strings.HasSuffix(name, "Request") {
