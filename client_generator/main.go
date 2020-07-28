@@ -36,7 +36,8 @@ type endpoint struct {
 	rawName        string
 	fileName       string
 
-	requestStructObject *ast.StructType
+	requestStructObject  *ast.StructType
+	responseStructObject *ast.StructType
 
 	method            string
 	request, response bool
@@ -119,6 +120,7 @@ func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *a
 
 				p.endpoints[me].rawName = strings.TrimSuffix(name, "Response")
 				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(strings.TrimSuffix(name[len(method):], "Response")))
+				p.endpoints[me].responseStructObject = typeSpec.Type.(*ast.StructType)
 			}
 
 			if strings.HasPrefix(goFileName, "0_") {
@@ -248,6 +250,8 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 			return fmt.Sprintf("${encodeURI(param.%s.toString())}%s", param, suffix)
 		})
 
+		responseFields := ep.responseStructObject.Fields
+
 		parent.Methods = append(
 			parent.Methods,
 			methodType{
@@ -257,7 +261,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 				Method:       strings.ToUpper(ep.method),
 				Endpoint:     endpointPath,
 				URLParams:    urlParams,
-				HasFields:    requestStruct.Fields.List != nil && len(requestStruct.Fields.List) > 0,
+				HasFields:    responseFields.List != nil && len(responseFields.List) > 0,
 			},
 		)
 	}
