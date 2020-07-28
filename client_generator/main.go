@@ -257,6 +257,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 				Method:       strings.ToUpper(ep.method),
 				Endpoint:     endpointPath,
 				URLParams:    urlParams,
+				HasFields:    requestStruct.Fields.List != nil && len(requestStruct.Fields.List) > 0,
 			},
 		)
 	}
