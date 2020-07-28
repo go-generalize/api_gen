@@ -109,18 +109,24 @@ func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *a
 			p.endpoints[me].method = method
 			p.endpoints[me].methodEndpoint = me
 
+			structType, ok := typeSpec.Type.(*ast.StructType)
+			if !ok {
+				fmt.Printf("\x1b[31mskip: %s \n"+
+					"  must be Struct.\x1b[0m\n", fset.Position(typeSpec.Type.Pos()).String())
+			}
+
 			if strings.HasSuffix(name, "Request") {
 				p.endpoints[me].request = true
 
 				p.endpoints[me].rawName = strings.TrimSuffix(name, "Request")
 				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(strings.TrimSuffix(name[len(method):], "Request")))
-				p.endpoints[me].requestStructObject = typeSpec.Type.(*ast.StructType)
+				p.endpoints[me].requestStructObject = structType
 			} else {
 				p.endpoints[me].response = true
 
 				p.endpoints[me].rawName = strings.TrimSuffix(name, "Response")
 				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(strings.TrimSuffix(name[len(method):], "Response")))
-				p.endpoints[me].responseStructObject = typeSpec.Type.(*ast.StructType)
+				p.endpoints[me].responseStructObject = structType
 			}
 
 			if strings.HasPrefix(goFileName, "0_") {
