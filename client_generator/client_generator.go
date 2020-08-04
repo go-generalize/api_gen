@@ -75,10 +75,20 @@ func (g *clientGenerator) generate() error {
 
 func (g *clientGenerator) sort() {
 	sort.Slice(g.Imports, func(i, j int) bool {
-		return g.Imports[i].Name < g.Imports[j].Name
+		return g.Imports[i].Name+g.Imports[i].Path < g.Imports[j].Name+g.Imports[j].Path
 	})
 
 	sort.Slice(g.ChildrenClients, func(i, j int) bool {
 		return g.ChildrenClients[i].Name < g.ChildrenClients[j].Name
 	})
+
+	sort.Slice(g.Methods, func(i, j int) bool {
+		return g.Methods[i].Name < g.Methods[j].Name
+	})
+
+	for index := range g.ChildrenClients {
+		sort.Slice(g.ChildrenClients[index].Methods, func(i, j int) bool {
+			return g.ChildrenClients[index].Methods[i].Name < g.ChildrenClients[index].Methods[j].Name
+		})
+	}
 }
