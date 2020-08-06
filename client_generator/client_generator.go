@@ -15,6 +15,7 @@ type methodType struct {
 	RequestType, ResponseType string
 	Method, Endpoint          string
 	URLParams                 []string
+	HasFields                 bool
 }
 
 type childrenType struct {

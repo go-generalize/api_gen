@@ -1,6 +1,6 @@
 // THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
-// generated version: 0.3.4
+// generated version: 0.3.5
 
 import { GetArticleRequest as ServiceGetArticleRequest } from './classes/service/GetArticleRequest';
 export { GetArticleRequest as ServiceGetArticleRequest } from './classes/service/GetArticleRequest';
@@ -92,7 +92,6 @@ class ServiceClient {
 		if (Math.floor(resp.status / 100) !== 2) {
 			throw new Error(resp.statusText + ": " + await resp.text());
 		}
-
 		return new ServiceGetArticleResponse(await resp.json());
 	}
 }
@@ -136,7 +135,6 @@ class ServiceStaticPageClient {
 		if (Math.floor(resp.status / 100) !== 2) {
 			throw new Error(resp.statusText + ": " + await resp.text());
 		}
-
 		return new ServiceStaticPageGetStaticPageResponse(await resp.json());
 	}
 }
@@ -201,7 +199,6 @@ class ServiceUser2Client {
 		if (Math.floor(resp.status / 100) !== 2) {
 			throw new Error(resp.statusText + ": " + await resp.text());
 		}
-
 		return new ServiceUser2GetUserResponse(await resp.json());
 	}
 	async postUpdateUserName(
@@ -227,7 +224,6 @@ class ServiceUser2Client {
 		if (Math.floor(resp.status / 100) !== 2) {
 			throw new Error(resp.statusText + ": " + await resp.text());
 		}
-
 		return new ServiceUser2PostUpdateUserNameResponse(await resp.json());
 	}
 	async postUpdateUserPassword(
@@ -253,7 +249,6 @@ class ServiceUser2Client {
 		if (Math.floor(resp.status / 100) !== 2) {
 			throw new Error(resp.statusText + ": " + await resp.text());
 		}
-
 		return new ServiceUser2PostUpdateUserPasswordResponse(await resp.json());
 	}
 }
@@ -299,7 +294,6 @@ class ServiceUser2UserIDClient {
 		if (Math.floor(resp.status / 100) !== 2) {
 			throw new Error(resp.statusText + ": " + await resp.text());
 		}
-
 		return new ServiceUser2UserIDGetUserJobGetResponse(await resp.json());
 	}
 }
@@ -344,7 +338,6 @@ class ServiceUser2UserIDJobIDClient {
 		if (Math.floor(resp.status / 100) !== 2) {
 			throw new Error(resp.statusText + ": " + await resp.text());
 		}
-
 		return new ServiceUser2UserIDJobIDPutJobResponse(await resp.json());
 	}
 }
@@ -389,7 +382,6 @@ class ServiceUserClient {
 		if (Math.floor(resp.status / 100) !== 2) {
 			throw new Error(resp.statusText + ": " + await resp.text());
 		}
-
 		return new ServiceUserPostUpdateUserNameResponse(await resp.json());
 	}
 	async postUpdateUserPassword(
@@ -415,7 +407,6 @@ class ServiceUserClient {
 		if (Math.floor(resp.status / 100) !== 2) {
 			throw new Error(resp.statusText + ": " + await resp.text());
 		}
-
 		return new ServiceUserPostUpdateUserPasswordResponse(await resp.json());
 	}
 }
@@ -485,7 +476,6 @@ export class APIClient {
 		if (Math.floor(resp.status / 100) !== 2) {
 			throw new Error(resp.statusText + ": " + await resp.text());
 		}
-
 		return new PostCreateTableResponse(await resp.json());
 	}
 
@@ -512,7 +502,6 @@ export class APIClient {
 		if (Math.floor(resp.status / 100) !== 2) {
 			throw new Error(resp.statusText + ": " + await resp.text());
 		}
-
 		return new PostCreateUserResponse(await resp.json());
 	}
 

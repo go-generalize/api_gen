@@ -61,8 +61,12 @@ class {{$elem.Name}} {
 		if (Math.floor(resp.status / 100) !== 2) {
 			throw new Error(resp.statusText + ": " + await resp.text());
 		}
-
+{{- if eq .HasFields true }}
 		return new {{$method.ResponseType}}(await resp.json());
+{{- else }}
+		await resp.text();
+		return new {{$method.ResponseType}}();
+{{- end }}
 	}{{end}}
 }
 {{end}}
@@ -144,7 +148,12 @@ export class APIClient {
 			throw new Error(resp.statusText + ": " + await resp.text());
 		}
 
+{{- if eq .HasFields true }}
 		return new {{$method.ResponseType}}(await resp.json());
+{{- else }}
+		await resp.text();
+		return new {{$method.ResponseType}}();
+{{- end }}
 	}
 {{end}}
 }

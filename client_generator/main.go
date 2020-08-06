@@ -36,7 +36,8 @@ type endpoint struct {
 	rawName        string
 	fileName       string
 
-	requestStructObject *ast.StructType
+	requestStructObject  *ast.StructType
+	responseStructObject *ast.StructType
 
 	method            string
 	request, response bool
@@ -108,17 +109,25 @@ func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *a
 			p.endpoints[me].method = method
 			p.endpoints[me].methodEndpoint = me
 
+			structType, ok := typeSpec.Type.(*ast.StructType)
+			if !ok {
+				fmt.Printf("\x1b[31mskip: %s \n"+
+					"  must be Struct.\x1b[0m\n", fset.Position(typeSpec.Type.Pos()).String())
+				continue
+			}
+
 			if strings.HasSuffix(name, "Request") {
 				p.endpoints[me].request = true
 
 				p.endpoints[me].rawName = strings.TrimSuffix(name, "Request")
 				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(strings.TrimSuffix(name[len(method):], "Request")))
-				p.endpoints[me].requestStructObject = typeSpec.Type.(*ast.StructType)
+				p.endpoints[me].requestStructObject = structType
 			} else {
 				p.endpoints[me].response = true
 
 				p.endpoints[me].rawName = strings.TrimSuffix(name, "Response")
 				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(strings.TrimSuffix(name[len(method):], "Response")))
+				p.endpoints[me].responseStructObject = structType
 			}
 
 			if strings.HasPrefix(goFileName, "0_") {
@@ -248,6 +257,8 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 			return fmt.Sprintf("${encodeURI(param.%s.toString())}%s", param, suffix)
 		})
 
+		responseFields := ep.responseStructObject.Fields
+
 		parent.Methods = append(
 			parent.Methods,
 			&methodType{
@@ -257,6 +268,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 				Method:       strings.ToUpper(ep.method),
 				Endpoint:     endpointPath,
 				URLParams:    urlParams,
+				HasFields:    responseFields.List != nil && len(responseFields.List) > 0,
 			},
 		)
 	}
