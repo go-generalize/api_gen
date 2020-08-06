@@ -1,4 +1,4 @@
-// THIS FILE IS A GENERATED CODE. DO NOT EDIT
+// THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
 // generated version: 0.3.4
 
@@ -26,14 +26,14 @@ import { PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest } fro
 export { PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest } from './classes/service/user/PostUpdateUserNameRequest';
 import { PostUpdateUserNameRequest as ServiceUser2PostUpdateUserNameRequest } from './classes/service/user2/PostUpdateUserNameRequest';
 export { PostUpdateUserNameRequest as ServiceUser2PostUpdateUserNameRequest } from './classes/service/user2/PostUpdateUserNameRequest';
-import { PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse } from './classes/service/user2/PostUpdateUserNameResponse';
-export { PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse } from './classes/service/user2/PostUpdateUserNameResponse';
 import { PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse } from './classes/service/user/PostUpdateUserNameResponse';
 export { PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse } from './classes/service/user/PostUpdateUserNameResponse';
-import { PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest } from './classes/service/user2/PostUpdateUserPasswordRequest';
-export { PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest } from './classes/service/user2/PostUpdateUserPasswordRequest';
+import { PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse } from './classes/service/user2/PostUpdateUserNameResponse';
+export { PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse } from './classes/service/user2/PostUpdateUserNameResponse';
 import { PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest } from './classes/service/user/PostUpdateUserPasswordRequest';
 export { PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest } from './classes/service/user/PostUpdateUserPasswordRequest';
+import { PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest } from './classes/service/user2/PostUpdateUserPasswordRequest';
+export { PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest } from './classes/service/user2/PostUpdateUserPasswordRequest';
 import { PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse } from './classes/service/user/PostUpdateUserPasswordResponse';
 export { PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse } from './classes/service/user/PostUpdateUserPasswordResponse';
 import { PostUpdateUserPasswordResponse as ServiceUser2PostUpdateUserPasswordResponse } from './classes/service/user2/PostUpdateUserPasswordResponse';
@@ -462,33 +462,6 @@ export class APIClient {
 		return res;
 	}
 
-	async postCreateUser(
-		param: PostCreateUserRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<PostCreateUserResponse> {
-	    const excludeParams: string[] = [];
-		const resp = await fetch(
-			`${this.baseURL}/create_user`,
-			{
-				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
-				headers: {
-					...this.headers,
-					...headers,
-				},
-				...this.options,
-				...options,
-			}
-		);
-
-		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
-		}
-
-		return new PostCreateUserResponse(await resp.json());
-	}
-
 	async postCreateTable(
 		param: PostCreateTableRequest,
 		headers?: {[key: string]: string},
@@ -514,6 +487,33 @@ export class APIClient {
 		}
 
 		return new PostCreateTableResponse(await resp.json());
+	}
+
+	async postCreateUser(
+		param: PostCreateUserRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
+	): Promise<PostCreateUserResponse> {
+	    const excludeParams: string[] = [];
+		const resp = await fetch(
+			`${this.baseURL}/create_user`,
+			{
+				method: "POST",
+				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				headers: {
+					...this.headers,
+					...headers,
+				},
+				...this.options,
+				...options,
+			}
+		);
+
+		if (Math.floor(resp.status / 100) !== 2) {
+			throw new Error(resp.statusText + ": " + await resp.text());
+		}
+
+		return new PostCreateUserResponse(await resp.json());
 	}
 
 }

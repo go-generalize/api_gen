@@ -23,7 +23,7 @@ type childrenType struct {
 
 type clientType struct {
 	Name     string
-	Methods  []methodType
+	Methods  []*methodType
 	Children []childrenType
 }
 
@@ -36,7 +36,7 @@ type clientGenerator struct {
 	AppVersion string
 	Imports    []importType
 	clientType
-	ChildrenClients []clientType
+	ChildrenClients []*clientType
 }
 
 func (g *clientGenerator) generate() error {
@@ -75,10 +75,21 @@ func (g *clientGenerator) generate() error {
 
 func (g *clientGenerator) sort() {
 	sort.Slice(g.Imports, func(i, j int) bool {
-		return g.Imports[i].Name < g.Imports[j].Name
+		return g.Imports[i].Name+g.Imports[i].Path < g.Imports[j].Name+g.Imports[j].Path
 	})
 
 	sort.Slice(g.ChildrenClients, func(i, j int) bool {
 		return g.ChildrenClients[i].Name < g.ChildrenClients[j].Name
 	})
+
+	sort.Slice(g.Methods, func(i, j int) bool {
+		return g.Methods[i].Name < g.Methods[j].Name
+	})
+
+	for _, clientType := range g.ChildrenClients {
+		methods := clientType.Methods
+		sort.Slice(methods, func(i, j int) bool {
+			return methods[i].Name < methods[j].Name
+		})
+	}
 }

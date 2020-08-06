@@ -250,7 +250,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 
 		parent.Methods = append(
 			parent.Methods,
-			methodType{
+			&methodType{
 				Name:         strcase.ToLowerCamel(ep.methodEndpoint),
 				RequestType:  replaced + "Request",
 				ResponseType: replaced + "Response",
@@ -298,7 +298,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 			continue
 		}
 
-		client := clientType{}
+		client := new(clientType)
 
 		nextURL := path.Join(url, fifos[i].Name())
 
@@ -310,7 +310,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 			},
 		)
 
-		walk(filepath.Join(p, fifos[i].Name()), nextURL, generator, &client)
+		walk(filepath.Join(p, fifos[i].Name()), nextURL, generator, client)
 
 		generator.ChildrenClients = append(generator.ChildrenClients, client)
 	}
