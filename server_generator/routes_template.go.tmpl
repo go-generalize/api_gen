@@ -10,10 +10,12 @@ import (
 	"net/http"
 )
 
+// Routes ...
 type Routes struct {
 	router *echo.Group
 }
 
+// NewRoutes ...
 func NewRoutes (ctx context.Context, router *echo.Group) *Routes {
 	r := &Routes{
 		router: router,
@@ -24,6 +26,7 @@ func NewRoutes (ctx context.Context, router *echo.Group) *Routes {
 	return r
 }
 {{ range .Controllers }}
+// {{ .HandlerName }} ...
 func (r *Routes) {{ .HandlerName }}(ctx context.Context) echo.HandlerFunc {
 	i := New{{ .ControllerName }}()
 	return func(c echo.Context) error {
@@ -47,6 +50,7 @@ func (r *Routes) {{ .HandlerName }}(ctx context.Context) echo.HandlerFunc {
 }
 {{ end }}
 {{ range .Controllers }}
+// I{{ .ControllerName }} ...
 type I{{ .ControllerName }} interface {
 	{{ .HandlerName }}(c echo.Context, req *{{ .RequestStructName }}) (res *{{ .ResponseStructName }}, err error)
 }

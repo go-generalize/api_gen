@@ -8,16 +8,18 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// {{ .ControllerName }} ...
 type {{ .ControllerName }} struct {
 }
 
+// New{{ .ControllerName }} ...
 func New{{ .ControllerName }}() *{{ .ControllerName }} {
 	{{ .ControllerNameInitial }} := &{{ .ControllerName }}{}
 	return {{ .ControllerNameInitial }}
 }
 
 
-// {{ .HandlerName }}
+// {{ .HandlerName }} ...
 // @Summary WIP
 // @Description WIP
 // @Accept json
