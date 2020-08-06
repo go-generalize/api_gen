@@ -1,6 +1,7 @@
-// THIS FILE IS A GENERATED CODE. DO NOT EDIT
+// THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
-// generated version: 0.3.4
+// generated version: 0.3.5
+
 package service
 
 import (
@@ -10,10 +11,12 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// Routes ...
 type Routes struct {
 	router *echo.Group
 }
 
+// NewRoutes ...
 func NewRoutes(ctx context.Context, router *echo.Group) *Routes {
 	r := &Routes{
 		router: router,
@@ -24,6 +27,7 @@ func NewRoutes(ctx context.Context, router *echo.Group) *Routes {
 	return r
 }
 
+// GetArticle ...
 func (r *Routes) GetArticle(ctx context.Context) echo.HandlerFunc {
 	i := NewGetArticleController()
 	return func(c echo.Context) error {
@@ -46,6 +50,7 @@ func (r *Routes) GetArticle(ctx context.Context) echo.HandlerFunc {
 	}
 }
 
+// IGetArticleController ...
 type IGetArticleController interface {
 	GetArticle(c echo.Context, req *GetArticleRequest) (res *GetArticleResponse, err error)
 }

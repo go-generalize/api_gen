@@ -1,6 +1,7 @@
-// THIS FILE IS A GENERATED CODE. DO NOT EDIT
+// THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
-// generated version: 0.3.4
+// generated version: 0.3.5
+
 package user
 
 import (
@@ -10,10 +11,12 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// Routes ...
 type Routes struct {
 	router *echo.Group
 }
 
+// NewRoutes ...
 func NewRoutes(ctx context.Context, router *echo.Group) *Routes {
 	r := &Routes{
 		router: router,
@@ -25,6 +28,7 @@ func NewRoutes(ctx context.Context, router *echo.Group) *Routes {
 	return r
 }
 
+// PostUpdateUserName ...
 func (r *Routes) PostUpdateUserName(ctx context.Context) echo.HandlerFunc {
 	i := NewPostUpdateUserNameController()
 	return func(c echo.Context) error {
@@ -47,6 +51,7 @@ func (r *Routes) PostUpdateUserName(ctx context.Context) echo.HandlerFunc {
 	}
 }
 
+// PostUpdateUserPassword ...
 func (r *Routes) PostUpdateUserPassword(ctx context.Context) echo.HandlerFunc {
 	i := NewPostUpdateUserPasswordController()
 	return func(c echo.Context) error {
@@ -69,10 +74,12 @@ func (r *Routes) PostUpdateUserPassword(ctx context.Context) echo.HandlerFunc {
 	}
 }
 
+// IPostUpdateUserNameController ...
 type IPostUpdateUserNameController interface {
 	PostUpdateUserName(c echo.Context, req *PostUpdateUserNameRequest) (res *PostUpdateUserNameResponse, err error)
 }
 
+// IPostUpdateUserPasswordController ...
 type IPostUpdateUserPasswordController interface {
 	PostUpdateUserPassword(c echo.Context, req *PostUpdateUserPasswordRequest) (res *PostUpdateUserPasswordResponse, err error)
 }

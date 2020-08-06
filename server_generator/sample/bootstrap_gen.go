@@ -1,6 +1,6 @@
-// THIS FILE IS A GENERATED CODE. DO NOT EDIT
+// THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
-// generated version: 0.3.4
+// generated version: 0.3.5
 
 package sample
 
@@ -18,14 +18,19 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// MiddlewareList ...
 type MiddlewareList []*MiddlewareSet
+
+// MiddlewareMap ...
 type MiddlewareMap map[string][]echo.MiddlewareFunc
 
+// MiddlewareSet ...
 type MiddlewareSet struct {
 	Path           string
 	MiddlewareFunc []echo.MiddlewareFunc
 }
 
+// ToMap ...
 func (m MiddlewareList) ToMap() MiddlewareMap {
 	mf := make(map[string][]echo.MiddlewareFunc)
 	for _, middleware := range m {
@@ -34,6 +39,7 @@ func (m MiddlewareList) ToMap() MiddlewareMap {
 	return mf
 }
 
+// Bootstrap ...
 func Bootstrap(ctx context.Context, e *echo.Echo, middlewareList MiddlewareList) {
 	middleware := middlewareList.ToMap()
 
