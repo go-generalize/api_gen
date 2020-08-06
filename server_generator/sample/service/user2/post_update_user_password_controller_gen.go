@@ -1,3 +1,5 @@
+// generated version: 0.3.5
+
 package user2
 
 import (
@@ -6,15 +8,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// PostUpdateUserPasswordController ...
 type PostUpdateUserPasswordController struct {
 }
 
+// NewPostUpdateUserPasswordController ...
 func NewPostUpdateUserPasswordController() *PostUpdateUserPasswordController {
 	p := &PostUpdateUserPasswordController{}
 	return p
 }
 
-// PostUpdateUserPassword
+// PostUpdateUserPassword ...
 // @Summary WIP
 // @Description WIP
 // @Accept json

@@ -2,6 +2,7 @@ package main
 
 import "go/ast"
 
+// PackageStruct ...
 type PackageStruct struct {
 	FileName      string
 	PackageName   string

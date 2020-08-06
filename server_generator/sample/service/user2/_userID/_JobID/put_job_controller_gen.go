@@ -1,3 +1,5 @@
+// generated version: 0.3.5
+
 package _JobID
 
 import (
@@ -6,15 +8,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// PutJobController ...
 type PutJobController struct {
 }
 
+// NewPutJobController ...
 func NewPutJobController() *PutJobController {
 	p := &PutJobController{}
 	return p
 }
 
-// PutJob
+// PutJob ...
 // @Summary WIP
 // @Description WIP
 // @Accept json

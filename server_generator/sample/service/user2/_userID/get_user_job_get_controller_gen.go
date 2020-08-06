@@ -1,3 +1,5 @@
+// generated version: 0.3.5
+
 package _userID
 
 import (
@@ -6,15 +8,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GetUserJobGetController ...
 type GetUserJobGetController struct {
 }
 
+// NewGetUserJobGetController ...
 func NewGetUserJobGetController() *GetUserJobGetController {
 	g := &GetUserJobGetController{}
 	return g
 }
 
-// GetUserJobGet
+// GetUserJobGet ...
 // @Summary WIP
 // @Description WIP
 // @Accept json

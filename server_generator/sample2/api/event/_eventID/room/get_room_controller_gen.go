@@ -1,4 +1,5 @@
-// generated version: 0.3.4
+// generated version: 0.3.5
+
 package room
 
 import (
@@ -7,15 +8,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GetRoomController ...
 type GetRoomController struct {
 }
 
+// NewGetRoomController ...
 func NewGetRoomController() *GetRoomController {
 	g := &GetRoomController{}
 	return g
 }
 
-// GetRoom
+// GetRoom ...
 // @Summary WIP
 // @Description WIP
 // @Accept json
