@@ -59,8 +59,8 @@ class {{$elem.Name}} {
 		);
 {{end}}
 		if (Math.floor(resp.status / 100) !== 2) {
-        	const responseText = await resp.text();
-            throw new ApiError(resp, responseText);
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
 		}
 {{- if eq .HasFields true }}
 		return new {{$method.ResponseType}}(await resp.json());
@@ -146,8 +146,8 @@ export class APIClient {
 		);
 {{end}}
 		if (Math.floor(resp.status / 100) !== 2) {
-        	const responseText = await resp.text();
-            throw new ApiError(resp, responseText);
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
 		}
 
 {{- if eq .HasFields true }}
