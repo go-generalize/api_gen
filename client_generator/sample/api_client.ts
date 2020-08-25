@@ -1,6 +1,6 @@
 // THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
-// generated version: 0.3.5
+// generated version: 0.4.0
 
 import { GetArticleRequest as ServiceGetArticleRequest } from './classes/service/GetArticleRequest';
 export { GetArticleRequest as ServiceGetArticleRequest } from './classes/service/GetArticleRequest';
@@ -90,8 +90,8 @@ class ServiceClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-        	const responseText = await resp.text();
-            throw new ApiError(resp, responseText);
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
 		}
 		return new ServiceGetArticleResponse(await resp.json());
 	}
@@ -134,8 +134,8 @@ class ServiceStaticPageClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-        	const responseText = await resp.text();
-            throw new ApiError(resp, responseText);
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
 		}
 		return new ServiceStaticPageGetStaticPageResponse(await resp.json());
 	}
@@ -199,8 +199,8 @@ class ServiceUser2Client {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-        	const responseText = await resp.text();
-            throw new ApiError(resp, responseText);
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
 		}
 		return new ServiceUser2GetUserResponse(await resp.json());
 	}
@@ -225,8 +225,8 @@ class ServiceUser2Client {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-        	const responseText = await resp.text();
-            throw new ApiError(resp, responseText);
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
 		}
 		return new ServiceUser2PostUpdateUserNameResponse(await resp.json());
 	}
@@ -251,8 +251,8 @@ class ServiceUser2Client {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-        	const responseText = await resp.text();
-            throw new ApiError(resp, responseText);
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
 		}
 		return new ServiceUser2PostUpdateUserPasswordResponse(await resp.json());
 	}
@@ -297,8 +297,8 @@ class ServiceUser2UserIDClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-        	const responseText = await resp.text();
-            throw new ApiError(resp, responseText);
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
 		}
 		return new ServiceUser2UserIDGetUserJobGetResponse(await resp.json());
 	}
@@ -342,8 +342,8 @@ class ServiceUser2UserIDJobIDClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-        	const responseText = await resp.text();
-            throw new ApiError(resp, responseText);
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
 		}
 		return new ServiceUser2UserIDJobIDPutJobResponse(await resp.json());
 	}
@@ -387,8 +387,8 @@ class ServiceUserClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-        	const responseText = await resp.text();
-            throw new ApiError(resp, responseText);
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
 		}
 		return new ServiceUserPostUpdateUserNameResponse(await resp.json());
 	}
@@ -413,8 +413,8 @@ class ServiceUserClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-        	const responseText = await resp.text();
-            throw new ApiError(resp, responseText);
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
 		}
 		return new ServiceUserPostUpdateUserPasswordResponse(await resp.json());
 	}
@@ -483,8 +483,8 @@ export class APIClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-        	const responseText = await resp.text();
-            throw new ApiError(resp, responseText);
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
 		}
 		return new PostCreateTableResponse(await resp.json());
 	}
@@ -510,8 +510,8 @@ export class APIClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-        	const responseText = await resp.text();
-            throw new ApiError(resp, responseText);
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
 		}
 		return new PostCreateUserResponse(await resp.json());
 	}
