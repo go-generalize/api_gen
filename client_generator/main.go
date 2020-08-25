@@ -355,13 +355,11 @@ func main() {
 		log.Fatalf("failed to run filepath.Abs: %+v", err)
 	}
 
-	stat, err := os.Stat(outputFullPath)
-	if err != nil {
+	if stat, err := os.Stat(outputFullPath); err != nil {
 		if err := os.MkdirAll(outputFullPath, 0774); err != nil {
 			log.Fatalf("failed to MkdirAll: %+v", err)
 		}
-	}
-	if err == nil && !stat.IsDir() {
+	} else if !stat.IsDir() {
 		log.Fatalf("-o specified is not a directory")
 	}
 
