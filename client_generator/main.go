@@ -357,7 +357,7 @@ func main() {
 
 	var stat os.FileInfo
 	if stat, err = os.Stat(outputFullPath); err != nil {
-		if err := os.MkdirAll(outputFullPath, 0774); err != nil {
+		if err = os.MkdirAll(outputFullPath, 0774); err != nil {
 			log.Fatalf("failed to MkdirAll: %+v", err)
 		}
 	} else if !stat.IsDir() {
