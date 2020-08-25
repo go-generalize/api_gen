@@ -90,7 +90,8 @@ class ServiceClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
+        	const responseText = await resp.text();
+            throw new ApiError(resp, responseText);
 		}
 		return new ServiceGetArticleResponse(await resp.json());
 	}
@@ -133,7 +134,8 @@ class ServiceStaticPageClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
+        	const responseText = await resp.text();
+            throw new ApiError(resp, responseText);
 		}
 		return new ServiceStaticPageGetStaticPageResponse(await resp.json());
 	}
@@ -197,7 +199,8 @@ class ServiceUser2Client {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
+        	const responseText = await resp.text();
+            throw new ApiError(resp, responseText);
 		}
 		return new ServiceUser2GetUserResponse(await resp.json());
 	}
@@ -222,7 +225,8 @@ class ServiceUser2Client {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
+        	const responseText = await resp.text();
+            throw new ApiError(resp, responseText);
 		}
 		return new ServiceUser2PostUpdateUserNameResponse(await resp.json());
 	}
@@ -247,7 +251,8 @@ class ServiceUser2Client {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
+        	const responseText = await resp.text();
+            throw new ApiError(resp, responseText);
 		}
 		return new ServiceUser2PostUpdateUserPasswordResponse(await resp.json());
 	}
@@ -292,7 +297,8 @@ class ServiceUser2UserIDClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
+        	const responseText = await resp.text();
+            throw new ApiError(resp, responseText);
 		}
 		return new ServiceUser2UserIDGetUserJobGetResponse(await resp.json());
 	}
@@ -336,7 +342,8 @@ class ServiceUser2UserIDJobIDClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
+        	const responseText = await resp.text();
+            throw new ApiError(resp, responseText);
 		}
 		return new ServiceUser2UserIDJobIDPutJobResponse(await resp.json());
 	}
@@ -380,7 +387,8 @@ class ServiceUserClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
+        	const responseText = await resp.text();
+            throw new ApiError(resp, responseText);
 		}
 		return new ServiceUserPostUpdateUserNameResponse(await resp.json());
 	}
@@ -405,7 +413,8 @@ class ServiceUserClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
+        	const responseText = await resp.text();
+            throw new ApiError(resp, responseText);
 		}
 		return new ServiceUserPostUpdateUserPasswordResponse(await resp.json());
 	}
@@ -474,7 +483,8 @@ export class APIClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
+        	const responseText = await resp.text();
+            throw new ApiError(resp, responseText);
 		}
 		return new PostCreateTableResponse(await resp.json());
 	}
@@ -500,9 +510,35 @@ export class APIClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
+        	const responseText = await resp.text();
+            throw new ApiError(resp, responseText);
 		}
 		return new PostCreateUserResponse(await resp.json());
 	}
 
+}
+
+export class ApiError extends Error {
+    private _statusCode: number;
+    private _statusText: string;
+    private _response: string;
+
+    constructor(response: Response, responseText: string) {
+        super();
+        this._statusCode = response.status;
+        this._statusText = response.statusText;
+        this._response = responseText
+    }
+
+    set response(value: string) {
+        this._response = value;
+    }
+
+    set statusText(value: string) {
+        this._statusText = value;
+    }
+
+    get statusCode(): number {
+        return this._statusCode;
+    }
 }

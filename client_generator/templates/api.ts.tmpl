@@ -59,7 +59,8 @@ class {{$elem.Name}} {
 		);
 {{end}}
 		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
+        	const responseText = await resp.text();
+            throw new ApiError(resp, responseText);
 		}
 {{- if eq .HasFields true }}
 		return new {{$method.ResponseType}}(await resp.json());
@@ -145,7 +146,8 @@ export class APIClient {
 		);
 {{end}}
 		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
+        	const responseText = await resp.text();
+            throw new ApiError(resp, responseText);
 		}
 
 {{- if eq .HasFields true }}
@@ -156,4 +158,29 @@ export class APIClient {
 {{- end }}
 	}
 {{end}}
+}
+
+export class ApiError extends Error {
+    private _statusCode: number;
+    private _statusText: string;
+    private _response: string;
+
+    constructor(response: Response, responseText: string) {
+        super();
+        this._statusCode = response.status;
+        this._statusText = response.statusText;
+        this._response = responseText
+    }
+
+    set response(value: string) {
+        this._response = value;
+    }
+
+    set statusText(value: string) {
+        this._statusText = value;
+    }
+
+    get statusCode(): number {
+        return this._statusCode;
+    }
 }
