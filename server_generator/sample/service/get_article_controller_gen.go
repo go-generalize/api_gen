@@ -1,3 +1,5 @@
+// generated version: 0.3.5
+
 package service
 
 import (
@@ -6,15 +8,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GetArticleController ...
 type GetArticleController struct {
 }
 
+// NewGetArticleController ...
 func NewGetArticleController() *GetArticleController {
 	g := &GetArticleController{}
 	return g
 }
 
-// GetArticle
+// GetArticle ...
 // @Summary WIP
 // @Description WIP
 // @Accept json

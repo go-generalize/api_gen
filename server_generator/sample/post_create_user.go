@@ -7,14 +7,17 @@ type PostCreateUserRequest struct {
 	Gender   int
 }
 
+// CreatedType ...
 type CreatedType int
 
+// CreatedType Values
 const (
 	CreatedTypeOwner CreatedType = iota
 	CreatedTypeMember
 	CreatedTypeGuest
 )
 
+// PostCreateUserResponse ...
 type PostCreateUserResponse struct {
 	Status      bool
 	Message     string

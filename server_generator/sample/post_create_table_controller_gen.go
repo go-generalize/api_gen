@@ -1,3 +1,5 @@
+// generated version: 0.3.5
+
 package sample
 
 import (
@@ -7,15 +9,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// PostCreateTableController ...
 type PostCreateTableController struct {
 }
 
+// NewPostCreateTableController ...
 func NewPostCreateTableController() *PostCreateTableController {
 	p := &PostCreateTableController{}
 	return p
 }
 
-// PostCreateTable
+// PostCreateTable ...
 // @Summary WIP
 // @Description WIP
 // @Accept json

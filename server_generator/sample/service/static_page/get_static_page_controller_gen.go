@@ -1,3 +1,5 @@
+// generated version: 0.3.5
+
 package static
 
 import (
@@ -6,15 +8,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GetStaticPageController ...
 type GetStaticPageController struct {
 }
 
+// NewGetStaticPageController ...
 func NewGetStaticPageController() *GetStaticPageController {
 	g := &GetStaticPageController{}
 	return g
 }
 
-// GetStaticPage
+// GetStaticPage ...
 // @Summary WIP
 // @Description WIP
 // @Accept json

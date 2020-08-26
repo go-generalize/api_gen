@@ -1,5 +1,6 @@
 package main
 
+// ControllerTemplate ...
 type ControllerTemplate struct {
 	AppVersion            string
 	Package               string

@@ -1,3 +1,5 @@
+// generated version: 0.3.5
+
 package user2
 
 import (
@@ -6,15 +8,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GetUserController ...
 type GetUserController struct {
 }
 
+// NewGetUserController ...
 func NewGetUserController() *GetUserController {
 	g := &GetUserController{}
 	return g
 }
 
-// GetUser
+// GetUser ...
 // @Summary WIP
 // @Description WIP
 // @Accept json

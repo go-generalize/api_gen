@@ -60,6 +60,7 @@ linters:
     - whitespace
 
 issues:
+  exclude-use-default: false
   exclude-rules:
     - path: _test\.go
       linters:

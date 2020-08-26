@@ -1,11 +1,13 @@
 package main
 
+// BootstrapTemplate ...
 type BootstrapTemplate struct {
 	AppVersion  string
 	PackageName string
 	Bootstraps  []*BootstrapTemplates
 }
 
+// BootstrapTemplates ...
 type BootstrapTemplates struct {
 	ParentPackageName string
 	RouteGroupName    string

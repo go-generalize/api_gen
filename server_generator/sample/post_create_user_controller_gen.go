@@ -1,3 +1,5 @@
+// generated version: 0.3.5
+
 package sample
 
 import (
@@ -7,15 +9,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// PostCreateUserController ...
 type PostCreateUserController struct {
 }
 
+// NewPostCreateUserController ...
 func NewPostCreateUserController() *PostCreateUserController {
 	p := &PostCreateUserController{}
 	return p
 }
 
-// PostCreateUser
+// PostCreateUser ...
 // @Summary WIP
 // @Description WIP
 // @Accept json

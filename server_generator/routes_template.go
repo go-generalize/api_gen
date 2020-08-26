@@ -1,5 +1,6 @@
 package main
 
+// RoutesTemplate ...
 type RoutesTemplate struct {
 	AppVersion  string
 	Package     string
