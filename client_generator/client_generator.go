@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 	"sort"
 	"text/template"
 
@@ -38,6 +39,7 @@ type clientGenerator struct {
 	Imports    []importType
 	clientType
 	ChildrenClients []*clientType
+	OutputDir       string
 }
 
 func (g *clientGenerator) generate() error {
@@ -60,7 +62,8 @@ func (g *clientGenerator) generate() error {
 
 	t := template.Must(template.New("tmpl").Parse(string(templ)))
 
-	fp, err := os.Create("api_client.ts")
+	apiTsPath := filepath.Join(g.OutputDir, "./api_client.ts")
+	fp, err := os.Create(apiTsPath)
 
 	if err != nil {
 		log.Fatalf("failed to create api_client.ts: %+v", err)

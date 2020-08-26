@@ -279,18 +279,23 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 		log.Fatalf("failed to get package: %+v", err)
 	}
 
+	classesDir := filepath.Join(generator.OutputDir, "./classes/")
+
 	if len(pkgParser.structs) != 0 {
-		if err = os.MkdirAll("./classes/"+url, 0774); err != nil {
+		if err = os.MkdirAll(classesDir+url, 0774); err != nil {
 			log.Fatalf("failed to MkdirAll: %+v", err)
 		}
 	}
 
 	var b []byte
 	for i := range pkgParser.structs {
+		structFilePath := filepath.Join(classesDir,
+			fmt.Sprintf("/%s/", url),
+			fmt.Sprintf("/%s.ts", pkgParser.structs[i]))
 		b, err = exec.Command(
 			"struct2ts",
 			"-o",
-			"./classes/"+url+"/"+pkgParser.structs[i]+".ts",
+			structFilePath,
 			goPkg+"."+pkgParser.structs[i],
 		).CombinedOutput()
 
@@ -336,6 +341,7 @@ func main() {
 	}
 
 	versionFlag := flag.Bool("v", false, "print version")
+	outputDir := flag.String("o", "./", "output directory of generated codes")
 
 	flag.Parse()
 
@@ -344,18 +350,36 @@ func main() {
 		return
 	}
 
-	if err := os.RemoveAll("./classes"); err != nil {
+	outputFullPath, err := filepath.Abs(*outputDir)
+	if err != nil {
+		log.Fatalf("failed to run filepath.Abs: %+v", err)
+	}
+
+	var stat os.FileInfo
+	if stat, err = os.Stat(outputFullPath); err != nil {
+		if err = os.MkdirAll(outputFullPath, 0774); err != nil {
+			log.Fatalf("failed to MkdirAll: %+v", err)
+		}
+	} else if !stat.IsDir() {
+		log.Fatalf("-o specified is not a directory")
+	}
+
+	log.Printf("output dir: %s", outputFullPath)
+	classesDir := filepath.Join(outputFullPath, "./classes")
+
+	if err = os.RemoveAll(classesDir); err != nil {
 		log.Fatalf("failed to run RemoveAll: %+v", err)
 	}
-	if err := os.MkdirAll("./classes", 0774); err != nil {
+	if err = os.MkdirAll(classesDir, 0774); err != nil {
 		log.Fatalf("failed to run MkdirAll: %+v", err)
 	}
 
 	generator := &clientGenerator{
 		AppVersion: common.AppVersion,
+		OutputDir:  outputFullPath,
 	}
 
-	fullPath, err := filepath.Abs(os.Args[1])
+	fullPath, err := filepath.Abs(flag.Arg(0))
 	if err != nil {
 		log.Fatalf("failed to run filepath.Abs: %+v", err)
 	}
