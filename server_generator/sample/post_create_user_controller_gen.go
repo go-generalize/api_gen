@@ -3,6 +3,8 @@
 package sample
 
 import (
+	"fmt"
+
 	props "github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/labstack/echo/v4"
 )
@@ -34,5 +36,9 @@ func NewPostCreateUserController(props *props.ControllerProps) *PostCreateUserCo
 func (p *PostCreateUserController) PostCreateUser(
 	c echo.Context, req *PostCreateUserRequest,
 ) (res *PostCreateUserResponse, err error) {
-	panic("require implements.")
+	return &PostCreateUserResponse{
+		Status:      true,
+		Message:     fmt.Sprintf("password is %s", req.Password),
+		CreatedType: CreatedTypeMember,
+	}, nil
 }

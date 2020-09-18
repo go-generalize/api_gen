@@ -4,6 +4,7 @@ package sample
 
 import (
 	props "github.com/go-generalize/api_gen/server_generator/sample/props"
+	"github.com/go-generalize/api_gen/server_generator/sample/service/table"
 	"github.com/labstack/echo/v4"
 )
 
@@ -33,5 +34,12 @@ func NewPostCreateTableController(props *props.ControllerProps) *PostCreateTable
 func (p *PostCreateTableController) PostCreateTable(
 	c echo.Context, req *PostCreateTableRequest,
 ) (res *PostCreateTableResponse, err error) {
-	panic("require implements.")
+	id := p.TestKey
+
+	res = &PostCreateTableResponse{
+		ID:      id,
+		Payload: table.Table{},
+	}
+
+	return res, nil
 }

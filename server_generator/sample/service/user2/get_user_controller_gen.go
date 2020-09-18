@@ -33,5 +33,8 @@ func NewGetUserController(props *props.ControllerProps) *GetUserController {
 func (g *GetUserController) GetUser(
 	c echo.Context, req *GetUserRequest,
 ) (res *GetUserResponse, err error) {
-	panic("require implements.")
+	return &GetUserResponse{
+		ID:            req.ID,
+		SearchRequest: req.SearchRequest,
+	}, nil
 }

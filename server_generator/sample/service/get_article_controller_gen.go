@@ -32,5 +32,9 @@ func NewGetArticleController(props *props.ControllerProps) *GetArticleController
 func (g *GetArticleController) GetArticle(
 	c echo.Context, req *GetArticleRequest,
 ) (res *GetArticleResponse, err error) {
-	panic("require implements.")
+	return &GetArticleResponse{
+		ID:    req.ID * 2,
+		Group: []string{"a", "b", "c"},
+		Body:  "hogehoge",
+	}, nil
 }

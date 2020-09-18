@@ -2,7 +2,6 @@ package sample
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -11,6 +10,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/go-generalize/api_gen/server_generator/sample/service/user2"
 
 	"github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID/_JobID"
@@ -71,10 +71,9 @@ func TestBootstrap(t *testing.T) {
 
 	const testKeyValue = "hogehoge"
 
-	ctx := context.Background()
-	ctx = context.WithValue(ctx, testKey, testKeyValue)
-
-	Bootstrap(ctx, e, m)
+	Bootstrap(&props.ControllerProps{
+		TestKey: testKeyValue,
+	}, e, m)
 
 	go func() {
 		if err := e.Start(":" + PORT); err != nil {

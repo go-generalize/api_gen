@@ -33,5 +33,9 @@ func NewPutJobController(props *props.ControllerProps) *PutJobController {
 func (p *PutJobController) PutJob(
 	c echo.Context, req *PutJobRequest,
 ) (res *PutJobResponse, err error) {
-	panic("require implements.")
+	res = new(PutJobResponse)
+	res.UserID = req.UserID
+	res.JobID = req.JobID
+
+	return res, nil
 }
