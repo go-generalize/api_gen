@@ -1,18 +1,19 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 
 	"github.com/go-generalize/api_gen/server_generator/sample"
+	"github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
-	ctx := context.Background()
 	e := echo.New()
-	sample.Bootstrap(ctx, e, sample.MiddlewareList{
+	sample.Bootstrap(&props.ControllerProps{
+		TestKey: "foobar",
+	}, e, sample.MiddlewareList{
 		{
 			Path: "/service/user2/",
 			MiddlewareFunc: []echo.MiddlewareFunc{

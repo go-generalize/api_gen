@@ -60,6 +60,8 @@ linters:
     - whitespace
 
 issues:
+  exclude:
+  - declaration of "(err|ctx)" shadows declaration at
   exclude-use-default: false
   exclude-rules:
     - path: _test\.go

@@ -1,21 +1,24 @@
-// generated version: 0.3.5
+// generated version: 0.4.0
 
 package sample
 
 import (
-	"context"
 	"fmt"
 
+	props "github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/labstack/echo/v4"
 )
 
 // PostCreateUserController ...
 type PostCreateUserController struct {
+	*props.ControllerProps
 }
 
 // NewPostCreateUserController ...
-func NewPostCreateUserController() *PostCreateUserController {
-	p := &PostCreateUserController{}
+func NewPostCreateUserController(props *props.ControllerProps) *PostCreateUserController {
+	p := &PostCreateUserController{
+		ControllerProps: props,
+	}
 	return p
 }
 
@@ -31,7 +34,7 @@ func NewPostCreateUserController() *PostCreateUserController {
 // @Failure 400 {object} WIP
 // @Router /create_user [POST]
 func (p *PostCreateUserController) PostCreateUser(
-	ctx context.Context, c echo.Context, req *PostCreateUserRequest,
+	c echo.Context, req *PostCreateUserRequest,
 ) (res *PostCreateUserResponse, err error) {
 	return &PostCreateUserResponse{
 		Status:      true,

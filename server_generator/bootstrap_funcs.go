@@ -16,8 +16,8 @@ func getNewRoute(b *BootstrapTemplates) string {
 	}
 
 	if b.Endpoint == "" {
-		return fmt.Sprintf("NewRoutes(ctx, %sGroup)", b.RouteGroupName)
+		return fmt.Sprintf("NewRoutes(p, %sGroup)", b.RouteGroupName)
 	}
 
-	return fmt.Sprintf("%s.NewRoutes(ctx, %sGroup)", b.RouteGroupName, b.RouteGroupName)
+	return fmt.Sprintf("%s.NewRoutes(p, %sGroup)", b.RouteGroupName, b.RouteGroupName)
 }

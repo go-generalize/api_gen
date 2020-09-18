@@ -1,20 +1,22 @@
-// generated version: 0.3.5
+// generated version: 0.4.0
 
 package user
 
 import (
-	"context"
-
+	props "github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/labstack/echo/v4"
 )
 
 // PostUpdateUserPasswordController ...
 type PostUpdateUserPasswordController struct {
+	*props.ControllerProps
 }
 
 // NewPostUpdateUserPasswordController ...
-func NewPostUpdateUserPasswordController() *PostUpdateUserPasswordController {
-	p := &PostUpdateUserPasswordController{}
+func NewPostUpdateUserPasswordController(props *props.ControllerProps) *PostUpdateUserPasswordController {
+	p := &PostUpdateUserPasswordController{
+		ControllerProps: props,
+	}
 	return p
 }
 
@@ -29,7 +31,7 @@ func NewPostUpdateUserPasswordController() *PostUpdateUserPasswordController {
 // @Failure 400 {object} WIP
 // @Router /service/user/update_user_password [POST]
 func (p *PostUpdateUserPasswordController) PostUpdateUserPassword(
-	ctx context.Context, c echo.Context, req *PostUpdateUserPasswordRequest,
+	c echo.Context, req *PostUpdateUserPasswordRequest,
 ) (res *PostUpdateUserPasswordResponse, err error) {
 	panic("require implements.")
 }

@@ -1,21 +1,23 @@
-// generated version: 0.3.5
+// generated version: 0.4.0
 
 package sample
 
 import (
-	"context"
-
+	props "github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/go-generalize/api_gen/server_generator/sample/service/table"
 	"github.com/labstack/echo/v4"
 )
 
 // PostCreateTableController ...
 type PostCreateTableController struct {
+	*props.ControllerProps
 }
 
 // NewPostCreateTableController ...
-func NewPostCreateTableController() *PostCreateTableController {
-	p := &PostCreateTableController{}
+func NewPostCreateTableController(props *props.ControllerProps) *PostCreateTableController {
+	p := &PostCreateTableController{
+		ControllerProps: props,
+	}
 	return p
 }
 
@@ -30,9 +32,9 @@ func NewPostCreateTableController() *PostCreateTableController {
 // @Failure 400 {object} WIP
 // @Router /create_table [POST]
 func (p *PostCreateTableController) PostCreateTable(
-	ctx context.Context, c echo.Context, req *PostCreateTableRequest,
+	c echo.Context, req *PostCreateTableRequest,
 ) (res *PostCreateTableResponse, err error) {
-	id := ctx.Value(testKey).(string)
+	id := p.TestKey
 
 	res = &PostCreateTableResponse{
 		ID:      id,

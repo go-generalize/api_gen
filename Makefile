@@ -21,6 +21,7 @@ bootstrap:
 			github.com/favadi/protoc-go-inject-tag \
 			github.com/moznion/go-errgen/cmd/errgen \
 			github.com/OneOfOne/struct2ts/... \
+			github.com/rakyll/statik \
 	)
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.24.0
 
@@ -42,6 +43,10 @@ statik:
 	cd client_generator && \
 	statik "-include=*.tmpl" -src=. && \
 	gofmt -w ./statik/statik.go
+
+.PHONY: server_generator
+server_generator: statik
+	go build -o ./bin/server_generator ./server_generator
 
 build-release:
 	$(shell bash ./scripts/build_release.sh)

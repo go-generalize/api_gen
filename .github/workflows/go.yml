@@ -26,10 +26,10 @@ jobs:
     - name: Start datastore emulator
       run: docker exec -d $(docker ps -f "ancestor=google/cloud-sdk" -q) gcloud beta emulators datastore start --project=pname --host-port 0.0.0.0:8000 --no-store-on-disk
 
-    - name: Set up Go 1.12
+    - name: Set up Go 1.15
       uses: actions/setup-go@v1
       with:
-        go-version: 1.12
+        go-version: 1.15
       id: go
     
     - uses: actions/checkout@v2

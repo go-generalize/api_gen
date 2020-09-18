@@ -2,9 +2,10 @@ package main
 
 // BootstrapTemplate ...
 type BootstrapTemplate struct {
-	AppVersion  string
-	PackageName string
-	Bootstraps  []*BootstrapTemplates
+	AppVersion             string
+	PackageName            string
+	Bootstraps             []*BootstrapTemplates
+	ControllerPropsPackage string
 }
 
 // BootstrapTemplates ...

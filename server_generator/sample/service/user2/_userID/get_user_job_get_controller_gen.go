@@ -1,20 +1,22 @@
-// generated version: 0.3.5
+// generated version: 0.4.0
 
 package _userID
 
 import (
-	"context"
-
+	props "github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/labstack/echo/v4"
 )
 
 // GetUserJobGetController ...
 type GetUserJobGetController struct {
+	*props.ControllerProps
 }
 
 // NewGetUserJobGetController ...
-func NewGetUserJobGetController() *GetUserJobGetController {
-	g := &GetUserJobGetController{}
+func NewGetUserJobGetController(props *props.ControllerProps) *GetUserJobGetController {
+	g := &GetUserJobGetController{
+		ControllerProps: props,
+	}
 	return g
 }
 
@@ -28,7 +30,7 @@ func NewGetUserJobGetController() *GetUserJobGetController {
 // @Failure 400 {object} WIP
 // @Router /service/user2/{userID}/user_job_get [GET]
 func (g *GetUserJobGetController) GetUserJobGet(
-	ctx context.Context, c echo.Context, req *GetUserJobGetRequest,
+	c echo.Context, req *GetUserJobGetRequest,
 ) (res *GetUserJobGetResponse, err error) {
 	panic("require implements.")
 }
