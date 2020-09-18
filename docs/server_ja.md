@@ -55,7 +55,7 @@ m = append(m, &MiddlewareSet{
 // 全てのハンドラーを初期化する
 service.Bootstrap(&props.ControllerProps{
     // ./sample/propsに定義したControllerPropsを初期化
-},e, m)
+}, e, m)
 
 if err := e.Start(":" + PORT); err != nil {
 	t.Fatalf("server listen error %s", err.Error())
