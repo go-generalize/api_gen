@@ -1,20 +1,22 @@
-// generated version: 0.3.5
+// generated version: 0.4.0
 
 package user2
 
 import (
-	"context"
-
+	props "github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/labstack/echo/v4"
 )
 
 // GetUserController ...
 type GetUserController struct {
+	*props.ControllerProps
 }
 
 // NewGetUserController ...
-func NewGetUserController() *GetUserController {
-	g := &GetUserController{}
+func NewGetUserController(props *props.ControllerProps) *GetUserController {
+	g := &GetUserController{
+		ControllerProps: props,
+	}
 	return g
 }
 
@@ -29,10 +31,7 @@ func NewGetUserController() *GetUserController {
 // @Failure 400 {object} WIP
 // @Router /service/user2/{userID} [GET]
 func (g *GetUserController) GetUser(
-	ctx context.Context, c echo.Context, req *GetUserRequest,
+	c echo.Context, req *GetUserRequest,
 ) (res *GetUserResponse, err error) {
-	return &GetUserResponse{
-		ID:            req.ID,
-		SearchRequest: req.SearchRequest,
-	}, nil
+	panic("require implements.")
 }

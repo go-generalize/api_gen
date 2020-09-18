@@ -6,15 +6,19 @@ import (
 	"context"
 
 	"github.com/labstack/echo/v4"
+	props "{{ .ControllerPropsPackage }}"
 )
 
 // {{ .ControllerName }} ...
 type {{ .ControllerName }} struct {
+	*props.ControllerProps
 }
 
 // New{{ .ControllerName }} ...
-func New{{ .ControllerName }}() *{{ .ControllerName }} {
-	{{ .ControllerNameInitial }} := &{{ .ControllerName }}{}
+func New{{ .ControllerName }}(props *props.ControllerProps) *{{ .ControllerName }} {
+	{{ .ControllerNameInitial }} := &{{ .ControllerName }}{
+		ControllerProps: props,
+	}
 	return {{ .ControllerNameInitial }}
 }
 
@@ -29,7 +33,7 @@ func New{{ .ControllerName }}() *{{ .ControllerName }} {
 // @Failure 400 {object} WIP
 // @Router {{ .RawEndpointPath }} [{{ .HTTPMethod }}]
 func ({{ .ControllerNameInitial }} *{{ .ControllerName }}) {{ .HandlerName }}(
-	ctx context.Context, c echo.Context, req *{{ .RequestStructName }},
+	c echo.Context, req *{{ .RequestStructName }},
 ) (res *{{ .ResponseStructName }}, err error) {
 	panic("require implements.")
 }

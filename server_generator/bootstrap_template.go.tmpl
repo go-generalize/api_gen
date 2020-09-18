@@ -10,6 +10,7 @@ import (
 {{ range $i, $v := .Bootstraps }}{{ if ne .PackagePath "" }}
 	{{ if ne $v.ImportPackageName "" }}{{ $v.ImportPackageName }} {{ end }}"{{ $v.PackagePath }}"{{ end }}{{ end }}
 	"github.com/labstack/echo/v4"
+	props "{{ .ControllerPropsPackage }}"
 )
 
 type MiddlewareList []*MiddlewareSet
@@ -29,7 +30,7 @@ func (m MiddlewareList) ToMap() MiddlewareMap {
 	return mf
 }
 
-func Bootstrap(ctx context.Context, e *echo.Echo, middlewareList MiddlewareList) {
+func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList MiddlewareList) {
 	middleware := middlewareList.ToMap()
 
 	// error handling

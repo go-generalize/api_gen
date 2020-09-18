@@ -1,20 +1,22 @@
-// generated version: 0.3.5
+// generated version: 0.4.0
 
 package static
 
 import (
-	"context"
-
+	props "github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/labstack/echo/v4"
 )
 
 // GetStaticPageController ...
 type GetStaticPageController struct {
+	*props.ControllerProps
 }
 
 // NewGetStaticPageController ...
-func NewGetStaticPageController() *GetStaticPageController {
-	g := &GetStaticPageController{}
+func NewGetStaticPageController(props *props.ControllerProps) *GetStaticPageController {
+	g := &GetStaticPageController{
+		ControllerProps: props,
+	}
 	return g
 }
 
@@ -27,7 +29,7 @@ func NewGetStaticPageController() *GetStaticPageController {
 // @Failure 400 {object} WIP
 // @Router /service/static_page/static_page [GET]
 func (g *GetStaticPageController) GetStaticPage(
-	ctx context.Context, c echo.Context, req *GetStaticPageRequest,
+	c echo.Context, req *GetStaticPageRequest,
 ) (res *GetStaticPageResponse, err error) {
 	panic("require implements.")
 }

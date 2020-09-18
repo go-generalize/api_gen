@@ -7,24 +7,26 @@ import (
 	"context"
 	"github.com/labstack/echo/v4"
 	"net/http"
+
+	props "{{ .ControllerPropsPackage }}"
 )
 
 type Routes struct {
 	router *echo.Group
 }
 
-func NewRoutes (ctx context.Context, router *echo.Group) *Routes {
+func NewRoutes (p *props.ControllerProps, router *echo.Group) *Routes {
 	r := &Routes{
 		router: router,
 	}
 
-	{{ range .Controllers }}router.{{ .HTTPMethod }}("{{ .Endpoint }}", r.{{ .HandlerName }}(ctx))
+	{{ range .Controllers }}router.{{ .HTTPMethod }}("{{ .Endpoint }}", r.{{ .HandlerName }}(p))
 	{{ end }}
 	return r
 }
 {{ range .Controllers }}
-func (r *Routes) {{ .HandlerName }}(ctx context.Context) echo.HandlerFunc {
-	i := New{{ .ControllerName }}()
+func (r *Routes) {{ .HandlerName }}(p *props.ControllerProps) echo.HandlerFunc {
+	i := New{{ .ControllerName }}(p)
 	return func(c echo.Context) error {
 		req := new({{ .RequestStructName }})
 		if err := c.Bind(req); err != nil {
@@ -33,7 +35,7 @@ func (r *Routes) {{ .HandlerName }}(ctx context.Context) echo.HandlerFunc {
 				"message": "invalid request.",
 			})
 		}
-		res, err := i.{{ .HandlerName }}(ctx, c, req)
+		res, err := i.{{ .HandlerName }}(c, req)
 		if err != nil {
 		   return err
 		}

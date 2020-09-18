@@ -51,6 +51,10 @@ func main() {
 }
 
 func run(arg string) error {
+	const (
+		commonPropsDir = "props"
+	)
+
 	rootPath, err := filepath.Abs(arg)
 	if err != nil {
 		return err
@@ -67,6 +71,32 @@ func run(arg string) error {
 	packageName := ""
 	endpointReplaceMatchRule := regexp.MustCompile(`:(.*?)/`)
 
+	var controllerPropsPackage string
+	{
+		dir := filepath.Join(rootPath, commonPropsDir)
+		if err := os.MkdirAll(dir, 0777); err != nil {
+			return err
+		}
+
+		r, err := filepath.Rel(packageRootPath, dir)
+
+		if err != nil {
+			return err
+		}
+
+		controllerPropsPackage = filepath.Join(basePackagePath+"/", r)
+
+		err = createFromTemplate(
+			"/controller_props.go.tmpl",
+			filepath.Join(dir, "controller_props.go"),
+			nil, true, nil,
+		)
+
+		if err != nil {
+			return err
+		}
+	}
+
 	isExistRoot := false
 	err = filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -74,6 +104,10 @@ func run(arg string) error {
 		}
 
 		if !info.IsDir() {
+			return nil
+		}
+
+		if p, _ := filepath.Rel(rootPath, path); p == commonPropsDir {
 			return nil
 		}
 
@@ -123,7 +157,7 @@ func run(arg string) error {
 			endpointParams = append(endpointParams, e[1])
 		}
 
-		cs, err := parsePackages(path, endpointParam, endpointParams)
+		cs, err := parsePackages(path, endpointParam, endpointParams, controllerPropsPackage)
 		if err != nil {
 			return err
 		}
@@ -206,9 +240,10 @@ func run(arg string) error {
 	err = createFromTemplate(
 		"/bootstrap_template.go.tmpl",
 		bootstrapFilePath, &BootstrapTemplate{
-			AppVersion:  common.AppVersion,
-			PackageName: packageName,
-			Bootstraps:  bootstrapTemplates,
+			AppVersion:             common.AppVersion,
+			PackageName:            packageName,
+			Bootstraps:             bootstrapTemplates,
+			ControllerPropsPackage: controllerPropsPackage,
 		},
 		true, template.FuncMap{
 			"GetGroupName": getGroupName,
@@ -220,7 +255,7 @@ func run(arg string) error {
 	return nil
 }
 
-func parsePackages(path, endpointBase string, endpointParams []string) ([]*ControllerTemplate, error) {
+func parsePackages(path, endpointBase string, endpointParams []string, controllerPropsPackage string) ([]*ControllerTemplate, error) {
 	replaceRule := regexp.MustCompile(`:(.*?)(/|$)`)
 	routes := make(map[string][]*ControllerTemplate)
 	structPair, err := findStructPairList(path, endpointParams)
@@ -275,17 +310,18 @@ func parsePackages(path, endpointBase string, endpointParams []string) ([]*Contr
 		fullEndpoint = replaceRule.ReplaceAllString(fullEndpoint, "{$1}$2")
 
 		ct := &ControllerTemplate{
-			AppVersion:            common.AppVersion,
-			Package:               req.PackageName,
-			ControllerName:        fmt.Sprintf("%sController", cn),
-			ControllerNameInitial: strings.ToLower(string([]rune(cn)[0])),
-			HandlerName:           cn,
-			RawEndpointPath:       fullEndpoint,
-			Endpoint:              endpoint,
-			HTTPMethod:            strings.ToUpper(httpMethod),
-			RequestStructName:     req.StructName,
-			ResponseStructName:    res.StructName,
-			RequestParams:         req.RequestParams,
+			AppVersion:             common.AppVersion,
+			Package:                req.PackageName,
+			ControllerName:         fmt.Sprintf("%sController", cn),
+			ControllerNameInitial:  strings.ToLower(string([]rune(cn)[0])),
+			HandlerName:            cn,
+			RawEndpointPath:        fullEndpoint,
+			Endpoint:               endpoint,
+			HTTPMethod:             strings.ToUpper(httpMethod),
+			RequestStructName:      req.StructName,
+			ResponseStructName:     res.StructName,
+			RequestParams:          req.RequestParams,
+			ControllerPropsPackage: controllerPropsPackage,
 		}
 
 		routes[createDir] = append(routes[createDir], ct)
@@ -318,9 +354,10 @@ func parsePackages(path, endpointBase string, endpointParams []string) ([]*Contr
 		controllers = append(controllers, cs...)
 
 		err := createFromTemplate("/routes_template.go.tmpl", routePath, &RoutesTemplate{
-			AppVersion:  common.AppVersion,
-			Package:     packageName,
-			Controllers: cs,
+			AppVersion:             common.AppVersion,
+			Package:                packageName,
+			Controllers:            cs,
+			ControllerPropsPackage: controllerPropsPackage,
 		}, true, template.FuncMap{})
 		if err != nil {
 			return nil, err
