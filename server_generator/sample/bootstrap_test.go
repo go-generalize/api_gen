@@ -2,11 +2,13 @@ package sample
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"sync"
 	"testing"
 	"time"
 
@@ -51,6 +53,7 @@ func TestMiddlewareList_ToMap(t *testing.T) {
 
 func TestBootstrap(t *testing.T) {
 	e := echo.New()
+
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
@@ -75,11 +78,19 @@ func TestBootstrap(t *testing.T) {
 		TestKey: testKeyValue,
 	}, e, m)
 
+	var wg sync.WaitGroup
+	wg.Add(1)
 	go func() {
-		if err := e.Start(":" + PORT); err != nil {
+		defer wg.Done()
+		if err := e.Start(":" + PORT); err != nil && err != http.ErrServerClosed {
 			t.Fatalf("server listen error %s", err.Error())
 		}
 	}()
+
+	defer t.Cleanup(func() {
+		e.Shutdown(context.Background())
+		wg.Wait()
+	})
 
 	start := time.Now().Unix()
 	ticker := time.NewTicker(50 * time.Millisecond)
