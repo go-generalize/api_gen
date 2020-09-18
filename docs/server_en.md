@@ -59,7 +59,9 @@ m = append(m, &MiddlewareSet{
 })
 
 // Initialize all handlers
-service.Bootstrap(e, m)
+service.Bootstrap(&props.ControllerProps{
+    // Initialize ControllerProps defined in ./sample/props
+},e, m)
 
 if err := e.Start(":" + PORT); err != nil {
 	t.Fatalf("server listen error %s", err.Error())
