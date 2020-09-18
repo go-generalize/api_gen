@@ -88,7 +88,9 @@ func TestBootstrap(t *testing.T) {
 	}()
 
 	defer t.Cleanup(func() {
-		e.Shutdown(context.Background())
+		if err := e.Shutdown(context.Background()); err != nil {
+			t.Errorf("failed to shutdown server: %+v", err)
+		}
 		wg.Wait()
 	})
 

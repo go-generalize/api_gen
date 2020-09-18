@@ -1,3 +1,4 @@
+// Package props is a scaffold file for props of controllers
 package props
 
 // SCAFFOLD FILE FOR PROPS OF CONTROLLERS

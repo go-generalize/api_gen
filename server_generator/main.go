@@ -255,7 +255,11 @@ func run(arg string) error {
 	return nil
 }
 
-func parsePackages(path, endpointBase string, endpointParams []string, controllerPropsPackage string) ([]*ControllerTemplate, error) {
+func parsePackages(
+	path, endpointBase string,
+	endpointParams []string,
+	controllerPropsPackage string,
+) ([]*ControllerTemplate, error) {
 	replaceRule := regexp.MustCompile(`:(.*?)(/|$)`)
 	routes := make(map[string][]*ControllerTemplate)
 	structPair, err := findStructPairList(path, endpointParams)
