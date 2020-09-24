@@ -9,7 +9,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"os/exec"
 	"path"
 	"path/filepath"
 	"reflect"
@@ -19,6 +18,8 @@ import (
 	"github.com/go-generalize/api_gen/common"
 
 	_ "github.com/go-generalize/api_gen/client_generator/statik"
+	go2tsgenerator "github.com/go-generalize/go2ts/pkg/generator"
+	go2tsparser "github.com/go-generalize/go2ts/pkg/parser"
 	"github.com/iancoleman/strcase"
 )
 
@@ -197,13 +198,19 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 
 	parent.Name = strcase.ToCamel(strings.ReplaceAll(url, "/", "-")) + "Client"
 
+	pairs := make([]importPair, 0, len(pkgParser.structs))
 	for i := range pkgParser.structs {
+		pairs = append(pairs, importPair{
+			Name:   pkgParser.structs[i],
+			NameAs: strcase.ToCamel(strings.ReplaceAll(url+"/"+pkgParser.structs[i], "/", "-")),
+		})
+	}
+	if len(pairs) != 0 {
 		generator.Imports = append(
 			generator.Imports,
 			importType{
-				Path:   "./classes" + url + "/" + pkgParser.structs[i],
-				Name:   pkgParser.structs[i],
-				NameAs: strcase.ToCamel(strings.ReplaceAll(url+"/"+pkgParser.structs[i], "/", "-")),
+				Path:  "./classes" + url + "/types",
+				Pairs: pairs,
 			},
 		)
 	}
@@ -273,36 +280,37 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 		)
 	}
 
-	goPkg, err := GetPackage(p)
-
-	if err != nil {
-		log.Fatalf("failed to get package: %+v", err)
-	}
-
 	classesDir := filepath.Join(generator.OutputDir, "./classes/")
 
 	if len(pkgParser.structs) != 0 {
-		if err = os.MkdirAll(classesDir+url, 0774); err != nil {
+		if err := os.MkdirAll(classesDir+url, 0774); err != nil {
 			log.Fatalf("failed to MkdirAll: %+v", err)
 		}
 	}
 
-	var b []byte
-	for i := range pkgParser.structs {
-		structFilePath := filepath.Join(classesDir,
-			fmt.Sprintf("/%s/", url),
-			fmt.Sprintf("/%s.ts", pkgParser.structs[i]))
-		b, err = exec.Command(
-			"struct2ts",
-			"-o",
-			structFilePath,
-			goPkg+"."+pkgParser.structs[i],
-		).CombinedOutput()
+	parser, err := go2tsparser.NewParser(p)
 
-		if err != nil {
-			log.Fatalf("struct2ts failed for %s(out: %s): %+v", pkgParser.structs[i], string(b), err)
-		}
+	if err != nil {
+		log.Fatalf("failed to initialize go2ts parser: %+v", err)
 	}
+	parser.Filter = func(name string) bool {
+		return strings.HasSuffix(name, "Request") || strings.HasSuffix(name, "Response")
+	}
+
+	types, err := parser.Parse()
+
+	if err != nil {
+		log.Fatalf("failed to parse go files: %+v", err)
+	}
+
+	ts := go2tsgenerator.NewGenerator(types).Generate()
+
+	filename := filepath.Join(
+		classesDir,
+		fmt.Sprintf("/%s/types.ts", url),
+	)
+
+	ioutil.WriteFile(filename, []byte(ts), 0777)
 
 	fifos, err := ioutil.ReadDir(p)
 

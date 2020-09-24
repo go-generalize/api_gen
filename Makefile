@@ -48,5 +48,9 @@ statik:
 server_generator: statik
 	go build -o ./bin/server_generator ./server_generator
 
+.PHONY: client_generator
+client_generator: statik
+	go build -o ./bin/client_generator ./client_generator
+
 build-release:
 	$(shell bash ./scripts/build_release.sh)

@@ -29,9 +29,13 @@ type clientType struct {
 	Children []childrenType
 }
 
-type importType struct {
-	Path         string
+type importPair struct {
 	Name, NameAs string
+}
+
+type importType struct {
+	Path  string
+	Pairs []importPair
 }
 
 type clientGenerator struct {
@@ -79,8 +83,15 @@ func (g *clientGenerator) generate() error {
 
 func (g *clientGenerator) sort() {
 	sort.Slice(g.Imports, func(i, j int) bool {
-		return g.Imports[i].Name+g.Imports[i].Path < g.Imports[j].Name+g.Imports[j].Path
+		return g.Imports[i].Path < g.Imports[j].Path
 	})
+
+	for i := range g.Imports {
+		pairs := g.Imports[i].Pairs
+		sort.Slice(pairs, func(i, j int) bool {
+			return pairs[i].NameAs < pairs[j].NameAs
+		})
+	}
 
 	sort.Slice(g.ChildrenClients, func(i, j int) bool {
 		return g.ChildrenClients[i].Name < g.ChildrenClients[j].Name
