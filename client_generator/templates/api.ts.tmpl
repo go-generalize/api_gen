@@ -2,10 +2,13 @@
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
 // generated version: {{ .AppVersion }}
 
-{{range $index, $elem := .Imports}}import {{"{"}} {{$elem.Name}} as {{$elem.NameAs}} {{"}"}} from '{{$elem.Path}}';
-export {{"{"}} {{$elem.Name}} as {{$elem.NameAs}} {{"}"}} from '{{$elem.Path}}';
+{{range $index, $elem := .Imports}}import {{"{"}}
+{{range $i, $pair := $elem.Pairs}}	{{$pair.Name}} as {{$pair.NameAs}},
+{{end}}{{"}"}} from '{{$elem.Path}}';
+export {{"{"}}
+{{range $i, $pair := $elem.Pairs}}	{{$pair.Name}} as {{$pair.NameAs}},
+{{end}}{{"}"}} from '{{$elem.Path}}';
 {{end}}
-
 {{range $index, $elem := .ChildrenClients}}
 class {{$elem.Name}} {
 {{range $index, $elem := .Children}}
@@ -63,10 +66,10 @@ class {{$elem.Name}} {
 			throw new ApiError(resp, responseText);
 		}
 {{- if eq .HasFields true }}
-		return new {{$method.ResponseType}}(await resp.json());
+		return (await resp.json()) as {{$method.ResponseType}};
 {{- else }}
 		await resp.text();
-		return new {{$method.ResponseType}}();
+		return {} as {{$method.ResponseType}};
 {{- end }}
 	}{{end}}
 }
@@ -151,10 +154,10 @@ export class APIClient {
 		}
 
 {{- if eq .HasFields true }}
-		return new {{$method.ResponseType}}(await resp.json());
+		return (await resp.json()) as {{$method.ResponseType}};
 {{- else }}
 		await resp.text();
-		return new {{$method.ResponseType}}();
+		return {} as {{$method.ResponseType}};
 {{- end }}
 	}
 {{end}}

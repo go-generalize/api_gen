@@ -20,7 +20,6 @@
         - Available methods: `get` , `post` , `put` , `delete` , `patch`
     - If `json` tags are specified for `GET` endpoints,  specify also `query` tags with the same name
     - Both `*Request` and `*Response` structs are necessary.
-- **CAUTION: If you specify the tag of `json: "-"`, struct2ts used internally is excluded from the class generation target.**
 - For path routing.
     - The directory must start with `_`.
         - Example: If you want to use `/service/:id/hogehoge`, use `/service/_id/*.go`.
