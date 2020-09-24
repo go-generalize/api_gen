@@ -6,6 +6,8 @@ github.com/go-generalize/go2ts v0.0.0-20200924050315-bf84d6de2bf5 h1:3XuDQP3X5mC
 github.com/go-generalize/go2ts v0.0.0-20200924050315-bf84d6de2bf5/go.mod h1:3UcRr+TkTZzHRik2X6H2p0DoPCSMN0haKFHtvQ6I2zg=
 github.com/go-generalize/go2ts v0.0.0-20200924065725-861d84e57cf5 h1:QFDAM4NbdJCpKUAzvpGyyJVywCcIAaGD4nwij4RrIm4=
 github.com/go-generalize/go2ts v0.0.0-20200924065725-861d84e57cf5/go.mod h1:3UcRr+TkTZzHRik2X6H2p0DoPCSMN0haKFHtvQ6I2zg=
+github.com/go-generalize/go2ts v0.0.1 h1:DtQ4LtB2+Hq87IfTLH5QOyu+OIvW4UyTwnrrVCR0ucI=
+github.com/go-generalize/go2ts v0.0.1/go.mod h1:3UcRr+TkTZzHRik2X6H2p0DoPCSMN0haKFHtvQ6I2zg=
 github.com/google/go-cmp v0.5.2/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334 h1:VHgatEHNcBFEB7inlalqfNqw65aNkM1lGX2yt3NmbS8=
 github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334/go.mod h1:SK73tn/9oHe+/Y0h39VT4UCxmurVJkR5NA7kMEAOgSE=
@@ -66,6 +68,8 @@ golang.org/x/tools v0.0.0-20191119224855-298f0cb1881e h1:aZzprAO9/8oim3qStq3wc1X
 golang.org/x/tools v0.0.0-20191119224855-298f0cb1881e/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
 golang.org/x/tools v0.0.0-20200918232735-d647fc253266 h1:k7tVuG0g1JwmD3Jh8oAl1vQ1C3jb4Hi/dUl1wWDBJpQ=
 golang.org/x/tools v0.0.0-20200918232735-d647fc253266/go.mod h1:z6u4i615ZeAfBE4XtMziQW1fSVJXACjjbWkB/mvPzlU=
+golang.org/x/tools v0.0.0-20200923182640-463111b69878 h1:VUw1+Jf6KJPf82mbTQMia6HCnNMv2BbAipkEZ4KTcqQ=
+golang.org/x/tools v0.0.0-20200923182640-463111b69878/go.mod h1:z6u4i615ZeAfBE4XtMziQW1fSVJXACjjbWkB/mvPzlU=
 golang.org/x/xerrors v0.0.0-20190717185122-a985d3407aa7/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 golang.org/x/xerrors v0.0.0-20191011141410-1b5146add898 h1:/atklqdjdhuosWIl6AIbOeHJjicWYPqR9bpxqxYG2pA=
 golang.org/x/xerrors v0.0.0-20191011141410-1b5146add898/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=

@@ -2,17 +2,6 @@
 
 ## Introduction
 
-### 前提条件
-
-[struct2ts](https://github.com/OneOfOne/struct2ts) のインストールが必須。
-※ client_generateで必要。
-
-```shell
-go get -u -v github.com/OneOfOne/struct2ts/...
-```
-
-
-
 ### インストール
 
 #### リリースよりダウンロード

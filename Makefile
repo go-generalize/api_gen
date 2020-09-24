@@ -20,7 +20,6 @@ bootstrap:
 			github.com/golang/protobuf/protoc-gen-go \
 			github.com/favadi/protoc-go-inject-tag \
 			github.com/moznion/go-errgen/cmd/errgen \
-			github.com/OneOfOne/struct2ts/... \
 			github.com/rakyll/statik \
 	)
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.24.0
