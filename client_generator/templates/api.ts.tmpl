@@ -4,14 +4,11 @@
 
 {{range $index, $elem := .Imports}}import {{"{"}}
 {{range $i, $pair := $elem.Pairs}}	{{$pair.Name}} as {{$pair.NameAs}},
-{{end}}
-{{"}"}} from '{{$elem.Path}}';
+{{end}}{{"}"}} from '{{$elem.Path}}';
 export {{"{"}}
 {{range $i, $pair := $elem.Pairs}}	{{$pair.Name}} as {{$pair.NameAs}},
+{{end}}{{"}"}} from '{{$elem.Path}}';
 {{end}}
-{{"}"}} from '{{$elem.Path}}';
-{{end}}
-
 {{range $index, $elem := .ChildrenClients}}
 class {{$elem.Name}} {
 {{range $index, $elem := .Children}}

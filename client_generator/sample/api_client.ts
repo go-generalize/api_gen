@@ -7,58 +7,48 @@ import {
 	PostCreateTableResponse as PostCreateTableResponse,
 	PostCreateUserRequest as PostCreateUserRequest,
 	PostCreateUserResponse as PostCreateUserResponse,
-
 } from './classes//types';
 export {
 	PostCreateTableRequest as PostCreateTableRequest,
 	PostCreateTableResponse as PostCreateTableResponse,
 	PostCreateUserRequest as PostCreateUserRequest,
 	PostCreateUserResponse as PostCreateUserResponse,
-
 } from './classes//types';
 import {
 	GetArticleRequest as ServiceGetArticleRequest,
 	GetArticleResponse as ServiceGetArticleResponse,
-
 } from './classes/service/types';
 export {
 	GetArticleRequest as ServiceGetArticleRequest,
 	GetArticleResponse as ServiceGetArticleResponse,
-
 } from './classes/service/types';
 import {
 	PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest,
 	PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse,
 	PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest,
 	PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse,
-
 } from './classes/service/user/types';
 export {
 	PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest,
 	PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse,
 	PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest,
 	PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse,
-
 } from './classes/service/user/types';
 import {
 	PutJobRequest as ServiceUser2UserIDJobIDPutJobRequest,
 	PutJobResponse as ServiceUser2UserIDJobIDPutJobResponse,
-
 } from './classes/service/user2/_userID/_JobID/types';
 export {
 	PutJobRequest as ServiceUser2UserIDJobIDPutJobRequest,
 	PutJobResponse as ServiceUser2UserIDJobIDPutJobResponse,
-
 } from './classes/service/user2/_userID/_JobID/types';
 import {
 	GetUserJobGetRequest as ServiceUser2UserIDGetUserJobGetRequest,
 	GetUserJobGetResponse as ServiceUser2UserIDGetUserJobGetResponse,
-
 } from './classes/service/user2/_userID/types';
 export {
 	GetUserJobGetRequest as ServiceUser2UserIDGetUserJobGetRequest,
 	GetUserJobGetResponse as ServiceUser2UserIDGetUserJobGetResponse,
-
 } from './classes/service/user2/_userID/types';
 import {
 	GetUserRequest as ServiceUser2GetUserRequest,
@@ -67,7 +57,6 @@ import {
 	PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse,
 	PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest,
 	PostUpdateUserPasswordResponse as ServiceUser2PostUpdateUserPasswordResponse,
-
 } from './classes/service/user2/types';
 export {
 	GetUserRequest as ServiceUser2GetUserRequest,
@@ -76,9 +65,7 @@ export {
 	PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse,
 	PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest,
 	PostUpdateUserPasswordResponse as ServiceUser2PostUpdateUserPasswordResponse,
-
 } from './classes/service/user2/types';
-
 
 
 class PropsClient {

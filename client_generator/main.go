@@ -310,7 +310,9 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 		fmt.Sprintf("/%s/types.ts", url),
 	)
 
-	ioutil.WriteFile(filename, []byte(ts), 0777)
+	if err := ioutil.WriteFile(filename, []byte(ts), 0777); err != nil {
+		log.Fatalf("failed to write into %s: %+v", filename, err)
+	}
 
 	fifos, err := ioutil.ReadDir(p)
 
