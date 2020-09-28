@@ -1,20 +1,22 @@
-// generated version: 0.3.5
+// generated version: 0.4.0
 
 package room
 
 import (
-	"context"
-
+	props "github.com/go-generalize/api_gen/server_generator/sample2/props"
 	"github.com/labstack/echo/v4"
 )
 
 // GetRoomController ...
 type GetRoomController struct {
+	*props.ControllerProps
 }
 
 // NewGetRoomController ...
-func NewGetRoomController() *GetRoomController {
-	g := &GetRoomController{}
+func NewGetRoomController(props *props.ControllerProps) *GetRoomController {
+	g := &GetRoomController{
+		ControllerProps: props,
+	}
 	return g
 }
 
@@ -28,7 +30,7 @@ func NewGetRoomController() *GetRoomController {
 // @Failure 400 {object} WIP
 // @Router /api/event/{eventID}/room/room [GET]
 func (g *GetRoomController) GetRoom(
-	ctx context.Context, c echo.Context, req *GetRoomRequest,
+	c echo.Context, req *GetRoomRequest,
 ) (res *GetRoomResponse, err error) {
 	panic("require implements.")
 }

@@ -5,7 +5,6 @@ Execute client_generator for the same root directory as server_generator.
 The library will generated in the current working directory.
 
 The library uses TypeScript+fetch API
-**CAUTION: If you specify the tag of `json: "-"`, struct2ts used internally is excluded from the class generation target.**
 
 ### About develop
 

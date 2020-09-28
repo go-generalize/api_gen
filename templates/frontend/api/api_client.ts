@@ -1,11 +1,11 @@
-// THIS CODE WAS GENERATED AUTOMATICALLY
+// THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
+// generated version: unknown
 
-import { PostCreateUserRequest as PostCreateUserRequest } from './classes//PostCreateUserRequest';
-export { PostCreateUserRequest as PostCreateUserRequest } from './classes//PostCreateUserRequest';
-import { PostCreateUserResponse as PostCreateUserResponse } from './classes//PostCreateUserResponse';
-export { PostCreateUserResponse as PostCreateUserResponse } from './classes//PostCreateUserResponse';
-
+import {
+	PostCreateUserRequest as PostCreateUserRequest,
+	PostCreateUserResponse as PostCreateUserResponse,
+} from './classes//types';
 
 
 
@@ -37,8 +37,7 @@ export class APIClient {
 
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -69,10 +68,35 @@ export class APIClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-			throw new Error(resp.statusText + ": " + await resp.text());
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
 		}
-
-		return new PostCreateUserResponse(await resp.json());
+		return (await resp.json()) as PostCreateUserResponse;
 	}
 
+}
+
+export class ApiError extends Error {
+    private _statusCode: number;
+    private _statusText: string;
+    private _response: string;
+
+    constructor(response: Response, responseText: string) {
+        super();
+        this._statusCode = response.status;
+        this._statusText = response.statusText;
+        this._response = responseText
+    }
+
+    get statusCode(): number {
+        return this._statusCode;
+    }
+
+	get statusText(): string {
+        return this._statusText;
+    }
+
+	get response(): string {
+        return this._response;
+    }
 }

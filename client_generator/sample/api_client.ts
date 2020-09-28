@@ -1,49 +1,58 @@
 // THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
-// generated version: 0.4.0
+// generated version: unknown
 
-import { GetArticleRequest as ServiceGetArticleRequest } from './classes/service/GetArticleRequest';
-export { GetArticleRequest as ServiceGetArticleRequest } from './classes/service/GetArticleRequest';
-import { GetArticleResponse as ServiceGetArticleResponse } from './classes/service/GetArticleResponse';
-export { GetArticleResponse as ServiceGetArticleResponse } from './classes/service/GetArticleResponse';
-import { GetUserJobGetRequest as ServiceUser2UserIDGetUserJobGetRequest } from './classes/service/user2/_userID/GetUserJobGetRequest';
-export { GetUserJobGetRequest as ServiceUser2UserIDGetUserJobGetRequest } from './classes/service/user2/_userID/GetUserJobGetRequest';
-import { GetUserJobGetResponse as ServiceUser2UserIDGetUserJobGetResponse } from './classes/service/user2/_userID/GetUserJobGetResponse';
-export { GetUserJobGetResponse as ServiceUser2UserIDGetUserJobGetResponse } from './classes/service/user2/_userID/GetUserJobGetResponse';
-import { GetUserRequest as ServiceUser2GetUserRequest } from './classes/service/user2/GetUserRequest';
-export { GetUserRequest as ServiceUser2GetUserRequest } from './classes/service/user2/GetUserRequest';
-import { GetUserResponse as ServiceUser2GetUserResponse } from './classes/service/user2/GetUserResponse';
-export { GetUserResponse as ServiceUser2GetUserResponse } from './classes/service/user2/GetUserResponse';
-import { PostCreateTableRequest as PostCreateTableRequest } from './classes//PostCreateTableRequest';
-export { PostCreateTableRequest as PostCreateTableRequest } from './classes//PostCreateTableRequest';
-import { PostCreateTableResponse as PostCreateTableResponse } from './classes//PostCreateTableResponse';
-export { PostCreateTableResponse as PostCreateTableResponse } from './classes//PostCreateTableResponse';
-import { PostCreateUserRequest as PostCreateUserRequest } from './classes//PostCreateUserRequest';
-export { PostCreateUserRequest as PostCreateUserRequest } from './classes//PostCreateUserRequest';
-import { PostCreateUserResponse as PostCreateUserResponse } from './classes//PostCreateUserResponse';
-export { PostCreateUserResponse as PostCreateUserResponse } from './classes//PostCreateUserResponse';
-import { PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest } from './classes/service/user/PostUpdateUserNameRequest';
-export { PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest } from './classes/service/user/PostUpdateUserNameRequest';
-import { PostUpdateUserNameRequest as ServiceUser2PostUpdateUserNameRequest } from './classes/service/user2/PostUpdateUserNameRequest';
-export { PostUpdateUserNameRequest as ServiceUser2PostUpdateUserNameRequest } from './classes/service/user2/PostUpdateUserNameRequest';
-import { PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse } from './classes/service/user/PostUpdateUserNameResponse';
-export { PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse } from './classes/service/user/PostUpdateUserNameResponse';
-import { PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse } from './classes/service/user2/PostUpdateUserNameResponse';
-export { PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse } from './classes/service/user2/PostUpdateUserNameResponse';
-import { PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest } from './classes/service/user/PostUpdateUserPasswordRequest';
-export { PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest } from './classes/service/user/PostUpdateUserPasswordRequest';
-import { PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest } from './classes/service/user2/PostUpdateUserPasswordRequest';
-export { PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest } from './classes/service/user2/PostUpdateUserPasswordRequest';
-import { PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse } from './classes/service/user/PostUpdateUserPasswordResponse';
-export { PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse } from './classes/service/user/PostUpdateUserPasswordResponse';
-import { PostUpdateUserPasswordResponse as ServiceUser2PostUpdateUserPasswordResponse } from './classes/service/user2/PostUpdateUserPasswordResponse';
-export { PostUpdateUserPasswordResponse as ServiceUser2PostUpdateUserPasswordResponse } from './classes/service/user2/PostUpdateUserPasswordResponse';
-import { PutJobRequest as ServiceUser2UserIDJobIDPutJobRequest } from './classes/service/user2/_userID/_JobID/PutJobRequest';
-export { PutJobRequest as ServiceUser2UserIDJobIDPutJobRequest } from './classes/service/user2/_userID/_JobID/PutJobRequest';
-import { PutJobResponse as ServiceUser2UserIDJobIDPutJobResponse } from './classes/service/user2/_userID/_JobID/PutJobResponse';
-export { PutJobResponse as ServiceUser2UserIDJobIDPutJobResponse } from './classes/service/user2/_userID/_JobID/PutJobResponse';
+import {
+	PostCreateTableRequest as PostCreateTableRequest,
+	PostCreateTableResponse as PostCreateTableResponse,
+	PostCreateUserRequest as PostCreateUserRequest,
+	PostCreateUserResponse as PostCreateUserResponse,
+} from './classes//types';
+import {
+	GetArticleRequest as ServiceGetArticleRequest,
+	GetArticleResponse as ServiceGetArticleResponse,
+} from './classes/service/types';
+import {
+	PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest,
+	PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse,
+	PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest,
+	PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse,
+} from './classes/service/user/types';
+import {
+	PutJobRequest as ServiceUser2UserIDJobIDPutJobRequest,
+	PutJobResponse as ServiceUser2UserIDJobIDPutJobResponse,
+} from './classes/service/user2/_userID/_JobID/types';
+import {
+	GetUserJobGetRequest as ServiceUser2UserIDGetUserJobGetRequest,
+	GetUserJobGetResponse as ServiceUser2UserIDGetUserJobGetResponse,
+} from './classes/service/user2/_userID/types';
+import {
+	GetUserRequest as ServiceUser2GetUserRequest,
+	GetUserResponse as ServiceUser2GetUserResponse,
+	PostUpdateUserNameRequest as ServiceUser2PostUpdateUserNameRequest,
+	PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse,
+	PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest,
+	PostUpdateUserPasswordResponse as ServiceUser2PostUpdateUserPasswordResponse,
+} from './classes/service/user2/types';
 
 
+class PropsClient {
+
+	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
+
+	}
+
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+		let res: { [key: string]: any } = {};
+		Object.keys(obj).forEach((key) => {
+			if (routingPath.indexOf(key) === -1) {
+				res[key] = obj[key];
+			}
+		});
+		return res;
+	}
+
+}
 
 class ServiceClient {
 
@@ -59,8 +68,7 @@ class ServiceClient {
 		this.user2 = new ServiceUser2Client(headers, options, baseURL);
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -93,7 +101,7 @@ class ServiceClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return new ServiceGetArticleResponse(await resp.json());
+		return (await resp.json()) as ServiceGetArticleResponse;
 	}
 }
 
@@ -103,8 +111,7 @@ class ServiceStaticPageClient {
 
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -137,7 +144,7 @@ class ServiceStaticPageClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return new ServiceStaticPageGetStaticPageResponse(await resp.json());
+		return (await resp.json()) as ServiceStaticPageGetStaticPageResponse;
 	}
 }
 
@@ -147,8 +154,7 @@ class ServiceTableClient {
 
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -168,8 +174,7 @@ class ServiceUser2Client {
 		this._userID = new ServiceUser2UserIDClient(headers, options, baseURL);
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -202,7 +207,7 @@ class ServiceUser2Client {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return new ServiceUser2GetUserResponse(await resp.json());
+		return (await resp.json()) as ServiceUser2GetUserResponse;
 	}
 	async postUpdateUserName(
 		param: ServiceUser2PostUpdateUserNameRequest,
@@ -228,7 +233,7 @@ class ServiceUser2Client {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return new ServiceUser2PostUpdateUserNameResponse(await resp.json());
+		return (await resp.json()) as ServiceUser2PostUpdateUserNameResponse;
 	}
 	async postUpdateUserPassword(
 		param: ServiceUser2PostUpdateUserPasswordRequest,
@@ -254,7 +259,7 @@ class ServiceUser2Client {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return new ServiceUser2PostUpdateUserPasswordResponse(await resp.json());
+		return (await resp.json()) as ServiceUser2PostUpdateUserPasswordResponse;
 	}
 }
 
@@ -266,8 +271,7 @@ class ServiceUser2UserIDClient {
 		this._JobID = new ServiceUser2UserIDJobIDClient(headers, options, baseURL);
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -300,7 +304,7 @@ class ServiceUser2UserIDClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return new ServiceUser2UserIDGetUserJobGetResponse(await resp.json());
+		return (await resp.json()) as ServiceUser2UserIDGetUserJobGetResponse;
 	}
 }
 
@@ -310,8 +314,7 @@ class ServiceUser2UserIDJobIDClient {
 
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -345,7 +348,7 @@ class ServiceUser2UserIDJobIDClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return new ServiceUser2UserIDJobIDPutJobResponse(await resp.json());
+		return (await resp.json()) as ServiceUser2UserIDJobIDPutJobResponse;
 	}
 }
 
@@ -355,8 +358,7 @@ class ServiceUserClient {
 
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -390,7 +392,7 @@ class ServiceUserClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return new ServiceUserPostUpdateUserNameResponse(await resp.json());
+		return (await resp.json()) as ServiceUserPostUpdateUserNameResponse;
 	}
 	async postUpdateUserPassword(
 		param: ServiceUserPostUpdateUserPasswordRequest,
@@ -416,7 +418,7 @@ class ServiceUserClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return new ServiceUserPostUpdateUserPasswordResponse(await resp.json());
+		return (await resp.json()) as ServiceUserPostUpdateUserPasswordResponse;
 	}
 }
 
@@ -426,6 +428,7 @@ export class APIClient {
 	private options: {[key: string]: any};
 	private baseURL: string;
 
+	public props: PropsClient;
 	public service: ServiceClient;
 
 	constructor(
@@ -448,11 +451,11 @@ export class APIClient {
 		this.headers = headers;
 
 
+		this.props = new PropsClient(headers, this.options, this.baseURL);
 		this.service = new ServiceClient(headers, this.options, this.baseURL);
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -486,7 +489,7 @@ export class APIClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return new PostCreateTableResponse(await resp.json());
+		return (await resp.json()) as PostCreateTableResponse;
 	}
 
 	async postCreateUser(
@@ -513,7 +516,7 @@ export class APIClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return new PostCreateUserResponse(await resp.json());
+		return (await resp.json()) as PostCreateUserResponse;
 	}
 
 }
@@ -530,15 +533,15 @@ export class ApiError extends Error {
         this._response = responseText
     }
 
-    set response(value: string) {
-        this._response = value;
-    }
-
-    set statusText(value: string) {
-        this._statusText = value;
-    }
-
     get statusCode(): number {
         return this._statusCode;
+    }
+
+	get statusText(): string {
+        return this._statusText;
+    }
+
+	get response(): string {
+        return this._response;
     }
 }

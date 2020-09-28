@@ -8,9 +8,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"sync"
 	"testing"
 	"time"
 
+	"github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/go-generalize/api_gen/server_generator/sample/service/user2"
 
 	"github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID/_JobID"
@@ -51,6 +53,7 @@ func TestMiddlewareList_ToMap(t *testing.T) {
 
 func TestBootstrap(t *testing.T) {
 	e := echo.New()
+
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
@@ -71,16 +74,25 @@ func TestBootstrap(t *testing.T) {
 
 	const testKeyValue = "hogehoge"
 
-	ctx := context.Background()
-	ctx = context.WithValue(ctx, testKey, testKeyValue)
+	Bootstrap(&props.ControllerProps{
+		TestKey: testKeyValue,
+	}, e, m)
 
-	Bootstrap(ctx, e, m)
-
+	var wg sync.WaitGroup
+	wg.Add(1)
 	go func() {
-		if err := e.Start(":" + PORT); err != nil {
+		defer wg.Done()
+		if err := e.Start(":" + PORT); err != nil && err != http.ErrServerClosed {
 			t.Fatalf("server listen error %s", err.Error())
 		}
 	}()
+
+	defer t.Cleanup(func() {
+		if err := e.Shutdown(context.Background()); err != nil {
+			t.Errorf("failed to shutdown server: %+v", err)
+		}
+		wg.Wait()
+	})
 
 	start := time.Now().Unix()
 	ticker := time.NewTicker(50 * time.Millisecond)
