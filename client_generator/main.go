@@ -286,32 +286,32 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 		if err := os.MkdirAll(classesDir+url, 0774); err != nil {
 			log.Fatalf("failed to MkdirAll: %+v", err)
 		}
-	}
 
-	parser, err := go2tsparser.NewParser(p)
+		parser, err := go2tsparser.NewParser(p)
 
-	if err != nil {
-		log.Fatalf("failed to initialize go2ts parser: %+v", err)
-	}
-	parser.Filter = func(name string) bool {
-		return strings.HasSuffix(name, "Request") || strings.HasSuffix(name, "Response")
-	}
+		if err != nil {
+			log.Fatalf("failed to initialize go2ts parser: %+v", err)
+		}
+		parser.Filter = func(name string) bool {
+			return strings.HasSuffix(name, "Request") || strings.HasSuffix(name, "Response")
+		}
 
-	types, err := parser.Parse()
+		types, err := parser.Parse()
 
-	if err != nil {
-		log.Fatalf("failed to parse go files: %+v", err)
-	}
+		if err != nil {
+			log.Fatalf("failed to parse go files: %+v", err)
+		}
 
-	ts := go2tsgenerator.NewGenerator(types).Generate()
+		ts := go2tsgenerator.NewGenerator(types).Generate()
 
-	filename := filepath.Join(
-		classesDir,
-		fmt.Sprintf("/%s/types.ts", url),
-	)
+		filename := filepath.Join(
+			classesDir,
+			fmt.Sprintf("/%s/types.ts", url),
+		)
 
-	if err := ioutil.WriteFile(filename, []byte(ts), os.ModePerm); err != nil {
-		log.Fatalf("failed to write into %s: %+v", filename, err)
+		if err := ioutil.WriteFile(filename, []byte(ts), os.ModePerm); err != nil {
+			log.Fatalf("failed to write into %s: %+v", filename, err)
+		}
 	}
 
 	fifos, err := ioutil.ReadDir(p)
