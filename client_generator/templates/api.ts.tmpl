@@ -5,9 +5,6 @@
 {{range $index, $elem := .Imports}}import {{"{"}}
 {{range $i, $pair := $elem.Pairs}}	{{$pair.Name}} as {{$pair.NameAs}},
 {{end}}{{"}"}} from '{{$elem.Path}}';
-export {{"{"}}
-{{range $i, $pair := $elem.Pairs}}	{{$pair.Name}} as {{$pair.NameAs}},
-{{end}}{{"}"}} from '{{$elem.Path}}';
 {{end}}
 {{range $index, $elem := .ChildrenClients}}
 class {{$elem.Name}} {
@@ -18,8 +15,7 @@ class {{$elem.Name}} {
 		this.{{$elem.Name}} = new {{$elem.ClassName}}(headers, options, baseURL);{{end}}
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -105,8 +101,7 @@ export class APIClient {
 		this.{{$elem.Name}} = new {{$elem.ClassName}}(headers, this.options, this.baseURL);{{end}}
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -175,15 +170,15 @@ export class ApiError extends Error {
         this._response = responseText
     }
 
-    set response(value: string) {
-        this._response = value;
-    }
-
-    set statusText(value: string) {
-        this._statusText = value;
-    }
-
     get statusCode(): number {
         return this._statusCode;
+    }
+
+	get statusText(): string {
+        return this._statusText;
+    }
+
+	get response(): string {
+        return this._response;
     }
 }

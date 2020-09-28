@@ -1,6 +1,6 @@
 // THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
-// generated version: 0.4.0
+// generated version: unknown
 
 import {
 	PostCreateTableRequest as PostCreateTableRequest,
@@ -8,17 +8,7 @@ import {
 	PostCreateUserRequest as PostCreateUserRequest,
 	PostCreateUserResponse as PostCreateUserResponse,
 } from './classes//types';
-export {
-	PostCreateTableRequest as PostCreateTableRequest,
-	PostCreateTableResponse as PostCreateTableResponse,
-	PostCreateUserRequest as PostCreateUserRequest,
-	PostCreateUserResponse as PostCreateUserResponse,
-} from './classes//types';
 import {
-	GetArticleRequest as ServiceGetArticleRequest,
-	GetArticleResponse as ServiceGetArticleResponse,
-} from './classes/service/types';
-export {
 	GetArticleRequest as ServiceGetArticleRequest,
 	GetArticleResponse as ServiceGetArticleResponse,
 } from './classes/service/types';
@@ -28,17 +18,7 @@ import {
 	PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest,
 	PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse,
 } from './classes/service/user/types';
-export {
-	PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest,
-	PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse,
-	PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest,
-	PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse,
-} from './classes/service/user/types';
 import {
-	PutJobRequest as ServiceUser2UserIDJobIDPutJobRequest,
-	PutJobResponse as ServiceUser2UserIDJobIDPutJobResponse,
-} from './classes/service/user2/_userID/_JobID/types';
-export {
 	PutJobRequest as ServiceUser2UserIDJobIDPutJobRequest,
 	PutJobResponse as ServiceUser2UserIDJobIDPutJobResponse,
 } from './classes/service/user2/_userID/_JobID/types';
@@ -46,19 +26,7 @@ import {
 	GetUserJobGetRequest as ServiceUser2UserIDGetUserJobGetRequest,
 	GetUserJobGetResponse as ServiceUser2UserIDGetUserJobGetResponse,
 } from './classes/service/user2/_userID/types';
-export {
-	GetUserJobGetRequest as ServiceUser2UserIDGetUserJobGetRequest,
-	GetUserJobGetResponse as ServiceUser2UserIDGetUserJobGetResponse,
-} from './classes/service/user2/_userID/types';
 import {
-	GetUserRequest as ServiceUser2GetUserRequest,
-	GetUserResponse as ServiceUser2GetUserResponse,
-	PostUpdateUserNameRequest as ServiceUser2PostUpdateUserNameRequest,
-	PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse,
-	PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest,
-	PostUpdateUserPasswordResponse as ServiceUser2PostUpdateUserPasswordResponse,
-} from './classes/service/user2/types';
-export {
 	GetUserRequest as ServiceUser2GetUserRequest,
 	GetUserResponse as ServiceUser2GetUserResponse,
 	PostUpdateUserNameRequest as ServiceUser2PostUpdateUserNameRequest,
@@ -74,8 +42,7 @@ class PropsClient {
 
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -101,8 +68,7 @@ class ServiceClient {
 		this.user2 = new ServiceUser2Client(headers, options, baseURL);
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -145,8 +111,7 @@ class ServiceStaticPageClient {
 
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -189,8 +154,7 @@ class ServiceTableClient {
 
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -210,8 +174,7 @@ class ServiceUser2Client {
 		this._userID = new ServiceUser2UserIDClient(headers, options, baseURL);
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -308,8 +271,7 @@ class ServiceUser2UserIDClient {
 		this._JobID = new ServiceUser2UserIDJobIDClient(headers, options, baseURL);
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -352,8 +314,7 @@ class ServiceUser2UserIDJobIDClient {
 
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -397,8 +358,7 @@ class ServiceUserClient {
 
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -495,8 +455,7 @@ export class APIClient {
 		this.service = new ServiceClient(headers, this.options, this.baseURL);
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -574,15 +533,15 @@ export class ApiError extends Error {
         this._response = responseText
     }
 
-    set response(value: string) {
-        this._response = value;
-    }
-
-    set statusText(value: string) {
-        this._statusText = value;
-    }
-
     get statusCode(): number {
         return this._statusCode;
+    }
+
+	get statusText(): string {
+        return this._statusText;
+    }
+
+	get response(): string {
+        return this._response;
     }
 }
