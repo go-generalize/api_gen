@@ -1,5 +1,5 @@
 # RECOMMENDED: YOU SHOULD USE FIXED VERSION FOR API_GEN
-# API_GEN_VERSION := "v0.4.0"
+# API_GEN_VERSION := "v1.0.0"
 # bootstrap:
 # 	mkdir -p ./bin
 # 	curl -L -o ./bin/client_generator.tar.gz https://github.com/go-generalize/api_gen/releases/download/$(API_GEN_VERSION)/client_generator_$(shell uname -s)_$(shell uname -m).tar.gz
