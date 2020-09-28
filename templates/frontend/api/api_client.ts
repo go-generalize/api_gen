@@ -1,18 +1,11 @@
 // THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
-// generated version: 0.4.0
+// generated version: unknown
 
 import {
 	PostCreateUserRequest as PostCreateUserRequest,
 	PostCreateUserResponse as PostCreateUserResponse,
-
 } from './classes//types';
-export {
-	PostCreateUserRequest as PostCreateUserRequest,
-	PostCreateUserResponse as PostCreateUserResponse,
-
-} from './classes//types';
-
 
 
 
@@ -44,8 +37,7 @@ export class APIClient {
 
 	}
 
-	getRequestObject(param: any, routingPath: string[]): { [key: string]: any } {
-		const obj = param.toObject();
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
 			if (routingPath.indexOf(key) === -1) {
@@ -96,15 +88,15 @@ export class ApiError extends Error {
         this._response = responseText
     }
 
-    set response(value: string) {
-        this._response = value;
-    }
-
-    set statusText(value: string) {
-        this._statusText = value;
-    }
-
     get statusCode(): number {
         return this._statusCode;
+    }
+
+	get statusText(): string {
+        return this._statusText;
+    }
+
+	get response(): string {
+        return this._response;
     }
 }

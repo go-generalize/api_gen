@@ -23,6 +23,12 @@ import (
 	"github.com/iancoleman/strcase"
 )
 
+const typesHeaderTemplate = `// THIS FILE IS A GENERATED CODE.
+// DO NOT EDIT THIS CODE BY YOUR OWN HANDS
+// generated version: %s
+
+`
+
 var supportedMethods = []string{
 	"get",
 	"post",
@@ -308,6 +314,8 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 			classesDir,
 			fmt.Sprintf("/%s/types.ts", url),
 		)
+
+		ts = fmt.Sprintf(typesHeaderTemplate, common.AppVersion) + ts
 
 		if err := ioutil.WriteFile(filename, []byte(ts), os.ModePerm); err != nil {
 			log.Fatalf("failed to write into %s: %+v", filename, err)
