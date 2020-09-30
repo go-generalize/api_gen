@@ -1,5 +1,4 @@
-// generated version: 0.4.0
-
+// generated version: unknown
 package _userID
 
 import (

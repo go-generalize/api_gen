@@ -1,3 +1,4 @@
+// Package sample ...
 package sample
 
 // PostCreateUserRequest Description ep="create_user/:id"
