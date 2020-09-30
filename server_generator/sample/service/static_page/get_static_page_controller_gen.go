@@ -1,5 +1,5 @@
-// generated version: 0.4.0
-
+// Package static ...
+// generated version: unknown
 package static
 
 import (

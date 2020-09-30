@@ -1,5 +1,5 @@
-// generated version: 0.4.0
-
+// Package sample ...
+// generated version: unknown
 package sample
 
 import (

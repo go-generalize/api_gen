@@ -4,7 +4,6 @@
 package {{ .Package }}
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -12,33 +11,36 @@ import (
 	props "{{ .ControllerPropsPackage }}"
 )
 
+// Routes ...
 type Routes struct {
 	router *echo.Group
 }
 
-func NewRoutes (p *props.ControllerProps, router *echo.Group) *Routes {
+// NewRoutes ...
+func NewRoutes(p *props.ControllerProps, router *echo.Group) *Routes {
 	r := &Routes{
 		router: router,
 	}
-
-	{{ range .Controllers }}router.{{ .HTTPMethod }}("{{ .Endpoint }}", r.{{ .HandlerName }}(p))
-	{{ end }}
+{{- range .Controllers }}
+	router.{{ .HTTPMethod }}("{{ .Endpoint }}", r.{{ .HandlerName }}(p))
+{{- end }}
 	return r
 }
 {{ range .Controllers }}
+// {{ .HandlerName }} ...
 func (r *Routes) {{ .HandlerName }}(p *props.ControllerProps) echo.HandlerFunc {
 	i := New{{ .ControllerName }}(p)
 	return func(c echo.Context) error {
 		req := new({{ .RequestStructName }})
 		if err := c.Bind(req); err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
-				"code":	http.StatusBadRequest,
+				"code":    http.StatusBadRequest,
 				"message": "invalid request.",
 			})
 		}
 		res, err := i.{{ .HandlerName }}(c, req)
 		if err != nil {
-		   return err
+			return err
 		}
 		if res == nil {
 			return nil
@@ -47,9 +49,10 @@ func (r *Routes) {{ .HandlerName }}(p *props.ControllerProps) echo.HandlerFunc {
 		return c.JSON(http.StatusOK, res)
 	}
 }
-{{ end }}
+{{- end }}
 {{ range .Controllers }}
+// I{{ .ControllerName }} ...
 type I{{ .ControllerName }} interface {
 	{{ .HandlerName }}(c echo.Context, req *{{ .RequestStructName }}) (res *{{ .ResponseStructName }}, err error)
 }
-{{ end }}
+{{- end }}

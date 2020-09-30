@@ -1,3 +1,4 @@
+// Package main ...
 package main
 
 import (
@@ -285,7 +286,10 @@ func findStructList(pkgs map[string]*ast.Package) []*PackageStruct {
 				t := tSpec.Type
 				switch t.(type) {
 				case *ast.StructType:
-					structObject := t.(*ast.StructType)
+					structObject, ok := t.(*ast.StructType)
+					if !ok {
+						continue
+					}
 					structList = append(structList, &PackageStruct{
 						FileName:     fileName,
 						PackageName:  pkg.Name,

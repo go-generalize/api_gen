@@ -1,5 +1,5 @@
-// generated version: 0.4.0
-
+// Package user ...
+// generated version: unknown
 package user
 
 import (

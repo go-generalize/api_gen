@@ -1,3 +1,4 @@
+// Package sample ...
 package sample
 
 import "github.com/go-generalize/api_gen/server_generator/sample/service/table"
