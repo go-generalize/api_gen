@@ -1,18 +1,16 @@
 package main
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-generalize/api_gen/templates/backend/interfaces"
+	"github.com/go-generalize/api_gen/templates/backend/interfaces/props"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
-	ctx := context.Background()
-
 	e := echo.New()
 
 	middlewareList := make([]*interfaces.MiddlewareSet, 0)
@@ -34,7 +32,7 @@ func main() {
 	e.Debug = true
 	e.Use(middleware.Recover())
 
-	interfaces.Bootstrap(ctx, e, nil)
+	interfaces.Bootstrap(new(props.ControllerProps), e, nil)
 
 	fmt.Println("All routes are...")
 	for _, r := range e.Routes() {
