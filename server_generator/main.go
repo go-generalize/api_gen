@@ -89,7 +89,7 @@ func run(arg string) error {
 		err = createFromTemplate(
 			"/controller_props.go.tmpl",
 			filepath.Join(dir, "controller_props.go"),
-			nil, true, nil,
+			nil, false, nil,
 		)
 
 		if err != nil {

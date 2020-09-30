@@ -6,7 +6,7 @@ builds:
     binary: client_generator
     ldflags:
       - -s -w
-      - -X common.AppVersion={{.Version}}
+      - -X github.com/go-generalize/api_gen/common.AppVersion={{.Version}}
     env:
       - CGO_ENABLED=0
 archives:
