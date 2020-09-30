@@ -4,24 +4,29 @@
 package {{ .PackageName }}
 
 import (
-	"context"
 	"log"
 	"net/http"
 {{ range $i, $v := .Bootstraps }}{{ if ne .PackagePath "" }}
-	{{ if ne $v.ImportPackageName "" }}{{ $v.ImportPackageName }} {{ end }}"{{ $v.PackagePath }}"{{ end }}{{ end }}
+	{{ if ne $v.ImportPackageName "" }}{{ $v.ImportPackageName }} {{ end }}"{{ $v.PackagePath }}"{{ end }}
+{{- end }}
 	"github.com/labstack/echo/v4"
+
 	props "{{ .ControllerPropsPackage }}"
 )
 
+// MiddlewareList ...
 type MiddlewareList []*MiddlewareSet
 
+// MiddlewareMap ...
 type MiddlewareMap map[string][]echo.MiddlewareFunc
 
+// MiddlewareSet ...
 type MiddlewareSet struct {
 	Path           string
 	MiddlewareFunc []echo.MiddlewareFunc
 }
 
+// ToMap ...
 func (m MiddlewareList) ToMap() MiddlewareMap {
 	mf := make(map[string][]echo.MiddlewareFunc)
 	for _, middleware := range m {
@@ -30,6 +35,7 @@ func (m MiddlewareList) ToMap() MiddlewareMap {
 	return mf
 }
 
+// Bootstrap ...
 func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList MiddlewareList) {
 	middleware := middlewareList.ToMap()
 
@@ -55,9 +61,7 @@ func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList Middleware
 			return err
 		}
 	})
-
 {{ range $i, $v := .Bootstraps }}
-
 	{{ $v.RouteGroupName }}Group := {{ GetGroupName $v }}.Group("{{ $v.Endpoint }}")
 	setMiddleware({{ $v.RouteGroupName }}Group, "{{ $v.EndpointPath }}", middleware)
 	{{ GetNewRoute $v}}{{ end }}
