@@ -168,6 +168,9 @@ func run(arg string) error {
 		if endpointPath == "/" {
 			packageName = cs[0].Package
 			isExistRoot = true
+
+			packagePath = ""
+			importPackageName = ""
 		}
 
 		bootstrapTemplates = append(bootstrapTemplates, &BootstrapTemplates{
