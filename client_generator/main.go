@@ -16,9 +16,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/go-generalize/api_gen/common"
-
 	_ "github.com/go-generalize/api_gen/client_generator/statik"
+	"github.com/go-generalize/api_gen/common"
 	go2tsgenerator "github.com/go-generalize/go2ts/pkg/generator"
 	go2tsparser "github.com/go-generalize/go2ts/pkg/parser"
 	"github.com/iancoleman/strcase"
