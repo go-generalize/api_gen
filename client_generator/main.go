@@ -87,7 +87,6 @@ func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *a
 			for i := range supportedMethods {
 				if strings.HasPrefix(lowered, supportedMethods[i]) {
 					method = supportedMethods[i]
-
 					break
 				}
 			}
