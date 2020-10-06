@@ -109,7 +109,7 @@ func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *a
 			goFileName := filepath.Base(goFilePath)
 			goFileName = goFileName[:len(goFileName)-len(filepath.Ext(goFileName))]
 
-			if _, ok := p.endpoints[me]; !ok {
+			if _, ok = p.endpoints[me]; !ok {
 				p.endpoints[me] = &endpoint{}
 			}
 
