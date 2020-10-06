@@ -299,7 +299,15 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 			log.Fatalf("failed to initialize go2ts parser: %+v", err)
 		}
 		parser.Filter = func(name string) bool {
-			return strings.HasSuffix(name, "Request") || strings.HasSuffix(name, "Response")
+			name = strings.ToLower(name)
+			if strings.HasSuffix(name, "controller") {
+				for _, method := range supportedMethods {
+					if strings.HasPrefix(name, method) {
+						return false
+					}
+				}
+			}
+			return true
 		}
 
 		types, err := parser.Parse()
