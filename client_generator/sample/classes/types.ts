@@ -8,12 +8,7 @@ export type PostCreateTableRequest = {
 }
 export type PostCreateTableResponse = {
 	ID: string;
-	Payload: {
-		Pos: {
-			X: number;
-			Y: number;
-		};
-	};
+	Payload: Table;
 }
 export type PostCreateUserRequest = {
 	Gender: number;
@@ -21,7 +16,14 @@ export type PostCreateUserRequest = {
 	Password: string;
 }
 export type PostCreateUserResponse = {
-	CreatedType: number;
+	CreatedType: 0 | 1 | 2;
 	Message: string;
 	Status: boolean;
+}
+export type Pos = {
+	X: number;
+	Y: number;
+}
+export type Table = {
+	Pos: Pos;
 }
