@@ -304,12 +304,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 				return false
 			}
 
-			ok := strings.HasSuffix(opt.Name, "Request") || strings.HasSuffix(opt.Name, "Response")
-
-			if ok {
-				fmt.Println(opt)
-			}
-			return ok
+			return strings.HasSuffix(opt.Name, "Request") || strings.HasSuffix(opt.Name, "Response")
 		}
 
 		parser, err := go2tsparser.NewParser(p, filter)
