@@ -293,13 +293,24 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 			log.Fatalf("failed to MkdirAll: %+v", err)
 		}
 
-		parser, err := go2tsparser.NewParser(p)
+		filter := func(opt *go2tsparser.FilterOpt) bool {
+			if opt.Dependency {
+				return true
+			}
+			if !opt.BasePackage {
+				return false
+			}
+			if !opt.Exported {
+				return false
+			}
+
+			return strings.HasSuffix(opt.Name, "Request") || strings.HasSuffix(opt.Name, "Response")
+		}
+
+		parser, err := go2tsparser.NewParser(p, filter)
 
 		if err != nil {
 			log.Fatalf("failed to initialize go2ts parser: %+v", err)
-		}
-		parser.Filter = func(name string) bool {
-			return strings.HasSuffix(name, "Request") || strings.HasSuffix(name, "Response")
 		}
 
 		types, err := parser.Parse()

@@ -4,6 +4,10 @@ github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumC
 github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
 github.com/go-generalize/go2ts v0.0.3 h1:vD2OTIcGW/87FvI/SlupLkl1lWHxbUnHxPSKw2YhOFw=
 github.com/go-generalize/go2ts v0.0.3/go.mod h1:3UcRr+TkTZzHRik2X6H2p0DoPCSMN0haKFHtvQ6I2zg=
+github.com/go-generalize/go2ts v0.0.4 h1:6BuTdttZCrQnoppcD/i+gQBQE3k0V3LuiN/NHfHVeug=
+github.com/go-generalize/go2ts v0.0.4/go.mod h1:075q+zcpc6IjwYy9WpJpY+M9ssbEA6uccjzWwr59t3M=
+github.com/go-generalize/go2ts v1.0.0 h1:dOsTJMF3aZve3oU6R/CtPzQ/Q7Orpa5hu2w7y1X8l7s=
+github.com/go-generalize/go2ts v1.0.0/go.mod h1:075q+zcpc6IjwYy9WpJpY+M9ssbEA6uccjzWwr59t3M=
 github.com/google/go-cmp v0.5.2/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/iancoleman/strcase v0.1.2 h1:gnomlvw9tnV3ITTAxzKSgTF+8kFWcU/f+TgttpXGz1U=
 github.com/iancoleman/strcase v0.1.2/go.mod h1:SK73tn/9oHe+/Y0h39VT4UCxmurVJkR5NA7kMEAOgSE=
