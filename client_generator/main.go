@@ -199,7 +199,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 	pkgParser.parseDir(url, p)
 
 	for k, v := range pkgParser.endpoints {
-		fmt.Println(k, *v)
+		fmt.Printf("Struct: %s / %+v\n", k, *v)
 	}
 
 	parent.Name = strcase.ToCamel(strings.ReplaceAll(url, "/", "-")) + "Client"
@@ -211,6 +211,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 			NameAs: strcase.ToCamel(strings.ReplaceAll(url+"/"+pkgParser.structs[i], "/", "-")),
 		})
 	}
+
 	if len(pairs) != 0 {
 		generator.Imports = append(
 			generator.Imports,
