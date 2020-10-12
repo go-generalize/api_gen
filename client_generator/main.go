@@ -307,13 +307,13 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 			return strings.HasSuffix(opt.Name, "Request") || strings.HasSuffix(opt.Name, "Response")
 		}
 
-		parser, err := go2tsparser.NewParser(p, filter)
+		psr, err := go2tsparser.NewParser(p, filter)
 
 		if err != nil {
 			log.Fatalf("failed to initialize go2ts parser: %+v", err)
 		}
 
-		types, err := parser.Parse()
+		types, err := psr.Parse()
 
 		if err != nil {
 			log.Fatalf("failed to parse go files: %+v", err)
