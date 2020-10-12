@@ -1,3 +1,4 @@
+// Package main ...
 package main
 
 import (
@@ -108,7 +109,7 @@ func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *a
 			goFileName := filepath.Base(goFilePath)
 			goFileName = goFileName[:len(goFileName)-len(filepath.Ext(goFileName))]
 
-			if _, ok := p.endpoints[me]; !ok {
+			if _, ok = p.endpoints[me]; !ok {
 				p.endpoints[me] = &endpoint{}
 			}
 
@@ -199,7 +200,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 	pkgParser.parseDir(url, p)
 
 	for k, v := range pkgParser.endpoints {
-		fmt.Println(k, *v)
+		fmt.Printf("Struct: %s / %+v\n", k, *v)
 	}
 
 	parent.Name = strcase.ToCamel(strings.ReplaceAll(url, "/", "-")) + "Client"
@@ -211,11 +212,12 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 			NameAs: strcase.ToCamel(strings.ReplaceAll(url+"/"+pkgParser.structs[i], "/", "-")),
 		})
 	}
+
 	if len(pairs) != 0 {
 		generator.Imports = append(
 			generator.Imports,
 			importType{
-				Path:  "./classes" + url + "/types",
+				Path:  "./" + path.Join("classes", url, "types"),
 				Pairs: pairs,
 			},
 		)
@@ -307,13 +309,13 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 			return strings.HasSuffix(opt.Name, "Request") || strings.HasSuffix(opt.Name, "Response")
 		}
 
-		parser, err := go2tsparser.NewParser(p, filter)
+		psr, err := go2tsparser.NewParser(p, filter)
 
 		if err != nil {
 			log.Fatalf("failed to initialize go2ts parser: %+v", err)
 		}
 
-		types, err := parser.Parse()
+		types, err := psr.Parse()
 
 		if err != nil {
 			log.Fatalf("failed to parse go files: %+v", err)
@@ -348,6 +350,14 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 
 		nextURL := path.Join(url, fifos[i].Name())
 
+		walk(filepath.Join(p, fifos[i].Name()), nextURL, generator, client)
+
+		if len(client.Methods) <= 0 {
+			continue
+		}
+
+		generator.ChildrenClients = append(generator.ChildrenClients, client)
+
 		parent.Children = append(
 			parent.Children,
 			childrenType{
@@ -355,10 +365,6 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 				ClassName: strcase.ToCamel(strings.ReplaceAll(nextURL, "/", "-")) + "Client",
 			},
 		)
-
-		walk(filepath.Join(p, fifos[i].Name()), nextURL, generator, client)
-
-		generator.ChildrenClients = append(generator.ChildrenClients, client)
 	}
 }
 

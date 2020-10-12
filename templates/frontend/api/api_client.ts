@@ -5,15 +5,13 @@
 import {
 	PostCreateUserRequest as PostCreateUserRequest,
 	PostCreateUserResponse as PostCreateUserResponse,
-} from './classes//types';
-
+} from './classes/types';
 
 
 export class APIClient {
 	private headers: {[key: string]: string};
 	private options: {[key: string]: any};
 	private baseURL: string;
-
 
 	constructor(
 		token?: string,
@@ -33,8 +31,6 @@ export class APIClient {
 		this.baseURL =  (baseURL === undefined) ? "" : baseURL;
 		this.options = commonOptions;
 		this.headers = headers;
-
-
 	}
 
 	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
@@ -73,7 +69,6 @@ export class APIClient {
 		}
 		return (await resp.json()) as PostCreateUserResponse;
 	}
-
 }
 
 export class ApiError extends Error {

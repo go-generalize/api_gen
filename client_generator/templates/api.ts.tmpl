@@ -1,18 +1,22 @@
 // THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
 // generated version: {{ .AppVersion }}
+{{- range $index, $elem := .Imports }}
 
-{{range $index, $elem := .Imports}}import {{"{"}}
-{{range $i, $pair := $elem.Pairs}}	{{$pair.Name}} as {{$pair.NameAs}},
-{{end}}{{"}"}} from '{{$elem.Path}}';
-{{end}}
-{{range $index, $elem := .ChildrenClients}}
-class {{$elem.Name}} {
-{{range $index, $elem := .Children}}
-	public {{$elem.Name}}: {{$elem.ClassName}};{{end}}
+import {{ "{" }}
+{{ range $i, $pair := $elem.Pairs }}	{{ $pair.Name }} as {{ $pair.NameAs }},
+{{ end }}{{ "}" }} from '{{ $elem.Path }}';
+{{- end }}
+{{ range $index, $elem := .ChildrenClients }}
+
+class {{ $elem.Name }} {
+{{- 	range $index, $elem := .Children }}
+	public {{ $elem.Name }}: {{ $elem.ClassName }};
+{{- 	end }}
 	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
-{{range $index, $elem := $elem.Children}}
-		this.{{$elem.Name}} = new {{$elem.ClassName}}(headers, options, baseURL);{{end}}
+{{-  	range $index, $elem := $elem.Children }}
+		this.{{ $elem.Name }} = new {{ $elem.ClassName }}(headers, options, baseURL);
+{{- 	end }}
 	}
 
 	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
@@ -24,17 +28,19 @@ class {{$elem.Name}} {
 		});
 		return res;
 	}
-{{range $index, $method := $elem.Methods}}
-	async {{$method.Name}}(
-		param: {{$method.RequestType}},
+{{- 	range $index, $method := $elem.Methods }}
+
+	async {{ $method.Name }}(
+		param: {{ $method.RequestType }},
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
-	): Promise<{{$method.ResponseType}}> {
+	): Promise<{{ $method.ResponseType }}> {
 	    const excludeParams: string[] = [{{ range $param := $method.URLParams }}'{{ $param }}', {{ end }}];
-{{if eq $method.Method "GET"}}		const resp = await fetch(
-			`${this.baseURL}{{$method.Endpoint}}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
+{{- 	if eq $method.Method "GET" }}
+		const resp = await fetch(
+			`${this.baseURL}{{ $method.Endpoint }}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
 			{
-				method: "{{$method.Method}}",
+				method: "{{ $method.Method }}",
 				headers: {
 					...this.headers,
 					...headers,
@@ -43,10 +49,11 @@ class {{$elem.Name}} {
 				...options,
 			}
 		);
-{{else}}		const resp = await fetch(
-			`${this.baseURL}{{$method.Endpoint}}`,
+{{- 	else }}
+		const resp = await fetch(
+			`${this.baseURL}{{ $method.Endpoint }}`,
 			{
-				method: "{{$method.Method}}",
+				method: "{{ $method.Method }}",
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
@@ -56,27 +63,31 @@ class {{$elem.Name}} {
 				...options,
 			}
 		);
-{{end}}
+{{- 	end }}
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-{{- if eq .HasFields true }}
-		return (await resp.json()) as {{$method.ResponseType}};
-{{- else }}
+{{- 	if eq .HasFields true }}
+		return (await resp.json()) as {{ $method.ResponseType }};
+{{- 	else }}
 		await resp.text();
-		return {} as {{$method.ResponseType}};
-{{- end }}
-	}{{end}}
+		return {} as {{ $method.ResponseType }};
+{{- 	end }}
+	}
+{{- 	end }}
 }
-{{end}}
+{{- end }}
 
 export class APIClient {
 	private headers: {[key: string]: string};
 	private options: {[key: string]: any};
 	private baseURL: string;
-{{range $index, $elem := .Children}}
-	public {{$elem.Name}}: {{$elem.ClassName}};{{end}}
+{{- 	range $index, $elem := .Children }}
+
+	public {{ $elem.Name }}: {{ $elem.ClassName }};
+{{- 	end }}
 
 	constructor(
 		token?: string,
@@ -96,9 +107,10 @@ export class APIClient {
 		this.baseURL =  (baseURL === undefined) ? "" : baseURL;
 		this.options = commonOptions;
 		this.headers = headers;
+{{- 	range $index, $elem := .Children }}
 
-{{range $index, $elem := .Children}}
-		this.{{$elem.Name}} = new {{$elem.ClassName}}(headers, this.options, this.baseURL);{{end}}
+		this.{{ $elem.Name }} = new {{ $elem.ClassName }}(headers, this.options, this.baseURL);
+{{- 	end }}
 	}
 
 	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
@@ -110,17 +122,19 @@ export class APIClient {
 		});
 		return res;
 	}
-{{range $index, $method := .Methods}}
-	async {{$method.Name}}(
-		param: {{$method.RequestType}},
+{{- range $index, $method := .Methods }}
+
+	async {{ $method.Name }}(
+		param: {{ $method.RequestType }},
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
-	): Promise<{{$method.ResponseType}}> {
+	): Promise<{{ $method.ResponseType }}> {
 	    const excludeParams: string[] = [{{ range $param := $method.URLParams }}'{{ $param }}', {{ end }}];
-{{if eq $method.Method "GET"}}		const resp = await fetch(
-			`${this.baseURL}{{$method.Endpoint}}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
+{{- 	if eq $method.Method "GET" }}
+		const resp = await fetch(
+			`${this.baseURL}{{ $method.Endpoint }}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
 			{
-				method: "{{$method.Method}}",
+				method: "{{ $method.Method }}",
 				headers: {
 					...this.headers,
 					...headers,
@@ -129,10 +143,11 @@ export class APIClient {
 				...options,
 			}
 		);
-{{else}}		const resp = await fetch(
-			`${this.baseURL}{{$method.Endpoint}}`,
+{{- 	else }}
+		const resp = await fetch(
+			`${this.baseURL}{{ $method.Endpoint }}`,
 			{
-				method: "{{$method.Method}}",
+				method: "{{ $method.Method }}",
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
@@ -142,20 +157,20 @@ export class APIClient {
 				...options,
 			}
 		);
-{{end}}
+{{ end }}
 		if (Math.floor(resp.status / 100) !== 2) {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
 
 {{- if eq .HasFields true }}
-		return (await resp.json()) as {{$method.ResponseType}};
+		return (await resp.json()) as {{ $method.ResponseType }};
 {{- else }}
 		await resp.text();
-		return {} as {{$method.ResponseType}};
+		return {} as {{ $method.ResponseType }};
 {{- end }}
 	}
-{{end}}
+{{- end }}
 }
 
 export class ApiError extends Error {

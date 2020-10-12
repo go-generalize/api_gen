@@ -1,15 +1,14 @@
-import { PostCreateUserRequest } from "./api/classes/PostCreateUserRequest";
 import { APIClient } from "./api/api_client";
 
 // the simplest
 (async () => {
     const client = new APIClient();
 
-    const resp = await client.postCreateUser(new PostCreateUserRequest({
+    const resp = await client.postCreateUser({
         ID: "id",
         Password: "password",
         Gender: 0,
-    }));
+    });
 
     console.log(resp);
 })();
@@ -28,11 +27,11 @@ import { APIClient } from "./api/api_client";
     );
 
     const resp = await client.postCreateUser(
-        new PostCreateUserRequest({
+        {
             ID: "id",
             Password: "password",
             Gender: 0,
-        }),
+        },
         {
             "X-Foobar": "hoge", // [optional] custom headers
         },
