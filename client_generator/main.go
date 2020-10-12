@@ -348,17 +348,18 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 
 		nextURL := path.Join(url, fifos[i].Name())
 
-		parent.Children = append(
-			parent.Children,
-			childrenType{
-				Name:      fifos[i].Name(),
-				ClassName: strcase.ToCamel(strings.ReplaceAll(nextURL, "/", "-")) + "Client",
-			},
-		)
-
 		walk(filepath.Join(p, fifos[i].Name()), nextURL, generator, client)
 
-		generator.ChildrenClients = append(generator.ChildrenClients, client)
+		if len(client.Methods) > 0 {
+			generator.ChildrenClients = append(generator.ChildrenClients, client)
+			parent.Children = append(
+				parent.Children,
+				childrenType{
+					Name:      fifos[i].Name(),
+					ClassName: strcase.ToCamel(strings.ReplaceAll(nextURL, "/", "-")) + "Client",
+				},
+			)
+		}
 	}
 }
 
