@@ -8,6 +8,7 @@ import {{ "{" }}
 {{ end }}{{ "}" }} from '{{ $elem.Path }}';
 {{- end }}
 {{ range $index, $elem := .ChildrenClients }}
+
 class {{ $elem.Name }} {
 {{- 	range $index, $elem := .Children }}
 	public {{ $elem.Name }}: {{ $elem.ClassName }};
