@@ -8,7 +8,7 @@ export type PostCreateUserRequest = {
 	Password: string;
 }
 export type PostCreateUserResponse = {
-	CreatedType: number;
+	CreatedType: 0 | 1 | 2;
 	Message: string;
 	Status: boolean;
 }
