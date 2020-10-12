@@ -215,7 +215,7 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 		generator.Imports = append(
 			generator.Imports,
 			importType{
-				Path:  "./classes" + url + "/types",
+				Path:  "./" + path.Join("classes", url, "types"),
 				Pairs: pairs,
 			},
 		)
