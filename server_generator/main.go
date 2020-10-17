@@ -399,7 +399,9 @@ func parsePackages(
 				Package:                packageName,
 				Controllers:            cs,
 				ControllerPropsPackage: controllerPropsPackage,
-			}, true, template.FuncMap{})
+			}, true, template.FuncMap{
+				"GetDefaultJsonFile": getDefaultJsonName,
+			})
 			if err != nil {
 				return nil, err
 			}

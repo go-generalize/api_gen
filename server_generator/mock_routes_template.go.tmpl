@@ -19,7 +19,7 @@ type MockRoutes struct {
 
 // apiGenMockOption api-gen mock options
 type apiGenMockOption struct {
-	File string `json:"file"`
+	FilePrefix string `json:"file_prefix"`
 }
 
 // NewRoutes ...
@@ -56,6 +56,15 @@ func (r *MockRoutes) {{ .HandlerName }}(p *props.ControllerProps) echo.HandlerFu
 		}
 
 		res := new({{ .ResponseStructName }})
+		loadJsonFile := "{{ GetDefaultJsonFile . }}.json"
+		if option.FilePrefix != "" {
+			loadJsonFile = option.FilePrefix
+		}
+		if !strings.HasSuffix(loadJsonFile, ".json") {
+			loadJsonFile = fmt.Sprintf("{{ GetDefaultJsonFile . }}-%s.json", option.FilePrefix)
+		}
+		log.Printf(".HTTPMethod: load %s", loadJsonFile)
+
 		return c.JSON(http.StatusOK, res)
 	}
 }
