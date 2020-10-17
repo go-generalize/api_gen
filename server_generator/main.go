@@ -251,14 +251,15 @@ func run(arg string) error {
 	}
 
 	bootstrapFilePath := filepath.Join(rootPath+"/", "bootstrap_gen.go")
+	bootstraptemplate := &BootstrapTemplate{
+		AppVersion:             common.AppVersion,
+		PackageName:            packageName,
+		Bootstraps:             bootstrapTemplates,
+		ControllerPropsPackage: controllerPropsPackage,
+	}
 	err = createFromTemplate(
 		"/bootstrap_template.go.tmpl",
-		bootstrapFilePath, &BootstrapTemplate{
-			AppVersion:             common.AppVersion,
-			PackageName:            packageName,
-			Bootstraps:             bootstrapTemplates,
-			ControllerPropsPackage: controllerPropsPackage,
-		},
+		bootstrapFilePath, bootstraptemplate,
 		true, template.FuncMap{
 			"GetGroupName": getGroupName,
 			"GetNewRoute":  getNewRoute,
@@ -267,7 +268,7 @@ func run(arg string) error {
 		return err
 	}
 
-	err = createMock(rootPath, controllerPropsPackage, apiRootPackage)
+	err = createMock(rootPath, controllerPropsPackage, apiRootPackage, bootstraptemplate)
 	if err != nil {
 		return err
 	}
@@ -391,27 +392,44 @@ func parsePackages(
 	return controllers, nil
 }
 
-func createMock(rootPath, controllerPropsPackage, rootPackage string) error {
-	mockPath := filepath.Join(rootPath+"/", "/cmd/mock/")
-	if i, err := os.Stat(mockPath); err == nil {
-		if !i.IsDir() {
-			return xerrors.Errorf("%s is must be directory: %w", mockPath, err)
+func createMock(rootPath, controllerPropsPackage, rootPackage string, bootstrapTemplate *BootstrapTemplate) error {
+	// cmd/mock/main.go
+	{
+		mockPath := filepath.Join(rootPath+"/", "/cmd/mock/")
+		if i, err := os.Stat(mockPath); err == nil {
+			if !i.IsDir() {
+				return xerrors.Errorf("%s is must be directory: %w", mockPath, err)
+			}
+		} else {
+			err = os.MkdirAll(mockPath, 0775)
+			if err != nil {
+				return xerrors.Errorf("Failed create an %s: %w", mockPath, err)
+			}
 		}
-	} else {
-		err = os.MkdirAll(mockPath, 0775)
+
+		mockMainPath := filepath.Join(mockPath, "main.go")
+		err := createFromTemplate("/mock_main.go.tmpl", mockMainPath, &MockMainTemplate{
+			AppVersion:             common.AppVersion,
+			ApiPackageRoot:         rootPackage,
+			ControllerPropsPackage: controllerPropsPackage,
+		}, true, template.FuncMap{})
 		if err != nil {
-			return xerrors.Errorf("Failed create an %s: %w", mockPath, err)
+			return xerrors.Errorf("Failed create an %s: %w", mockMainPath, err)
 		}
 	}
 
-	mockMainPath := filepath.Join(mockPath, "main.go")
-	err := createFromTemplate("/mock_main.go.tmpl", mockMainPath, &MockMainTemplate{
-		AppVersion:             common.AppVersion,
-		ApiPackageRoot:         rootPackage,
-		ControllerPropsPackage: controllerPropsPackage,
-	}, true, template.FuncMap{})
-	if err != nil {
-		return xerrors.Errorf("Failed create an %s: %w", mockMainPath, err)
+	// mock_bootstrap.go
+	{
+		mockBootstrapPath := filepath.Join(rootPath+"/", "mock_bootstrap.go")
+		err := createFromTemplate("/mock_bootstrap_template.go.tmpl", mockBootstrapPath, bootstrapTemplate,
+			true, template.FuncMap{
+				"GetGroupName":    getGroupName,
+				"GetNewMockRoute": getNewMockRoute,
+			},
+		)
+		if err != nil {
+			return xerrors.Errorf("Failed create an %s: %w", mockBootstrapPath, err)
+		}
 	}
 
 	return nil

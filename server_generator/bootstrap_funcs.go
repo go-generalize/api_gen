@@ -22,3 +22,15 @@ func getNewRoute(b *BootstrapTemplates) string {
 
 	return fmt.Sprintf("%s.NewRoutes(p, %sGroup)", b.RouteGroupName, b.RouteGroupName)
 }
+
+func getNewMockRoute(b *BootstrapTemplates) string {
+	if b.Controller == nil {
+		return ""
+	}
+
+	if b.Endpoint == "" {
+		return fmt.Sprintf("NewMockRoutes(p, %sGroup)", b.RouteGroupName)
+	}
+
+	return fmt.Sprintf("%s.NewMockRoutes(p, %sGroup)", b.RouteGroupName, b.RouteGroupName)
+}
