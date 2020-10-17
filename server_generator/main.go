@@ -360,7 +360,6 @@ func parsePackages(
 
 	controllers := make([]*ControllerTemplate, 0)
 	for dir, cs := range routes {
-		routePath := filepath.Join(dir+"/", "routes_gen.go")
 		packageName := ""
 		if len(cs) > 0 {
 			packageName = cs[0].Package
@@ -378,14 +377,32 @@ func parsePackages(
 
 		controllers = append(controllers, cs...)
 
-		err := createFromTemplate("/routes_template.go.tmpl", routePath, &RoutesTemplate{
-			AppVersion:             common.AppVersion,
-			Package:                packageName,
-			Controllers:            cs,
-			ControllerPropsPackage: controllerPropsPackage,
-		}, true, template.FuncMap{})
-		if err != nil {
-			return nil, err
+		// routes_gen.go
+		{
+			routePath := filepath.Join(dir+"/", "routes_gen.go")
+			err := createFromTemplate("/routes_template.go.tmpl", routePath, &RoutesTemplate{
+				AppVersion:             common.AppVersion,
+				Package:                packageName,
+				Controllers:            cs,
+				ControllerPropsPackage: controllerPropsPackage,
+			}, true, template.FuncMap{})
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		// mock_routes_gen.go
+		{
+			routePath := filepath.Join(dir+"/", "mock_routes_gen.go")
+			err := createFromTemplate("/mock_routes_template.go.tmpl", routePath, &RoutesTemplate{
+				AppVersion:             common.AppVersion,
+				Package:                packageName,
+				Controllers:            cs,
+				ControllerPropsPackage: controllerPropsPackage,
+			}, true, template.FuncMap{})
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 
@@ -418,9 +435,9 @@ func createMock(rootPath, controllerPropsPackage, rootPackage string, bootstrapT
 		}
 	}
 
-	// mock_bootstrap.go
+	// mock_bootstrap_gen.go
 	{
-		mockBootstrapPath := filepath.Join(rootPath+"/", "mock_bootstrap.go")
+		mockBootstrapPath := filepath.Join(rootPath+"/", "mock_bootstrap_gen.go")
 		err := createFromTemplate("/mock_bootstrap_template.go.tmpl", mockBootstrapPath, bootstrapTemplate,
 			true, template.FuncMap{
 				"GetGroupName":    getGroupName,
