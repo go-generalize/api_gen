@@ -17,6 +17,7 @@ import (
 	_ "github.com/go-generalize/api_gen/server_generator/statik"
 	"github.com/iancoleman/strcase"
 	"github.com/rakyll/statik/fs"
+	"golang.org/x/xerrors"
 )
 
 var supportHTTPMethod = []string{
@@ -71,6 +72,15 @@ func run(arg string) error {
 	bootstrapTemplates := make([]*BootstrapTemplates, 0)
 	packageName := ""
 	endpointReplaceMatchRule := regexp.MustCompile(`:(.*?)/`)
+
+	var apiRootPackage string
+	{
+		r, err := filepath.Rel(packageRootPath, rootPath)
+		if err != nil {
+			return err
+		}
+		apiRootPackage = filepath.Join(basePackagePath+"/", r)
+	}
 
 	var controllerPropsPackage string
 	{
@@ -256,6 +266,12 @@ func run(arg string) error {
 	if err != nil {
 		return err
 	}
+
+	err = createMock(rootPath, controllerPropsPackage, apiRootPackage)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -375,6 +391,32 @@ func parsePackages(
 	return controllers, nil
 }
 
+func createMock(rootPath, controllerPropsPackage, rootPackage string) error {
+	mockPath := filepath.Join(rootPath+"/", "/cmd/mock/")
+	if i, err := os.Stat(mockPath); err == nil {
+		if !i.IsDir() {
+			return xerrors.Errorf("%s is must be directory: %w", mockPath, err)
+		}
+	} else {
+		err = os.MkdirAll(mockPath, 0775)
+		if err != nil {
+			return xerrors.Errorf("Failed create an %s: %w", mockPath, err)
+		}
+	}
+
+	mockMainPath := filepath.Join(mockPath, "main.go")
+	err := createFromTemplate("/mock_main.go.tmpl", mockMainPath, &MockMainTemplate{
+		AppVersion:             common.AppVersion,
+		ApiPackageRoot:         rootPackage,
+		ControllerPropsPackage: controllerPropsPackage,
+	}, true, template.FuncMap{})
+	if err != nil {
+		return xerrors.Errorf("Failed create an %s: %w", mockMainPath, err)
+	}
+
+	return nil
+}
+
 func createFromTemplate(templatePath, path string, m interface{}, isOverRide bool, funcMap template.FuncMap) error {
 	_, err := os.Stat(path)
 	if err == nil {
@@ -384,40 +426,40 @@ func createFromTemplate(templatePath, path string, m interface{}, isOverRide boo
 
 		err = os.Remove(path)
 		if err != nil {
-			return err
+			return xerrors.Errorf("%s remove error: %w", path, err)
 		}
 	}
 
 	statikFs, err := fs.New()
 	if err != nil {
-		return err
+		return xerrors.Errorf("statikFs init error: %w", err)
 	}
 	f, err := statikFs.Open(templatePath)
 	if err != nil {
-		return err
+		return xerrors.Errorf("%s open error in statikFs: %w", templatePath, err)
 	}
 
 	t, err := ioutil.ReadAll(f)
 	if err != nil {
-		return err
+		return xerrors.Errorf("%s read error in statikFs: %w", templatePath, err)
 	}
 
 	tpl := template.Must(template.New("tmpl").Funcs(funcMap).Parse(string(t)))
 
 	w, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE, 0664)
 	if err != nil {
-		return err
+		return xerrors.Errorf("%s create error: %w", path, err)
 	}
 	defer w.Close()
 
 	err = tpl.Execute(w, m)
 	if err != nil {
-		return err
+		return xerrors.Errorf("template exec error in %s: %w", path, err)
 	}
 
 	_, err = ExecCommand("goimports", "-w", path)
 	if err != nil {
-		return err
+		return xerrors.Errorf("goimports exec error (%s): %w", path, err)
 	}
 
 	return nil
