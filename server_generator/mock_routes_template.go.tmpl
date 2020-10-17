@@ -35,6 +35,9 @@ func NewMockRoutes(p *props.ControllerProps, router *echo.Group, jsonDir string)
 {{ range .Controllers }}
 // {{ .HandlerName }} ...
 func (r *MockRoutes) {{ .HandlerName }}(p *props.ControllerProps, jsonDir string) echo.HandlerFunc {
+	type Mock struct {
+		Payload {{ .ResponseStructName }} `json:"payload"`
+	}
 	return func(c echo.Context) error {
 		req := new({{ .RequestStructName }})
 		if err := c.Bind(req); err != nil {
@@ -55,7 +58,6 @@ func (r *MockRoutes) {{ .HandlerName }}(p *props.ControllerProps, jsonDir string
 			}
 		}
 
-		res := new({{ .ResponseStructName }})
 		loadJsonFile := "{{ GetDefaultJsonFile . }}.json"
 		if option.FilePrefix != "" {
 			loadJsonFile = option.FilePrefix
@@ -75,7 +77,8 @@ func (r *MockRoutes) {{ .HandlerName }}(p *props.ControllerProps, jsonDir string
 			})
 		}
 
-		err = json.Unmarshal(j, res)
+        mock := new(Mock)
+		err = json.Unmarshal(j, mock)
 		if err != nil {
 			m := fmt.Sprintf("unmarshal mock json error in %s: %+v", loadJsonPath, err)
 			log.Printf(m)
@@ -85,7 +88,7 @@ func (r *MockRoutes) {{ .HandlerName }}(p *props.ControllerProps, jsonDir string
 			})
 		}
 
-		return c.JSON(http.StatusOK, res)
+		return c.JSON(http.StatusOK, mock.Payload)
 	}
 }
 {{- end }}
