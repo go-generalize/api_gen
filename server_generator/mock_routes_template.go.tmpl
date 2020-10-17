@@ -23,18 +23,18 @@ type apiGenMockOption struct {
 }
 
 // NewRoutes ...
-func NewMockRoutes(p *props.ControllerProps, router *echo.Group) *MockRoutes {
+func NewMockRoutes(p *props.ControllerProps, router *echo.Group, jsonDir string) *MockRoutes {
 	r := &MockRoutes{
 		router: router,
 	}
 {{- range .Controllers }}
-	router.{{ .HTTPMethod }}("{{ .Endpoint }}", r.{{ .HandlerName }}(p))
+	router.{{ .HTTPMethod }}("{{ .Endpoint }}", r.{{ .HandlerName }}(p, jsonDir))
 {{- end }}
 	return r
 }
 {{ range .Controllers }}
 // {{ .HandlerName }} ...
-func (r *MockRoutes) {{ .HandlerName }}(p *props.ControllerProps) echo.HandlerFunc {
+func (r *MockRoutes) {{ .HandlerName }}(p *props.ControllerProps, jsonDir string) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		req := new({{ .RequestStructName }})
 		if err := c.Bind(req); err != nil {
@@ -61,9 +61,29 @@ func (r *MockRoutes) {{ .HandlerName }}(p *props.ControllerProps) echo.HandlerFu
 			loadJsonFile = option.FilePrefix
 		}
 		if !strings.HasSuffix(loadJsonFile, ".json") {
-			loadJsonFile = fmt.Sprintf("{{ GetDefaultJsonFile . }}-%s.json", option.FilePrefix)
+			loadJsonFile = fmt.Sprintf("{{ GetDefaultJsonFile . }}_%s.json", option.FilePrefix)
 		}
-		log.Printf(".HTTPMethod: load %s", loadJsonFile)
+		loadJsonPath := filepath.Join(jsonDir, loadJsonFile)
+		log.Printf("{{ .HTTPMethod }}: load %s", loadJsonPath)
+		j, err := ioutil.ReadFile(loadJsonPath)
+		if err != nil {
+			m := fmt.Sprintf("load mock json error in %s: %+v", loadJsonPath, err)
+			log.Printf(m)
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    http.StatusInternalServerError,
+				"message": m,
+			})
+		}
+
+		err = json.Unmarshal(j, res)
+		if err != nil {
+			m := fmt.Sprintf("unmarshal mock json error in %s: %+v", loadJsonPath, err)
+			log.Printf(m)
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    http.StatusInternalServerError,
+				"message": m,
+			})
+		}
 
 		return c.JSON(http.StatusOK, res)
 	}

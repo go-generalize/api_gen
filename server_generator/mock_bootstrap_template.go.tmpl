@@ -16,7 +16,7 @@ import (
 )
 
 // Bootstrap ...
-func MockBootstrap(p *props.ControllerProps, e *echo.Echo) {
+func MockBootstrap(p *props.ControllerProps, e *echo.Echo, jsonDir string) {
 	// error handling
 	e.Use(func(before echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {

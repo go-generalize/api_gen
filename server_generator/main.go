@@ -13,6 +13,10 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/go-generalize/api_gen/server_generator/go2json"
+
+	go2tsparser "github.com/go-generalize/go2ts/pkg/parser"
+
 	"github.com/go-generalize/api_gen/common"
 	_ "github.com/go-generalize/api_gen/server_generator/statik"
 	"github.com/iancoleman/strcase"
@@ -74,11 +78,13 @@ func run(arg string) error {
 	endpointReplaceMatchRule := regexp.MustCompile(`:(.*?)/`)
 
 	var apiRootPackage string
+	var apiRootPathRel string
 	{
 		r, err := filepath.Rel(packageRootPath, rootPath)
 		if err != nil {
 			return err
 		}
+		apiRootPathRel = r
 		apiRootPackage = filepath.Join(basePackagePath+"/", r)
 	}
 
@@ -191,6 +197,12 @@ func run(arg string) error {
 			Controller:        cs[0],
 		})
 
+		// create mock json
+		err = createMockJson(rootPath, path)
+		if err != nil {
+			return err
+		}
+
 		return nil
 	})
 	if err != nil {
@@ -268,7 +280,13 @@ func run(arg string) error {
 		return err
 	}
 
-	err = createMock(rootPath, controllerPropsPackage, apiRootPackage, bootstraptemplate)
+	err = createMock(&CreateMockRequest{
+		RootPath:               rootPath,
+		ControllerPropsPackage: controllerPropsPackage,
+		ApiRootPackage:         apiRootPackage,
+		BootstrapTemplate:      bootstraptemplate,
+		ApiRootPathRel:         apiRootPathRel,
+	})
 	if err != nil {
 		return err
 	}
@@ -411,10 +429,10 @@ func parsePackages(
 	return controllers, nil
 }
 
-func createMock(rootPath, controllerPropsPackage, rootPackage string, bootstrapTemplate *BootstrapTemplate) error {
+func createMock(req *CreateMockRequest) error {
 	// cmd/mock/main.go
 	{
-		mockPath := filepath.Join(rootPath+"/", "/cmd/mock/")
+		mockPath := filepath.Join(req.RootPath+"/", "/cmd/mock/")
 		if i, err := os.Stat(mockPath); err == nil {
 			if !i.IsDir() {
 				return xerrors.Errorf("%s is must be directory: %w", mockPath, err)
@@ -429,8 +447,10 @@ func createMock(rootPath, controllerPropsPackage, rootPackage string, bootstrapT
 		mockMainPath := filepath.Join(mockPath, "main.go")
 		err := createFromTemplate("/mock_main.go.tmpl", mockMainPath, &MockMainTemplate{
 			AppVersion:             common.AppVersion,
-			ApiPackageRoot:         rootPackage,
-			ControllerPropsPackage: controllerPropsPackage,
+			ApiPackageRoot:         req.ApiRootPackage,
+			ApiRootPackageName:     filepath.Base(req.ApiRootPackage),
+			ControllerPropsPackage: req.ControllerPropsPackage,
+			DefaultJsonDirPath:     filepath.Join(req.ApiRootPathRel+"/", "mock_json/"),
 		}, true, template.FuncMap{})
 		if err != nil {
 			return xerrors.Errorf("Failed create an %s: %w", mockMainPath, err)
@@ -439,8 +459,9 @@ func createMock(rootPath, controllerPropsPackage, rootPackage string, bootstrapT
 
 	// mock_bootstrap_gen.go
 	{
-		mockBootstrapPath := filepath.Join(rootPath+"/", "mock_bootstrap_gen.go")
-		err := createFromTemplate("/mock_bootstrap_template.go.tmpl", mockBootstrapPath, bootstrapTemplate,
+		mockBootstrapPath := filepath.Join(req.RootPath+"/", "mock_bootstrap_gen.go")
+		err := createFromTemplate("/mock_bootstrap_template.go.tmpl", mockBootstrapPath,
+			req.BootstrapTemplate,
 			true, template.FuncMap{
 				"GetGroupName":    getGroupName,
 				"GetNewMockRoute": getNewMockRoute,
@@ -451,6 +472,51 @@ func createMock(rootPath, controllerPropsPackage, rootPackage string, bootstrapT
 		}
 	}
 
+	return nil
+}
+
+func createMockJson(rootPath, path string) error {
+	f, err := go2tsparser.NewParser(path, func(opt *go2tsparser.FilterOpt) bool {
+		if opt.Dependency {
+			return true
+		}
+		if !opt.BasePackage {
+			return false
+		}
+		if !opt.Exported {
+			return false
+		}
+
+		return strings.HasSuffix(opt.Name, "Request") || strings.HasSuffix(opt.Name, "Response")
+	})
+	if err != nil {
+		return err
+	}
+
+	r, err := filepath.Rel(rootPath, path)
+	if err != nil {
+		return err
+	}
+
+	jsonRoot := filepath.Join(rootPath+"/", "mock_jsons/")
+	jsonDir := filepath.Join(jsonRoot, r)
+	i, err := os.Stat(jsonDir)
+	if err == nil {
+		if !i.IsDir() {
+			return xerrors.Errorf("%s must be dir", jsonDir)
+		}
+	} else {
+		err = os.MkdirAll(jsonDir, 0775)
+		if err != nil {
+			return xerrors.Errorf("failed to create %s: %w", jsonDir, err)
+		}
+	}
+
+	ts, err := f.Parse()
+	if err != nil {
+		return err
+	}
+	go2json.NewGenerator(ts).Generate(jsonDir)
 	return nil
 }
 

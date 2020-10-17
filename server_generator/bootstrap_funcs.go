@@ -29,8 +29,8 @@ func getNewMockRoute(b *BootstrapTemplates) string {
 	}
 
 	if b.Endpoint == "" {
-		return fmt.Sprintf("NewMockRoutes(p, %sGroup)", b.RouteGroupName)
+		return fmt.Sprintf("NewMockRoutes(p, %sGroup, jsonDir)", b.RouteGroupName)
 	}
 
-	return fmt.Sprintf("%s.NewMockRoutes(p, %sGroup)", b.RouteGroupName, b.RouteGroupName)
+	return fmt.Sprintf("%s.NewMockRoutes(p, %sGroup, jsonDir)", b.RouteGroupName, b.RouteGroupName)
 }

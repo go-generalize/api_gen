@@ -7,6 +7,9 @@ import (
 )
 
 func getDefaultJsonName(c *ControllerTemplate) string {
-	m := strings.ToLower(c.HTTPMethod)
-	return fmt.Sprintf("%s-%s", m, c.Endpoint)
+	m := strings.ToUpper(c.HTTPMethod)
+	rhn := []rune(c.HandlerName)
+	opName := string(rhn[len(m):])
+
+	return fmt.Sprintf("%s_%s", m, opName)
 }
