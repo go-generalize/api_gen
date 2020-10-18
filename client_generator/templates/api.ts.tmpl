@@ -36,34 +36,32 @@ class {{ $elem.Name }} {
 		options?: {[key: string]: any}
 	): Promise<{{ $method.ResponseType }}> {
 	    const excludeParams: string[] = [{{ range $param := $method.URLParams }}'{{ $param }}', {{ end }}];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
 {{- 	if eq $method.Method "GET" }}
-		const resp = await fetch(
-			`${this.baseURL}{{ $method.Endpoint }}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
-			{
-				method: "{{ $method.Method }}",
-				headers: {
-					...this.headers,
-					...headers,
-				},
-				...this.options,
-				...options,
-			}
-		);
+		const url = `${this.baseURL}{{ $method.Endpoint }}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
 {{- 	else }}
+		const url = `${this.baseURL}{{ $method.Endpoint }}`;
+{{-      end }}
 		const resp = await fetch(
-			`${this.baseURL}{{ $method.Endpoint }}`,
+			url,
 			{
 				method: "{{ $method.Method }}",
+{{- 	if ne $method.Method "GET" }}
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+{{-       end }}
 				headers: {
 					...this.headers,
 					...headers,
+					...mockHeaders,
 				},
 				...this.options,
 				...options,
 			}
 		);
-{{- 	end }}
 
 		if (Math.floor(resp.status / 100) !== 2) {
 			const responseText = await resp.text();
@@ -130,34 +128,33 @@ export class APIClient {
 		options?: {[key: string]: any}
 	): Promise<{{ $method.ResponseType }}> {
 	    const excludeParams: string[] = [{{ range $param := $method.URLParams }}'{{ $param }}', {{ end }}];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
 {{- 	if eq $method.Method "GET" }}
-		const resp = await fetch(
-			`${this.baseURL}{{ $method.Endpoint }}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
-			{
-				method: "{{ $method.Method }}",
-				headers: {
-					...this.headers,
-					...headers,
-				},
-				...this.options,
-				...options,
-			}
-		);
+		const url = `${this.baseURL}{{ $method.Endpoint }}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
 {{- 	else }}
+		const url = `${this.baseURL}{{ $method.Endpoint }}`;
+{{      end }}
 		const resp = await fetch(
-			`${this.baseURL}{{ $method.Endpoint }}`,
+			url,
 			{
 				method: "{{ $method.Method }}",
+{{- 	if ne $method.Method "GET" }}
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+{{-       end }}
 				headers: {
 					...this.headers,
 					...headers,
+					...mockHeaders,
 				},
 				...this.options,
 				...options,
 			}
 		);
-{{ end }}
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
@@ -196,4 +193,9 @@ export class ApiError extends Error {
 	get response(): string {
         return this._response;
     }
+}
+
+export interface MockOption {
+	wait_ms: number;
+	target_file: string;
 }

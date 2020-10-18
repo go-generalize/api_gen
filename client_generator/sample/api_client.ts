@@ -3,29 +3,27 @@
 // generated version: unknown
 
 import {
-	PostCreateTableRequest as PostCreateTableRequest,
-	PostCreateTableResponse as PostCreateTableResponse,
-	PostCreateUserRequest as PostCreateUserRequest,
-	PostCreateUserResponse as PostCreateUserResponse,
-} from './classes//types';
-import {
 	GetArticleRequest as ServiceGetArticleRequest,
 	GetArticleResponse as ServiceGetArticleResponse,
 } from './classes/service/types';
+
 import {
 	PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest,
 	PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse,
 	PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest,
 	PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse,
 } from './classes/service/user/types';
+
 import {
 	PutJobRequest as ServiceUser2UserIDJobIDPutJobRequest,
 	PutJobResponse as ServiceUser2UserIDJobIDPutJobResponse,
 } from './classes/service/user2/_userID/_JobID/types';
+
 import {
 	GetUserJobGetRequest as ServiceUser2UserIDGetUserJobGetRequest,
 	GetUserJobGetResponse as ServiceUser2UserIDGetUserJobGetResponse,
 } from './classes/service/user2/_userID/types';
+
 import {
 	GetUserRequest as ServiceUser2GetUserRequest,
 	GetUserResponse as ServiceUser2GetUserResponse,
@@ -35,35 +33,20 @@ import {
 	PostUpdateUserPasswordResponse as ServiceUser2PostUpdateUserPasswordResponse,
 } from './classes/service/user2/types';
 
+import {
+	PostCreateTableRequest as PostCreateTableRequest,
+	PostCreateTableResponse as PostCreateTableResponse,
+	PostCreateUserRequest as PostCreateUserRequest,
+	PostCreateUserResponse as PostCreateUserResponse,
+} from './classes/types';
 
-class PropsClient {
-
-	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
-
-	}
-
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
-		let res: { [key: string]: any } = {};
-		Object.keys(obj).forEach((key) => {
-			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
-			}
-		});
-		return res;
-	}
-
-}
 
 class ServiceClient {
-
 	public static_page: ServiceStaticPageClient;
-	public table: ServiceTableClient;
 	public user: ServiceUserClient;
 	public user2: ServiceUser2Client;
 	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
-
 		this.static_page = new ServiceStaticPageClient(headers, options, baseURL);
-		this.table = new ServiceTableClient(headers, options, baseURL);
 		this.user = new ServiceUserClient(headers, options, baseURL);
 		this.user2 = new ServiceUser2Client(headers, options, baseURL);
 	}
@@ -84,13 +67,20 @@ class ServiceClient {
 		options?: {[key: string]: any}
 	): Promise<ServiceGetArticleResponse> {
 	    const excludeParams: string[] = [];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
+		const url = `${this.baseURL}/service/article?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
 		const resp = await fetch(
-			`${this.baseURL}/service/article?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
+			url,
 			{
 				method: "GET",
 				headers: {
 					...this.headers,
 					...headers,
+					...mockHeaders,
 				},
 				...this.options,
 				...options,
@@ -106,9 +96,7 @@ class ServiceClient {
 }
 
 class ServiceStaticPageClient {
-
 	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
-
 	}
 
 	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
@@ -127,13 +115,20 @@ class ServiceStaticPageClient {
 		options?: {[key: string]: any}
 	): Promise<ServiceStaticPageGetStaticPageResponse> {
 	    const excludeParams: string[] = [];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
+		const url = `${this.baseURL}/service/static_page/static_page?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
 		const resp = await fetch(
-			`${this.baseURL}/service/static_page/static_page?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
+			url,
 			{
 				method: "GET",
 				headers: {
 					...this.headers,
 					...headers,
+					...mockHeaders,
 				},
 				...this.options,
 				...options,
@@ -148,29 +143,9 @@ class ServiceStaticPageClient {
 	}
 }
 
-class ServiceTableClient {
-
-	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
-
-	}
-
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
-		let res: { [key: string]: any } = {};
-		Object.keys(obj).forEach((key) => {
-			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
-			}
-		});
-		return res;
-	}
-
-}
-
 class ServiceUser2Client {
-
 	public _userID: ServiceUser2UserIDClient;
 	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
-
 		this._userID = new ServiceUser2UserIDClient(headers, options, baseURL);
 	}
 
@@ -190,13 +165,20 @@ class ServiceUser2Client {
 		options?: {[key: string]: any}
 	): Promise<ServiceUser2GetUserResponse> {
 	    const excludeParams: string[] = ['id', ];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
+		const url = `${this.baseURL}/service/user2/${encodeURI(param.id.toString())}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
 		const resp = await fetch(
-			`${this.baseURL}/service/user2/${encodeURI(param.id.toString())}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
+			url,
 			{
 				method: "GET",
 				headers: {
 					...this.headers,
 					...headers,
+					...mockHeaders,
 				},
 				...this.options,
 				...options,
@@ -209,20 +191,28 @@ class ServiceUser2Client {
 		}
 		return (await resp.json()) as ServiceUser2GetUserResponse;
 	}
+
 	async postUpdateUserName(
 		param: ServiceUser2PostUpdateUserNameRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceUser2PostUpdateUserNameResponse> {
 	    const excludeParams: string[] = [];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
+		const url = `${this.baseURL}/service/user2/update_user_name`;
 		const resp = await fetch(
-			`${this.baseURL}/service/user2/update_user_name`,
+			url,
 			{
 				method: "POST",
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
 					...headers,
+					...mockHeaders,
 				},
 				...this.options,
 				...options,
@@ -235,20 +225,28 @@ class ServiceUser2Client {
 		}
 		return (await resp.json()) as ServiceUser2PostUpdateUserNameResponse;
 	}
+
 	async postUpdateUserPassword(
 		param: ServiceUser2PostUpdateUserPasswordRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceUser2PostUpdateUserPasswordResponse> {
 	    const excludeParams: string[] = [];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
+		const url = `${this.baseURL}/service/user2/update_user_password`;
 		const resp = await fetch(
-			`${this.baseURL}/service/user2/update_user_password`,
+			url,
 			{
 				method: "POST",
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
 					...headers,
+					...mockHeaders,
 				},
 				...this.options,
 				...options,
@@ -264,10 +262,8 @@ class ServiceUser2Client {
 }
 
 class ServiceUser2UserIDClient {
-
 	public _JobID: ServiceUser2UserIDJobIDClient;
 	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
-
 		this._JobID = new ServiceUser2UserIDJobIDClient(headers, options, baseURL);
 	}
 
@@ -287,13 +283,20 @@ class ServiceUser2UserIDClient {
 		options?: {[key: string]: any}
 	): Promise<ServiceUser2UserIDGetUserJobGetResponse> {
 	    const excludeParams: string[] = ['UserID', ];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
+		const url = `${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/user_job_get?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
 		const resp = await fetch(
-			`${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/user_job_get?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString(),
+			url,
 			{
 				method: "GET",
 				headers: {
 					...this.headers,
 					...headers,
+					...mockHeaders,
 				},
 				...this.options,
 				...options,
@@ -309,9 +312,7 @@ class ServiceUser2UserIDClient {
 }
 
 class ServiceUser2UserIDJobIDClient {
-
 	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
-
 	}
 
 	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
@@ -330,14 +331,21 @@ class ServiceUser2UserIDJobIDClient {
 		options?: {[key: string]: any}
 	): Promise<ServiceUser2UserIDJobIDPutJobResponse> {
 	    const excludeParams: string[] = ['UserID', 'JobID', ];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
+		const url = `${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/${encodeURI(param.JobID.toString())}/job`;
 		const resp = await fetch(
-			`${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/${encodeURI(param.JobID.toString())}/job`,
+			url,
 			{
 				method: "PUT",
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
 					...headers,
+					...mockHeaders,
 				},
 				...this.options,
 				...options,
@@ -353,9 +361,7 @@ class ServiceUser2UserIDJobIDClient {
 }
 
 class ServiceUserClient {
-
 	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
-
 	}
 
 	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
@@ -374,14 +380,21 @@ class ServiceUserClient {
 		options?: {[key: string]: any}
 	): Promise<ServiceUserPostUpdateUserNameResponse> {
 	    const excludeParams: string[] = [];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
+		const url = `${this.baseURL}/service/user/update_user_name`;
 		const resp = await fetch(
-			`${this.baseURL}/service/user/update_user_name`,
+			url,
 			{
 				method: "POST",
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
 					...headers,
+					...mockHeaders,
 				},
 				...this.options,
 				...options,
@@ -394,20 +407,28 @@ class ServiceUserClient {
 		}
 		return (await resp.json()) as ServiceUserPostUpdateUserNameResponse;
 	}
+
 	async postUpdateUserPassword(
 		param: ServiceUserPostUpdateUserPasswordRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceUserPostUpdateUserPasswordResponse> {
 	    const excludeParams: string[] = [];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
+		const url = `${this.baseURL}/service/user/update_user_password`;
 		const resp = await fetch(
-			`${this.baseURL}/service/user/update_user_password`,
+			url,
 			{
 				method: "POST",
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
 					...headers,
+					...mockHeaders,
 				},
 				...this.options,
 				...options,
@@ -422,13 +443,11 @@ class ServiceUserClient {
 	}
 }
 
-
 export class APIClient {
 	private headers: {[key: string]: string};
 	private options: {[key: string]: any};
 	private baseURL: string;
 
-	public props: PropsClient;
 	public service: ServiceClient;
 
 	constructor(
@@ -450,8 +469,6 @@ export class APIClient {
 		this.options = commonOptions;
 		this.headers = headers;
 
-
-		this.props = new PropsClient(headers, this.options, this.baseURL);
 		this.service = new ServiceClient(headers, this.options, this.baseURL);
 	}
 
@@ -471,14 +488,22 @@ export class APIClient {
 		options?: {[key: string]: any}
 	): Promise<PostCreateTableResponse> {
 	    const excludeParams: string[] = [];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
+		const url = `${this.baseURL}/create_table`;
+
 		const resp = await fetch(
-			`${this.baseURL}/create_table`,
+			url,
 			{
 				method: "POST",
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
 					...headers,
+					...mockHeaders,
 				},
 				...this.options,
 				...options,
@@ -498,14 +523,22 @@ export class APIClient {
 		options?: {[key: string]: any}
 	): Promise<PostCreateUserResponse> {
 	    const excludeParams: string[] = [];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
+		const url = `${this.baseURL}/create_user`;
+
 		const resp = await fetch(
-			`${this.baseURL}/create_user`,
+			url,
 			{
 				method: "POST",
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
 					...headers,
+					...mockHeaders,
 				},
 				...this.options,
 				...options,
@@ -518,7 +551,6 @@ export class APIClient {
 		}
 		return (await resp.json()) as PostCreateUserResponse;
 	}
-
 }
 
 export class ApiError extends Error {
@@ -544,4 +576,9 @@ export class ApiError extends Error {
 	get response(): string {
         return this._response;
     }
+}
+
+export interface MockOption {
+	wait_ms: string;
+	target_file: string;
 }

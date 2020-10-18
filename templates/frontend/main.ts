@@ -1,4 +1,4 @@
-import { APIClient } from "./api/api_client";
+import { APIClient, MockOption } from "./api/api_client";
 
 // the simplest
 (async () => {
@@ -39,6 +39,25 @@ import { APIClient } from "./api/api_client";
             mode: "cors" // [optional] options for fetch API 
         },
     );
+
+    console.log(resp);
+})();
+
+// mock mode
+(async () => {
+    const client = new APIClient();
+    const mockOption: MockOption = {
+        wait_ms: 10,
+        target_file: 'error'
+    }
+
+    const resp = await client.postCreateUser({
+        ID: "id",
+        Password: "password",
+        Gender: 0,
+    }, undefined, {
+        'mock_option': mockOption,
+    });
 
     console.log(resp);
 })();

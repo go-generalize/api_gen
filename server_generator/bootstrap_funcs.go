@@ -1,7 +1,9 @@
 // Package main ...
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func getGroupName(b *BootstrapTemplates) string {
 	if !b.HasParent {
@@ -21,4 +23,18 @@ func getNewRoute(b *BootstrapTemplates) string {
 	}
 
 	return fmt.Sprintf("%s.NewRoutes(p, %sGroup)", b.RouteGroupName, b.RouteGroupName)
+}
+
+func getNewMockRoute(b *BootstrapTemplates) string {
+	if b.Controller == nil {
+		return ""
+	}
+
+	join := fmt.Sprintf(`filepath.Join(jsonDir, "%s")`, b.RawEndpointFilePath)
+	fn := fmt.Sprintf(`NewMockRoutes(p, %sGroup, %s)`, b.RouteGroupName, join)
+
+	if b.Endpoint == "" {
+		return fn
+	}
+	return fmt.Sprintf("%s.%s", b.RouteGroupName, fn)
 }

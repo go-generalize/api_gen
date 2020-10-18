@@ -1,0 +1,17 @@
+{
+    "meta": {
+        "status": 200,
+        "match_request": {
+            "ID": 1234
+        }
+    },
+    "payload": {
+        "Body": "string",
+        "Group": [
+            "string",
+            "string",
+            "string"
+        ],
+        "ID": 1234
+    }
+}

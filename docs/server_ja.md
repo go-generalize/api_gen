@@ -26,11 +26,48 @@
 $ server_generator ./sample/
 ```
 
+#### モックサーバ
+
+モックサーバは生成対象としたディレクトリの直下に `cmd/mock/main.go` として生成される。モックサーバを起動するためにはビルドオプションで `-tags mock` を付ける必要がある。  
+また、モックサーバが返すjsonは生成対象としたディレクトリ直下に生成される`mock_jsons`へルーティングと同じ階層構造で生成される。  
+例として以下の構造で生成される。 
+```text
+interfaces/
+├── bootstrap_gen.go
+├── mock_bootstrap_gen.go
+└─── mock_jsons
+   └── post_create_user
+       └── default.json
+```
+
+jsonの構造は以下のようになっている。
+```javascript
+{
+    "meta": {
+        "status": 200,           // レスポンス ステータスコード
+        "match_request": { ... } // これに一致する場合、このjsonを返す。ただし、オプションでファイルが指定された場合はこの限りではない。
+    },
+    "payload": { ... }           // 実際に返すレスポンスのjson
+}
+```
+
+返すjsonファイルは以下のように決定される。
+1. ヘッダーでファイルが指定されているか
+2. 一致するリクエストか
+3. default.jsonを返す
+
+default.jsonは他にマッチするものがないか指定されたファイルが見つからない場合に自動的に参照するため、削除することは非推奨。他のレスポンスを返すjsonを作成する際はdefault.jsonをベースに作成することを推奨する。  
+
+モックサーバ起動手順
+```shell script
+go run -tags mock sample/cmd/mock/main.go
+```
+
 #### コードサンプル
 
 middlewareは `map[endpoint]middleware` の形式で追加していく。指定したmiddlewareはendpoint以下のすべてに適用される。
 
-[templates](../templates)にapi_genでプロジェクトを始める時のテンプレートを参照できます。
+[templates](../templates)にapi_genでプロジェクトを始める時のテンプレートを参照できる。
 
 ```go
 e := echo.New()

@@ -1,0 +1,15 @@
+{
+    "meta": {
+        "status": 200,
+        "match_request": {
+            "Gender": 1234,
+            "ID": "string",
+            "Password": "string"
+        }
+    },
+    "payload": {
+        "CreatedType": 1234,
+        "Message": "string",
+        "Status": true
+    }
+}

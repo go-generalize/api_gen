@@ -30,6 +30,45 @@
 $ server_generator ./sample/
 ```
 
+
+#### Mock server
+
+The mock server is created as `cmd/mock/main.go` directly under the directory to be created. In order to start the mock server, you should add the build option `-tags mock`.  
+Moreover, the json returned by the mock server is generated in the same hierarchical structure as the routing to `mock_jsons` which is generated directly under the directory to be generated.  
+As an example, json is generated with the following structure. 
+```text
+interfaces/
+├── bootstrap_gen.go
+├── mock_bootstrap_gen.go
+└─── mock_jsons
+   └── post_create_user
+       └── default.json
+```
+
+The structure of json is as follows.
+```javascript
+{
+    "meta": {
+        "status": 200,           // Response http status code
+        "match_request": { ... } // If it matches, this json is returned. If the file is specified as an option, however, this is not required.
+    },
+    "payload": { ... }           // The actual response json to be returned
+}
+```
+
+The json file to be returned is determined by the following rules.
+1. whether the file is specified in the header
+2. matching requests ("match_request")
+3. return default.json
+
+Because default.json is automatically referenced when no other matches or the specified file is not found, it is not recommended to delete it. It is recommended to create json files that return other responses based on default.json.  
+
+Mock server startup procedure.
+```shell script
+go run -tags mock sample/cmd/mock/main.go
+```
+
+
 #### Example
 
 You can define middlewares in `map[endpoint]middleware`.

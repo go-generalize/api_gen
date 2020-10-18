@@ -49,14 +49,22 @@ export class APIClient {
 		options?: {[key: string]: any}
 	): Promise<PostCreateUserResponse> {
 	    const excludeParams: string[] = ['ID', ];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
+		const url = `${this.baseURL}/${encodeURI(param.ID.toString())}`;
+
 		const resp = await fetch(
-			`${this.baseURL}/${encodeURI(param.ID.toString())}`,
+			url,
 			{
 				method: "POST",
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
 					...this.headers,
 					...headers,
+					...mockHeaders,
 				},
 				...this.options,
 				...options,
@@ -94,4 +102,9 @@ export class ApiError extends Error {
 	get response(): string {
         return this._response;
     }
+}
+
+export interface MockOption {
+	wait_ms: number;
+	target_file: string;
 }

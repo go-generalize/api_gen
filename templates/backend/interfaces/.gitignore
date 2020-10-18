@@ -1,2 +1,4 @@
 props/
 *_gen.go
+cmd/
+mock_jsons/
