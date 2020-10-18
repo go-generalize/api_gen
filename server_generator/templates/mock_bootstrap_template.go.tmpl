@@ -7,6 +7,7 @@ package {{ .PackageName }}
 import (
 	"log"
 	"net/http"
+	"path/filepath"
 {{ range $i, $v := .Bootstraps }}{{ if ne .PackagePath "" }}
 	{{ if ne $v.ImportPackageName "" }}{{ $v.ImportPackageName }} {{ end }}"{{ $v.PackagePath }}"{{ end }}
 {{- end }}
@@ -41,6 +42,6 @@ func MockBootstrap(p *props.ControllerProps, e *echo.Echo, jsonDir string) {
 	})
 {{ range $i, $v := .Bootstraps }}
 	{{ $v.RouteGroupName }}Group := {{ GetGroupName $v }}.Group("{{ $v.Endpoint }}")
-    {{ GetNewMockRoute $v}}
+	{{ GetNewMockRoute $v}}
 {{- end }}
 }
