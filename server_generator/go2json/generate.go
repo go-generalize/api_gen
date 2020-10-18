@@ -177,6 +177,10 @@ func (g *Generator) Generate(dir string) error {
 }
 
 func (g *Generator) generateType(t tstypes.Type) interface{} {
+	if t == nil {
+		return nil
+	}
+
 	switch v := t.(type) {
 	case *tstypes.Array:
 		return g.generateArray(v)

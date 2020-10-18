@@ -102,7 +102,15 @@ func validateRequestByEndpointParams(fset *token.FileSet, structType *ast.Struct
 			return fmt.Errorf("%+v: 同じ行に複数のパラメータを記述することはできません。", fields.Names)
 		}
 
-		fieldName := fields.Names[0].Name
+		fieldName := ""
+		if len(fields.Names) > 0 {
+			fieldName = fields.Names[0].Name
+		} else {
+			switch t := fields.Type.(type) {
+			case *ast.SelectorExpr:
+				fieldName = t.Sel.Name
+			}
+		}
 		if fields.Tag != nil {
 			tags := reflect.StructTag(strings.Trim(fields.Tag.Value, "`"))
 			if paramTag, ok := tags.Lookup("param"); ok {
@@ -225,7 +233,15 @@ func getFieldNameFromStructAndEndpointParams(
 	targetTag := ""
 	var tags reflect.StructTag
 
-	fName := f.Names[0].Name
+	fName := ""
+	if len(f.Names) > 0 {
+		fName = f.Names[0].Name
+	} else {
+		switch t := f.Type.(type) {
+		case *ast.SelectorExpr:
+			fName = t.Sel.Name
+		}
+	}
 	var fType RequestParamType
 
 	if f.Tag != nil {
