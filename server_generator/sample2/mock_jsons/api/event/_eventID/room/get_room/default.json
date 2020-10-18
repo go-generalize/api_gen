@@ -2,10 +2,8 @@
     "meta": {
         "status": 200,
         "match_request": {
-            "UserID": "string"
+            "ID": "string"
         }
     },
-    "payload": {
-        "JobName": "string"
-    }
+    "payload": {}
 }

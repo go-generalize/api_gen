@@ -133,6 +133,8 @@ func (g *Generator) Generate(dir string) error {
 		if err != nil {
 			return xerrors.Errorf("GenerateType Marshal error at %s: %w", c, err)
 		}
+		// append \n
+		jsonByte = append(jsonByte, 0xa)
 
 		httpMethod := ""
 		httpMethods := []string{
