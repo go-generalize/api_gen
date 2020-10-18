@@ -11,6 +11,19 @@ Typescript+fetchを利用したライブラリが生成される。
 fetchに非対応のブラウザに対応するには[Polyfill](https://github.com/github/fetch)を使って対応する。    
 eslintなどを導入する場合は、自動生成をignoreに追加することを推奨する。
 
+### モックサーバ
+
+server_generatorではモックサーバをサポートしています。モックデータの返し方の詳細に関してはserver_generatorのドキュメントを参照。  
+モックサーバへのリクエストは通常のclient_generatorが生成したクライアントから行える。ただし、いくつかのオプションが存在しており、これらは `Api-Gen-Option` ヘッダーでJSONエンコードされモックサーバへ送信される。  
+オプションの指定方法はclient_generatorの生成したコードのオプション引数にて `'mock_option'` をキーとしたオブジェクトを渡す必要がある。  
+オプションの詳細は以下のとおり。
+```javascript
+{
+    wait_ms: 10,           // モックサーバからの応答を指定したミリ秒遅延させる。 (例では1000ms)
+    target_file: 'error'   // モックサーバが参照するjsonファイルを固定する。拡張子のjsonは省略することが可能。 (例ではerror.json)
+}
+```
+
 ### 生成について
 
 [templates](../templates) を利用した場合、[templates/frontend](../templates/frontend)にて `make generate`を実行することで簡単に生成できる。
@@ -19,23 +32,22 @@ eslintなどを導入する場合は、自動生成をignoreに追加するこ�
 - api/
     - api_client.ts
     - classes/
-        - {HTTP Method}{Endpoint Name}{Request/Response}.ts
+        - types.ts
 
 以下が実装例です。
 
 ```typescript
-import { PostCreateUserRequest } from "./api/classes/PostCreateUserRequest";
-import { APIClient } from "./api/api_client";
+import { APIClient, MockOption } from "./api/api_client";
 
 // the simplest
 (async () => {
     const client = new APIClient();
 
-    const resp = await client.postCreateUser(new PostCreateUserRequest({
+    const resp = await client.postCreateUser({
         ID: "id",
         Password: "password",
         Gender: 0,
-    }));
+    });
 
     console.log(resp);
 })();
@@ -54,11 +66,11 @@ import { APIClient } from "./api/api_client";
     );
 
     const resp = await client.postCreateUser(
-        new PostCreateUserRequest({
+        {
             ID: "id",
             Password: "password",
             Gender: 0,
-        }),
+        },
         {
             "X-Foobar": "hoge", // [optional] custom headers
         },
@@ -66,6 +78,25 @@ import { APIClient } from "./api/api_client";
             mode: "cors" // [optional] options for fetch API 
         },
     );
+
+    console.log(resp);
+})();
+
+// mock mode
+(async () => {
+    const client = new APIClient();
+    const mockOption: MockOption = {
+        wait_ms: 1000,
+        target_file: 'error'
+    }
+
+    const resp = await client.postCreateUser({
+        ID: "id",
+        Password: "password",
+        Gender: 0,
+    }, undefined, {
+        'mock_option': mockOption,
+    });
 
     console.log(resp);
 })();
