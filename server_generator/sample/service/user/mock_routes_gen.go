@@ -68,12 +68,12 @@ func (r *MockRoutes) PostUpdateUserName(p *props.ControllerProps, jsonDir string
 		}
 
 		option := &apiGenMockOption{}
-		xago := c.Request().Header.Get("X-Api-Gen-Option")
-		if xago != "" {
-			if err := json.Unmarshal([]byte(xago), option); err != nil {
+		ago := c.Request().Header.Get("Api-Gen-Option")
+		if ago != "" {
+			if err := json.Unmarshal([]byte(ago), option); err != nil {
 				return c.JSON(http.StatusBadRequest, map[string]interface{}{
 					"code":    http.StatusBadRequest,
-					"message": "invalid X-Api-Gen-Option.",
+					"message": "invalid Api-Gen-Option.",
 				})
 			}
 		}
@@ -182,12 +182,12 @@ func (r *MockRoutes) PostUpdateUserPassword(p *props.ControllerProps, jsonDir st
 		}
 
 		option := &apiGenMockOption{}
-		xago := c.Request().Header.Get("X-Api-Gen-Option")
-		if xago != "" {
-			if err := json.Unmarshal([]byte(xago), option); err != nil {
+		ago := c.Request().Header.Get("Api-Gen-Option")
+		if ago != "" {
+			if err := json.Unmarshal([]byte(ago), option); err != nil {
 				return c.JSON(http.StatusBadRequest, map[string]interface{}{
 					"code":    http.StatusBadRequest,
-					"message": "invalid X-Api-Gen-Option.",
+					"message": "invalid Api-Gen-Option.",
 				})
 			}
 		}

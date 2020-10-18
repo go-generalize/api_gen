@@ -11,7 +11,7 @@ import (
 	"log"
 	"strings"
 
-	"{{ .ApiPackageRoot }}"
+	"{{ .APIPackageRoot }}"
 	"{{ .ControllerPropsPackage }}"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -19,7 +19,7 @@ import (
 
 func main() {
 	port := flag.Int("port", 15000, "mock server listen port")
-	jsonDir := flag.String("json-dir", "{{ .DefaultJsonDirPath }}", "mock jsons directory")
+	jsonDir := flag.String("json-dir", "{{ .DefaultJSONDirPath }}", "mock jsons directory")
 	flag.Parse()
 
 	jsonDirPath := *jsonDir
@@ -42,7 +42,7 @@ func main() {
 		}
 	})
 
-	{{ .ApiRootPackageName }}.MockBootstrap(p, e, jsonDirPath)
+	{{ .APIRootPackageName }}.MockBootstrap(p, e, jsonDirPath)
 
 	fmt.Println("All routes are...")
 	for _, r := range e.Routes() {
