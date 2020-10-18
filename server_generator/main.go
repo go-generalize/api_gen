@@ -200,7 +200,7 @@ func run(arg string) error {
 		})
 
 		// create mock json
-		err = createMockJson(rootPath, path)
+		err = createMockJSON(rootPath, path)
 		if err != nil {
 			return err
 		}
@@ -287,7 +287,7 @@ func run(arg string) error {
 		ControllerPropsPackage: controllerPropsPackage,
 		ApiRootPackage:         apiRootPackage,
 		BootstrapTemplate:      bootstraptemplate,
-		ApiRootPathRel:         apiRootPathRel,
+		APIRootPathRel:         apiRootPathRel,
 	})
 	if err != nil {
 		return err
@@ -420,7 +420,7 @@ func parsePackages(
 				Controllers:            cs,
 				ControllerPropsPackage: controllerPropsPackage,
 			}, true, template.FuncMap{
-				"GetJsonDir": getJsonDir,
+				"GetJSONDir": getJSONDir,
 			})
 			if err != nil {
 				return nil, err
@@ -449,10 +449,10 @@ func createMock(req *CreateMockRequest) error {
 		mockMainPath := filepath.Join(mockPath, "main.go")
 		err := createFromTemplate("/mock_main.go.tmpl", mockMainPath, &MockMainTemplate{
 			AppVersion:             common.AppVersion,
-			ApiPackageRoot:         req.ApiRootPackage,
-			ApiRootPackageName:     filepath.Base(req.ApiRootPackage),
+			APIPackageRoot:         req.ApiRootPackage,
+			APIRootPackageName:     filepath.Base(req.ApiRootPackage),
 			ControllerPropsPackage: req.ControllerPropsPackage,
-			DefaultJsonDirPath:     filepath.Join(req.ApiRootPathRel+"/", "mock_jsons/"),
+			DefaultJSONDirPath:     filepath.Join(req.APIRootPathRel+"/", "mock_jsons/"),
 		}, true, template.FuncMap{})
 		if err != nil {
 			return xerrors.Errorf("Failed create an %s: %w", mockMainPath, err)
@@ -477,7 +477,7 @@ func createMock(req *CreateMockRequest) error {
 	return nil
 }
 
-func createMockJson(rootPath, path string) error {
+func createMockJSON(rootPath, path string) error {
 	f, err := go2tsparser.NewParser(path, func(opt *go2tsparser.FilterOpt) bool {
 		if opt.Dependency {
 			return true

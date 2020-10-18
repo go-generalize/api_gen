@@ -1,3 +1,4 @@
+// Package go2json ...
 package go2json
 
 import (

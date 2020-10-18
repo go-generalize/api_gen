@@ -155,21 +155,21 @@ func (g *Generator) Generate(dir string) error {
 
 		rc := []rune(c)
 		opName := strcase.ToSnake(string(rc[len(httpMethod):]))
-		opJsonDir := filepath.Join(dir+"/", fmt.Sprintf("%s_%s/", httpMethod, opName))
+		opJSONDir := filepath.Join(dir+"/", fmt.Sprintf("%s_%s/", httpMethod, opName))
 		{
-			if i, err := os.Stat(opJsonDir); err == nil {
+			if i, err := os.Stat(opJSONDir); err == nil {
 				if !i.IsDir() {
-					return xerrors.Errorf("%s must be directory.", opJsonDir)
+					return xerrors.Errorf("%s must be directory.", opJSONDir)
 				}
 			} else {
-				err = os.MkdirAll(opJsonDir, 0775)
+				err = os.MkdirAll(opJSONDir, 0775)
 				if err != nil {
-					return xerrors.Errorf("Failed to create %s: %w", opJsonDir, err)
+					return xerrors.Errorf("Failed to create %s: %w", opJSONDir, err)
 				}
 			}
 		}
 
-		jsonPath := filepath.Join(opJsonDir, "/default.json")
+		jsonPath := filepath.Join(opJSONDir, "/default.json")
 		err = ioutil.WriteFile(jsonPath, jsonByte, 0664)
 		if err != nil {
 			return xerrors.Errorf("Write mock json error in %s: %w", jsonPath, err)

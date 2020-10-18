@@ -40,7 +40,7 @@ func NewMockRoutes(p *props.ControllerProps, router *echo.Group, jsonDir string)
 	}
 {{- range .Controllers }}
 	{
-		jd := filepath.Join(jsonDir, "/{{ GetJsonDir . }}/")
+		jd := filepath.Join(jsonDir, "/{{ GetJSONDir . }}/")
 		router.{{ .HTTPMethod }}("{{ .Endpoint }}", r.{{ .HandlerName }}(p, jd))
 	}
 {{- end }}

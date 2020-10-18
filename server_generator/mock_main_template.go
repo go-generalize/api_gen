@@ -7,14 +7,14 @@ type CreateMockRequest struct {
 	ControllerPropsPackage string
 	ApiRootPackage         string
 	BootstrapTemplate      *BootstrapTemplate
-	ApiRootPathRel         string
+	APIRootPathRel         string
 }
 
 // MockMainTemplate ...
 type MockMainTemplate struct {
 	AppVersion             string
 	ControllerPropsPackage string
-	ApiPackageRoot         string
-	ApiRootPackageName     string
-	DefaultJsonDirPath     string
+	APIPackageRoot         string
+	APIRootPackageName     string
+	DefaultJSONDirPath     string
 }

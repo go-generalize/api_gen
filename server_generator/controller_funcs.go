@@ -8,7 +8,7 @@ import (
 	"github.com/iancoleman/strcase"
 )
 
-func getJsonDir(c *ControllerTemplate) string {
+func getJSONDir(c *ControllerTemplate) string {
 	m := strings.ToLower(c.HTTPMethod)
 	rhn := []rune(c.HandlerName)
 	opName := strcase.ToSnake(string(rhn[len(m):]))
