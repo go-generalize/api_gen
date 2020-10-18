@@ -46,7 +46,8 @@ func NewMockRoutes(p *props.ControllerProps, router *echo.Group, jsonDir string)
 {{- end }}
 	return r
 }
-{{ range .Controllers }}
+{{- range .Controllers }}
+
 // {{ .HandlerName }} ...
 func (r *MockRoutes) {{ .HandlerName }}(p *props.ControllerProps, jsonDir string) echo.HandlerFunc {
 	type Mock struct {
