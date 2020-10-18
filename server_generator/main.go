@@ -285,7 +285,7 @@ func run(arg string) error {
 	err = createMock(&CreateMockRequest{
 		RootPath:               rootPath,
 		ControllerPropsPackage: controllerPropsPackage,
-		ApiRootPackage:         apiRootPackage,
+		APIRootPackage:         apiRootPackage,
 		BootstrapTemplate:      bootstraptemplate,
 		APIRootPathRel:         apiRootPathRel,
 	})
@@ -449,8 +449,8 @@ func createMock(req *CreateMockRequest) error {
 		mockMainPath := filepath.Join(mockPath, "main.go")
 		err := createFromTemplate("/mock_main.go.tmpl", mockMainPath, &MockMainTemplate{
 			AppVersion:             common.AppVersion,
-			APIPackageRoot:         req.ApiRootPackage,
-			APIRootPackageName:     filepath.Base(req.ApiRootPackage),
+			APIPackageRoot:         req.APIRootPackage,
+			APIRootPackageName:     filepath.Base(req.APIRootPackage),
 			ControllerPropsPackage: req.ControllerPropsPackage,
 			DefaultJSONDirPath:     filepath.Join(req.APIRootPathRel+"/", "mock_jsons/"),
 		}, true, template.FuncMap{})

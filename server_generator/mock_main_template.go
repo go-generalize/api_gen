@@ -5,7 +5,7 @@ package main
 type CreateMockRequest struct {
 	RootPath               string
 	ControllerPropsPackage string
-	ApiRootPackage         string
+	APIRootPackage         string
 	BootstrapTemplate      *BootstrapTemplate
 	APIRootPathRel         string
 }
