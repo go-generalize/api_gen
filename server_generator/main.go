@@ -13,12 +13,10 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/go-generalize/api_gen/server_generator/go2json"
-
-	go2tsparser "github.com/go-generalize/go2ts/pkg/parser"
-
 	"github.com/go-generalize/api_gen/common"
+	"github.com/go-generalize/api_gen/server_generator/go2json"
 	_ "github.com/go-generalize/api_gen/server_generator/statik"
+	go2tsparser "github.com/go-generalize/go2ts/pkg/parser"
 	"github.com/iancoleman/strcase"
 	"github.com/rakyll/statik/fs"
 	"golang.org/x/xerrors"

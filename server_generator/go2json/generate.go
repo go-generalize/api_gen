@@ -12,13 +12,10 @@ import (
 	"strings"
 	"time"
 
-	"golang.org/x/xerrors"
-
-	"github.com/iancoleman/strcase"
-
-	"github.com/go-generalize/go2ts/pkg/util"
-
 	tstypes "github.com/go-generalize/go2ts/pkg/types"
+	"github.com/go-generalize/go2ts/pkg/util"
+	"github.com/iancoleman/strcase"
+	"golang.org/x/xerrors"
 )
 
 // Generator go struct->json
