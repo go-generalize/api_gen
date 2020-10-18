@@ -33,7 +33,7 @@ $ server_generator ./sample/
 
 #### Mock server
 
-The mock server is created as `cmd/mock/main.go` under the target directory. In order to start the mock server, you should add the build option `-tags mock`.  
+The mock server is created as `cmd/mock/main.go` directly under the directory to be created. In order to start the mock server, you should add the build option `-tags mock`.  
 Moreover, the json returned by the mock server is generated in the same hierarchical structure as the routing to `mock_jsons` which is generated directly under the directory to be generated.  
 As an example, json is generated with the following structure. 
 ```text
@@ -45,7 +45,7 @@ interfaces/
        └── default.json
 ```
 
-jsonの構造は以下のようになっている。
+The structure of json is as follows.
 ```javascript
 {
     "meta": {
