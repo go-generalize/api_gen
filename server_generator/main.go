@@ -102,7 +102,7 @@ func run(arg string) error {
 		controllerPropsPackage = filepath.Join(basePackagePath+"/", r)
 
 		err = createFromTemplate(
-			"/controller_props.go.tmpl",
+			"/templates/controller_props.go.tmpl",
 			filepath.Join(dir, "controller_props.go"),
 			nil, false, nil,
 		)
@@ -270,7 +270,7 @@ func run(arg string) error {
 		ControllerPropsPackage: controllerPropsPackage,
 	}
 	err = createFromTemplate(
-		"/bootstrap_template.go.tmpl",
+		"/templates/bootstrap_template.go.tmpl",
 		bootstrapFilePath, bootstraptemplate,
 		true, template.FuncMap{
 			"GetGroupName": getGroupName,
@@ -369,7 +369,7 @@ func parsePackages(
 
 		routes[createDir] = append(routes[createDir], ct)
 
-		err = createFromTemplate("/controller_template.go.tmpl",
+		err = createFromTemplate("/templates/controller_template.go.tmpl",
 			createPath, ct, false, template.FuncMap{})
 		if err != nil {
 			return nil, err
@@ -398,7 +398,7 @@ func parsePackages(
 		// routes_gen.go
 		{
 			routePath := filepath.Join(dir+"/", "routes_gen.go")
-			err := createFromTemplate("/routes_template.go.tmpl", routePath, &RoutesTemplate{
+			err := createFromTemplate("/templates/routes_template.go.tmpl", routePath, &RoutesTemplate{
 				AppVersion:             common.AppVersion,
 				Package:                packageName,
 				Controllers:            cs,
@@ -412,7 +412,7 @@ func parsePackages(
 		// mock_routes_gen.go
 		{
 			routePath := filepath.Join(dir+"/", "mock_routes_gen.go")
-			err := createFromTemplate("/mock_routes_template.go.tmpl", routePath, &RoutesTemplate{
+			err := createFromTemplate("/templates/mock_routes_template.go.tmpl", routePath, &RoutesTemplate{
 				AppVersion:             common.AppVersion,
 				Package:                packageName,
 				Controllers:            cs,
@@ -445,7 +445,7 @@ func createMock(req *CreateMockRequest) error {
 		}
 
 		mockMainPath := filepath.Join(mockPath, "main.go")
-		err := createFromTemplate("/mock_main.go.tmpl", mockMainPath, &MockMainTemplate{
+		err := createFromTemplate("/templates/mock_main.go.tmpl", mockMainPath, &MockMainTemplate{
 			AppVersion:             common.AppVersion,
 			APIPackageRoot:         req.APIRootPackage,
 			APIRootPackageName:     filepath.Base(req.APIRootPackage),
@@ -460,7 +460,7 @@ func createMock(req *CreateMockRequest) error {
 	// mock_bootstrap_gen.go
 	{
 		mockBootstrapPath := filepath.Join(req.RootPath+"/", "mock_bootstrap_gen.go")
-		err := createFromTemplate("/mock_bootstrap_template.go.tmpl", mockBootstrapPath,
+		err := createFromTemplate("/templates/mock_bootstrap_template.go.tmpl", mockBootstrapPath,
 			req.BootstrapTemplate,
 			true, template.FuncMap{
 				"GetGroupName":    getGroupName,
