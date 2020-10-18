@@ -1,0 +1,13 @@
+{
+    "meta": {
+        "status": 200,
+        "match_request": {
+            "Password": "string",
+            "PasswordConfirm": "string"
+        }
+    },
+    "payload": {
+        "Message": "string",
+        "Status": true
+    }
+}

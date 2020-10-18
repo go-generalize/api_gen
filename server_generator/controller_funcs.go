@@ -4,12 +4,14 @@ package main
 import (
 	"fmt"
 	"strings"
+
+	"github.com/iancoleman/strcase"
 )
 
-func getDefaultJsonName(c *ControllerTemplate) string {
-	m := strings.ToUpper(c.HTTPMethod)
+func getJsonDir(c *ControllerTemplate) string {
+	m := strings.ToLower(c.HTTPMethod)
 	rhn := []rune(c.HandlerName)
-	opName := string(rhn[len(m):])
+	opName := strcase.ToSnake(string(rhn[len(m):]))
 
 	return fmt.Sprintf("%s_%s", m, opName)
 }

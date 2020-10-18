@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -147,15 +148,28 @@ func (g *Generator) Generate(dir string) error {
 		uc := strings.ToUpper(c)
 		for _, h := range httpMethods {
 			if strings.HasPrefix(uc, h) {
-				httpMethod = h
+				httpMethod = strings.ToLower(h)
 				break
 			}
 		}
 
 		rc := []rune(c)
-		opName := string(rc[len(httpMethod):])
-		jsonFileName := fmt.Sprintf("%s_%s.json", httpMethod, opName)
-		jsonPath := filepath.Join(dir+"/", jsonFileName)
+		opName := strcase.ToSnake(string(rc[len(httpMethod):]))
+		opJsonDir := filepath.Join(dir+"/", fmt.Sprintf("%s_%s/", httpMethod, opName))
+		{
+			if i, err := os.Stat(opJsonDir); err == nil {
+				if !i.IsDir() {
+					return xerrors.Errorf("%s must be directory.", opJsonDir)
+				}
+			} else {
+				err = os.MkdirAll(opJsonDir, 0775)
+				if err != nil {
+					return xerrors.Errorf("Failed to create %s: %w", opJsonDir, err)
+				}
+			}
+		}
+
+		jsonPath := filepath.Join(opJsonDir, "/default.json")
 		err = ioutil.WriteFile(jsonPath, jsonByte, 0664)
 		if err != nil {
 			return xerrors.Errorf("Write mock json error in %s: %w", jsonPath, err)

@@ -166,6 +166,7 @@ func run(arg string) error {
 		}
 
 		endpointParams := make([]string, 0)
+		rawEndpointFilePath := endpointPath
 		endpointPath = strings.ReplaceAll(endpointPath, "/_", "/:")
 		endpointParam := strings.ReplaceAll(endpoint, "/_", "/:")
 		endPointParamsFromRegexp := endpointReplaceMatchRule.FindAllStringSubmatch(endpointPath+"/", -1)
@@ -190,11 +191,12 @@ func run(arg string) error {
 		}
 
 		bootstrapTemplates = append(bootstrapTemplates, &BootstrapTemplates{
-			PackagePath:       packagePath,
-			ImportPackageName: strcase.ToLowerCamel(importPackageName),
-			EndpointPath:      endpointPath,
-			Endpoint:          endpoint,
-			Controller:        cs[0],
+			PackagePath:         packagePath,
+			ImportPackageName:   strcase.ToLowerCamel(importPackageName),
+			EndpointPath:        endpointPath,
+			RawEndpointFilePath: rawEndpointFilePath,
+			Endpoint:            endpoint,
+			Controller:          cs[0],
 		})
 
 		// create mock json
@@ -418,7 +420,7 @@ func parsePackages(
 				Controllers:            cs,
 				ControllerPropsPackage: controllerPropsPackage,
 			}, true, template.FuncMap{
-				"GetDefaultJsonFile": getDefaultJsonName,
+				"GetJsonDir": getJsonDir,
 			})
 			if err != nil {
 				return nil, err
@@ -450,7 +452,7 @@ func createMock(req *CreateMockRequest) error {
 			ApiPackageRoot:         req.ApiRootPackage,
 			ApiRootPackageName:     filepath.Base(req.ApiRootPackage),
 			ControllerPropsPackage: req.ControllerPropsPackage,
-			DefaultJsonDirPath:     filepath.Join(req.ApiRootPathRel+"/", "mock_json/"),
+			DefaultJsonDirPath:     filepath.Join(req.ApiRootPathRel+"/", "mock_jsons/"),
 		}, true, template.FuncMap{})
 		if err != nil {
 			return xerrors.Errorf("Failed create an %s: %w", mockMainPath, err)
@@ -516,8 +518,8 @@ func createMockJson(rootPath, path string) error {
 	if err != nil {
 		return err
 	}
-	go2json.NewGenerator(ts).Generate(jsonDir)
-	return nil
+	err = go2json.NewGenerator(ts).Generate(jsonDir)
+	return err
 }
 
 func createFromTemplate(templatePath, path string, m interface{}, isOverRide bool, funcMap template.FuncMap) error {

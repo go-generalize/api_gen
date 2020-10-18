@@ -9,6 +9,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/go-generalize/api_gen/templates/backend/interfaces"
 	"github.com/go-generalize/api_gen/templates/backend/interfaces/props"
@@ -18,8 +19,13 @@ import (
 
 func main() {
 	port := flag.Int("port", 15000, "mock server listen port")
-	jsonDir := flag.String("json-dir", "templates/backend/interfaces/mock_json", "mock jsons directory")
+	jsonDir := flag.String("json-dir", "templates/backend/interfaces/mock_jsons", "mock jsons directory")
 	flag.Parse()
+
+	jsonDirPath := *jsonDir
+	if !strings.HasSuffix(jsonDirPath, "/") {
+		jsonDirPath += "/"
+	}
 
 	p := &props.ControllerProps{}
 	e := echo.New()
@@ -27,7 +33,7 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
 
-	interfaces.MockBootstrap(p, e, *jsonDir)
+	interfaces.MockBootstrap(p, e, jsonDirPath)
 
 	fmt.Println("All routes are...")
 	for _, r := range e.Routes() {
