@@ -60,6 +60,7 @@ func (r *MockRoutes) {{ .HandlerName }}(p *props.ControllerProps, jsonDir string
 	return func(c echo.Context) error {
 		req := new({{ .RequestStructName }})
 		if err := c.Bind(req); err != nil {
+			log.Printf("failed to JSON binding: %+v", err)
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
 				"code":    http.StatusBadRequest,
 				"message": "invalid request.",
@@ -70,6 +71,7 @@ func (r *MockRoutes) {{ .HandlerName }}(p *props.ControllerProps, jsonDir string
 		ago := c.Request().Header.Get("Api-Gen-Option")
 		if ago != "" {
 			if err := json.Unmarshal([]byte(ago), option); err != nil {
+				log.Printf("failed to JSON binding: %+v", err)
 				return c.JSON(http.StatusBadRequest, map[string]interface{}{
 					"code":    http.StatusBadRequest,
 					"message": "invalid Api-Gen-Option.",
