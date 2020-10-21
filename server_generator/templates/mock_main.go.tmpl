@@ -9,6 +9,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	"{{ .APIPackageRoot }}"
@@ -42,7 +43,7 @@ func main() {
 		}
 	})
 
-	{{ .APIRootPackageName }}.MockBootstrap(p, e, jsonDirPath)
+	{{ .APIRootPackageName }}.MockBootstrap(p, e, os.Stderr, jsonDirPath)
 
 	fmt.Println("All routes are...")
 	for _, r := range e.Routes() {

@@ -5,6 +5,7 @@
 package {{ .PackageName }}
 
 import (
+	"io"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -17,7 +18,10 @@ import (
 )
 
 // Bootstrap ...
-func MockBootstrap(p *props.ControllerProps, e *echo.Echo, jsonDir string) {
+func MockBootstrap(p *props.ControllerProps, e *echo.Echo, w io.Writer, jsonDir string) {
+	if w != nil {
+		log.SetOutput(w)
+	}
 	// error handling
 	e.Use(func(before echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {

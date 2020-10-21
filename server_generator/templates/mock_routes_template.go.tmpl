@@ -34,7 +34,10 @@ type apiGenMockOption struct {
 }
 
 // NewRoutes ...
-func NewMockRoutes(p *props.ControllerProps, router *echo.Group, jsonDir string) *MockRoutes {
+func NewMockRoutes(p *props.ControllerProps, router *echo.Group, jsonDir string, w io.Writer) *MockRoutes {
+	if w != nil {
+		log.SetOutput(w)
+	}
 	r := &MockRoutes{
 		router: router,
 	}
