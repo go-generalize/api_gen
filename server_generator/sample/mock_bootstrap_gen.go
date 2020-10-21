@@ -5,6 +5,7 @@
 package sample
 
 import (
+	"io"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -16,12 +17,13 @@ import (
 	serviceUser2UserID "github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID"
 	serviceUser2UserIDJobID "github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID/_JobID"
 	"github.com/labstack/echo/v4"
-
-	props "github.com/go-generalize/api_gen/server_generator/sample/props"
 )
 
 // Bootstrap ...
-func MockBootstrap(p *props.ControllerProps, e *echo.Echo, jsonDir string) {
+func MockBootstrap(e *echo.Echo, w io.Writer, jsonDir string) {
+	if w != nil {
+		log.SetOutput(w)
+	}
 	// error handling
 	e.Use(func(before echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {
@@ -46,17 +48,17 @@ func MockBootstrap(p *props.ControllerProps, e *echo.Echo, jsonDir string) {
 	})
 
 	rootGroup := e.Group("")
-	NewMockRoutes(p, rootGroup, filepath.Join(jsonDir, "/"))
+	NewMockRoutes(rootGroup, filepath.Join(jsonDir, "/"), w)
 	serviceGroup := rootGroup.Group("service/")
-	service.NewMockRoutes(p, serviceGroup, filepath.Join(jsonDir, "/service"))
+	service.NewMockRoutes(serviceGroup, filepath.Join(jsonDir, "/service"), w)
 	serviceStaticPageGroup := serviceGroup.Group("static_page/")
-	serviceStaticPage.NewMockRoutes(p, serviceStaticPageGroup, filepath.Join(jsonDir, "/service/static_page"))
+	serviceStaticPage.NewMockRoutes(serviceStaticPageGroup, filepath.Join(jsonDir, "/service/static_page"), w)
 	serviceUserGroup := serviceGroup.Group("user/")
-	serviceUser.NewMockRoutes(p, serviceUserGroup, filepath.Join(jsonDir, "/service/user"))
+	serviceUser.NewMockRoutes(serviceUserGroup, filepath.Join(jsonDir, "/service/user"), w)
 	serviceUser2Group := serviceGroup.Group("user2/")
-	serviceUser2.NewMockRoutes(p, serviceUser2Group, filepath.Join(jsonDir, "/service/user2"))
+	serviceUser2.NewMockRoutes(serviceUser2Group, filepath.Join(jsonDir, "/service/user2"), w)
 	serviceUser2UserIDGroup := serviceUser2Group.Group(":userID/")
-	serviceUser2UserID.NewMockRoutes(p, serviceUser2UserIDGroup, filepath.Join(jsonDir, "/service/user2/_userID"))
+	serviceUser2UserID.NewMockRoutes(serviceUser2UserIDGroup, filepath.Join(jsonDir, "/service/user2/_userID"), w)
 	serviceUser2UserIDJobIDGroup := serviceUser2UserIDGroup.Group(":JobID/")
-	serviceUser2UserIDJobID.NewMockRoutes(p, serviceUser2UserIDJobIDGroup, filepath.Join(jsonDir, "/service/user2/_userID/_JobID"))
+	serviceUser2UserIDJobID.NewMockRoutes(serviceUser2UserIDJobIDGroup, filepath.Join(jsonDir, "/service/user2/_userID/_JobID"), w)
 }

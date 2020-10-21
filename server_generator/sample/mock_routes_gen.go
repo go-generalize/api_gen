@@ -7,6 +7,7 @@ package sample
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -18,8 +19,6 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-
-	props "github.com/go-generalize/api_gen/server_generator/sample/props"
 )
 
 // MockRoutes ...
@@ -34,23 +33,26 @@ type apiGenMockOption struct {
 }
 
 // NewRoutes ...
-func NewMockRoutes(p *props.ControllerProps, router *echo.Group, jsonDir string) *MockRoutes {
+func NewMockRoutes(router *echo.Group, jsonDir string, w io.Writer) *MockRoutes {
+	if w != nil {
+		log.SetOutput(w)
+	}
 	r := &MockRoutes{
 		router: router,
 	}
 	{
-		jd := filepath.Join(jsonDir, "/post_create_table/")
-		router.POST("create_table", r.PostCreateTable(p, jd))
+		jd := filepath.Join(jsonDir, "post_create_table")
+		router.POST("create_table", r.PostCreateTable(jd))
 	}
 	{
-		jd := filepath.Join(jsonDir, "/post_create_user/")
-		router.POST("create_user", r.PostCreateUser(p, jd))
+		jd := filepath.Join(jsonDir, "post_create_user")
+		router.POST("create_user", r.PostCreateUser(jd))
 	}
 	return r
 }
 
 // PostCreateTable ...
-func (r *MockRoutes) PostCreateTable(p *props.ControllerProps, jsonDir string) echo.HandlerFunc {
+func (r *MockRoutes) PostCreateTable(jsonDir string) echo.HandlerFunc {
 	type Mock struct {
 		Meta struct {
 			Status       int                     `json:"status"`
@@ -61,6 +63,7 @@ func (r *MockRoutes) PostCreateTable(p *props.ControllerProps, jsonDir string) e
 	return func(c echo.Context) error {
 		req := new(PostCreateTableRequest)
 		if err := c.Bind(req); err != nil {
+			log.Printf("failed to JSON binding(/create_table): %+v", err)
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
 				"code":    http.StatusBadRequest,
 				"message": "invalid request.",
@@ -71,6 +74,7 @@ func (r *MockRoutes) PostCreateTable(p *props.ControllerProps, jsonDir string) e
 		ago := c.Request().Header.Get("Api-Gen-Option")
 		if ago != "" {
 			if err := json.Unmarshal([]byte(ago), option); err != nil {
+				log.Printf("failed to JSON Unmarshal to `Api-Gen-Option` header(/create_table): %+v", err)
 				return c.JSON(http.StatusBadRequest, map[string]interface{}{
 					"code":    http.StatusBadRequest,
 					"message": "invalid Api-Gen-Option.",
@@ -164,7 +168,7 @@ func (r *MockRoutes) PostCreateTable(p *props.ControllerProps, jsonDir string) e
 }
 
 // PostCreateUser ...
-func (r *MockRoutes) PostCreateUser(p *props.ControllerProps, jsonDir string) echo.HandlerFunc {
+func (r *MockRoutes) PostCreateUser(jsonDir string) echo.HandlerFunc {
 	type Mock struct {
 		Meta struct {
 			Status       int                    `json:"status"`
@@ -175,6 +179,7 @@ func (r *MockRoutes) PostCreateUser(p *props.ControllerProps, jsonDir string) ec
 	return func(c echo.Context) error {
 		req := new(PostCreateUserRequest)
 		if err := c.Bind(req); err != nil {
+			log.Printf("failed to JSON binding(/create_user): %+v", err)
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
 				"code":    http.StatusBadRequest,
 				"message": "invalid request.",
@@ -185,6 +190,7 @@ func (r *MockRoutes) PostCreateUser(p *props.ControllerProps, jsonDir string) ec
 		ago := c.Request().Header.Get("Api-Gen-Option")
 		if ago != "" {
 			if err := json.Unmarshal([]byte(ago), option); err != nil {
+				log.Printf("failed to JSON Unmarshal to `Api-Gen-Option` header(/create_user): %+v", err)
 				return c.JSON(http.StatusBadRequest, map[string]interface{}{
 					"code":    http.StatusBadRequest,
 					"message": "invalid Api-Gen-Option.",

@@ -9,10 +9,10 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/go-generalize/api_gen/server_generator/sample2"
-	"github.com/go-generalize/api_gen/server_generator/sample2/props"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -27,7 +27,6 @@ func main() {
 		jsonDirPath += "/"
 	}
 
-	p := &props.ControllerProps{}
 	e := echo.New()
 
 	e.Use(middleware.Recover())
@@ -42,7 +41,7 @@ func main() {
 		}
 	})
 
-	sample2.MockBootstrap(p, e, jsonDirPath)
+	sample2.MockBootstrap(e, os.Stderr, jsonDirPath)
 
 	fmt.Println("All routes are...")
 	for _, r := range e.Routes() {

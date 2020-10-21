@@ -4,6 +4,7 @@
 package sample
 
 import (
+	"io"
 	"log"
 	"net/http"
 
@@ -40,7 +41,13 @@ func (m MiddlewareList) ToMap() MiddlewareMap {
 }
 
 // Bootstrap ...
-func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList MiddlewareList) {
+func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList MiddlewareList, opts ...io.Writer) {
+	if len(opts) > 0 {
+		if w := opts[0]; w != nil {
+			log.SetOutput(w)
+		}
+	}
+
 	middleware := middlewareList.ToMap()
 
 	// error handling
@@ -68,25 +75,25 @@ func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList Middleware
 
 	rootGroup := e.Group("")
 	setMiddleware(rootGroup, "/", middleware)
-	NewRoutes(p, rootGroup)
+	NewRoutes(p, rootGroup, opts...)
 	serviceGroup := rootGroup.Group("service/")
 	setMiddleware(serviceGroup, "/service/", middleware)
-	service.NewRoutes(p, serviceGroup)
+	service.NewRoutes(p, serviceGroup, opts...)
 	serviceStaticPageGroup := serviceGroup.Group("static_page/")
 	setMiddleware(serviceStaticPageGroup, "/service/static_page/", middleware)
-	serviceStaticPage.NewRoutes(p, serviceStaticPageGroup)
+	serviceStaticPage.NewRoutes(p, serviceStaticPageGroup, opts...)
 	serviceUserGroup := serviceGroup.Group("user/")
 	setMiddleware(serviceUserGroup, "/service/user/", middleware)
-	serviceUser.NewRoutes(p, serviceUserGroup)
+	serviceUser.NewRoutes(p, serviceUserGroup, opts...)
 	serviceUser2Group := serviceGroup.Group("user2/")
 	setMiddleware(serviceUser2Group, "/service/user2/", middleware)
-	serviceUser2.NewRoutes(p, serviceUser2Group)
+	serviceUser2.NewRoutes(p, serviceUser2Group, opts...)
 	serviceUser2UserIDGroup := serviceUser2Group.Group(":userID/")
 	setMiddleware(serviceUser2UserIDGroup, "/service/user2/:userID/", middleware)
-	serviceUser2UserID.NewRoutes(p, serviceUser2UserIDGroup)
+	serviceUser2UserID.NewRoutes(p, serviceUser2UserIDGroup, opts...)
 	serviceUser2UserIDJobIDGroup := serviceUser2UserIDGroup.Group(":JobID/")
 	setMiddleware(serviceUser2UserIDJobIDGroup, "/service/user2/:userID/:JobID/", middleware)
-	serviceUser2UserIDJobID.NewRoutes(p, serviceUser2UserIDJobIDGroup)
+	serviceUser2UserIDJobID.NewRoutes(p, serviceUser2UserIDJobIDGroup, opts...)
 }
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {

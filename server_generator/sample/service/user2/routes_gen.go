@@ -4,6 +4,8 @@
 package user2
 
 import (
+	"io"
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -17,7 +19,12 @@ type Routes struct {
 }
 
 // NewRoutes ...
-func NewRoutes(p *props.ControllerProps, router *echo.Group) *Routes {
+func NewRoutes(p *props.ControllerProps, router *echo.Group, opts ...io.Writer) *Routes {
+	if len(opts) > 0 {
+		if w := opts[0]; w != nil {
+			log.SetOutput(w)
+		}
+	}
 	r := &Routes{
 		router: router,
 	}
@@ -33,6 +40,7 @@ func (r *Routes) GetUser(p *props.ControllerProps) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		req := new(GetUserRequest)
 		if err := c.Bind(req); err != nil {
+			log.Printf("failed to JSON binding(/service/user2/{userID}): %+v", err)
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
 				"code":    http.StatusBadRequest,
 				"message": "invalid request.",
@@ -56,6 +64,7 @@ func (r *Routes) PostUpdateUserName(p *props.ControllerProps) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		req := new(PostUpdateUserNameRequest)
 		if err := c.Bind(req); err != nil {
+			log.Printf("failed to JSON binding(/service/user2/update_user_name): %+v", err)
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
 				"code":    http.StatusBadRequest,
 				"message": "invalid request.",
@@ -79,6 +88,7 @@ func (r *Routes) PostUpdateUserPassword(p *props.ControllerProps) echo.HandlerFu
 	return func(c echo.Context) error {
 		req := new(PostUpdateUserPasswordRequest)
 		if err := c.Bind(req); err != nil {
+			log.Printf("failed to JSON binding(/service/user2/update_user_password): %+v", err)
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
 				"code":    http.StatusBadRequest,
 				"message": "invalid request.",

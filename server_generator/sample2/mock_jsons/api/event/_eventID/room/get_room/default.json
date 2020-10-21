@@ -2,7 +2,8 @@
     "meta": {
         "status": 200,
         "match_request": {
-            "ID": "string"
+            "EventID": "string",
+            "RoomID": "string"
         }
     },
     "payload": {}
