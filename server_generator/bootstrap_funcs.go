@@ -19,10 +19,10 @@ func getNewRoute(b *BootstrapTemplates) string {
 	}
 
 	if b.Endpoint == "" {
-		return fmt.Sprintf("NewRoutes(p, %sGroup)", b.RouteGroupName)
+		return fmt.Sprintf("NewRoutes(p, %sGroup, opts...)", b.RouteGroupName)
 	}
 
-	return fmt.Sprintf("%s.NewRoutes(p, %sGroup)", b.RouteGroupName, b.RouteGroupName)
+	return fmt.Sprintf("%s.NewRoutes(p, %sGroup, opts...)", b.RouteGroupName, b.RouteGroupName)
 }
 
 func getNewMockRoute(b *BootstrapTemplates) string {

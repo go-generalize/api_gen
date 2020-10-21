@@ -18,7 +18,12 @@ type Routes struct {
 }
 
 // NewRoutes ...
-func NewRoutes(p *props.ControllerProps, router *echo.Group) *Routes {
+func NewRoutes(p *props.ControllerProps, router *echo.Group, opts ...io.Writer) *Routes {
+	if len(opts) > 0 {
+		if w := opts[0]; w != nil {
+			log.SetOutput(w)
+		}
+	}
 	r := &Routes{
 		router: router,
 	}
