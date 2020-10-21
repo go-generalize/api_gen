@@ -39,7 +39,7 @@ func (r *Routes) {{ .HandlerName }}(p *props.ControllerProps) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		req := new({{ .RequestStructName }})
 		if err := c.Bind(req); err != nil {
-			log.Printf("failed to JSON binding(/{{ GetJSONDir . }}/{{ .Endpoint }}): %+v", err)
+			log.Printf("failed to JSON binding({{ .RawEndpointPath }}): %+v", err)
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
 				"code":    http.StatusBadRequest,
 				"message": "invalid request.",

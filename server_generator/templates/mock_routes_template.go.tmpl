@@ -42,7 +42,7 @@ func NewMockRoutes(router *echo.Group, jsonDir string, w io.Writer) *MockRoutes 
 	}
 {{- range .Controllers }}
 	{
-		jd := filepath.Join(jsonDir, "/{{ GetJSONDir . }}/")
+		jd := filepath.Join(jsonDir, "{{ GetJSONDir . }}")
 		router.{{ .HTTPMethod }}("{{ .Endpoint }}", r.{{ .HandlerName }}(jd))
 	}
 {{- end }}
@@ -62,7 +62,7 @@ func (r *MockRoutes) {{ .HandlerName }}(jsonDir string) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		req := new({{ .RequestStructName }})
 		if err := c.Bind(req); err != nil {
-			log.Printf("failed to JSON binding(/{{ GetJSONDir . }}/{{ .Endpoint }}): %+v", err)
+			log.Printf("failed to JSON binding({{ .RawEndpointPath }}): %+v", err)
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
 				"code":    http.StatusBadRequest,
 				"message": "invalid request.",
@@ -73,7 +73,7 @@ func (r *MockRoutes) {{ .HandlerName }}(jsonDir string) echo.HandlerFunc {
 		ago := c.Request().Header.Get("Api-Gen-Option")
 		if ago != "" {
 			if err := json.Unmarshal([]byte(ago), option); err != nil {
-				log.Printf("failed to JSON Unmarshal to `Api-Gen-Option` header(/{{ GetJSONDir . }}/{{ .Endpoint }}): %+v", err)
+				log.Printf("failed to JSON Unmarshal to `Api-Gen-Option` header({{ .RawEndpointPath }}): %+v", err)
 				return c.JSON(http.StatusBadRequest, map[string]interface{}{
 					"code":    http.StatusBadRequest,
 					"message": "invalid Api-Gen-Option.",
