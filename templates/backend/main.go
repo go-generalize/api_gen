@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-generalize/api_gen/templates/backend/interfaces"
@@ -32,7 +33,7 @@ func main() {
 	e.Debug = true
 	e.Use(middleware.Recover())
 
-	interfaces.Bootstrap(new(props.ControllerProps), e, nil)
+	interfaces.Bootstrap(new(props.ControllerProps), e, nil, os.Stdout)
 
 	fmt.Println("All routes are...")
 	for _, r := range e.Routes() {
