@@ -44,6 +44,6 @@ func MockBootstrap(e *echo.Echo, w io.Writer, jsonDir string) {
 	})
 {{ range $i, $v := .Bootstraps }}
 	{{ $v.RouteGroupName }}Group := {{ GetGroupName $v }}.Group("{{ $v.Endpoint }}")
-	{{ GetNewMockRoute $v}}
+	{{ GetNewMockRoute $v }}
 {{- end }}
 }
