@@ -36,7 +36,13 @@ func (m MiddlewareList) ToMap() MiddlewareMap {
 }
 
 // Bootstrap ...
-func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList MiddlewareList) {
+func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList MiddlewareList, opts ...io.Writer) {
+	if len(opts) > 0 {
+		if w := opts[0]; w != nil {
+			log.SetOutput(w)
+		}
+	}
+
 	middleware := middlewareList.ToMap()
 
 	// error handling
@@ -64,7 +70,7 @@ func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList Middleware
 {{ range $i, $v := .Bootstraps }}
 	{{ $v.RouteGroupName }}Group := {{ GetGroupName $v }}.Group("{{ $v.Endpoint }}")
 	setMiddleware({{ $v.RouteGroupName }}Group, "{{ $v.EndpointPath }}", middleware)
-	{{ GetNewRoute $v}}{{ end }}
+	{{ GetNewRoute $v }}{{ end }}
 }
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {

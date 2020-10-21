@@ -4,6 +4,8 @@
 package sample
 
 import (
+	"io"
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -17,7 +19,12 @@ type Routes struct {
 }
 
 // NewRoutes ...
-func NewRoutes(p *props.ControllerProps, router *echo.Group) *Routes {
+func NewRoutes(p *props.ControllerProps, router *echo.Group, opts ...io.Writer) *Routes {
+	if len(opts) > 0 {
+		if w := opts[0]; w != nil {
+			log.SetOutput(w)
+		}
+	}
 	r := &Routes{
 		router: router,
 	}
@@ -32,6 +39,7 @@ func (r *Routes) PostCreateTable(p *props.ControllerProps) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		req := new(PostCreateTableRequest)
 		if err := c.Bind(req); err != nil {
+			log.Printf("failed to JSON binding(/create_table): %+v", err)
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
 				"code":    http.StatusBadRequest,
 				"message": "invalid request.",
@@ -55,6 +63,7 @@ func (r *Routes) PostCreateUser(p *props.ControllerProps) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		req := new(PostCreateUserRequest)
 		if err := c.Bind(req); err != nil {
+			log.Printf("failed to JSON binding(/create_user): %+v", err)
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
 				"code":    http.StatusBadRequest,
 				"message": "invalid request.",

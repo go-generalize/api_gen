@@ -5,18 +5,20 @@
 package sample2
 
 import (
+	"io"
 	"log"
 	"net/http"
 	"path/filepath"
 
 	apiEventEventIDRoom "github.com/go-generalize/api_gen/server_generator/sample2/api/event/_eventID/room"
 	"github.com/labstack/echo/v4"
-
-	props "github.com/go-generalize/api_gen/server_generator/sample2/props"
 )
 
 // Bootstrap ...
-func MockBootstrap(p *props.ControllerProps, e *echo.Echo, jsonDir string) {
+func MockBootstrap(e *echo.Echo, w io.Writer, jsonDir string) {
+	if w != nil {
+		log.SetOutput(w)
+	}
 	// error handling
 	e.Use(func(before echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {
@@ -43,5 +45,5 @@ func MockBootstrap(p *props.ControllerProps, e *echo.Echo, jsonDir string) {
 	rootGroup := e.Group("/")
 
 	apiEventEventIDRoomGroup := rootGroup.Group("api/event/:eventID/room/")
-	apiEventEventIDRoom.NewMockRoutes(p, apiEventEventIDRoomGroup, filepath.Join(jsonDir, "/api/event/_eventID/room"))
+	apiEventEventIDRoom.NewMockRoutes(apiEventEventIDRoomGroup, filepath.Join(jsonDir, "/api/event/_eventID/room"), w)
 }

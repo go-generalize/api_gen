@@ -4,6 +4,7 @@
 package sample2
 
 import (
+	"io"
 	"log"
 	"net/http"
 
@@ -35,7 +36,13 @@ func (m MiddlewareList) ToMap() MiddlewareMap {
 }
 
 // Bootstrap ...
-func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList MiddlewareList) {
+func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList MiddlewareList, opts ...io.Writer) {
+	if len(opts) > 0 {
+		if w := opts[0]; w != nil {
+			log.SetOutput(w)
+		}
+	}
+
 	middleware := middlewareList.ToMap()
 
 	// error handling
@@ -66,7 +73,7 @@ func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList Middleware
 
 	apiEventEventIDRoomGroup := rootGroup.Group("api/event/:eventID/room/")
 	setMiddleware(apiEventEventIDRoomGroup, "/api/event/:eventID/room/", middleware)
-	apiEventEventIDRoom.NewRoutes(p, apiEventEventIDRoomGroup)
+	apiEventEventIDRoom.NewRoutes(p, apiEventEventIDRoomGroup, opts...)
 }
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {

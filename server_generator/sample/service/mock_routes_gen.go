@@ -7,6 +7,7 @@ package service
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -18,8 +19,6 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-
-	props "github.com/go-generalize/api_gen/server_generator/sample/props"
 )
 
 // MockRoutes ...
@@ -34,19 +33,22 @@ type apiGenMockOption struct {
 }
 
 // NewRoutes ...
-func NewMockRoutes(p *props.ControllerProps, router *echo.Group, jsonDir string) *MockRoutes {
+func NewMockRoutes(router *echo.Group, jsonDir string, w io.Writer) *MockRoutes {
+	if w != nil {
+		log.SetOutput(w)
+	}
 	r := &MockRoutes{
 		router: router,
 	}
 	{
-		jd := filepath.Join(jsonDir, "/get_article/")
-		router.GET("article", r.GetArticle(p, jd))
+		jd := filepath.Join(jsonDir, "get_article")
+		router.GET("article", r.GetArticle(jd))
 	}
 	return r
 }
 
 // GetArticle ...
-func (r *MockRoutes) GetArticle(p *props.ControllerProps, jsonDir string) echo.HandlerFunc {
+func (r *MockRoutes) GetArticle(jsonDir string) echo.HandlerFunc {
 	type Mock struct {
 		Meta struct {
 			Status       int                `json:"status"`
@@ -57,6 +59,7 @@ func (r *MockRoutes) GetArticle(p *props.ControllerProps, jsonDir string) echo.H
 	return func(c echo.Context) error {
 		req := new(GetArticleRequest)
 		if err := c.Bind(req); err != nil {
+			log.Printf("failed to JSON binding(/service/article): %+v", err)
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
 				"code":    http.StatusBadRequest,
 				"message": "invalid request.",
@@ -67,6 +70,7 @@ func (r *MockRoutes) GetArticle(p *props.ControllerProps, jsonDir string) echo.H
 		ago := c.Request().Header.Get("Api-Gen-Option")
 		if ago != "" {
 			if err := json.Unmarshal([]byte(ago), option); err != nil {
+				log.Printf("failed to JSON Unmarshal to `Api-Gen-Option` header(/service/article): %+v", err)
 				return c.JSON(http.StatusBadRequest, map[string]interface{}{
 					"code":    http.StatusBadRequest,
 					"message": "invalid Api-Gen-Option.",

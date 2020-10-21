@@ -10,6 +10,6 @@ require (
 	golang.org/x/mod v0.3.0
 	golang.org/x/net v0.0.0-20200927032502-5d4f70055728 // indirect
 	golang.org/x/sys v0.0.0-20200929083018-4d22bbb62b3c // indirect
-	golang.org/x/tools v0.0.0-20201011145850-ed2f50202694
+	golang.org/x/tools v0.0.0-20201021000207-d49c4edd7d96 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 )

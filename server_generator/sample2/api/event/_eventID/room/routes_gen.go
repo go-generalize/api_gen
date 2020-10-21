@@ -4,6 +4,8 @@
 package room
 
 import (
+	"io"
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -17,11 +19,16 @@ type Routes struct {
 }
 
 // NewRoutes ...
-func NewRoutes(p *props.ControllerProps, router *echo.Group) *Routes {
+func NewRoutes(p *props.ControllerProps, router *echo.Group, opts ...io.Writer) *Routes {
+	if len(opts) > 0 {
+		if w := opts[0]; w != nil {
+			log.SetOutput(w)
+		}
+	}
 	r := &Routes{
 		router: router,
 	}
-	router.GET("room", r.GetRoom(p))
+	router.GET(":roomID", r.GetRoom(p))
 	return r
 }
 
@@ -31,6 +38,7 @@ func (r *Routes) GetRoom(p *props.ControllerProps) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		req := new(GetRoomRequest)
 		if err := c.Bind(req); err != nil {
+			log.Printf("failed to JSON binding(/api/event/{eventID}/room/{roomID}): %+v", err)
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
 				"code":    http.StatusBadRequest,
 				"message": "invalid request.",

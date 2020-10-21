@@ -2,7 +2,8 @@ package room
 
 // GetRoomRequest ...
 type GetRoomRequest struct {
-	ID string `param:"eventID"`
+	RoomID  string `param:"roomID"`
+	EventID string `param:"eventID"`
 }
 
 // GetRoomResponse ...
