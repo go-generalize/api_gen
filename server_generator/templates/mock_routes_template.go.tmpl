@@ -18,8 +18,6 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-
-	props "{{ .ControllerPropsPackage }}"
 )
 
 // MockRoutes ...
@@ -34,7 +32,7 @@ type apiGenMockOption struct {
 }
 
 // NewRoutes ...
-func NewMockRoutes(p *props.ControllerProps, router *echo.Group, jsonDir string, w io.Writer) *MockRoutes {
+func NewMockRoutes(router *echo.Group, jsonDir string, w io.Writer) *MockRoutes {
 	if w != nil {
 		log.SetOutput(w)
 	}
@@ -44,7 +42,7 @@ func NewMockRoutes(p *props.ControllerProps, router *echo.Group, jsonDir string,
 {{- range .Controllers }}
 	{
 		jd := filepath.Join(jsonDir, "/{{ GetJSONDir . }}/")
-		router.{{ .HTTPMethod }}("{{ .Endpoint }}", r.{{ .HandlerName }}(p, jd))
+		router.{{ .HTTPMethod }}("{{ .Endpoint }}", r.{{ .HandlerName }}(jd))
 	}
 {{- end }}
 	return r
@@ -52,7 +50,7 @@ func NewMockRoutes(p *props.ControllerProps, router *echo.Group, jsonDir string,
 {{- range .Controllers }}
 
 // {{ .HandlerName }} ...
-func (r *MockRoutes) {{ .HandlerName }}(p *props.ControllerProps, jsonDir string) echo.HandlerFunc {
+func (r *MockRoutes) {{ .HandlerName }}(jsonDir string) echo.HandlerFunc {
 	type Mock struct {
 		Meta struct {
 			Status       int         `json:"status"`

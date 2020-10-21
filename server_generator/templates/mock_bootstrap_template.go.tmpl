@@ -13,12 +13,10 @@ import (
 	{{ if ne $v.ImportPackageName "" }}{{ $v.ImportPackageName }} {{ end }}"{{ $v.PackagePath }}"{{ end }}
 {{- end }}
 	"github.com/labstack/echo/v4"
-
-	props "{{ .ControllerPropsPackage }}"
 )
 
 // Bootstrap ...
-func MockBootstrap(p *props.ControllerProps, e *echo.Echo, w io.Writer, jsonDir string) {
+func MockBootstrap(e *echo.Echo, w io.Writer, jsonDir string) {
 	if w != nil {
 		log.SetOutput(w)
 	}

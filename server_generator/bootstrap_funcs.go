@@ -31,7 +31,7 @@ func getNewMockRoute(b *BootstrapTemplates) string {
 	}
 
 	join := fmt.Sprintf(`filepath.Join(jsonDir, "%s")`, b.RawEndpointFilePath)
-	fn := fmt.Sprintf(`NewMockRoutes(p, %sGroup, %s, w)`, b.RouteGroupName, join)
+	fn := fmt.Sprintf(`NewMockRoutes(%sGroup, %s, w)`, b.RouteGroupName, join)
 
 	if b.Endpoint == "" {
 		return fn
