@@ -403,7 +403,9 @@ func parsePackages(
 				Package:                packageName,
 				Controllers:            cs,
 				ControllerPropsPackage: controllerPropsPackage,
-			}, true, template.FuncMap{})
+			}, true, template.FuncMap{
+				"GetJSONDir": getJSONDir,
+			})
 			if err != nil {
 				return nil, err
 			}
