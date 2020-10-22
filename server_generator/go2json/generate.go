@@ -19,7 +19,7 @@ import (
 )
 
 var (
-	FixedTime = time.Date(
+	fixedTime = time.Date(
 		2006, time.January, 02, 15, 04, 05, 0, time.Local,
 	).Format(time.RFC3339)
 )
@@ -201,7 +201,7 @@ func (g *Generator) generateType(t tstypes.Type) interface{} {
 	case *tstypes.Boolean:
 		return true
 	case *tstypes.Date:
-		return FixedTime
+		return fixedTime
 	case *tstypes.Nullable:
 		return g.generateType(v.Inner)
 	case *tstypes.Any:
