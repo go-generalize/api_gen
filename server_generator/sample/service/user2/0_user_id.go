@@ -1,6 +1,8 @@
 // Package user2 ...
 package user2
 
+import "time"
+
 // GetUserRequest ...
 type GetUserRequest struct {
 	ID            string `json:"id" param:"userID"`
@@ -11,4 +13,5 @@ type GetUserRequest struct {
 type GetUserResponse struct {
 	ID            string
 	SearchRequest string
+	RequestTime   time.Time
 }

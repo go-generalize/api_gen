@@ -2,6 +2,7 @@
     "meta": {
         "status": 200,
         "match_request": {
+            "Birthday": "2006-01-02T15:04:05+09:00",
             "Gender": 1234,
             "ID": "string",
             "Password": "string"
@@ -10,6 +11,7 @@
     "payload": {
         "CreatedType": 1234,
         "Message": "string",
+        "RequestedAt": "2006-01-02T15:04:05+09:00",
         "Status": true
     }
 }

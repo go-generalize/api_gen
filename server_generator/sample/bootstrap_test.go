@@ -54,7 +54,8 @@ func TestMiddlewareList_ToMap(t *testing.T) {
 func TestBootstrap(t *testing.T) {
 	e := echo.New()
 
-	e.Use(middleware.Logger())
+	e.HideBanner = true
+	e.HidePort = true
 	e.Use(middleware.Recover())
 
 	m := make([]*MiddlewareSet, 0)

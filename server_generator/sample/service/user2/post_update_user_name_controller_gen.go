@@ -3,7 +3,9 @@
 package user2
 
 import (
-	props "github.com/go-generalize/api_gen/server_generator/sample/props"
+	"fmt"
+
+	"github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/labstack/echo/v4"
 )
 
@@ -30,7 +32,7 @@ func NewPostUpdateUserNameController(props *props.ControllerProps) *PostUpdateUs
 // @Failure 400 {object} WIP
 // @Router /service/user2/update_user_name [POST]
 func (p *PostUpdateUserNameController) PostUpdateUserName(
-	c echo.Context, req *PostUpdateUserNameRequest,
+	_ echo.Context, _ *PostUpdateUserNameRequest,
 ) (res *PostUpdateUserNameResponse, err error) {
-	panic("require implements.")
+	return nil, fmt.Errorf("internal server error")
 }

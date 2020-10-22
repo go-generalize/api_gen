@@ -1,6 +1,8 @@
 // Package service ...
 package service
 
+import "time"
+
 // GetArticleRequest ...
 type GetArticleRequest struct {
 	ID int
@@ -8,7 +10,8 @@ type GetArticleRequest struct {
 
 // GetArticleResponse ...
 type GetArticleResponse struct {
-	ID    int
-	Group []string
-	Body  string
+	ID          int
+	Group       []string
+	Body        string
+	RequestTime time.Time
 }
