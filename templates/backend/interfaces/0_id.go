@@ -1,5 +1,7 @@
 package interfaces
 
+import "time"
+
 // Example endpoint
 
 // PostCreateUserRequest Description
@@ -7,6 +9,7 @@ type PostCreateUserRequest struct {
 	ID       string `param:"id"`
 	Password string
 	Gender   int
+	Birthday time.Time
 }
 
 // CreatedType ...

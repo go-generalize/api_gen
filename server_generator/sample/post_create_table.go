@@ -1,7 +1,11 @@
 // Package sample ...
 package sample
 
-import "github.com/go-generalize/api_gen/server_generator/sample/service/table"
+import (
+	"time"
+
+	"github.com/go-generalize/api_gen/server_generator/sample/service/table"
+)
 
 // PostCreateTableRequest ...
 type PostCreateTableRequest struct {
@@ -11,6 +15,7 @@ type PostCreateTableRequest struct {
 
 // PostCreateTableResponse ...
 type PostCreateTableResponse struct {
-	ID      string
-	Payload table.Table
+	ID          string
+	Payload     table.Table
+	RequestTime time.Time
 }

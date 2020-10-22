@@ -1,6 +1,8 @@
 // Package user ...
 package user
 
+import "time"
+
 // PostUpdateUserNameRequest ...
 type PostUpdateUserNameRequest struct {
 	Name string
@@ -8,6 +10,7 @@ type PostUpdateUserNameRequest struct {
 
 // PostUpdateUserNameResponse ...
 type PostUpdateUserNameResponse struct {
-	Status  bool
-	Message string
+	Status      bool
+	Message     string
+	RequestTime time.Time
 }

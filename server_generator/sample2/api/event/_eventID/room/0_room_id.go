@@ -1,5 +1,7 @@
 package room
 
+import "time"
+
 // GetRoomRequest ...
 type GetRoomRequest struct {
 	RoomID  string `param:"roomID"`
@@ -8,4 +10,5 @@ type GetRoomRequest struct {
 
 // GetRoomResponse ...
 type GetRoomResponse struct {
+	RequestTime time.Time
 }
