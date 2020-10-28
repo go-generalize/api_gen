@@ -9,4 +9,5 @@ export type GetArticleResponse = {
 	Body: string;
 	Group: string[] | null;
 	ID: number;
+	RequestTime: string;
 }

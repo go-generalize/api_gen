@@ -3,12 +3,18 @@ package sample
 
 import "time"
 
+type Role struct {
+	ID   int
+	Name string
+}
+
 // PostCreateUserRequest ...
 type PostCreateUserRequest struct {
 	ID       string `param:"id"`
 	Password string
 	Gender   int
 	Birthday time.Time
+	Roles    []*Role
 }
 
 // CreatedType ...

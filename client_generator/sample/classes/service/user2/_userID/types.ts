@@ -7,4 +7,5 @@ export type GetUserJobGetRequest = {
 }
 export type GetUserJobGetResponse = {
 	JobName: string;
+	RequestTime: string;
 }
