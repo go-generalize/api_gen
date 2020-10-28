@@ -7,6 +7,7 @@ export type PostUpdateUserNameRequest = {
 }
 export type PostUpdateUserNameResponse = {
 	Message: string;
+	RequestTime: string;
 	Status: boolean;
 }
 export type PostUpdateUserPasswordRequest = {
@@ -15,5 +16,6 @@ export type PostUpdateUserPasswordRequest = {
 }
 export type PostUpdateUserPasswordResponse = {
 	Message: string;
+	RequestTime: string;
 	Status: boolean;
 }

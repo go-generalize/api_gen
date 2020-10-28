@@ -8,5 +8,6 @@ export type PutJobRequest = {
 }
 export type PutJobResponse = {
 	JobID: string;
+	RequestTime: string;
 	UserID: string;
 }

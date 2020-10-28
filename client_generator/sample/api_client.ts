@@ -579,6 +579,6 @@ export class ApiError extends Error {
 }
 
 export interface MockOption {
-	wait_ms: string;
+	wait_ms: number;
 	target_file: string;
 }
