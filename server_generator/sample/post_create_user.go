@@ -3,6 +3,7 @@ package sample
 
 import "time"
 
+// Role ...
 type Role struct {
 	ID   int
 	Name string
