@@ -163,10 +163,14 @@ func validateGetRequestTags(fset *token.FileSet, structType *ast.StructType, end
 
 		queryTag, ok := tags.Lookup("query")
 
-		if !ok || jsonTag != queryTag {
+		jsonName := strings.TrimSpace(strings.Split(jsonTag, ",")[0])
+		queryName := strings.TrimSpace(strings.Split(queryTag, ",")[0])
+
+		if !ok || jsonName != queryName {
 			return fmt.Errorf(
-				"%s: GETのRequest structはjsonタグをqueryタグに同じ値を指定する必要があります",
+				`%s (json:"%s"!=query:"%s"): GETのRequest structはjsonタグをqueryタグに同じ値を指定する必要があります`,
 				fset.Position(fieldList[i].Tag.Pos()).String(),
+				jsonName, queryName,
 			)
 		}
 	}
