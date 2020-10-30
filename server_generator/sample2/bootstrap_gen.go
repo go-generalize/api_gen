@@ -9,9 +9,8 @@ import (
 	"net/http"
 
 	apiEventEventIDRoom "github.com/go-generalize/api_gen/server_generator/sample2/api/event/_eventID/room"
+	"github.com/go-generalize/api_gen/server_generator/sample2/props"
 	"github.com/labstack/echo/v4"
-
-	props "github.com/go-generalize/api_gen/server_generator/sample2/props"
 )
 
 // MiddlewareList ...

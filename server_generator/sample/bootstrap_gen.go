@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/go-generalize/api_gen/server_generator/sample/service"
 	serviceStaticPage "github.com/go-generalize/api_gen/server_generator/sample/service/static_page"
 	serviceUser "github.com/go-generalize/api_gen/server_generator/sample/service/user"
@@ -15,8 +16,6 @@ import (
 	serviceUser2UserID "github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID"
 	serviceUser2UserIDJobID "github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID/_JobID"
 	"github.com/labstack/echo/v4"
-
-	props "github.com/go-generalize/api_gen/server_generator/sample/props"
 )
 
 // MiddlewareList ...
