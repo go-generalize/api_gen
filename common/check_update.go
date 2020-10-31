@@ -24,11 +24,11 @@ func CheckUpdate() {
 	}
 
 	if latest == AppVersion {
-		fmt.Printf("Already up to date.\n\ncurrent: %s\n", latest)
+		fmt.Println("Already up to date.")
 		return
 	}
 
-	fmt.Printf("latest:  %s\n\ncurrent: %s\n", latest, AppVersion)
+	fmt.Printf("latest: %s\n", latest)
 	return
 }
 
