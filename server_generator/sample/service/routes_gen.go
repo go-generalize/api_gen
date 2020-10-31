@@ -8,9 +8,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/labstack/echo/v4"
-
-	props "github.com/go-generalize/api_gen/server_generator/sample/props"
 )
 
 // Routes ...

@@ -10,8 +10,7 @@ import (
 	{{ if ne $v.ImportPackageName "" }}{{ $v.ImportPackageName }} {{ end }}"{{ $v.PackagePath }}"{{ end }}
 {{- end }}
 	"github.com/labstack/echo/v4"
-
-	props "{{ .ControllerPropsPackage }}"
+	"{{ .ControllerPropsPackage }}"
 )
 
 // MiddlewareList ...

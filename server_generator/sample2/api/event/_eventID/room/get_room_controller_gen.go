@@ -2,7 +2,7 @@
 package room
 
 import (
-	props "github.com/go-generalize/api_gen/server_generator/sample2/props"
+	"github.com/go-generalize/api_gen/server_generator/sample2/props"
 	"github.com/labstack/echo/v4"
 )
 
