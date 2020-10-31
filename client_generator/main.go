@@ -377,11 +377,17 @@ func main() {
 
 	versionFlag := flag.Bool("v", false, "print version")
 	outputDir := flag.String("o", "./", "output directory of generated codes")
+	updateCheckFlag := flag.Bool("check-update", false, "check for updates")
 
 	flag.Parse()
 
 	if *versionFlag {
 		fmt.Println(common.AppVersion)
+		return
+	}
+
+	if *updateCheckFlag {
+		common.CheckUpdate()
 		return
 	}
 
