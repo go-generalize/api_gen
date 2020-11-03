@@ -433,6 +433,7 @@ func parsePackages(
 			ResponseStructName:     res.StructName,
 			RequestParams:          req.RequestParams,
 			ControllerPropsPackage: controllerPropsPackage,
+			WrapperPackage:         wrapperPackage,
 		}
 
 		routes[createDir] = append(routes[createDir], ct)

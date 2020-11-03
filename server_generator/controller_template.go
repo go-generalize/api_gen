@@ -15,4 +15,5 @@ type ControllerTemplate struct {
 	ResponseStructName     string
 	RequestParams          []RequestParam
 	ControllerPropsPackage string
+	WrapperPackage         string
 }

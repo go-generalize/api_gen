@@ -35,5 +35,17 @@ func New{{ .ControllerName }}(props *props.ControllerProps) *{{ .ControllerName 
 func ({{ .ControllerNameInitial }} *{{ .ControllerName }}) {{ .HandlerName }}(
 	c echo.Context, req *{{ .RequestStructName }},
 ) (res *{{ .ResponseStructName }}, err error) {
-	panic("require implements.")
+	// API Error Usage: {{ .WrapperPackage }}
+	//
+	// return nil, wrapper.NewAPIError(http.StatusBadRequest)
+	//
+	// return nil, wrapper.NewAPIError(http.StatusBadRequest).SetError(err)
+	//
+	// body := map[string]interface{}{
+	// 	"code": http.StatusBadRequest,
+	// 	"message": "invalid request parameter.",
+	// }
+	// return nil, wrapper.NewAPIError(http.StatusBadRequest, body).SetError(err)
+	{{- $fixme := "FIXME" }}
+	panic("require implements.") // {{ $fixme }} require implements.
 }
