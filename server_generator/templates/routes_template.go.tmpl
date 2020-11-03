@@ -47,9 +47,9 @@ func (r *Routes) {{ .HandlerName }}(p *props.ControllerProps) echo.HandlerFunc {
 		}
 		res, err := i.{{ .HandlerName }}(c, req)
 		if err != nil {
-		    if werr, ok := err.(*wrapper.APIError); ok {
+			if werr, ok := err.(*wrapper.APIError); ok {
 				return c.JSON(werr.Status, werr.Body)
-		    }
+			}
 			return err
 		}
 		if res == nil {
