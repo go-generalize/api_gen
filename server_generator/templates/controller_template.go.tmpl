@@ -30,7 +30,8 @@ func New{{ .ControllerName }}(cp *props.ControllerProps) *{{ .ControllerName }} 
 // @Param {{ $p.Name }} {{ $p.Type }} {{ $p.DataType }} WIP:${isRequire} WIP:${description}
 {{- end }}
 // @Success 200 {object} {{ .ResponseStructName }}
-// @Failure 400 {object} WIP
+// @Failure 400 {object} wrapper.NewAPIError
+// @Failure 500 {object} wrapper.NewAPIError
 // @Router {{ .RawEndpointPath }} [{{ .HTTPMethod }}]
 func ({{ .ControllerNameInitial }} *{{ .ControllerName }}) {{ .HandlerName }}(
 	c echo.Context, req *{{ .RequestStructName }},
