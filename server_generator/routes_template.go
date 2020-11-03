@@ -7,4 +7,5 @@ type RoutesTemplate struct {
 	Package                string
 	Controllers            []*ControllerTemplate
 	ControllerPropsPackage string
+	WrapperPackage         string
 }
