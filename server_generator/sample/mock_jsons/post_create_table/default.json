@@ -2,8 +2,12 @@
     "meta": {
         "status": 200,
         "match_request": {
+            "Flag": 1234,
             "ID": "string",
-            "Text": "string"
+            "Text": "string",
+            "map": {
+                "1234": 1234
+            }
         }
     },
     "payload": {
