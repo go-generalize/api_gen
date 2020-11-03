@@ -136,7 +136,7 @@ func run(arg string) error {
 		wrapperInternalPackage = filepath.Join(basePackagePath+"/", r)
 
 		err = createFromTemplate(
-			"/templates/errorf_template.go.tmpl",
+			"/templates/fmt_template.go.tmpl",
 			filepath.Join(dir, "fmt.go"),
 			map[string]string{
 				"AppVersion": common.AppVersion,
