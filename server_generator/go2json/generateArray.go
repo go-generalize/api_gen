@@ -16,9 +16,19 @@ func (g *Generator) generateArray(typ *tstypes.Array) interface{} {
 }
 
 func (g *Generator) generateMap(obj *tstypes.Map) interface{} {
-	return map[interface{}]interface{}{
-		g.generateType(obj.Key): g.generateType(obj.Value),
+	key := g.generateType(obj.Key)
+	val := g.generateType(obj.Value)
+	switch obj.Key.(type) {
+	case *tstypes.String:
+		return map[string]interface{}{
+			key.(string): val,
+		}
+	case *tstypes.Number:
+		return map[int]interface{}{
+			key.(int): val,
+		}
 	}
+	panic("map key is `string` or `number`")
 }
 
 func (g *Generator) generateObject(obj *tstypes.Object) interface{} {
