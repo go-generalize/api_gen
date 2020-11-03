@@ -1,5 +1,5 @@
 // Package service ...
-// generated version: unknown
+// generated version: devel
 package service
 
 import (

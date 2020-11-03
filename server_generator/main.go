@@ -62,7 +62,9 @@ func main() {
 
 func run(arg string) error {
 	const (
-		commonPropsDir = "props"
+		commonPropsDir    = "props"
+		commonWrapperDir  = "wrapper"
+		commonInternalDir = "internal"
 	)
 
 	rootPath, err := filepath.Abs(arg)
@@ -111,6 +113,63 @@ func run(arg string) error {
 			"/templates/controller_props.go.tmpl",
 			filepath.Join(dir, "controller_props.go"),
 			nil, false, nil,
+		)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	var wrapperInternalPackage string
+	{
+		dir := filepath.Join(rootPath, commonWrapperDir, commonInternalDir)
+		if err := os.MkdirAll(dir, 0777); err != nil {
+			return err
+		}
+
+		r, err := filepath.Rel(packageRootPath, dir)
+
+		if err != nil {
+			return err
+		}
+
+		wrapperInternalPackage = filepath.Join(basePackagePath+"/", r)
+
+		err = createFromTemplate(
+			"/templates/fmt_template.go.tmpl",
+			filepath.Join(dir, "fmt.go"),
+			map[string]string{
+				"AppVersion": common.AppVersion,
+			}, true, nil,
+		)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	var wrapperPackage string
+	{
+		dir := filepath.Join(rootPath, commonWrapperDir)
+		if err := os.MkdirAll(dir, 0777); err != nil {
+			return err
+		}
+
+		r, err := filepath.Rel(packageRootPath, dir)
+
+		if err != nil {
+			return err
+		}
+
+		wrapperPackage = filepath.Join(basePackagePath+"/", r)
+
+		err = createFromTemplate(
+			"/templates/wrapper_template.go.tmpl",
+			filepath.Join(dir, "wrapper.go"),
+			map[string]string{
+				"AppVersion":      common.AppVersion,
+				"InternalPackage": wrapperInternalPackage,
+			}, true, nil,
 		)
 
 		if err != nil {
@@ -179,7 +238,9 @@ func run(arg string) error {
 			endpointParams = append(endpointParams, e[1])
 		}
 
-		cs, err := parsePackages(path, endpointParam, endpointParams, controllerPropsPackage)
+		cs, err := parsePackages(
+			path, endpointParam, endpointParams, controllerPropsPackage, wrapperPackage,
+		)
 		if err != nil {
 			return err
 		}
@@ -304,6 +365,7 @@ func parsePackages(
 	path, endpointBase string,
 	endpointParams []string,
 	controllerPropsPackage string,
+	wrapperPackage string,
 ) ([]*ControllerTemplate, error) {
 	replaceRule := regexp.MustCompile(`:(.*?)(/|$)`)
 	routes := make(map[string][]*ControllerTemplate)
@@ -371,6 +433,7 @@ func parsePackages(
 			ResponseStructName:     res.StructName,
 			RequestParams:          req.RequestParams,
 			ControllerPropsPackage: controllerPropsPackage,
+			WrapperPackage:         wrapperPackage,
 		}
 
 		routes[createDir] = append(routes[createDir], ct)
@@ -409,6 +472,7 @@ func parsePackages(
 				Package:                packageName,
 				Controllers:            cs,
 				ControllerPropsPackage: controllerPropsPackage,
+				WrapperPackage:         wrapperPackage,
 			}, true, template.FuncMap{
 				"GetJSONDir": getJSONDir,
 			})

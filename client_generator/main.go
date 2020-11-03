@@ -346,6 +346,18 @@ func walk(p, url string, generator *clientGenerator, parent *clientType) {
 			continue
 		}
 
+		var skip bool
+		for _, s := range common.Excludes() {
+			if s == fifos[i].Name() {
+				skip = true
+				break
+			}
+		}
+
+		if skip {
+			continue
+		}
+
 		client := new(clientType)
 
 		nextURL := path.Join(url, fifos[i].Name())

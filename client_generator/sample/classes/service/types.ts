@@ -1,6 +1,6 @@
 // THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
-// generated version: unknown
+// generated version: devel
 
 export type GetArticleRequest = {
 	ID: number;

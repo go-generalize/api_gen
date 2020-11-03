@@ -13,9 +13,9 @@ type {{ .ControllerName }} struct {
 }
 
 // New{{ .ControllerName }} ...
-func New{{ .ControllerName }}(props *props.ControllerProps) *{{ .ControllerName }} {
+func New{{ .ControllerName }}(cp *props.ControllerProps) *{{ .ControllerName }} {
 	{{ .ControllerNameInitial }} := &{{ .ControllerName }}{
-		ControllerProps: props,
+		ControllerProps: cp,
 	}
 	return {{ .ControllerNameInitial }}
 }
@@ -30,10 +30,23 @@ func New{{ .ControllerName }}(props *props.ControllerProps) *{{ .ControllerName 
 // @Param {{ $p.Name }} {{ $p.Type }} {{ $p.DataType }} WIP:${isRequire} WIP:${description}
 {{- end }}
 // @Success 200 {object} {{ .ResponseStructName }}
-// @Failure 400 {object} WIP
+// @Failure 400 {object} wrapper.NewAPIError
+// @Failure 500 {object} wrapper.NewAPIError
 // @Router {{ .RawEndpointPath }} [{{ .HTTPMethod }}]
 func ({{ .ControllerNameInitial }} *{{ .ControllerName }}) {{ .HandlerName }}(
 	c echo.Context, req *{{ .RequestStructName }},
 ) (res *{{ .ResponseStructName }}, err error) {
-	panic("require implements.")
+	// API Error Usage: {{ .WrapperPackage }}
+	//
+	// return nil, wrapper.NewAPIError(http.StatusBadRequest)
+	//
+	// return nil, wrapper.NewAPIError(http.StatusBadRequest).SetError(err)
+	//
+	// body := map[string]interface{}{
+	// 	"code": http.StatusBadRequest,
+	// 	"message": "invalid request parameter.",
+	// }
+	// return nil, wrapper.NewAPIError(http.StatusBadRequest, body).SetError(err)
+	{{- $fixme := "FIXME" }}
+	panic("require implements.") // {{ $fixme }} require implements.
 }

@@ -1,10 +1,12 @@
 // THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
-// generated version: unknown
+// generated version: devel
 
 export type PostCreateTableRequest = {
+	Flag: number;
 	ID: string;
 	Text: string;
+	map: {[key: number]: number};
 }
 export type PostCreateTableResponse = {
 	ID: string;
