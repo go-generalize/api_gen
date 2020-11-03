@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/go-generalize/api_gen/server_generator/sample/props"
+	"github.com/go-generalize/api_gen/server_generator/sample/wrapper"
 	"github.com/labstack/echo/v4"
 )
 
@@ -47,6 +48,9 @@ func (r *Routes) GetUser(p *props.ControllerProps) echo.HandlerFunc {
 		}
 		res, err := i.GetUser(c, req)
 		if err != nil {
+			if werr, ok := err.(*wrapper.APIError); ok {
+				return c.JSON(werr.Status, werr.Body)
+			}
 			return err
 		}
 		if res == nil {
@@ -71,6 +75,9 @@ func (r *Routes) PostUpdateUserName(p *props.ControllerProps) echo.HandlerFunc {
 		}
 		res, err := i.PostUpdateUserName(c, req)
 		if err != nil {
+			if werr, ok := err.(*wrapper.APIError); ok {
+				return c.JSON(werr.Status, werr.Body)
+			}
 			return err
 		}
 		if res == nil {
@@ -95,6 +102,9 @@ func (r *Routes) PostUpdateUserPassword(p *props.ControllerProps) echo.HandlerFu
 		}
 		res, err := i.PostUpdateUserPassword(c, req)
 		if err != nil {
+			if werr, ok := err.(*wrapper.APIError); ok {
+				return c.JSON(werr.Status, werr.Body)
+			}
 			return err
 		}
 		if res == nil {

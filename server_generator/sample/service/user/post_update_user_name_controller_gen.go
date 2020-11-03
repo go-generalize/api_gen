@@ -1,5 +1,5 @@
 // Package user ...
-// generated version: unknown
+// generated version: devel
 package user
 
 import (
@@ -13,9 +13,9 @@ type PostUpdateUserNameController struct {
 }
 
 // NewPostUpdateUserNameController ...
-func NewPostUpdateUserNameController(props *props.ControllerProps) *PostUpdateUserNameController {
+func NewPostUpdateUserNameController(cp *props.ControllerProps) *PostUpdateUserNameController {
 	p := &PostUpdateUserNameController{
-		ControllerProps: props,
+		ControllerProps: cp,
 	}
 	return p
 }
@@ -27,10 +27,22 @@ func NewPostUpdateUserNameController(props *props.ControllerProps) *PostUpdateUs
 // @Produce json
 // @Param Name body string WIP:${isRequire} WIP:${description}
 // @Success 200 {object} PostUpdateUserNameResponse
-// @Failure 400 {object} WIP
+// @Failure 400 {object} wrapper.NewAPIError
+// @Failure 500 {object} wrapper.NewAPIError
 // @Router /service/user/update_user_name [POST]
 func (p *PostUpdateUserNameController) PostUpdateUserName(
 	c echo.Context, req *PostUpdateUserNameRequest,
 ) (res *PostUpdateUserNameResponse, err error) {
-	panic("require implements.")
+	// API Error Usage: github.com/go-generalize/api_gen/server_generator/sample/wrapper
+	//
+	// return nil, wrapper.NewAPIError(http.StatusBadRequest)
+	//
+	// return nil, wrapper.NewAPIError(http.StatusBadRequest).SetError(err)
+	//
+	// body := map[string]interface{}{
+	// 	"code": http.StatusBadRequest,
+	// 	"message": "invalid request parameter.",
+	// }
+	// return nil, wrapper.NewAPIError(http.StatusBadRequest, body).SetError(err)
+	panic("require implements.") // FIXME require implements.
 }

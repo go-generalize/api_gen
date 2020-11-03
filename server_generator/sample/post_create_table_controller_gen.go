@@ -1,5 +1,5 @@
 // Package sample ...
-// generated version: unknown
+// generated version: devel
 package sample
 
 import (
