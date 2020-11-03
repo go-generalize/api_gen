@@ -7,6 +7,7 @@ import (
 	"github.com/go-generalize/api_gen/server_generator/sample/service/table"
 )
 
+// Flag - type alias(int)
 type Flag int
 
 // PostCreateTableRequest ...
