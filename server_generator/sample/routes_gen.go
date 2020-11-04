@@ -48,6 +48,7 @@ func (r *Routes) PostCreateTable(p *props.ControllerProps) echo.HandlerFunc {
 		res, err := i.PostCreateTable(c, req)
 		if err != nil {
 			if werr, ok := err.(*wrapper.APIError); ok {
+				log.Printf("%+v", werr)
 				return c.JSON(werr.Status, werr.Body)
 			}
 			return err
@@ -75,6 +76,7 @@ func (r *Routes) PostCreateUser(p *props.ControllerProps) echo.HandlerFunc {
 		res, err := i.PostCreateUser(c, req)
 		if err != nil {
 			if werr, ok := err.(*wrapper.APIError); ok {
+				log.Printf("%+v", werr)
 				return c.JSON(werr.Status, werr.Body)
 			}
 			return err

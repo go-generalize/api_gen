@@ -48,6 +48,7 @@ func (r *Routes) PostUpdateUserName(p *props.ControllerProps) echo.HandlerFunc {
 		res, err := i.PostUpdateUserName(c, req)
 		if err != nil {
 			if werr, ok := err.(*wrapper.APIError); ok {
+				log.Printf("%+v", werr)
 				return c.JSON(werr.Status, werr.Body)
 			}
 			return err
@@ -75,6 +76,7 @@ func (r *Routes) PostUpdateUserPassword(p *props.ControllerProps) echo.HandlerFu
 		res, err := i.PostUpdateUserPassword(c, req)
 		if err != nil {
 			if werr, ok := err.(*wrapper.APIError); ok {
+				log.Printf("%+v", werr)
 				return c.JSON(werr.Status, werr.Body)
 			}
 			return err
