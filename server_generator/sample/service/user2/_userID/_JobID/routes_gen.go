@@ -47,6 +47,7 @@ func (r *Routes) PutJob(p *props.ControllerProps) echo.HandlerFunc {
 		res, err := i.PutJob(c, req)
 		if err != nil {
 			if werr, ok := err.(*wrapper.APIError); ok {
+				log.Printf("%+v", werr)
 				return c.JSON(werr.Status, werr.Body)
 			}
 			return err
