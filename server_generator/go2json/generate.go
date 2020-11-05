@@ -125,8 +125,10 @@ func (g *Generator) Generate(dir string) error {
 	}
 
 	for c, gs := range typeSets {
-		req := g.generateType(gs.Request)
-		res := g.generateType(gs.Response)
+		packageStack := make([]string, 0)
+		req := g.generateType(gs.Request, packageStack)
+		packageStack = make([]string, 0)
+		res := g.generateType(gs.Response, packageStack)
 
 		gt := &GenerateType{
 			Meta: &MockMeta{
@@ -184,16 +186,16 @@ func (g *Generator) Generate(dir string) error {
 	return nil
 }
 
-func (g *Generator) generateType(t tstypes.Type) interface{} {
+func (g *Generator) generateType(t tstypes.Type, packageStack []string) interface{} {
 	if t == nil {
 		return nil
 	}
 
 	switch v := t.(type) {
 	case *tstypes.Array:
-		return g.generateArray(v)
+		return g.generateArray(v, packageStack)
 	case *tstypes.Object:
-		return g.generateObject(v)
+		return g.generateObject(v, packageStack)
 	case *tstypes.String:
 		return "string"
 	case *tstypes.Number:
@@ -203,11 +205,11 @@ func (g *Generator) generateType(t tstypes.Type) interface{} {
 	case *tstypes.Date:
 		return fixedTime
 	case *tstypes.Nullable:
-		return g.generateType(v.Inner)
+		return g.generateType(v.Inner, packageStack)
 	case *tstypes.Any:
 		return "any"
 	case *tstypes.Map:
-		return g.generateMap(v)
+		return g.generateMap(v, packageStack)
 	default:
 		panic("unsupported")
 	}
