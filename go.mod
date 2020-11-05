@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	github.com/go-generalize/go2ts v1.0.3
-	github.com/go-utils/count v0.0.0-20201105121138-668a274e0c37
+	github.com/go-utils/count v0.0.1
 	github.com/iancoleman/strcase v0.1.2
 	github.com/labstack/echo/v4 v4.1.16
 	github.com/rakyll/statik v0.1.7
