@@ -11,11 +11,8 @@ import (
 )
 
 func (g *Generator) generateArray(typ *tstypes.Array, packageStack []string) interface{} {
-	return []interface{}{
-		g.generateType(typ.Inner, packageStack),
-		g.generateType(typ.Inner, packageStack),
-		g.generateType(typ.Inner, packageStack),
-	}
+	item := g.generateType(typ.Inner, packageStack)
+	return []interface{}{item, item, item}
 }
 
 func (g *Generator) generateMap(obj *tstypes.Map, packageStack []string) interface{} {
