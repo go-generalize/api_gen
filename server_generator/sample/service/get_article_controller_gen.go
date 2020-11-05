@@ -13,9 +13,9 @@ type GetArticleController struct {
 }
 
 // NewGetArticleController ...
-func NewGetArticleController(props *props.ControllerProps) *GetArticleController {
+func NewGetArticleController(cp *props.ControllerProps) *GetArticleController {
 	g := &GetArticleController{
-		ControllerProps: props,
+		ControllerProps: cp,
 	}
 	return g
 }
@@ -27,10 +27,11 @@ func NewGetArticleController(props *props.ControllerProps) *GetArticleController
 // @Produce json
 // @Param ID query integer WIP:${isRequire} WIP:${description}
 // @Success 200 {object} GetArticleResponse
-// @Failure 400 {object} WIP
+// @Failure 400 {object} wrapper.APIError
+// @Failure 500 {object} wrapper.APIError
 // @Router /service/article [GET]
 func (g *GetArticleController) GetArticle(
-	c echo.Context, req *GetArticleRequest,
+	_ echo.Context, req *GetArticleRequest,
 ) (res *GetArticleResponse, err error) {
 	return &GetArticleResponse{
 		ID:    req.ID * 2,

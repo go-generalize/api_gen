@@ -27,8 +27,8 @@ func NewPostUpdateUserNameController(cp *props.ControllerProps) *PostUpdateUserN
 // @Produce json
 // @Param Name body string WIP:${isRequire} WIP:${description}
 // @Success 200 {object} PostUpdateUserNameResponse
-// @Failure 400 {object} wrapper.NewAPIError
-// @Failure 500 {object} wrapper.NewAPIError
+// @Failure 400 {object} wrapper.APIError
+// @Failure 500 {object} wrapper.APIError
 // @Router /service/user/update_user_name [POST]
 func (p *PostUpdateUserNameController) PostUpdateUserName(
 	c echo.Context, req *PostUpdateUserNameRequest,

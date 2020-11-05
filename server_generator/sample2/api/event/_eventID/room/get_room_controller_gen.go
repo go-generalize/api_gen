@@ -28,8 +28,8 @@ func NewGetRoomController(cp *props.ControllerProps) *GetRoomController {
 // @Param roomID path string WIP:${isRequire} WIP:${description}
 // @Param eventID path string WIP:${isRequire} WIP:${description}
 // @Success 200 {object} GetRoomResponse
-// @Failure 400 {object} wrapper.NewAPIError
-// @Failure 500 {object} wrapper.NewAPIError
+// @Failure 400 {object} wrapper.APIError
+// @Failure 500 {object} wrapper.APIError
 // @Router /api/event/{eventID}/room/{roomID} [GET]
 func (g *GetRoomController) GetRoom(
 	c echo.Context, req *GetRoomRequest,

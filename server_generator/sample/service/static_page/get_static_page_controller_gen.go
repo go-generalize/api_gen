@@ -26,8 +26,8 @@ func NewGetStaticPageController(cp *props.ControllerProps) *GetStaticPageControl
 // @Accept json
 // @Produce json
 // @Success 200 {object} GetStaticPageResponse
-// @Failure 400 {object} wrapper.NewAPIError
-// @Failure 500 {object} wrapper.NewAPIError
+// @Failure 400 {object} wrapper.APIError
+// @Failure 500 {object} wrapper.APIError
 // @Router /service/static_page/static_page [GET]
 func (g *GetStaticPageController) GetStaticPage(
 	c echo.Context, req *GetStaticPageRequest,

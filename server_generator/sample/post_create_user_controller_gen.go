@@ -15,9 +15,9 @@ type PostCreateUserController struct {
 }
 
 // NewPostCreateUserController ...
-func NewPostCreateUserController(props *props.ControllerProps) *PostCreateUserController {
+func NewPostCreateUserController(cp *props.ControllerProps) *PostCreateUserController {
 	p := &PostCreateUserController{
-		ControllerProps: props,
+		ControllerProps: cp,
 	}
 	return p
 }
@@ -30,11 +30,14 @@ func NewPostCreateUserController(props *props.ControllerProps) *PostCreateUserCo
 // @Param ID body string WIP:${isRequire} WIP:${description}
 // @Param Password body string WIP:${isRequire} WIP:${description}
 // @Param Gender body integer WIP:${isRequire} WIP:${description}
+// @Param Birthday body time.Time WIP:${isRequire} WIP:${description}
+// @Param Roles body []*Role WIP:${isRequire} WIP:${description}
 // @Success 200 {object} PostCreateUserResponse
-// @Failure 400 {object} WIP
+// @Failure 400 {object} wrapper.APIError
+// @Failure 500 {object} wrapper.APIError
 // @Router /create_user [POST]
 func (p *PostCreateUserController) PostCreateUser(
-	c echo.Context, req *PostCreateUserRequest,
+	_ echo.Context, req *PostCreateUserRequest,
 ) (res *PostCreateUserResponse, err error) {
 	return &PostCreateUserResponse{
 		Status:      true,

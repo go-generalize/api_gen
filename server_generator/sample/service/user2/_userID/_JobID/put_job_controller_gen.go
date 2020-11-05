@@ -1,3 +1,4 @@
+// Package _JobID ...
 // generated version: devel
 package _JobID
 
@@ -12,9 +13,9 @@ type PutJobController struct {
 }
 
 // NewPutJobController ...
-func NewPutJobController(props *props.ControllerProps) *PutJobController {
+func NewPutJobController(cp *props.ControllerProps) *PutJobController {
 	p := &PutJobController{
-		ControllerProps: props,
+		ControllerProps: cp,
 	}
 	return p
 }
@@ -27,7 +28,8 @@ func NewPutJobController(props *props.ControllerProps) *PutJobController {
 // @Param userID path string WIP:${isRequire} WIP:${description}
 // @Param JobID path string WIP:${isRequire} WIP:${description}
 // @Success 200 {object} PutJobResponse
-// @Failure 400 {object} WIP
+// @Failure 400 {object} wrapper.APIError
+// @Failure 500 {object} wrapper.APIError
 // @Router /service/user2/{userID}/{JobID}/job [PUT]
 func (p *PutJobController) PutJob(
 	c echo.Context, req *PutJobRequest,

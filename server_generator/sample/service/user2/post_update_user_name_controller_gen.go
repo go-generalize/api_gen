@@ -15,9 +15,9 @@ type PostUpdateUserNameController struct {
 }
 
 // NewPostUpdateUserNameController ...
-func NewPostUpdateUserNameController(props *props.ControllerProps) *PostUpdateUserNameController {
+func NewPostUpdateUserNameController(cp *props.ControllerProps) *PostUpdateUserNameController {
 	p := &PostUpdateUserNameController{
-		ControllerProps: props,
+		ControllerProps: cp,
 	}
 	return p
 }
@@ -29,7 +29,8 @@ func NewPostUpdateUserNameController(props *props.ControllerProps) *PostUpdateUs
 // @Produce json
 // @Param Name body string WIP:${isRequire} WIP:${description}
 // @Success 200 {object} PostUpdateUserNameResponse
-// @Failure 400 {object} WIP
+// @Failure 400 {object} wrapper.APIError
+// @Failure 500 {object} wrapper.APIError
 // @Router /service/user2/update_user_name [POST]
 func (p *PostUpdateUserNameController) PostUpdateUserName(
 	_ echo.Context, _ *PostUpdateUserNameRequest,
