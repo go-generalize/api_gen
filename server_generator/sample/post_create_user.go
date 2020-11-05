@@ -5,8 +5,9 @@ import "time"
 
 // Role ...
 type Role struct {
-	ID   int
-	Name string
+	ID             int
+	Name           string
+	RecursionRoles []Role
 }
 
 // PostCreateUserRequest ...
