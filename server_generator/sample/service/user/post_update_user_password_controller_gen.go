@@ -13,9 +13,9 @@ type PostUpdateUserPasswordController struct {
 }
 
 // NewPostUpdateUserPasswordController ...
-func NewPostUpdateUserPasswordController(props *props.ControllerProps) *PostUpdateUserPasswordController {
+func NewPostUpdateUserPasswordController(cp *props.ControllerProps) *PostUpdateUserPasswordController {
 	p := &PostUpdateUserPasswordController{
-		ControllerProps: props,
+		ControllerProps: cp,
 	}
 	return p
 }
@@ -28,10 +28,22 @@ func NewPostUpdateUserPasswordController(props *props.ControllerProps) *PostUpda
 // @Param Password body string WIP:${isRequire} WIP:${description}
 // @Param PasswordConfirm body string WIP:${isRequire} WIP:${description}
 // @Success 200 {object} PostUpdateUserPasswordResponse
-// @Failure 400 {object} WIP
+// @Failure 400 {object} wrapper.APIError
+// @Failure 500 {object} wrapper.APIError
 // @Router /service/user/update_user_password [POST]
 func (p *PostUpdateUserPasswordController) PostUpdateUserPassword(
 	c echo.Context, req *PostUpdateUserPasswordRequest,
 ) (res *PostUpdateUserPasswordResponse, err error) {
-	panic("require implements.")
+	// API Error Usage: github.com/go-generalize/api_gen/server_generator/sample/wrapper
+	//
+	// return nil, wrapper.NewAPIError(http.StatusBadRequest)
+	//
+	// return nil, wrapper.NewAPIError(http.StatusBadRequest).SetError(err)
+	//
+	// body := map[string]interface{}{
+	// 	"code": http.StatusBadRequest,
+	// 	"message": "invalid request parameter.",
+	// }
+	// return nil, wrapper.NewAPIError(http.StatusBadRequest, body).SetError(err)
+	panic("require implements.") // FIXME require implements.
 }

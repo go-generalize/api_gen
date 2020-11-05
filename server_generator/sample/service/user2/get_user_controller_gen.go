@@ -13,9 +13,9 @@ type GetUserController struct {
 }
 
 // NewGetUserController ...
-func NewGetUserController(props *props.ControllerProps) *GetUserController {
+func NewGetUserController(cp *props.ControllerProps) *GetUserController {
 	g := &GetUserController{
-		ControllerProps: props,
+		ControllerProps: cp,
 	}
 	return g
 }
@@ -28,10 +28,11 @@ func NewGetUserController(props *props.ControllerProps) *GetUserController {
 // @Param userID path string WIP:${isRequire} WIP:${description}
 // @Param search_request query string WIP:${isRequire} WIP:${description}
 // @Success 200 {object} GetUserResponse
-// @Failure 400 {object} WIP
+// @Failure 400 {object} wrapper.APIError
+// @Failure 500 {object} wrapper.APIError
 // @Router /service/user2/{userID} [GET]
 func (g *GetUserController) GetUser(
-	c echo.Context, req *GetUserRequest,
+	_ echo.Context, req *GetUserRequest,
 ) (res *GetUserResponse, err error) {
 	return &GetUserResponse{
 		ID:            req.ID,

@@ -14,9 +14,9 @@ type PostCreateTableController struct {
 }
 
 // NewPostCreateTableController ...
-func NewPostCreateTableController(props *props.ControllerProps) *PostCreateTableController {
+func NewPostCreateTableController(cp *props.ControllerProps) *PostCreateTableController {
 	p := &PostCreateTableController{
-		ControllerProps: props,
+		ControllerProps: cp,
 	}
 	return p
 }
@@ -28,11 +28,14 @@ func NewPostCreateTableController(props *props.ControllerProps) *PostCreateTable
 // @Produce json
 // @Param ID body string WIP:${isRequire} WIP:${description}
 // @Param Text body string WIP:${isRequire} WIP:${description}
+// @Param Flag body Flag WIP:${isRequire} WIP:${description}
+// @Param map body map[Flag]Flag WIP:${isRequire} WIP:${description}
 // @Success 200 {object} PostCreateTableResponse
-// @Failure 400 {object} WIP
+// @Failure 400 {object} wrapper.APIError
+// @Failure 500 {object} wrapper.APIError
 // @Router /create_table [POST]
 func (p *PostCreateTableController) PostCreateTable(
-	c echo.Context, req *PostCreateTableRequest,
+	_ echo.Context, _ *PostCreateTableRequest,
 ) (res *PostCreateTableResponse, err error) {
 	id := p.TestKey
 
