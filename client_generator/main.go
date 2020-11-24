@@ -72,7 +72,6 @@ func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *a
 		if genDecl.Tok != token.TYPE {
 			continue
 		}
-		packageName := file.Name.Name
 
 		for _, spec := range genDecl.Specs {
 			// 型定義
@@ -147,15 +146,6 @@ func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *a
 				endpointPath = strcase.ToCamel(goFileName)
 				endpointPath = fmt.Sprintf("/_%s", strings.ToLower(string(endpointPath[0]))+endpointPath[1:])
 				p.endpoints[me].path = filepath.Join(filepath.Dir(p.endpoints[me].path), endpointPath)
-			}
-
-			packageNameFromFilePath := filepath.Base(dir)
-			if packageName != packageNameFromFilePath {
-				fmt.Printf("\x1b[31mskip: %s/.%s \n"+
-					"  The file path and the actual package name must match.\n"+
-					"  package name=%s, require=%s\x1b[0m\n",
-					p.endpoints[me].path, p.endpoints[me].rawName, packageNameFromFilePath, packageName)
-				continue
 			}
 
 			p.structs = append(p.structs, name)
