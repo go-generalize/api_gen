@@ -2,6 +2,8 @@
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
 // generated version: devel
 
+export type GetRequest = {}
+export type GetResponse = {}
 export type PostUpdateUserNameRequest = {
 	Name: string;
 }

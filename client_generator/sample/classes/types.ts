@@ -2,6 +2,12 @@
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
 // generated version: devel
 
+export type GetRequest = {
+	Param: string;
+}
+export type GetResponse = {
+	Data: string;
+}
 export type PostCreateTableRequest = {
 	Flag: number;
 	ID: string;
@@ -29,6 +35,7 @@ export type PostCreateUserResponse = {
 export type Role = {
 	ID: number;
 	Name: string;
+	RecursionRoles: Role[] | null;
 }
 export type Pos = {
 	X: number;

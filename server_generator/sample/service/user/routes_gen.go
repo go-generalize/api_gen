@@ -28,9 +28,38 @@ func NewRoutes(p *props.ControllerProps, router *echo.Group, opts ...io.Writer) 
 	r := &Routes{
 		router: router,
 	}
+	router.GET("", r.Get(p))
 	router.POST("update_user_name", r.PostUpdateUserName(p))
 	router.POST("update_user_password", r.PostUpdateUserPassword(p))
 	return r
+}
+
+// Get ...
+func (r *Routes) Get(p *props.ControllerProps) echo.HandlerFunc {
+	i := NewGetController(p)
+	return func(c echo.Context) error {
+		req := new(GetRequest)
+		if err := c.Bind(req); err != nil {
+			log.Printf("failed to JSON binding(/service/user): %+v", err)
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    http.StatusBadRequest,
+				"message": "invalid request.",
+			})
+		}
+		res, err := i.Get(c, req)
+		if err != nil {
+			if werr, ok := err.(*wrapper.APIError); ok {
+				log.Printf("%+v", werr)
+				return c.JSON(werr.Status, werr.Body)
+			}
+			return err
+		}
+		if res == nil {
+			return nil
+		}
+
+		return c.JSON(http.StatusOK, res)
+	}
 }
 
 // PostUpdateUserName ...
@@ -87,6 +116,11 @@ func (r *Routes) PostUpdateUserPassword(p *props.ControllerProps) echo.HandlerFu
 
 		return c.JSON(http.StatusOK, res)
 	}
+}
+
+// IGetController ...
+type IGetController interface {
+	Get(c echo.Context, req *GetRequest) (res *GetResponse, err error)
 }
 
 // IPostUpdateUserNameController ...
