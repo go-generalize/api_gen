@@ -127,13 +127,19 @@ func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *a
 				p.endpoints[me].request = true
 
 				p.endpoints[me].rawName = strings.TrimSuffix(name, "Request")
-				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(strings.TrimSuffix(name[len(method):], "Request")))
+
+				epName := strings.TrimSuffix(name[len(method):], "Request")
+				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(epName))
+
 				p.endpoints[me].requestStructObject = structType
 			} else {
 				p.endpoints[me].response = true
 
 				p.endpoints[me].rawName = strings.TrimSuffix(name, "Response")
-				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(strings.TrimSuffix(name[len(method):], "Response")))
+
+				epName := strings.TrimSuffix(name[len(method):], "Response")
+				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(epName))
+
 				p.endpoints[me].responseStructObject = structType
 			}
 

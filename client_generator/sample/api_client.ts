@@ -8,6 +8,8 @@ import {
 } from './classes/service/types';
 
 import {
+	GetRequest as ServiceUserGetRequest,
+	GetResponse as ServiceUserGetResponse,
 	PostUpdateUserNameRequest as ServiceUserPostUpdateUserNameRequest,
 	PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse,
 	PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest,
@@ -34,6 +36,8 @@ import {
 } from './classes/service/user2/types';
 
 import {
+	GetRequest as GetRequest,
+	GetResponse as GetResponse,
 	PostCreateTableRequest as PostCreateTableRequest,
 	PostCreateTableResponse as PostCreateTableResponse,
 	PostCreateUserRequest as PostCreateUserRequest,
@@ -374,6 +378,40 @@ class ServiceUserClient {
 		return res;
 	}
 
+	async get(
+		param: ServiceUserGetRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
+	): Promise<ServiceUserGetResponse> {
+	    const excludeParams: string[] = [];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
+		const url = `${this.baseURL}/service/user/?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
+		const resp = await fetch(
+			url,
+			{
+				method: "GET",
+				headers: {
+					...this.headers,
+					...headers,
+					...mockHeaders,
+				},
+				...this.options,
+				...options,
+			}
+		);
+
+		if (Math.floor(resp.status / 100) !== 2) {
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
+		}
+		await resp.text();
+		return {} as ServiceUserGetResponse;
+	}
+
 	async postUpdateUserName(
 		param: ServiceUserPostUpdateUserNameRequest,
 		headers?: {[key: string]: string},
@@ -480,6 +518,39 @@ export class APIClient {
 			}
 		});
 		return res;
+	}
+
+	async get(
+		param: GetRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
+	): Promise<GetResponse> {
+	    const excludeParams: string[] = [];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
+		const url = `${this.baseURL}/?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
+		const resp = await fetch(
+			url,
+			{
+				method: "GET",
+				headers: {
+					...this.headers,
+					...headers,
+					...mockHeaders,
+				},
+				...this.options,
+				...options,
+			}
+		);
+
+		if (Math.floor(resp.status / 100) !== 2) {
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
+		}
+		return (await resp.json()) as GetResponse;
 	}
 
 	async postCreateTable(

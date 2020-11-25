@@ -47,7 +47,7 @@ func MockBootstrap(e *echo.Echo, w io.Writer, jsonDir string) {
 		}
 	})
 
-	rootGroup := e.Group("")
+	rootGroup := e.Group("/")
 	NewMockRoutes(rootGroup, filepath.Join(jsonDir, "/"), w)
 	serviceGroup := rootGroup.Group("service/")
 	service.NewMockRoutes(serviceGroup, filepath.Join(jsonDir, "/service"), w)

@@ -221,10 +221,9 @@ func run(arg string) error {
 		endpointPath = filepath.Join(endpointPath, "/")
 		endpoint := endpointPath
 		if endpointPath == "." {
-			endpoint = ""
+			endpoint = "/"
 			endpointPath = "/"
 		} else {
-			endpoint += "/"
 			endpointPath = "/" + endpointPath
 		}
 
@@ -417,7 +416,7 @@ func parsePackages(
 			endpoint = fmt.Sprintf(":%s", param)
 		}
 
-		fullEndpoint := "/" + filepath.Join(endpointBase, endpoint)
+		fullEndpoint := filepath.Join("/", endpointBase, endpoint)
 		fullEndpoint = replaceRule.ReplaceAllString(fullEndpoint, "{$1}$2")
 
 		ct := &ControllerTemplate{
