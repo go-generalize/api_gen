@@ -72,7 +72,7 @@ func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList Middleware
 		}
 	})
 
-	rootGroup := e.Group("")
+	rootGroup := e.Group("/")
 	setMiddleware(rootGroup, "/", middleware)
 	NewRoutes(p, rootGroup, opts...)
 	serviceGroup := rootGroup.Group("service/")

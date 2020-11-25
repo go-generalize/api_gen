@@ -131,10 +131,6 @@ func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *a
 				epName := strings.TrimSuffix(name[len(method):], "Request")
 				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(epName))
 
-				if name == "" && !strings.HasSuffix(p.endpoints[me].path, "/") {
-					p.endpoints[me].path = p.endpoints[me].path + "/"
-				}
-
 				p.endpoints[me].requestStructObject = structType
 			} else {
 				p.endpoints[me].response = true
@@ -143,10 +139,6 @@ func (p *pkgParser) parseFile(pathName, dir string, fset *token.FileSet, file *a
 
 				epName := strings.TrimSuffix(name[len(method):], "Response")
 				p.endpoints[me].path = path.Join(pathName, strcase.ToSnake(epName))
-
-				if name == "" && !strings.HasSuffix(p.endpoints[me].path, "/") {
-					p.endpoints[me].path = p.endpoints[me].path + "/"
-				}
 
 				p.endpoints[me].responseStructObject = structType
 			}
