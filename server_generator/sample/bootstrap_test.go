@@ -60,7 +60,7 @@ func TestBootstrap(t *testing.T) {
 
 	m := make([]*MiddlewareSet, 0)
 	m = append(m, &MiddlewareSet{
-		Path: "/service/user/",
+		Path: "/service/user",
 		MiddlewareFunc: []echo.MiddlewareFunc{
 			func(handlerFunc echo.HandlerFunc) echo.HandlerFunc {
 				return func(context echo.Context) error {

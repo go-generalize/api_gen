@@ -224,6 +224,7 @@ func run(arg string) error {
 			endpoint = "/"
 			endpointPath = "/"
 		} else {
+			endpoint = "/" + endpoint
 			endpointPath = "/" + endpointPath
 		}
 
@@ -253,6 +254,7 @@ func run(arg string) error {
 			packagePath = ""
 			importPackageName = ""
 		}
+		fmt.Println(packagePath, endpoint, endpointPath)
 
 		bootstrapTemplates = append(bootstrapTemplates, &BootstrapTemplates{
 			PackagePath:         packagePath,
@@ -314,11 +316,11 @@ func run(arg string) error {
 
 			b.RouteGroupName = b.ImportPackageName
 			b.HasParent = true
-			b.Endpoint = rel + "/"
+			b.Endpoint = "/" + rel
 
-			if !strings.HasSuffix(b.EndpointPath, "/") {
-				b.EndpointPath = b.EndpointPath + "/"
-			}
+			// if !strings.HasSuffix(b.EndpointPath, "/") {
+			// 	b.EndpointPath = b.EndpointPath + "/"
+			// }
 		}
 	}
 
@@ -426,7 +428,7 @@ func parsePackages(
 			ControllerNameInitial:  strings.ToLower(string([]rune(cn)[0])),
 			HandlerName:            cn,
 			RawEndpointPath:        fullEndpoint,
-			Endpoint:               endpoint,
+			Endpoint:               "/" + endpoint,
 			HTTPMethod:             strings.ToUpper(httpMethod),
 			RequestStructName:      req.StructName,
 			ResponseStructName:     res.StructName,

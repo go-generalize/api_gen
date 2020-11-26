@@ -42,7 +42,7 @@ func NewMockRoutes(router *echo.Group, jsonDir string, w io.Writer) *MockRoutes 
 	}
 	{
 		jd := filepath.Join(jsonDir, "put_job")
-		router.PUT("job", r.PutJob(jd))
+		router.PUT("/job", r.PutJob(jd))
 	}
 	return r
 }

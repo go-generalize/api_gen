@@ -28,9 +28,9 @@ func NewRoutes(p *props.ControllerProps, router *echo.Group, opts ...io.Writer) 
 	r := &Routes{
 		router: router,
 	}
-	router.GET("", r.Get(p))
-	router.POST("create_table", r.PostCreateTable(p))
-	router.POST("create_user", r.PostCreateUser(p))
+	router.GET("/", r.Get(p))
+	router.POST("/create_table", r.PostCreateTable(p))
+	router.POST("/create_user", r.PostCreateUser(p))
 	return r
 }
 

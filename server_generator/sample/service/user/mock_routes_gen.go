@@ -42,15 +42,15 @@ func NewMockRoutes(router *echo.Group, jsonDir string, w io.Writer) *MockRoutes 
 	}
 	{
 		jd := filepath.Join(jsonDir, "get_")
-		router.GET("", r.Get(jd))
+		router.GET("/", r.Get(jd))
 	}
 	{
 		jd := filepath.Join(jsonDir, "post_update_user_name")
-		router.POST("update_user_name", r.PostUpdateUserName(jd))
+		router.POST("/update_user_name", r.PostUpdateUserName(jd))
 	}
 	{
 		jd := filepath.Join(jsonDir, "post_update_user_password")
-		router.POST("update_user_password", r.PostUpdateUserPassword(jd))
+		router.POST("/update_user_password", r.PostUpdateUserPassword(jd))
 	}
 	return r
 }

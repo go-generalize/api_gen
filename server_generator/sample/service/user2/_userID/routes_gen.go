@@ -28,7 +28,7 @@ func NewRoutes(p *props.ControllerProps, router *echo.Group, opts ...io.Writer) 
 	r := &Routes{
 		router: router,
 	}
-	router.GET("user_job_get", r.GetUserJobGet(p))
+	router.GET("/user_job_get", r.GetUserJobGet(p))
 	return r
 }
 

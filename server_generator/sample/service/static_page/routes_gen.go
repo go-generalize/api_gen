@@ -28,7 +28,7 @@ func NewRoutes(p *props.ControllerProps, router *echo.Group, opts ...io.Writer) 
 	r := &Routes{
 		router: router,
 	}
-	router.GET("static_page", r.GetStaticPage(p))
+	router.GET("/static_page", r.GetStaticPage(p))
 	return r
 }
 
