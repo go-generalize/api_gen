@@ -221,7 +221,7 @@ func run(arg string) error {
 		endpointPath = filepath.Join(endpointPath, "/")
 		endpoint := endpointPath
 		if endpointPath == "." {
-			endpoint = "/"
+			endpoint = ""
 			endpointPath = "/"
 		} else {
 			endpoint = "/" + endpoint
@@ -254,7 +254,6 @@ func run(arg string) error {
 			packagePath = ""
 			importPackageName = ""
 		}
-		fmt.Println(packagePath, endpoint, endpointPath)
 
 		bootstrapTemplates = append(bootstrapTemplates, &BootstrapTemplates{
 			PackagePath:         packagePath,
@@ -317,10 +316,6 @@ func run(arg string) error {
 			b.RouteGroupName = b.ImportPackageName
 			b.HasParent = true
 			b.Endpoint = "/" + rel
-
-			// if !strings.HasSuffix(b.EndpointPath, "/") {
-			// 	b.EndpointPath = b.EndpointPath + "/"
-			// }
 		}
 	}
 
