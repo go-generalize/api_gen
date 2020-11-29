@@ -627,7 +627,7 @@ func createFromTemplate(templatePath, path string, m interface{}, isOverRide boo
 
 	t, err := ioutil.ReadAll(f)
 	if err != nil {
-		return xerrors.Errorf("%s read error in statikFs: %w", templatePath, err)
+		return xerrors.Errorf("%s read error in ioutil: %w", templatePath, err)
 	}
 
 	tpl := template.Must(template.New("tmpl").Funcs(funcMap).Parse(string(t)))
