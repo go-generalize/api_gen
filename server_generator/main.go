@@ -22,13 +22,16 @@ import (
 	"golang.org/x/xerrors"
 )
 
-var supportHTTPMethod = []string{
-	"get",
-	"post",
-	"put",
-	"delete",
-	"patch",
-}
+var (
+	supportHTTPMethod = []string{
+		"get",
+		"post",
+		"put",
+		"delete",
+		"patch",
+	}
+	withMock bool
+)
 
 const rootPackageName = "root"
 
@@ -41,6 +44,7 @@ func main() {
 
 	versionFlag := flag.Bool("v", false, "print version")
 	updateCheckFlag := flag.Bool("check-update", false, "check for updates")
+	mockFlag := flag.Bool("mock", false, "generate mock")
 
 	flag.Parse()
 
@@ -54,7 +58,12 @@ func main() {
 		return
 	}
 
-	err := run(os.Args[1])
+	if *mockFlag {
+		withMock = true
+	}
+
+	args := os.Args
+	err := run(args[len(args)-1])
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -263,10 +272,11 @@ func run(arg string) error {
 			Controller:          cs[0],
 		})
 
-		// create mock json
-		err = createMockJSON(rootPath, path)
-		if err != nil {
-			return err
+		if withMock {
+			// create mock json
+			if err = createMockJSON(rootPath, path); err != nil {
+				return xerrors.Errorf("error in createMockJSON method: %w", err)
+			}
 		}
 
 		return nil
@@ -346,15 +356,16 @@ func run(arg string) error {
 		return err
 	}
 
-	err = createMock(&CreateMockRequest{
-		RootPath:               rootPath,
-		ControllerPropsPackage: controllerPropsPackage,
-		APIRootPackage:         apiRootPackage,
-		BootstrapTemplate:      bootstraptemplate,
-		APIRootPathRel:         apiRootPathRel,
-	})
-	if err != nil {
-		return err
+	if withMock {
+		if err = createMock(&CreateMockRequest{
+			RootPath:               rootPath,
+			ControllerPropsPackage: controllerPropsPackage,
+			APIRootPackage:         apiRootPackage,
+			BootstrapTemplate:      bootstraptemplate,
+			APIRootPathRel:         apiRootPathRel,
+		}); err != nil {
+			return xerrors.Errorf("error in createMock method: %w", err)
+		}
 	}
 
 	return nil
@@ -481,7 +492,7 @@ func parsePackages(
 		}
 
 		// mock_routes_gen.go
-		{
+		if withMock {
 			routePath := filepath.Join(dir+"/", "mock_routes_gen.go")
 			err := createFromTemplate("/templates/mock_routes_template.go.tmpl", routePath, &RoutesTemplate{
 				AppVersion:             common.AppVersion,
@@ -615,7 +626,7 @@ func createFromTemplate(templatePath, path string, m interface{}, isOverRide boo
 
 	t, err := ioutil.ReadAll(f)
 	if err != nil {
-		return xerrors.Errorf("%s read error in statikFs: %w", templatePath, err)
+		return xerrors.Errorf("%s read error in ioutil: %w", templatePath, err)
 	}
 
 	tpl := template.Must(template.New("tmpl").Funcs(funcMap).Parse(string(t)))
