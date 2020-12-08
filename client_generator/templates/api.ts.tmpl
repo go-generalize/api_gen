@@ -7,15 +7,46 @@ import {{ "{" }}
 {{ range $i, $pair := $elem.Pairs }}	{{ $pair.Name }} as {{ $pair.NameAs }},
 {{ end }}{{ "}" }} from '{{ $elem.Path }}';
 {{- end }}
+
+export type ApiClientBeforeMiddleware =
+	(httpMethod: string, endpoint: string, request: unknown) => Promise<boolean>;
+export type ApiClientAfterMiddleware =
+	(httpMethod: string, endpoint: string, request: unknown, response: unknown) => Promise<boolean>;
+
+export interface middlewareSet {
+	beforeMiddleware?: ApiClientBeforeMiddleware[];
+	afterMiddleware?: ApiClientAfterMiddleware[];
+}
 {{ range $index, $elem := .ChildrenClients }}
 
 class {{ $elem.Name }} {
+	private beforeMiddleware: ApiClientBeforeMiddleware[] = [];
+	private afterMiddleware: ApiClientAfterMiddleware[] = [];
+
 {{- 	range $index, $elem := .Children }}
 	public {{ $elem.Name }}: {{ $elem.ClassName }};
 {{- 	end }}
-	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
+	constructor(
+		private headers: {[key: string]: string},
+		private options: {[key: string]: any},
+		private baseURL: string,
+		middleware: middlewareSet
+	) {
+		this.beforeMiddleware = middleware.beforeMiddleware!;
+		this.afterMiddleware = middleware.afterMiddleware!;
+{{- 	if $elem.Children }}
+		const childMiddlewareSet: middlewareSet = {
+			beforeMiddleware: this.beforeMiddleware,
+			afterMiddleware: this.afterMiddleware
+		};
+{{- 	end }}
 {{-  	range $index, $elem := $elem.Children }}
-		this.{{ $elem.Name }} = new {{ $elem.ClassName }}(headers, options, baseURL);
+		this.{{ $elem.Name }} = new {{ $elem.ClassName }}(
+			headers,
+			options,
+			baseURL,
+			childMiddlewareSet
+		);
 {{- 	end }}
 	}
 
@@ -40,6 +71,9 @@ class {{ $elem.Name }} {
 	    if (options && options['mock_option']) {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
 			delete options['mock_option'];
+		}
+		for (const m of this.beforeMiddleware) {
+			await m('{{$method.Method}}', `${this.baseURL}{{ $method.Endpoint }}`, param);
 		}
 {{- 	if eq $method.Method "GET" }}
 		const url = `${this.baseURL}{{ $method.Endpoint }}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
@@ -68,11 +102,15 @@ class {{ $elem.Name }} {
 			throw new ApiError(resp, responseText);
 		}
 {{- 	if eq .HasFields true }}
-		return (await resp.json()) as {{ $method.ResponseType }};
+		const res = (await resp.json()) as {{ $method.ResponseType }};
 {{- 	else }}
 		await resp.text();
-		return {} as {{ $method.ResponseType }};
+		const res = {} as {{ $method.ResponseType }};
 {{- 	end }}
+		for (const m of this.afterMiddleware) {
+			await m('{{$method.Method}}', `${this.baseURL}{{ $method.Endpoint }}`, param, res);
+		}
+		return res;
 	}
 {{- 	end }}
 }
@@ -82,6 +120,10 @@ export class APIClient {
 	private headers: {[key: string]: string};
 	private options: {[key: string]: any};
 	private baseURL: string;
+
+	private beforeMiddleware: ApiClientBeforeMiddleware[] = [];
+	private afterMiddleware: ApiClientAfterMiddleware[] = [];
+
 {{- 	range $index, $elem := .Children }}
 
 	public {{ $elem.Name }}: {{ $elem.ClassName }};
@@ -91,7 +133,8 @@ export class APIClient {
 		token?: string,
 		commonHeaders?: {[key: string]: string},
 		baseURL?: string,
-		commonOptions: {[key: string]: any} = {}
+		commonOptions: {[key: string]: any} = {},
+		middleware?: middlewareSet
 	) {
 		const headers: {[key: string]: string} =  {
 			'Content-Type': 'application/json',
@@ -105,9 +148,23 @@ export class APIClient {
 		this.baseURL =  (baseURL === undefined) ? "" : baseURL;
 		this.options = commonOptions;
 		this.headers = headers;
+
+		if (middleware) {
+			this.beforeMiddleware = middleware.beforeMiddleware ?? [];
+			this.afterMiddleware = middleware.afterMiddleware ?? [];
+		}
+		const childMiddlewareSet: middlewareSet = {
+			beforeMiddleware: this.beforeMiddleware,
+			afterMiddleware: this.afterMiddleware
+		};
 {{- 	range $index, $elem := .Children }}
 
-		this.{{ $elem.Name }} = new {{ $elem.ClassName }}(headers, this.options, this.baseURL);
+		this.{{ $elem.Name }} = new {{ $elem.ClassName }}(
+			headers,
+			this.options,
+			this.baseURL,
+			childMiddlewareSet
+		);
 {{- 	end }}
 	}
 
@@ -132,6 +189,9 @@ export class APIClient {
 	    if (options && options['mock_option']) {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
 			delete options['mock_option'];
+		}
+		for (const m of this.beforeMiddleware) {
+			await m('{{$method.Method}}', `${this.baseURL}{{ $method.Endpoint }}`, param);
 		}
 {{- 	if eq $method.Method "GET" }}
 		const url = `${this.baseURL}{{ $method.Endpoint }}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
@@ -161,11 +221,15 @@ export class APIClient {
 		}
 
 {{- if eq .HasFields true }}
-		return (await resp.json()) as {{ $method.ResponseType }};
+		const res = (await resp.json()) as {{ $method.ResponseType }};
 {{- else }}
 		await resp.text();
-		return {} as {{ $method.ResponseType }};
+		const res = {} as {{ $method.ResponseType }};
 {{- end }}
+		for (const m of this.afterMiddleware) {
+			await m('{{$method.Method}}', `${this.baseURL}{{ $method.Endpoint }}`, param, res);
+		}
+		return res;
 	}
 {{- end }}
 }
