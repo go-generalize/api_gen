@@ -3,6 +3,11 @@
 // generated version: devel
 
 import {
+	GetStaticPageRequest as ServiceStaticPageGetStaticPageRequest,
+	GetStaticPageResponse as ServiceStaticPageGetStaticPageResponse,
+} from './classes/service/static_page/types';
+
+import {
 	GetArticleRequest as ServiceGetArticleRequest,
 	GetArticleResponse as ServiceGetArticleResponse,
 } from './classes/service/types';
@@ -44,15 +49,53 @@ import {
 	PostCreateUserResponse as PostCreateUserResponse,
 } from './classes/types';
 
+export type ApiClientBeforeMiddleware =
+	(httpMethod: string, endpoint: string, request: unknown) => Promise<boolean>;
+export type ApiClientAfterMiddleware =
+	(httpMethod: string, endpoint: string, request: unknown, response: unknown) => Promise<boolean>;
+
+export interface middlewareSet {
+	beforeMiddleware?: ApiClientBeforeMiddleware[];
+	afterMiddleware?: ApiClientAfterMiddleware[];
+}
+
 
 class ServiceClient {
+	private beforeMiddleware: ApiClientBeforeMiddleware[] = [];
+	private afterMiddleware: ApiClientAfterMiddleware[] = [];
 	public static_page: ServiceStaticPageClient;
 	public user: ServiceUserClient;
 	public user2: ServiceUser2Client;
-	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
-		this.static_page = new ServiceStaticPageClient(headers, options, baseURL);
-		this.user = new ServiceUserClient(headers, options, baseURL);
-		this.user2 = new ServiceUser2Client(headers, options, baseURL);
+	constructor(
+		private headers: {[key: string]: string},
+		private options: {[key: string]: any},
+		private baseURL: string,
+		middleware: middlewareSet
+	) {
+		this.beforeMiddleware = middleware.beforeMiddleware!;
+		this.afterMiddleware = middleware.afterMiddleware!;
+		const childMiddlewareSet: middlewareSet = {
+			beforeMiddleware: this.beforeMiddleware,
+			afterMiddleware: this.afterMiddleware
+		};
+		this.static_page = new ServiceStaticPageClient(
+			headers,
+			options,
+			baseURL,
+			childMiddlewareSet
+		);
+		this.user = new ServiceUserClient(
+			headers,
+			options,
+			baseURL,
+			childMiddlewareSet
+		);
+		this.user2 = new ServiceUser2Client(
+			headers,
+			options,
+			baseURL,
+			childMiddlewareSet
+		);
 	}
 
 	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
@@ -76,6 +119,9 @@ class ServiceClient {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
 			delete options['mock_option'];
 		}
+		for (const m of this.beforeMiddleware) {
+			await m('GET', `${this.baseURL}/service/article`, param);
+		}
 		const url = `${this.baseURL}/service/article?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
 		const resp = await fetch(
 			url,
@@ -95,12 +141,25 @@ class ServiceClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return (await resp.json()) as ServiceGetArticleResponse;
+		const res = (await resp.json()) as ServiceGetArticleResponse;
+		for (const m of this.afterMiddleware) {
+			await m('GET', `${this.baseURL}/service/article`, param, res);
+		}
+		return res;
 	}
 }
 
 class ServiceStaticPageClient {
-	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
+	private beforeMiddleware: ApiClientBeforeMiddleware[] = [];
+	private afterMiddleware: ApiClientAfterMiddleware[] = [];
+	constructor(
+		private headers: {[key: string]: string},
+		private options: {[key: string]: any},
+		private baseURL: string,
+		middleware: middlewareSet
+	) {
+		this.beforeMiddleware = middleware.beforeMiddleware!;
+		this.afterMiddleware = middleware.afterMiddleware!;
 	}
 
 	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
@@ -124,6 +183,9 @@ class ServiceStaticPageClient {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
 			delete options['mock_option'];
 		}
+		for (const m of this.beforeMiddleware) {
+			await m('GET', `${this.baseURL}/service/static_page/static_page`, param);
+		}
 		const url = `${this.baseURL}/service/static_page/static_page?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
 		const resp = await fetch(
 			url,
@@ -143,14 +205,36 @@ class ServiceStaticPageClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return (await resp.json()) as ServiceStaticPageGetStaticPageResponse;
+		const res = (await resp.json()) as ServiceStaticPageGetStaticPageResponse;
+		for (const m of this.afterMiddleware) {
+			await m('GET', `${this.baseURL}/service/static_page/static_page`, param, res);
+		}
+		return res;
 	}
 }
 
 class ServiceUser2Client {
+	private beforeMiddleware: ApiClientBeforeMiddleware[] = [];
+	private afterMiddleware: ApiClientAfterMiddleware[] = [];
 	public _userID: ServiceUser2UserIDClient;
-	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
-		this._userID = new ServiceUser2UserIDClient(headers, options, baseURL);
+	constructor(
+		private headers: {[key: string]: string},
+		private options: {[key: string]: any},
+		private baseURL: string,
+		middleware: middlewareSet
+	) {
+		this.beforeMiddleware = middleware.beforeMiddleware!;
+		this.afterMiddleware = middleware.afterMiddleware!;
+		const childMiddlewareSet: middlewareSet = {
+			beforeMiddleware: this.beforeMiddleware,
+			afterMiddleware: this.afterMiddleware
+		};
+		this._userID = new ServiceUser2UserIDClient(
+			headers,
+			options,
+			baseURL,
+			childMiddlewareSet
+		);
 	}
 
 	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
@@ -174,6 +258,9 @@ class ServiceUser2Client {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
 			delete options['mock_option'];
 		}
+		for (const m of this.beforeMiddleware) {
+			await m('GET', `${this.baseURL}/service/user2/${encodeURI(param.id.toString())}`, param);
+		}
 		const url = `${this.baseURL}/service/user2/${encodeURI(param.id.toString())}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
 		const resp = await fetch(
 			url,
@@ -193,7 +280,11 @@ class ServiceUser2Client {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return (await resp.json()) as ServiceUser2GetUserResponse;
+		const res = (await resp.json()) as ServiceUser2GetUserResponse;
+		for (const m of this.afterMiddleware) {
+			await m('GET', `${this.baseURL}/service/user2/${encodeURI(param.id.toString())}`, param, res);
+		}
+		return res;
 	}
 
 	async postUpdateUserName(
@@ -206,6 +297,9 @@ class ServiceUser2Client {
 	    if (options && options['mock_option']) {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
 			delete options['mock_option'];
+		}
+		for (const m of this.beforeMiddleware) {
+			await m('POST', `${this.baseURL}/service/user2/update_user_name`, param);
 		}
 		const url = `${this.baseURL}/service/user2/update_user_name`;
 		const resp = await fetch(
@@ -227,7 +321,11 @@ class ServiceUser2Client {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return (await resp.json()) as ServiceUser2PostUpdateUserNameResponse;
+		const res = (await resp.json()) as ServiceUser2PostUpdateUserNameResponse;
+		for (const m of this.afterMiddleware) {
+			await m('POST', `${this.baseURL}/service/user2/update_user_name`, param, res);
+		}
+		return res;
 	}
 
 	async postUpdateUserPassword(
@@ -240,6 +338,9 @@ class ServiceUser2Client {
 	    if (options && options['mock_option']) {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
 			delete options['mock_option'];
+		}
+		for (const m of this.beforeMiddleware) {
+			await m('POST', `${this.baseURL}/service/user2/update_user_password`, param);
 		}
 		const url = `${this.baseURL}/service/user2/update_user_password`;
 		const resp = await fetch(
@@ -261,14 +362,36 @@ class ServiceUser2Client {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return (await resp.json()) as ServiceUser2PostUpdateUserPasswordResponse;
+		const res = (await resp.json()) as ServiceUser2PostUpdateUserPasswordResponse;
+		for (const m of this.afterMiddleware) {
+			await m('POST', `${this.baseURL}/service/user2/update_user_password`, param, res);
+		}
+		return res;
 	}
 }
 
 class ServiceUser2UserIDClient {
+	private beforeMiddleware: ApiClientBeforeMiddleware[] = [];
+	private afterMiddleware: ApiClientAfterMiddleware[] = [];
 	public _JobID: ServiceUser2UserIDJobIDClient;
-	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
-		this._JobID = new ServiceUser2UserIDJobIDClient(headers, options, baseURL);
+	constructor(
+		private headers: {[key: string]: string},
+		private options: {[key: string]: any},
+		private baseURL: string,
+		middleware: middlewareSet
+	) {
+		this.beforeMiddleware = middleware.beforeMiddleware!;
+		this.afterMiddleware = middleware.afterMiddleware!;
+		const childMiddlewareSet: middlewareSet = {
+			beforeMiddleware: this.beforeMiddleware,
+			afterMiddleware: this.afterMiddleware
+		};
+		this._JobID = new ServiceUser2UserIDJobIDClient(
+			headers,
+			options,
+			baseURL,
+			childMiddlewareSet
+		);
 	}
 
 	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
@@ -292,6 +415,9 @@ class ServiceUser2UserIDClient {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
 			delete options['mock_option'];
 		}
+		for (const m of this.beforeMiddleware) {
+			await m('GET', `${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/user_job_get`, param);
+		}
 		const url = `${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/user_job_get?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
 		const resp = await fetch(
 			url,
@@ -311,12 +437,25 @@ class ServiceUser2UserIDClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return (await resp.json()) as ServiceUser2UserIDGetUserJobGetResponse;
+		const res = (await resp.json()) as ServiceUser2UserIDGetUserJobGetResponse;
+		for (const m of this.afterMiddleware) {
+			await m('GET', `${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/user_job_get`, param, res);
+		}
+		return res;
 	}
 }
 
 class ServiceUser2UserIDJobIDClient {
-	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
+	private beforeMiddleware: ApiClientBeforeMiddleware[] = [];
+	private afterMiddleware: ApiClientAfterMiddleware[] = [];
+	constructor(
+		private headers: {[key: string]: string},
+		private options: {[key: string]: any},
+		private baseURL: string,
+		middleware: middlewareSet
+	) {
+		this.beforeMiddleware = middleware.beforeMiddleware!;
+		this.afterMiddleware = middleware.afterMiddleware!;
 	}
 
 	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
@@ -340,6 +479,9 @@ class ServiceUser2UserIDJobIDClient {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
 			delete options['mock_option'];
 		}
+		for (const m of this.beforeMiddleware) {
+			await m('PUT', `${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/${encodeURI(param.JobID.toString())}/job`, param);
+		}
 		const url = `${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/${encodeURI(param.JobID.toString())}/job`;
 		const resp = await fetch(
 			url,
@@ -360,12 +502,25 @@ class ServiceUser2UserIDJobIDClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return (await resp.json()) as ServiceUser2UserIDJobIDPutJobResponse;
+		const res = (await resp.json()) as ServiceUser2UserIDJobIDPutJobResponse;
+		for (const m of this.afterMiddleware) {
+			await m('PUT', `${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/${encodeURI(param.JobID.toString())}/job`, param, res);
+		}
+		return res;
 	}
 }
 
 class ServiceUserClient {
-	constructor(private headers: {[key: string]: string}, private options: {[key: string]: any}, private baseURL: string) {
+	private beforeMiddleware: ApiClientBeforeMiddleware[] = [];
+	private afterMiddleware: ApiClientAfterMiddleware[] = [];
+	constructor(
+		private headers: {[key: string]: string},
+		private options: {[key: string]: any},
+		private baseURL: string,
+		middleware: middlewareSet
+	) {
+		this.beforeMiddleware = middleware.beforeMiddleware!;
+		this.afterMiddleware = middleware.afterMiddleware!;
 	}
 
 	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
@@ -389,7 +544,10 @@ class ServiceUserClient {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
 			delete options['mock_option'];
 		}
-		const url = `${this.baseURL}/service/user/?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
+		for (const m of this.beforeMiddleware) {
+			await m('GET', `${this.baseURL}/service/user`, param);
+		}
+		const url = `${this.baseURL}/service/user?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
 		const resp = await fetch(
 			url,
 			{
@@ -409,7 +567,11 @@ class ServiceUserClient {
 			throw new ApiError(resp, responseText);
 		}
 		await resp.text();
-		return {} as ServiceUserGetResponse;
+		const res = {} as ServiceUserGetResponse;
+		for (const m of this.afterMiddleware) {
+			await m('GET', `${this.baseURL}/service/user`, param, res);
+		}
+		return res;
 	}
 
 	async postUpdateUserName(
@@ -422,6 +584,9 @@ class ServiceUserClient {
 	    if (options && options['mock_option']) {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
 			delete options['mock_option'];
+		}
+		for (const m of this.beforeMiddleware) {
+			await m('POST', `${this.baseURL}/service/user/update_user_name`, param);
 		}
 		const url = `${this.baseURL}/service/user/update_user_name`;
 		const resp = await fetch(
@@ -443,7 +608,11 @@ class ServiceUserClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return (await resp.json()) as ServiceUserPostUpdateUserNameResponse;
+		const res = (await resp.json()) as ServiceUserPostUpdateUserNameResponse;
+		for (const m of this.afterMiddleware) {
+			await m('POST', `${this.baseURL}/service/user/update_user_name`, param, res);
+		}
+		return res;
 	}
 
 	async postUpdateUserPassword(
@@ -456,6 +625,9 @@ class ServiceUserClient {
 	    if (options && options['mock_option']) {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
 			delete options['mock_option'];
+		}
+		for (const m of this.beforeMiddleware) {
+			await m('POST', `${this.baseURL}/service/user/update_user_password`, param);
 		}
 		const url = `${this.baseURL}/service/user/update_user_password`;
 		const resp = await fetch(
@@ -477,7 +649,11 @@ class ServiceUserClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return (await resp.json()) as ServiceUserPostUpdateUserPasswordResponse;
+		const res = (await resp.json()) as ServiceUserPostUpdateUserPasswordResponse;
+		for (const m of this.afterMiddleware) {
+			await m('POST', `${this.baseURL}/service/user/update_user_password`, param, res);
+		}
+		return res;
 	}
 }
 
@@ -486,13 +662,17 @@ export class APIClient {
 	private options: {[key: string]: any};
 	private baseURL: string;
 
+	private beforeMiddleware: ApiClientBeforeMiddleware[] = [];
+	private afterMiddleware: ApiClientAfterMiddleware[] = [];
+
 	public service: ServiceClient;
 
 	constructor(
 		token?: string,
 		commonHeaders?: {[key: string]: string},
 		baseURL?: string,
-		commonOptions: {[key: string]: any} = {}
+		commonOptions: {[key: string]: any} = {},
+		middleware?: middlewareSet
 	) {
 		const headers: {[key: string]: string} =  {
 			'Content-Type': 'application/json',
@@ -507,7 +687,21 @@ export class APIClient {
 		this.options = commonOptions;
 		this.headers = headers;
 
-		this.service = new ServiceClient(headers, this.options, this.baseURL);
+		if (middleware) {
+			this.beforeMiddleware = middleware.beforeMiddleware ?? [];
+			this.afterMiddleware = middleware.afterMiddleware ?? [];
+		}
+		const childMiddlewareSet: middlewareSet = {
+			beforeMiddleware: this.beforeMiddleware,
+			afterMiddleware: this.afterMiddleware
+		};
+
+		this.service = new ServiceClient(
+			headers,
+			this.options,
+			this.baseURL,
+			childMiddlewareSet
+		);
 	}
 
 	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
@@ -531,6 +725,9 @@ export class APIClient {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
 			delete options['mock_option'];
 		}
+		for (const m of this.beforeMiddleware) {
+			await m('GET', `${this.baseURL}/`, param);
+		}
 		const url = `${this.baseURL}/?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
 		const resp = await fetch(
 			url,
@@ -550,7 +747,11 @@ export class APIClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return (await resp.json()) as GetResponse;
+		const res = (await resp.json()) as GetResponse;
+		for (const m of this.afterMiddleware) {
+			await m('GET', `${this.baseURL}/`, param, res);
+		}
+		return res;
 	}
 
 	async postCreateTable(
@@ -563,6 +764,9 @@ export class APIClient {
 	    if (options && options['mock_option']) {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
 			delete options['mock_option'];
+		}
+		for (const m of this.beforeMiddleware) {
+			await m('POST', `${this.baseURL}/create_table`, param);
 		}
 		const url = `${this.baseURL}/create_table`;
 
@@ -585,7 +789,11 @@ export class APIClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return (await resp.json()) as PostCreateTableResponse;
+		const res = (await resp.json()) as PostCreateTableResponse;
+		for (const m of this.afterMiddleware) {
+			await m('POST', `${this.baseURL}/create_table`, param, res);
+		}
+		return res;
 	}
 
 	async postCreateUser(
@@ -598,6 +806,9 @@ export class APIClient {
 	    if (options && options['mock_option']) {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
 			delete options['mock_option'];
+		}
+		for (const m of this.beforeMiddleware) {
+			await m('POST', `${this.baseURL}/create_user`, param);
 		}
 		const url = `${this.baseURL}/create_user`;
 
@@ -620,7 +831,11 @@ export class APIClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return (await resp.json()) as PostCreateUserResponse;
+		const res = (await resp.json()) as PostCreateUserResponse;
+		for (const m of this.afterMiddleware) {
+			await m('POST', `${this.baseURL}/create_user`, param, res);
+		}
+		return res;
 	}
 }
 
