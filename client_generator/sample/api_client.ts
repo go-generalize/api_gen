@@ -124,8 +124,9 @@ class ServiceClient {
 		middlewares: ApiClientMiddlewareFunc[],
 		context: MiddlewareContext
 	) {
-		for (const m: ApiClientMiddlewareFunc of middlewares) {
-			const mr = await m(context);
+		for (const m of middlewares) {
+			const func: ApiClientMiddlewareFunc = m;
+			const mr = await func(context);
 			if (typeof mr === 'boolean') {
 				if (!mr) {
 					break;
@@ -220,8 +221,9 @@ class ServiceStaticPageClient {
 		middlewares: ApiClientMiddlewareFunc[],
 		context: MiddlewareContext
 	) {
-		for (const m: ApiClientMiddlewareFunc of middlewares) {
-			const mr = await m(context);
+		for (const m of middlewares) {
+			const func: ApiClientMiddlewareFunc = m;
+			const mr = await func(context);
 			if (typeof mr === 'boolean') {
 				if (!mr) {
 					break;
@@ -327,8 +329,9 @@ class ServiceUser2Client {
 		middlewares: ApiClientMiddlewareFunc[],
 		context: MiddlewareContext
 	) {
-		for (const m: ApiClientMiddlewareFunc of middlewares) {
-			const mr = await m(context);
+		for (const m of middlewares) {
+			const func: ApiClientMiddlewareFunc = m;
+			const mr = await func(context);
 			if (typeof mr === 'boolean') {
 				if (!mr) {
 					break;
@@ -536,8 +539,9 @@ class ServiceUser2UserIDClient {
 		middlewares: ApiClientMiddlewareFunc[],
 		context: MiddlewareContext
 	) {
-		for (const m: ApiClientMiddlewareFunc of middlewares) {
-			const mr = await m(context);
+		for (const m of middlewares) {
+			const func: ApiClientMiddlewareFunc = m;
+			const mr = await func(context);
 			if (typeof mr === 'boolean') {
 				if (!mr) {
 					break;
@@ -632,8 +636,9 @@ class ServiceUser2UserIDJobIDClient {
 		middlewares: ApiClientMiddlewareFunc[],
 		context: MiddlewareContext
 	) {
-		for (const m: ApiClientMiddlewareFunc of middlewares) {
-			const mr = await m(context);
+		for (const m of middlewares) {
+			const func: ApiClientMiddlewareFunc = m;
+			const mr = await func(context);
 			if (typeof mr === 'boolean') {
 				if (!mr) {
 					break;
@@ -729,8 +734,9 @@ class ServiceUserClient {
 		middlewares: ApiClientMiddlewareFunc[],
 		context: MiddlewareContext
 	) {
-		for (const m: ApiClientMiddlewareFunc of middlewares) {
-			const mr = await m(context);
+		for (const m of middlewares) {
+			const func: ApiClientMiddlewareFunc = m;
+			const mr = await func(context);
 			if (typeof mr === 'boolean') {
 				if (!mr) {
 					break;
@@ -962,8 +968,9 @@ export class APIClient {
 		middlewares: ApiClientMiddlewareFunc[],
 		context: MiddlewareContext
 	) {
-		for (const m: ApiClientMiddlewareFunc of middlewares) {
-			const mr = await m(context);
+		for (const m of middlewares) {
+			const func: ApiClientMiddlewareFunc = m;
+			const mr = await func(context);
 			if (typeof mr === 'boolean') {
 				if (!mr) {
 					break;
