@@ -11,6 +11,7 @@ import (
 	"github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/go-generalize/api_gen/server_generator/sample/wrapper"
 	"github.com/labstack/echo/v4"
+	"golang.org/x/xerrors"
 )
 
 // Routes ...
@@ -40,7 +41,10 @@ func (r *Routes) GetUserJobGet(p *props.ControllerProps) echo.HandlerFunc {
 	bindable := !ok || b.AutoBind()
 
 	return func(c echo.Context) error {
-		var req *GetUserJobGetRequest
+		var (
+			req  *GetUserJobGetRequest
+			werr *wrapper.APIError
+		)
 
 		if bindable {
 			req = new(GetUserJobGetRequest)
@@ -51,10 +55,16 @@ func (r *Routes) GetUserJobGet(p *props.ControllerProps) echo.HandlerFunc {
 					"message": "invalid request.",
 				})
 			}
+			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
+				if xerrors.As(err, &werr) {
+					return c.JSON(werr.Status, werr.Body)
+				}
+				return err
+			}
 		}
 		res, err := i.GetUserJobGet(c, req)
 		if err != nil {
-			if werr, ok := err.(*wrapper.APIError); ok {
+			if xerrors.As(err, &werr) {
 				log.Printf("%+v", werr)
 				return c.JSON(werr.Status, werr.Body)
 			}

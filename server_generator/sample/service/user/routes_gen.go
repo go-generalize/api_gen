@@ -11,6 +11,7 @@ import (
 	"github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/go-generalize/api_gen/server_generator/sample/wrapper"
 	"github.com/labstack/echo/v4"
+	"golang.org/x/xerrors"
 )
 
 // Routes ...
@@ -42,7 +43,10 @@ func (r *Routes) Get(p *props.ControllerProps) echo.HandlerFunc {
 	bindable := !ok || b.AutoBind()
 
 	return func(c echo.Context) error {
-		var req *GetRequest
+		var (
+			req  *GetRequest
+			werr *wrapper.APIError
+		)
 
 		if bindable {
 			req = new(GetRequest)
@@ -53,10 +57,16 @@ func (r *Routes) Get(p *props.ControllerProps) echo.HandlerFunc {
 					"message": "invalid request.",
 				})
 			}
+			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
+				if xerrors.As(err, &werr) {
+					return c.JSON(werr.Status, werr.Body)
+				}
+				return err
+			}
 		}
 		res, err := i.Get(c, req)
 		if err != nil {
-			if werr, ok := err.(*wrapper.APIError); ok {
+			if xerrors.As(err, &werr) {
 				log.Printf("%+v", werr)
 				return c.JSON(werr.Status, werr.Body)
 			}
@@ -78,7 +88,10 @@ func (r *Routes) PostUpdateUserName(p *props.ControllerProps) echo.HandlerFunc {
 	bindable := !ok || b.AutoBind()
 
 	return func(c echo.Context) error {
-		var req *PostUpdateUserNameRequest
+		var (
+			req  *PostUpdateUserNameRequest
+			werr *wrapper.APIError
+		)
 
 		if bindable {
 			req = new(PostUpdateUserNameRequest)
@@ -89,10 +102,16 @@ func (r *Routes) PostUpdateUserName(p *props.ControllerProps) echo.HandlerFunc {
 					"message": "invalid request.",
 				})
 			}
+			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
+				if xerrors.As(err, &werr) {
+					return c.JSON(werr.Status, werr.Body)
+				}
+				return err
+			}
 		}
 		res, err := i.PostUpdateUserName(c, req)
 		if err != nil {
-			if werr, ok := err.(*wrapper.APIError); ok {
+			if xerrors.As(err, &werr) {
 				log.Printf("%+v", werr)
 				return c.JSON(werr.Status, werr.Body)
 			}
@@ -114,7 +133,10 @@ func (r *Routes) PostUpdateUserPassword(p *props.ControllerProps) echo.HandlerFu
 	bindable := !ok || b.AutoBind()
 
 	return func(c echo.Context) error {
-		var req *PostUpdateUserPasswordRequest
+		var (
+			req  *PostUpdateUserPasswordRequest
+			werr *wrapper.APIError
+		)
 
 		if bindable {
 			req = new(PostUpdateUserPasswordRequest)
@@ -125,10 +147,16 @@ func (r *Routes) PostUpdateUserPassword(p *props.ControllerProps) echo.HandlerFu
 					"message": "invalid request.",
 				})
 			}
+			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
+				if xerrors.As(err, &werr) {
+					return c.JSON(werr.Status, werr.Body)
+				}
+				return err
+			}
 		}
 		res, err := i.PostUpdateUserPassword(c, req)
 		if err != nil {
-			if werr, ok := err.(*wrapper.APIError); ok {
+			if xerrors.As(err, &werr) {
 				log.Printf("%+v", werr)
 				return c.JSON(werr.Status, werr.Body)
 			}
