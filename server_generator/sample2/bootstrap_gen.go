@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"runtime/debug"
 
 	apiEventEventIDRoom "github.com/go-generalize/api_gen/server_generator/sample2/api/event/_eventID/room"
 	"github.com/go-generalize/api_gen/server_generator/sample2/props"
@@ -52,18 +53,20 @@ func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList Middleware
 				if recoverErr == nil {
 					return
 				}
+
+				debug.PrintStack()
+
 				if httpErr, ok := recoverErr.(*echo.HTTPError); ok {
 					err = c.JSON(httpErr.Code, httpErr.Message)
 				}
-				log.Printf("panic: %#v", recoverErr)
+
 				err = c.JSON(http.StatusInternalServerError, map[string]interface{}{
 					"code":    http.StatusInternalServerError,
 					"message": "internal server error.",
 				})
 			}()
 
-			err = before(c)
-			return err
+			return before(c)
 		}
 	})
 
@@ -77,8 +80,8 @@ func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList Middleware
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {
 	if ms, ok := list[path]; ok {
-		for _, m := range ms {
-			group.Use(m)
+		for i := range ms {
+			group.Use(ms[i])
 		}
 	}
 }
