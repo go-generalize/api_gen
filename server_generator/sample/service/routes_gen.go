@@ -35,14 +35,22 @@ func NewRoutes(p *props.ControllerProps, router *echo.Group, opts ...io.Writer) 
 // GetArticle ...
 func (r *Routes) GetArticle(p *props.ControllerProps) echo.HandlerFunc {
 	i := NewGetArticleController(p)
+
+	b, ok := (interface{})(i).(interface{ AutoBind() bool })
+	bindable := !ok || b.AutoBind()
+
 	return func(c echo.Context) error {
-		req := new(GetArticleRequest)
-		if err := c.Bind(req); err != nil {
-			log.Printf("failed to JSON binding(/service/article): %+v", err)
-			return c.JSON(http.StatusBadRequest, map[string]interface{}{
-				"code":    http.StatusBadRequest,
-				"message": "invalid request.",
-			})
+		var req *GetArticleRequest
+
+		if bindable {
+			req = new(GetArticleRequest)
+			if err := c.Bind(req); err != nil {
+				log.Printf("failed to JSON binding(/service/article): %+v", err)
+				return c.JSON(http.StatusBadRequest, map[string]interface{}{
+					"code":    http.StatusBadRequest,
+					"message": "invalid request.",
+				})
+			}
 		}
 		res, err := i.GetArticle(c, req)
 		if err != nil {

@@ -35,14 +35,22 @@ func NewRoutes(p *props.ControllerProps, router *echo.Group, opts ...io.Writer) 
 // GetRoom ...
 func (r *Routes) GetRoom(p *props.ControllerProps) echo.HandlerFunc {
 	i := NewGetRoomController(p)
+
+	b, ok := (interface{})(i).(interface{ AutoBind() bool })
+	bindable := !ok || b.AutoBind()
+
 	return func(c echo.Context) error {
-		req := new(GetRoomRequest)
-		if err := c.Bind(req); err != nil {
-			log.Printf("failed to JSON binding(/api/event/{eventID}/room/{roomID}): %+v", err)
-			return c.JSON(http.StatusBadRequest, map[string]interface{}{
-				"code":    http.StatusBadRequest,
-				"message": "invalid request.",
-			})
+		var req *GetRoomRequest
+
+		if bindable {
+			req = new(GetRoomRequest)
+			if err := c.Bind(req); err != nil {
+				log.Printf("failed to JSON binding(/api/event/{eventID}/room/{roomID}): %+v", err)
+				return c.JSON(http.StatusBadRequest, map[string]interface{}{
+					"code":    http.StatusBadRequest,
+					"message": "invalid request.",
+				})
+			}
 		}
 		res, err := i.GetRoom(c, req)
 		if err != nil {

@@ -35,14 +35,22 @@ func NewRoutes(p *props.ControllerProps, router *echo.Group, opts ...io.Writer) 
 // GetUserJobGet ...
 func (r *Routes) GetUserJobGet(p *props.ControllerProps) echo.HandlerFunc {
 	i := NewGetUserJobGetController(p)
+
+	b, ok := (interface{})(i).(interface{ AutoBind() bool })
+	bindable := !ok || b.AutoBind()
+
 	return func(c echo.Context) error {
-		req := new(GetUserJobGetRequest)
-		if err := c.Bind(req); err != nil {
-			log.Printf("failed to JSON binding(/service/user2/{userID}/user_job_get): %+v", err)
-			return c.JSON(http.StatusBadRequest, map[string]interface{}{
-				"code":    http.StatusBadRequest,
-				"message": "invalid request.",
-			})
+		var req *GetUserJobGetRequest
+
+		if bindable {
+			req = new(GetUserJobGetRequest)
+			if err := c.Bind(req); err != nil {
+				log.Printf("failed to JSON binding(/service/user2/{userID}/user_job_get): %+v", err)
+				return c.JSON(http.StatusBadRequest, map[string]interface{}{
+					"code":    http.StatusBadRequest,
+					"message": "invalid request.",
+				})
+			}
 		}
 		res, err := i.GetUserJobGet(c, req)
 		if err != nil {

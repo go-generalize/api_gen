@@ -3,6 +3,9 @@
 package user
 
 import (
+	"io"
+	"os"
+
 	"github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/labstack/echo/v4"
 )
@@ -34,16 +37,12 @@ func NewPostUpdateUserPasswordController(cp *props.ControllerProps) *PostUpdateU
 func (p *PostUpdateUserPasswordController) PostUpdateUserPassword(
 	c echo.Context, req *PostUpdateUserPasswordRequest,
 ) (res *PostUpdateUserPasswordResponse, err error) {
-	// API Error Usage: github.com/go-generalize/api_gen/server_generator/sample/wrapper
-	//
-	// return nil, wrapper.NewAPIError(http.StatusBadRequest)
-	//
-	// return nil, wrapper.NewAPIError(http.StatusBadRequest).SetError(err)
-	//
-	// body := map[string]interface{}{
-	// 	"code": http.StatusBadRequest,
-	// 	"message": "invalid request parameter.",
-	// }
-	// return nil, wrapper.NewAPIError(http.StatusBadRequest, body).SetError(err)
-	panic("require implements.") // FIXME require implements.
+	io.Copy(os.Stdout, c.Request().Body)
+
+	return &PostUpdateUserPasswordResponse{}, nil
+}
+
+// AutoBind - Call c.Bind() before controllers and save the parameters in req
+func (p *PostUpdateUserPasswordController) AutoBind() bool {
+	return false
 }
