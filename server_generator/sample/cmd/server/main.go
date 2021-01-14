@@ -1,3 +1,4 @@
+// Package main is a server for sample
 package main
 
 import (
@@ -11,5 +12,5 @@ func main() {
 
 	sample.Bootstrap(&props.ControllerProps{}, e, nil)
 
-	e.Start(":8080")
+	panic(e.Start(":8080"))
 }

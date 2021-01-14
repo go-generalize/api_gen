@@ -37,6 +37,7 @@ func NewPostUpdateUserPasswordController(cp *props.ControllerProps) *PostUpdateU
 func (p *PostUpdateUserPasswordController) PostUpdateUserPassword(
 	c echo.Context, req *PostUpdateUserPasswordRequest,
 ) (res *PostUpdateUserPasswordResponse, err error) {
+	// nolint:errcheck
 	io.Copy(os.Stdout, c.Request().Body)
 
 	return &PostUpdateUserPasswordResponse{}, nil
