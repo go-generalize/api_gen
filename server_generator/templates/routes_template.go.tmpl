@@ -36,7 +36,7 @@ func NewRoutes(p *props.ControllerProps, router *echo.Group, opts ...io.Writer) 
 // {{ .HandlerName }} ...
 func (r *Routes) {{ .HandlerName }}(p *props.ControllerProps) echo.HandlerFunc {
 	i := New{{ .ControllerName }}(p)
-	
+
 	b, ok := (interface{})(i).(interface{ AutoBind() bool })
 	bindable := !ok || b.AutoBind()
 
