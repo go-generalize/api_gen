@@ -37,14 +37,22 @@ func NewRoutes(p *props.ControllerProps, router *echo.Group, opts ...io.Writer) 
 // GetUser ...
 func (r *Routes) GetUser(p *props.ControllerProps) echo.HandlerFunc {
 	i := NewGetUserController(p)
+
+	b, ok := (interface{})(i).(interface{ AutoBind() bool })
+	bindable := !ok || b.AutoBind()
+
 	return func(c echo.Context) error {
-		req := new(GetUserRequest)
-		if err := c.Bind(req); err != nil {
-			log.Printf("failed to JSON binding(/service/user2/{userID}): %+v", err)
-			return c.JSON(http.StatusBadRequest, map[string]interface{}{
-				"code":    http.StatusBadRequest,
-				"message": "invalid request.",
-			})
+		var req *GetUserRequest
+
+		if bindable {
+			req = new(GetUserRequest)
+			if err := c.Bind(req); err != nil {
+				log.Printf("failed to JSON binding(/service/user2/{userID}): %+v", err)
+				return c.JSON(http.StatusBadRequest, map[string]interface{}{
+					"code":    http.StatusBadRequest,
+					"message": "invalid request.",
+				})
+			}
 		}
 		res, err := i.GetUser(c, req)
 		if err != nil {
@@ -65,14 +73,22 @@ func (r *Routes) GetUser(p *props.ControllerProps) echo.HandlerFunc {
 // PostUpdateUserName ...
 func (r *Routes) PostUpdateUserName(p *props.ControllerProps) echo.HandlerFunc {
 	i := NewPostUpdateUserNameController(p)
+
+	b, ok := (interface{})(i).(interface{ AutoBind() bool })
+	bindable := !ok || b.AutoBind()
+
 	return func(c echo.Context) error {
-		req := new(PostUpdateUserNameRequest)
-		if err := c.Bind(req); err != nil {
-			log.Printf("failed to JSON binding(/service/user2/update_user_name): %+v", err)
-			return c.JSON(http.StatusBadRequest, map[string]interface{}{
-				"code":    http.StatusBadRequest,
-				"message": "invalid request.",
-			})
+		var req *PostUpdateUserNameRequest
+
+		if bindable {
+			req = new(PostUpdateUserNameRequest)
+			if err := c.Bind(req); err != nil {
+				log.Printf("failed to JSON binding(/service/user2/update_user_name): %+v", err)
+				return c.JSON(http.StatusBadRequest, map[string]interface{}{
+					"code":    http.StatusBadRequest,
+					"message": "invalid request.",
+				})
+			}
 		}
 		res, err := i.PostUpdateUserName(c, req)
 		if err != nil {
@@ -93,14 +109,22 @@ func (r *Routes) PostUpdateUserName(p *props.ControllerProps) echo.HandlerFunc {
 // PostUpdateUserPassword ...
 func (r *Routes) PostUpdateUserPassword(p *props.ControllerProps) echo.HandlerFunc {
 	i := NewPostUpdateUserPasswordController(p)
+
+	b, ok := (interface{})(i).(interface{ AutoBind() bool })
+	bindable := !ok || b.AutoBind()
+
 	return func(c echo.Context) error {
-		req := new(PostUpdateUserPasswordRequest)
-		if err := c.Bind(req); err != nil {
-			log.Printf("failed to JSON binding(/service/user2/update_user_password): %+v", err)
-			return c.JSON(http.StatusBadRequest, map[string]interface{}{
-				"code":    http.StatusBadRequest,
-				"message": "invalid request.",
-			})
+		var req *PostUpdateUserPasswordRequest
+
+		if bindable {
+			req = new(PostUpdateUserPasswordRequest)
+			if err := c.Bind(req); err != nil {
+				log.Printf("failed to JSON binding(/service/user2/update_user_password): %+v", err)
+				return c.JSON(http.StatusBadRequest, map[string]interface{}{
+					"code":    http.StatusBadRequest,
+					"message": "invalid request.",
+				})
+			}
 		}
 		res, err := i.PostUpdateUserPassword(c, req)
 		if err != nil {
