@@ -60,27 +60,28 @@ func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList Middleware
 				if httpErr, ok := recoverErr.(*echo.HTTPError); ok {
 					err = c.JSON(httpErr.Code, httpErr.Message)
 				}
-				log.Printf("panic: %#v", recoverErr)
+
 				err = c.JSON(http.StatusInternalServerError, map[string]interface{}{
 					"code":    http.StatusInternalServerError,
 					"message": "internal server error.",
 				})
 			}()
 
-			err = before(c)
-			return err
+			return before(c)
 		}
 	})
-{{ range $i, $v := .Bootstraps }}
+{{- range $i, $v := .Bootstraps }}
+
 	{{ $v.RouteGroupName }}Group := {{ GetGroupName $v }}.Group("{{ $v.Endpoint }}")
 	setMiddleware({{ $v.RouteGroupName }}Group, "{{ $v.EndpointPath }}", middleware)
-	{{ GetNewRoute $v }}{{ end }}
+	{{ GetNewRoute $v }}
+{{- end }}
 }
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {
 	if ms, ok := list[path]; ok {
-		for _, m := range ms {
-			group.Use(m)
+		for i := range ms {
+			group.Use(ms[i])
 		}
 	}
 }
