@@ -4,6 +4,7 @@
 package {{ .PackageName }}
 
 import (
+	"io"
 	"log"
 	"net/http"
 {{ range $i, $v := .Bootstraps }}{{ if ne .PackagePath "" }}
