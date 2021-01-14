@@ -33,6 +33,11 @@ var (
 	withMock bool
 )
 
+var (
+	replaceRule              = regexp.MustCompile(`:(.*?)(/|$)`)
+	endpointReplaceMatchRule = regexp.MustCompile(`:(.*?)/`)
+)
+
 const rootPackageName = "root"
 
 func main() {
@@ -90,7 +95,6 @@ func run(arg string) error {
 	}
 	bootstrapTemplates := make([]*BootstrapTemplates, 0)
 	packageName := ""
-	endpointReplaceMatchRule := regexp.MustCompile(`:(.*?)/`)
 
 	var apiRootPackage string
 	var apiRootPathRel string
@@ -377,7 +381,6 @@ func parsePackages(
 	controllerPropsPackage string,
 	wrapperPackage string,
 ) ([]*ControllerTemplate, error) {
-	replaceRule := regexp.MustCompile(`:(.*?)(/|$)`)
 	routes := make(map[string][]*ControllerTemplate)
 	structPair, err := findStructPairList(path, endpointParams)
 	if err != nil {
