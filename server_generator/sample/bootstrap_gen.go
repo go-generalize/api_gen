@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"runtime/debug"
 
 	"github.com/go-generalize/api_gen/server_generator/sample/props"
 	"github.com/go-generalize/api_gen/server_generator/sample/service"
@@ -57,39 +58,47 @@ func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList Middleware
 				if recoverErr == nil {
 					return
 				}
+
+				debug.PrintStack()
+
 				if httpErr, ok := recoverErr.(*echo.HTTPError); ok {
 					err = c.JSON(httpErr.Code, httpErr.Message)
 				}
-				log.Printf("panic: %#v", recoverErr)
+
 				err = c.JSON(http.StatusInternalServerError, map[string]interface{}{
 					"code":    http.StatusInternalServerError,
 					"message": "internal server error.",
 				})
 			}()
 
-			err = before(c)
-			return err
+			return before(c)
 		}
 	})
 
 	rootGroup := e.Group("/")
 	setMiddleware(rootGroup, "/", middleware)
 	NewRoutes(p, rootGroup, opts...)
+
 	serviceGroup := rootGroup.Group("service/")
 	setMiddleware(serviceGroup, "/service/", middleware)
 	service.NewRoutes(p, serviceGroup, opts...)
+
 	serviceStaticPageGroup := serviceGroup.Group("static_page/")
 	setMiddleware(serviceStaticPageGroup, "/service/static_page/", middleware)
 	serviceStaticPage.NewRoutes(p, serviceStaticPageGroup, opts...)
+
 	serviceUserGroup := serviceGroup.Group("user/")
 	setMiddleware(serviceUserGroup, "/service/user/", middleware)
 	serviceUser.NewRoutes(p, serviceUserGroup, opts...)
+
 	serviceUser2Group := serviceGroup.Group("user2/")
 	setMiddleware(serviceUser2Group, "/service/user2/", middleware)
 	serviceUser2.NewRoutes(p, serviceUser2Group, opts...)
+
 	serviceUser2UserIDGroup := serviceUser2Group.Group(":userID/")
 	setMiddleware(serviceUser2UserIDGroup, "/service/user2/:userID/", middleware)
 	serviceUser2UserID.NewRoutes(p, serviceUser2UserIDGroup, opts...)
+
 	serviceUser2UserIDJobIDGroup := serviceUser2UserIDGroup.Group(":JobID/")
 	setMiddleware(serviceUser2UserIDJobIDGroup, "/service/user2/:userID/:JobID/", middleware)
 	serviceUser2UserIDJobID.NewRoutes(p, serviceUser2UserIDJobIDGroup, opts...)
@@ -97,8 +106,8 @@ func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList Middleware
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {
 	if ms, ok := list[path]; ok {
-		for _, m := range ms {
-			group.Use(m)
+		for i := range ms {
+			group.Use(ms[i])
 		}
 	}
 }
