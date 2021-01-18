@@ -33,6 +33,11 @@ var (
 	withMock bool
 )
 
+var (
+	replaceRule              = regexp.MustCompile(`:(.*?)(/|$)`)
+	endpointReplaceMatchRule = regexp.MustCompile(`:(.*?)/`)
+)
+
 const rootPackageName = "root"
 
 func main() {
@@ -90,7 +95,6 @@ func run(arg string) error {
 	}
 	bootstrapTemplates := make([]*BootstrapTemplates, 0)
 	packageName := ""
-	endpointReplaceMatchRule := regexp.MustCompile(`:(.*?)/`)
 
 	var apiRootPackage string
 	var apiRootPathRel string
@@ -339,7 +343,7 @@ func run(arg string) error {
 	}
 
 	bootstrapFilePath := filepath.Join(rootPath+"/", "bootstrap_gen.go")
-	bootstraptemplate := &BootstrapTemplate{
+	bootstrapTemplate := &BootstrapTemplate{
 		AppVersion:             common.AppVersion,
 		PackageName:            packageName,
 		Bootstraps:             bootstrapTemplates,
@@ -347,7 +351,7 @@ func run(arg string) error {
 	}
 	err = createFromTemplate(
 		"/templates/bootstrap_template.go.tmpl",
-		bootstrapFilePath, bootstraptemplate,
+		bootstrapFilePath, bootstrapTemplate,
 		true, template.FuncMap{
 			"GetGroupName": getGroupName,
 			"GetNewRoute":  getNewRoute,
@@ -361,7 +365,7 @@ func run(arg string) error {
 			RootPath:               rootPath,
 			ControllerPropsPackage: controllerPropsPackage,
 			APIRootPackage:         apiRootPackage,
-			BootstrapTemplate:      bootstraptemplate,
+			BootstrapTemplate:      bootstrapTemplate,
 			APIRootPathRel:         apiRootPathRel,
 		}); err != nil {
 			return xerrors.Errorf("error in createMock method: %w", err)
@@ -377,7 +381,6 @@ func parsePackages(
 	controllerPropsPackage string,
 	wrapperPackage string,
 ) ([]*ControllerTemplate, error) {
-	replaceRule := regexp.MustCompile(`:(.*?)(/|$)`)
 	routes := make(map[string][]*ControllerTemplate)
 	structPair, err := findStructPairList(path, endpointParams)
 	if err != nil {

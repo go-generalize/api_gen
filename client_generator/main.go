@@ -30,13 +30,16 @@ const typesHeaderTemplate = `// THIS FILE IS A GENERATED CODE.
 
 `
 
-var supportedMethods = []string{
-	"get",
-	"post",
-	"put",
-	"delete",
-	"patch",
-}
+var (
+	supportedMethods = []string{
+		"get",
+		"post",
+		"put",
+		"delete",
+		"patch",
+	}
+	endpointReplaceMatchRule = regexp.MustCompile(`(?m):(.*?)(/|$)`)
+)
 
 type endpoint struct {
 	methodEndpoint string
@@ -190,7 +193,6 @@ func (p *pkgParser) parseDir(pathName, dir string) {
 }
 
 func walk(p, url string, generator *clientGenerator, parent *clientType) {
-	endpointReplaceMatchRule := regexp.MustCompile(`(?m):(.*?)(/|$)`)
 	pkgParser := newPkgParser()
 
 	pkgParser.parseDir(url, p)

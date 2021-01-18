@@ -36,12 +36,15 @@ func NewRoutes(p *props.ControllerProps, router *echo.Group, opts ...io.Writer) 
 // {{ .HandlerName }} ...
 func (r *Routes) {{ .HandlerName }}(p *props.ControllerProps) echo.HandlerFunc {
 	i := New{{ .ControllerName }}(p)
-	
+
 	b, ok := (interface{})(i).(interface{ AutoBind() bool })
 	bindable := !ok || b.AutoBind()
 
 	return func(c echo.Context) error {
-		var req *{{ .RequestStructName }}
+		var (
+			req  *{{ .RequestStructName }}
+			werr *wrapper.APIError
+		)
 
 		if bindable {
 			req = new({{ .RequestStructName }})
@@ -52,10 +55,16 @@ func (r *Routes) {{ .HandlerName }}(p *props.ControllerProps) echo.HandlerFunc {
 					"message": "invalid request.",
 				})
 			}
+			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
+				if xerrors.As(err, &werr) {
+					return c.JSON(werr.Status, werr.Body)
+				}
+				return err
+			}
 		}
 		res, err := i.{{ .HandlerName }}(c, req)
 		if err != nil {
-			if werr, ok := err.(*wrapper.APIError); ok {
+			if xerrors.As(err, &werr) {
 				log.Printf("%+v", werr)
 				return c.JSON(werr.Status, werr.Body)
 			}
