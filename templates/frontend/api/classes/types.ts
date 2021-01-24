@@ -3,6 +3,7 @@
 // generated version: devel
 
 export type PostCreateUserRequest = {
+	Birthday: string;
 	Gender: number;
 	ID: string;
 	Password: string;

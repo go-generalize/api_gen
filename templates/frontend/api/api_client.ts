@@ -7,17 +7,43 @@ import {
 	PostCreateUserResponse as PostCreateUserResponse,
 } from './classes/types';
 
+export interface MiddlewareContext {
+	httpMethod: string;
+	endpoint: string;
+	request: unknown;
+	response?: unknown;
+	baseURL: string;
+	headers: {[key: string]: string};
+	options: {[key: string]: any};
+}
+
+export enum MiddlewareResult {
+	CONTINUE = 1,
+	MIDDLEWARE_STOP = 2,
+	STOP = 4
+}
+
+export type ApiClientMiddlewareFunc = (context: MiddlewareContext) => Promise<MiddlewareResult|boolean>;
+
+export interface middlewareSet {
+	beforeMiddleware?: ApiClientMiddlewareFunc[];
+	afterMiddleware?: ApiClientMiddlewareFunc[];
+}
 
 export class APIClient {
 	private headers: {[key: string]: string};
 	private options: {[key: string]: any};
 	private baseURL: string;
 
+	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
+	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
+
 	constructor(
 		token?: string,
 		commonHeaders?: {[key: string]: string},
 		baseURL?: string,
-		commonOptions: {[key: string]: any} = {}
+		commonOptions: {[key: string]: any} = {},
+		middleware?: middlewareSet
 	) {
 		const headers: {[key: string]: string} =  {
 			'Content-Type': 'application/json',
@@ -31,6 +57,15 @@ export class APIClient {
 		this.baseURL =  (baseURL === undefined) ? "" : baseURL;
 		this.options = commonOptions;
 		this.headers = headers;
+
+		if (middleware) {
+			this.beforeMiddleware = middleware.beforeMiddleware ?? [];
+			this.afterMiddleware = middleware.afterMiddleware ?? [];
+		}
+		const childMiddlewareSet: middlewareSet = {
+			beforeMiddleware: this.beforeMiddleware,
+			afterMiddleware: this.afterMiddleware
+		};
 	}
 
 	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
@@ -41,6 +76,29 @@ export class APIClient {
 			}
 		});
 		return res;
+	}
+
+	async callMiddleware(
+		middlewares: ApiClientMiddlewareFunc[],
+		context: MiddlewareContext
+	) {
+		for (const m of middlewares) {
+			const func: ApiClientMiddlewareFunc = m;
+			const mr = await func(context);
+			if (typeof mr === 'boolean') {
+				if (!mr) {
+					break;
+				}
+			} else {
+				if (mr === MiddlewareResult.CONTINUE) {
+					continue;
+				} else if (mr === MiddlewareResult.MIDDLEWARE_STOP) {
+					break;
+				} else if (mr === MiddlewareResult.STOP) {
+					throw new ApiMiddlewareStop();
+				}
+			}
+		}
 	}
 
 	async postCreateUser(
@@ -54,6 +112,25 @@ export class APIClient {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
 			delete options['mock_option'];
 		}
+
+		const reqHeader = {
+			...this.headers,
+			...headers,
+			...mockHeaders,
+		};
+		const reqOption = {
+			...this.options,
+			...options,
+		};
+		const context: MiddlewareContext = {
+			httpMethod: 'POST',
+			endpoint: `${this.baseURL}/${encodeURI(param.ID.toString())}`,
+			request: param,
+			baseURL: this.baseURL,
+			headers: reqHeader,
+			options: reqOption,
+		};
+		await this.callMiddleware(this.beforeMiddleware, context);
 		const url = `${this.baseURL}/${encodeURI(param.ID.toString())}`;
 
 		const resp = await fetch(
@@ -75,34 +152,39 @@ export class APIClient {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-		return (await resp.json()) as PostCreateUserResponse;
+		const res = (await resp.json()) as PostCreateUserResponse;
+		context.response = res;
+		await this.callMiddleware(this.afterMiddleware, context);
+		return res;
 	}
 }
 
 export class ApiError extends Error {
-    private _statusCode: number;
-    private _statusText: string;
-    private _response: string;
+	private _statusCode: number;
+	private _statusText: string;
+	private _response: string;
 
-    constructor(response: Response, responseText: string) {
-        super();
-        this._statusCode = response.status;
-        this._statusText = response.statusText;
-        this._response = responseText
-    }
+	constructor(response: Response, responseText: string) {
+		super();
+		this._statusCode = response.status;
+		this._statusText = response.statusText;
+		this._response = responseText
+	}
 
-    get statusCode(): number {
-        return this._statusCode;
-    }
+	get statusCode(): number {
+		return this._statusCode;
+	}
 
 	get statusText(): string {
-        return this._statusText;
-    }
+		return this._statusText;
+	}
 
 	get response(): string {
-        return this._response;
-    }
+		return this._response;
+	}
 }
+
+export class ApiMiddlewareStop extends Error {}
 
 export interface MockOption {
 	wait_ms: number;
