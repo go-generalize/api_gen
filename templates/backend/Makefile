@@ -1,8 +1,7 @@
-.PHONY: generate
-generate:
-	server_generator ./interfaces
-	go generate ./...
-
 .PHONY: dev
-dev: generate	
+dev:
 	go run main.go
+
+.PHONY: run_mock
+run_mock:
+	go run -tags mock interfaces/cmd/mock/main.go -port 1323
