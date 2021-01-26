@@ -1,0 +1,41 @@
+name: Statik
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
+    steps:
+      - name: Set up Go 1.12
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.12
+        id: go
+
+      - uses: actions/checkout@v2
+
+      - name: Setup
+        run: |
+          git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
+          git pull github ${GITHUB_REF} --ff-only
+
+      - name: Make
+        run: |
+          PATH="$PATH":"$HOME"/go/bin
+          go get github.com/rakyll/statik
+          make statik
+
+      - name: Imitate latest commit
+        run: |
+          git config --local user.email "$(git log --format='%ae' HEAD^!)"
+          git config --local user.name "$(git log --format='%an' HEAD^!)"
+
+      - name: Commit
+        run: |
+          git add -f statik/
+          git commit -m "update: statik"
+          git push github HEAD:${GITHUB_REF}
