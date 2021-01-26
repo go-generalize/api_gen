@@ -36,6 +36,6 @@ jobs:
 
       - name: Commit
         run: |
-          git add -f statik/
+          git add -f */statik/
           git commit -m "update: statik"
           git push github HEAD:${GITHUB_REF}
