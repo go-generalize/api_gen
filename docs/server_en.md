@@ -14,7 +14,7 @@
         - For all endpoints
     - Route defitinion(`routes_gen.go`)
         - All directories
-    - echo.Echo initializer(bootstrap.go)
+    - echo.Echo initializer(`bootstrap_gen.go`)
 - Each endpoint consists of two structs: `*Request`, `*Response`
     - The name should be `{HTTP_METHOD}Name{Request|Response}`
         - Available methods: `get` , `post` , `put` , `delete` , `patch`

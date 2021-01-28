@@ -18,7 +18,7 @@ You can specify options by passing `'mock_option' as an option argument in the c
 The options are details below.
 ```javascript
 {
-    wait_ms: 10,           // Delay the response from the mock server for the specified millisecond。 (example: 1000ms)
+    wait_ms: 10,           // Delay the response from the mock server for the specified millisecond。 (example: 10ms)
     target_file: 'error'   // Fixes the json file to be referenced by the mock server. You can omit the json file extension. (example: error.json)
 }
 ```

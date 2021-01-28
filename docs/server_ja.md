@@ -8,10 +8,10 @@
 ### 使い方
 #### 生成方法
 - ルートとなるディレクトリパスを指定して以下のファイルを生成する。
-    - Controller
+    - `*_controller_gen.go`: Controller
         - すでにファイルが存在する場合は、上書きしない。
-    - Route定義
-    - 上記ふたつをまとめたもの
+    - `routes_gen.go`: Route定義
+    - `bootstrap_gen.go`: 上記ふたつをまとめたもの
 - 生成対象は、 `{HTTP_METHOD}Name{Request|Response}` といった命名をしたStructでなければならない。
      - 対応しているHTTPメソッドは、 `get` , `post` , `put` , `delete` , `patch`
      - GETメソッドでは、Requestの、json tagとquery tagの両方に同じ値を入れなくてはならない。
