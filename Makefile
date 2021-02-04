@@ -51,5 +51,16 @@ server_generator: statik
 client_generator: statik
 	go build -o ./bin/client_generator ./client_generator
 
+sample_server_generator: server_generator
+	cd server_generator/sample && ../../bin/server_generator .
+
+sample_client_generator: client_generator
+	cd client_generator/sample && ../../bin/client_generator ../../server_generator/sample
+
+sample: sample_server_generator sample_client_generator
+
+sample_server_generator_run: sample_server_generator
+	go run server_generator/sample/cmd/server/main.go
+
 build-release:
 	$(shell bash ./scripts/build_release.sh)
