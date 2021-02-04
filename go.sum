@@ -8,6 +8,8 @@ github.com/go-generalize/go2ts v1.0.4 h1:W93JCLLD8A9q97wJRPI27I/PJiFL5ealK/Lco0e
 github.com/go-generalize/go2ts v1.0.4/go.mod h1:075q+zcpc6IjwYy9WpJpY+M9ssbEA6uccjzWwr59t3M=
 github.com/go-utils/count v0.0.1 h1:mt55LmS+NgZjldyZx5IQqpXcmbV1Zzsh+EtxSNW9YeM=
 github.com/go-utils/count v0.0.1/go.mod h1:jTOK09i9ez7PdsTjscdN+iDrXGq5YkDTDYuiVy7hRZw=
+github.com/go-utils/gopackages v0.0.0-20210117150247-4bcdec6783b3 h1:/6XeQL0Ol0158cpOQtHblmYpjeEFWsocNZjPA9YfiXQ=
+github.com/go-utils/gopackages v0.0.0-20210117150247-4bcdec6783b3/go.mod h1:QPVW4BzGDze3cEu7TbM7Gw9ppfYTj4NDgBW0JwNZE1g=
 github.com/google/go-cmp v0.5.2 h1:X2ev0eStA3AbceY54o37/0PQ/UWqKEiiO2dKL5OPaFM=
 github.com/google/go-cmp v0.5.2/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/iancoleman/strcase v0.1.2 h1:gnomlvw9tnV3ITTAxzKSgTF+8kFWcU/f+TgttpXGz1U=
@@ -44,6 +46,8 @@ golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 h1:psW17arqaxU48Z5kZ0CQnk
 golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
 golang.org/x/mod v0.3.0 h1:RM4zey1++hCTbCVQfnWeKs9/IEsaBLA8vTkd0WVtmH4=
 golang.org/x/mod v0.3.0/go.mod h1:s0Qsj1ACt9ePp/hMypM3fl4fZqREWJwdYDEqhRiZZUA=
+golang.org/x/mod v0.4.1 h1:Kvvh58BN8Y9/lBi7hTekvtMpm07eUZ0ck5pRHpsMWrY=
+golang.org/x/mod v0.4.1/go.mod h1:s0Qsj1ACt9ePp/hMypM3fl4fZqREWJwdYDEqhRiZZUA=
 golang.org/x/net v0.0.0-20190404232315-eb5bcb51f2a3/go.mod h1:t9HGtf8HONx5eT2rtn7q6eTqICYqUVnKs3thJo3Qplg=
 golang.org/x/net v0.0.0-20190620200207-3b0461eec859/go.mod h1:z5CRVTTTmAJ677TzLLGU+0bjPO0LkuOLi4/5GtJWs/s=
 golang.org/x/net v0.0.0-20200226121028-0de0cce0169b h1:0mm1VjtFUOIlE1SbDlwjYaDxZVDP2S5ou6y0gSgXHu8=
