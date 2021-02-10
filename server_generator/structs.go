@@ -223,6 +223,14 @@ func createRequestParams(structName string, fset *token.FileSet, st *ast.StructT
 
 		fType, fName := getFieldNameFromStructAndEndpointParams(structName, f, ep)
 
+		isRequired := fType == PathRequestName
+		if !isRequired && f.Tag != nil {
+			tags := reflect.StructTag(strings.Trim(f.Tag.Value, "`"))
+			if validateTags, ok := tags.Lookup("validate"); ok {
+				isRequired = strings.Contains(validateTags, "required")
+			}
+		}
+
 		var comment string
 		if f.Comment != nil {
 			if len(f.Comment.List) > 0 {
@@ -237,6 +245,7 @@ func createRequestParams(structName string, fset *token.FileSet, st *ast.StructT
 			Type:     fType,
 			DataType: fDataType,
 			Comment:  comment,
+			Required: isRequired,
 		}
 	}
 
