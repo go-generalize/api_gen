@@ -1,6 +1,9 @@
 package parser
 
-import "go/ast"
+import (
+	"go/ast"
+	"strings"
+)
 
 // MethodType represents methods for HTTP
 type MethodType string
@@ -17,6 +20,24 @@ const (
 	// PATCH is method for HTTP
 	PATCH MethodType = "PATCH"
 )
+
+func getMethodType(structName string) MethodType {
+	var method MethodType
+	switch lowered := strings.ToLower(structName); {
+	case strings.HasPrefix(lowered, string(GET)):
+		method = GET
+	case strings.HasPrefix(lowered, string(POST)):
+		method = POST
+	case strings.HasPrefix(lowered, string(PUT)):
+		method = PUT
+	case strings.HasPrefix(lowered, string(DELETE)):
+		method = DELETE
+	case strings.HasPrefix(lowered, string(PATCH)):
+		method = PATCH
+	}
+
+	return method
+}
 
 // Endpoint represents one HTTP endpoint
 type Endpoint struct {
