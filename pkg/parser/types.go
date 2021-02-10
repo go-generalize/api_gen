@@ -21,30 +21,33 @@ const (
 	PATCH MethodType = "PATCH"
 )
 
+var (
+	methods = []MethodType{
+		GET,
+		POST,
+		PUT,
+		DELETE,
+		PATCH,
+	}
+)
+
 func getMethodType(structName string) MethodType {
-	var method MethodType
-	switch lowered := strings.ToLower(structName); {
-	case strings.HasPrefix(lowered, string(GET)):
-		method = GET
-	case strings.HasPrefix(lowered, string(POST)):
-		method = POST
-	case strings.HasPrefix(lowered, string(PUT)):
-		method = PUT
-	case strings.HasPrefix(lowered, string(DELETE)):
-		method = DELETE
-	case strings.HasPrefix(lowered, string(PATCH)):
-		method = PATCH
+	structName = strings.ToUpper(structName)
+	for i := range methods {
+		if strings.HasPrefix(structName, string(methods[i])) {
+			return methods[i]
+		}
 	}
 
-	return method
+	return ""
 }
 
 // Endpoint represents one HTTP endpoint
 type Endpoint struct {
 	parentGroup *Group
 
-	Method MethodType
-	Path   string
+	Method        MethodType
+	RawPath, Path string
 
 	RequestPayload  *ast.StructType
 	ResponsePayload *ast.StructType
@@ -52,9 +55,9 @@ type Endpoint struct {
 
 // Group is a layer for endpoints
 type Group struct {
-	ImportPath string
-	Path       string
-	Dir        string
+	ImportPath    string
+	RawPath, Path string
+	Dir           string
 
 	Children  []*Group
 	Endpoints []*Endpoint

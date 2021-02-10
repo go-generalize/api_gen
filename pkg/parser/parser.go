@@ -59,7 +59,13 @@ func newParser(dir string) (*parser, error) {
 }
 
 func (p *parser) relativePathFromRoot(dir string) (string, error) {
-	d, err := filepath.Rel(p.moduleDir, dir)
+	abs, err := filepath.Abs(dir)
+
+	if err != nil {
+		return "", xerrors.Errorf("failed to get absolute path for %s: %w", dir, abs)
+	}
+
+	d, err := filepath.Rel(p.moduleDir, abs)
 
 	if err != nil {
 		return "", xerrors.Errorf("failed to get relative path from module root: %w", err)
@@ -126,6 +132,7 @@ func (p *parser) parseFile(dir string, fset *token.FileSet, file *ast.File, endp
 			}
 
 			ep.Method = method
+			ep.RawPath = me[len(method):]
 			ep.Path = strcase.ToSnake(me[len(method):])
 
 			if isRequest {
@@ -153,7 +160,12 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 	}
 
 	endpoints := map[string]*Endpoint{}
-	gr := &Group{}
+	gr := &Group{
+		Dir:        dir,
+		ImportPath: gomod,
+		RawPath:    filepath.Base(dir),
+		Path:       strcase.ToSnake(filepath.Base(dir)),
+	}
 
 	for name, v := range pkgs {
 		if strings.HasSuffix(name, "_test") {
@@ -170,9 +182,6 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 			p.parseFile(dir, fset, file, endpoints)
 		}
 
-		gr.Dir = dir
-		gr.ImportPath = gomod
-		gr.Path = strcase.ToSnake(name)
 		gr.Endpoints = make([]*Endpoint, 0, len(endpoints))
 
 		for _, v := range endpoints {
@@ -202,6 +211,10 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 
 		if err != nil {
 			return nil, xerrors.Errorf("failed to parse package for %s: %w", fifo.Name(), err)
+		}
+
+		if len(child.Endpoints) == 0 && len(child.Children) == 0 {
+			continue
 		}
 
 		gr.Children = append(gr.Children, child)
