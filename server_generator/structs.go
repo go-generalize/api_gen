@@ -94,7 +94,9 @@ func validateRequestByEndpointParams(fset *token.FileSet, structType *ast.Struct
 	fieldList := structType.Fields.List
 	hasEndpoints := make(map[string]bool)
 	for _, e := range endpointParams {
-		hasEndpoints[e] = false
+		if _, ok := hasEndpoints[e]; !ok {
+			hasEndpoints[e] = false
+		}
 	}
 
 	for _, fields := range fieldList {
@@ -102,19 +104,17 @@ func validateRequestByEndpointParams(fset *token.FileSet, structType *ast.Struct
 			return fmt.Errorf("%+v: 同じ行に複数のパラメータを記述することはできません。", fields.Names)
 		}
 
-		fieldName := ""
+		var fieldName string
 		if len(fields.Names) > 0 {
 			fieldName = fields.Names[0].Name
-		} else {
-			switch t := fields.Type.(type) {
-			case *ast.SelectorExpr:
-				fieldName = t.Sel.Name
-			}
+		} else if t, ok := fields.Type.(*ast.SelectorExpr); ok {
+			fieldName = t.Sel.Name
 		}
+
 		if fields.Tag != nil {
 			tags := reflect.StructTag(strings.Trim(fields.Tag.Value, "`"))
 			if paramTag, ok := tags.Lookup("param"); ok {
-				fieldName = paramTag
+				fieldName = strings.Split(paramTag, ",")[0]
 			}
 		}
 
@@ -123,7 +123,7 @@ func validateRequestByEndpointParams(fset *token.FileSet, structType *ast.Struct
 		}
 	}
 
-	requireParams := ""
+	var requireParams string
 	for name, e := range hasEndpoints {
 		if e {
 			continue
@@ -146,7 +146,9 @@ func validateGetRequestTags(fset *token.FileSet, structType *ast.StructType, end
 	fieldList := structType.Fields.List
 	ep := make(map[string]struct{})
 	for _, e := range endpointParams {
-		ep[e] = struct{}{}
+		if _, ok := ep[e]; !ok {
+			ep[e] = struct{}{}
+		}
 	}
 
 	for i := range fieldList {
@@ -187,26 +189,24 @@ func validateGetRequestTags(fset *token.FileSet, structType *ast.StructType, end
 	return nil
 }
 
-func createRequestParams(
-	structName string, fset *token.FileSet, st *ast.StructType, endpointParams []string) (
-	[]RequestParam, error) {
+func createRequestParams(structName string, fset *token.FileSet, st *ast.StructType, endpointParams []string) ([]RequestParam, error) {
 	ep := make(map[string]struct{})
 	for _, e := range endpointParams {
-		ep[e] = struct{}{}
+		if _, ok := ep[e]; !ok {
+			ep[e] = struct{}{}
+		}
 	}
 
 	fl := st.Fields.List
-	result := make([]RequestParam, 0, len(fl))
+	result := make([]RequestParam, len(fl))
 
-	for _, f := range fl {
+	for i, f := range fl {
 		if len(f.Names) > 1 {
 			return nil, fmt.Errorf("%s: %+v: 同じ行に複数のパラメータを記述することはできません。",
 				fset.Position(f.Pos()).String(), f.Names)
 		}
-		fDataType := ""
 
-		fType, fName := getFieldNameFromStructAndEndpointParams(structName, f, ep)
-
+		var fDataType string
 		switch types.ExprString(f.Type) {
 		case "string":
 			fDataType = StringRequestDataType
@@ -221,36 +221,46 @@ func createRequestParams(
 			fDataType = types.ExprString(f.Type)
 		}
 
-		param := RequestParam{}
-		param.Name = fName
-		param.Type = fType
-		param.DataType = fDataType
+		fType, fName := getFieldNameFromStructAndEndpointParams(structName, f, ep)
 
-		result = append(result, param)
+		isRequired := fType == PathRequestName
+		if !isRequired && f.Tag != nil {
+			tags := reflect.StructTag(strings.Trim(f.Tag.Value, "`"))
+			if validateTags, ok := tags.Lookup("validate"); ok {
+				isRequired = strings.Contains(validateTags, "required")
+			}
+		}
+
+		result[i] = RequestParam{
+			Name:     fName,
+			Type:     fType,
+			DataType: fDataType,
+			Comment:  parseComment(f.Comment),
+			Required: isRequired,
+		}
 	}
+
 	return result, nil
 }
 
-func getFieldNameFromStructAndEndpointParams(
-	structName string, f *ast.Field, ep map[string]struct{}) (
-	RequestParamType, string) {
-	targetTag := ""
-	var tags reflect.StructTag
+func getFieldNameFromStructAndEndpointParams(structName string, f *ast.Field, ep map[string]struct{}) (RequestParamType, string) {
+	var (
+		targetTag string
+		fName     string
+		tags      reflect.StructTag
+		fType     RequestParamType
+	)
 
-	fName := ""
 	if len(f.Names) > 0 {
 		fName = f.Names[0].Name
-	} else {
-		switch t := f.Type.(type) {
-		case *ast.SelectorExpr:
-			fName = t.Sel.Name
-		}
+	} else if t, ok := f.Type.(*ast.SelectorExpr); ok {
+		fName = t.Sel.Name
 	}
-	var fType RequestParamType
 
 	if f.Tag != nil {
 		tags = reflect.StructTag(strings.Trim(f.Tag.Value, "`"))
 		if nameFromTag, ok := tags.Lookup("param"); ok {
+			nameFromTag = strings.Split(nameFromTag, ",")[0]
 			if _, ok := ep[nameFromTag]; ok {
 				return PathRequestName, nameFromTag
 			}
@@ -276,12 +286,11 @@ func getFieldNameFromStructAndEndpointParams(
 	if nameFromTag, ok := tags.Lookup(targetTag); ok {
 		fName = nameFromTag
 	}
+
 	return fType, fName
 }
 
-var (
-	epMap = make(map[string]string)
-)
+var epMap = make(map[string]string)
 
 func findStructList(pkgs map[string]*ast.Package) []*PackageStruct {
 	structList := make([]*PackageStruct, 0)
@@ -298,18 +307,15 @@ func findStructList(pkgs map[string]*ast.Package) []*PackageStruct {
 				if strings.HasSuffix(name, "Request") {
 					epMap[name] = ""
 				}
+
 				tSpec, ok := object.Decl.(*ast.TypeSpec)
 				if !ok {
 					continue
 				}
 
 				t := tSpec.Type
-				switch t.(type) {
+				switch structObject := t.(type) {
 				case *ast.StructType:
-					structObject, ok := t.(*ast.StructType)
-					if !ok {
-						continue
-					}
 					structList = append(structList, &PackageStruct{
 						FileName:     fileName,
 						PackageName:  pkg.Name,
@@ -326,4 +332,18 @@ func findStructList(pkgs map[string]*ast.Package) []*PackageStruct {
 	}
 
 	return structList
+}
+
+func parseComment(comments *ast.CommentGroup) (comment string) {
+	if comments == nil {
+		return comment
+	} else if len(comments.List) == 0 {
+		return comment
+	}
+
+	for _, c := range comments.List {
+		comment += strings.TrimPrefix(c.Text, "// ")
+	}
+
+	return comment
 }

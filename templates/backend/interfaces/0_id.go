@@ -6,10 +6,10 @@ import "time"
 
 // PostCreateUserRequest Description
 type PostCreateUserRequest struct {
-	ID       string `param:"id"`
-	Password string
-	Gender   int
-	Birthday time.Time
+	ID       string    `param:"id" validate:"required"` // User ID
+	Password string    `json:"password"`                // User Password
+	Gender   int       `json:"gender"`                  // User Gender
+	Birthday time.Time `json:"birthday"`                // User Birthday
 }
 
 // CreatedType ...

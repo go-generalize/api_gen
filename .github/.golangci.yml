@@ -13,9 +13,6 @@ linters-settings:
     min-confidence: 0
   govet:
     check-shadowing: true
-
-  lll:
-    line-length: 120
   misspell:
     locale: US
     ignore-words: []
@@ -45,8 +42,6 @@ linters:
     - govet
     # 意味のない再代入を検出
     - ineffassign
-    # 1行の最大長が長すぎるものを検出
-    - lll
     # スペルチェック
     - misspell
     # for中などで固定されてない変数を検出

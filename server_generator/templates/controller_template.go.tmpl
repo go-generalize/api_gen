@@ -27,7 +27,7 @@ func New{{ .ControllerName }}(cp *props.ControllerProps) *{{ .ControllerName }} 
 // @Accept json
 // @Produce json
 {{- range $p := .RequestParams }}
-// @Param {{ $p.Name }} {{ $p.Type }} {{ $p.DataType }} WIP:${isRequire} WIP:${description}
+// @Param {{ $p.Name }} {{ $p.Type }} {{ $p.DataType }} {{ $p.Required }} "{{ $p.Comment }}"
 {{- end }}
 // @Success 200 {object} {{ .ResponseStructName }}
 // @Failure 400 {object} wrapper.APIError
