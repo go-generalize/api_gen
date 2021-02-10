@@ -6,6 +6,7 @@ type RequestParam struct {
 	Name     string
 	Type     RequestParamType
 	DataType string
+	Comment  string
 }
 
 // RequestParamType ...
