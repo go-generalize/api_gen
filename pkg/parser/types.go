@@ -48,6 +48,7 @@ type Endpoint struct {
 
 	Method        MethodType
 	RawPath, Path string
+	Placeholder   string
 
 	RequestPayload  *ast.StructType
 	ResponsePayload *ast.StructType
@@ -58,6 +59,7 @@ type Group struct {
 	ImportPath    string
 	RawPath, Path string
 	Dir           string
+	Placeholder   string
 
 	Children  []*Group
 	Endpoints []*Endpoint

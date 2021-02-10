@@ -84,7 +84,7 @@ func (p *parser) getGoModulePackage(dir string) (string, error) {
 	return filepath.Join(p.module, rel), nil
 }
 
-func (p *parser) parseFile(dir string, fset *token.FileSet, file *ast.File, endpoints map[string]*Endpoint) {
+func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.File, endpoints map[string]*Endpoint) {
 	for _, decl := range file.Decls {
 		genDecl, ok := decl.(*ast.GenDecl)
 		if !ok {
@@ -131,9 +131,14 @@ func (p *parser) parseFile(dir string, fset *token.FileSet, file *ast.File, endp
 				endpoints[me] = ep
 			}
 
+			rawPath := me[len(method):]
 			ep.Method = method
-			ep.RawPath = me[len(method):]
-			ep.Path = strcase.ToSnake(me[len(method):])
+			ep.RawPath = rawPath
+			ep.Path = strcase.ToSnake(rawPath)
+
+			if strings.HasPrefix(filepath.Base(fileName), "0_") {
+				ep.Placeholder = strings.ReplaceAll(stem(fileName), "_id", "ID")[2:]
+			}
 
 			if isRequest {
 				ep.RequestPayload = structType
@@ -167,6 +172,10 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 		Path:       strcase.ToSnake(filepath.Base(dir)),
 	}
 
+	if strings.HasPrefix(gr.RawPath, "_") {
+		gr.Placeholder = gr.RawPath[1:]
+	}
+
 	for name, v := range pkgs {
 		if strings.HasSuffix(name, "_test") {
 			continue
@@ -179,7 +188,7 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 				continue
 			}
 
-			p.parseFile(dir, fset, file, endpoints)
+			p.parseFile(dir, name, fset, file, endpoints)
 		}
 
 		gr.Endpoints = make([]*Endpoint, 0, len(endpoints))
