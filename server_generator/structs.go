@@ -251,6 +251,7 @@ func getFieldNameFromStructAndEndpointParams(
 	if f.Tag != nil {
 		tags = reflect.StructTag(strings.Trim(f.Tag.Value, "`"))
 		if nameFromTag, ok := tags.Lookup("param"); ok {
+			nameFromTag = strings.Split(nameFromTag, ",")[0]
 			if _, ok := ep[nameFromTag]; ok {
 				return PathRequestName, nameFromTag
 			}
