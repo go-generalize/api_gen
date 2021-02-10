@@ -231,20 +231,11 @@ func createRequestParams(structName string, fset *token.FileSet, st *ast.StructT
 			}
 		}
 
-		var comment string
-		if f.Comment != nil {
-			if len(f.Comment.List) > 0 {
-				for _, c := range f.Comment.List {
-					comment += strings.TrimPrefix(c.Text, "// ")
-				}
-			}
-		}
-
 		result[i] = RequestParam{
 			Name:     fName,
 			Type:     fType,
 			DataType: fDataType,
-			Comment:  comment,
+			Comment:  parseComment(f.Comment),
 			Required: isRequired,
 		}
 	}
@@ -341,4 +332,18 @@ func findStructList(pkgs map[string]*ast.Package) []*PackageStruct {
 	}
 
 	return structList
+}
+
+func parseComment(comments *ast.CommentGroup) (comment string) {
+	if comments == nil {
+		return
+	} else if len(comments.List) == 0 {
+		return
+	}
+
+	for _, c := range comments.List {
+		comment += strings.TrimPrefix(c.Text, "// ")
+	}
+
+	return comment
 }
