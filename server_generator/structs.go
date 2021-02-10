@@ -336,9 +336,9 @@ func findStructList(pkgs map[string]*ast.Package) []*PackageStruct {
 
 func parseComment(comments *ast.CommentGroup) (comment string) {
 	if comments == nil {
-		return
+		return comment
 	} else if len(comments.List) == 0 {
-		return
+		return comment
 	}
 
 	for _, c := range comments.List {
