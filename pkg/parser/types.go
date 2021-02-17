@@ -88,7 +88,7 @@ func (g *Group) GetFullPath(splitter string, fn func(rawPath, path, placeholder 
 
 	gr := g.parentGroup
 	for gr != nil {
-		paths = append(paths, fn(g.RawPath, gr.Path, gr.Placeholder))
+		paths = append(paths, fn(gr.RawPath, gr.Path, gr.Placeholder))
 
 		gr = gr.parentGroup
 	}

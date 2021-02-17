@@ -1,7 +1,7 @@
 package clientgo
 
 import (
-	"bytes"
+	"fmt"
 	"testing"
 
 	"github.com/go-generalize/api_gen/pkg/parser"
@@ -9,25 +9,39 @@ import (
 
 func TestGenerate(t *testing.T) {
 	type args struct {
-		gr *parser.Group
+		gr          *parser.Group
+		packageName string
 	}
+	group, err := parser.Parse("../../../server_generator/sample")
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	tests := []struct {
 		name       string
 		args       args
 		wantWriter string
 		wantErr    bool
 	}{
-		// TODO: Add test cases.
+		{
+			name: "server_generator/sample",
+			args: args{
+				gr:          group,
+				packageName: "client",
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			writer := &bytes.Buffer{}
-			if err := Generate(writer, tt.args.gr); (err != nil) != tt.wantErr {
+			got, err := Generate(tt.args.gr, tt.args.packageName)
+			if (err != nil) != tt.wantErr {
 				t.Errorf("Generate() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if gotWriter := writer.String(); gotWriter != tt.wantWriter {
-				t.Errorf("Generate() = %v, want %v", gotWriter, tt.wantWriter)
+			if got != tt.wantWriter {
+				fmt.Println(got)
+				t.Errorf("Generate() = %v, want %v", got, tt.wantWriter)
 			}
 		})
 	}

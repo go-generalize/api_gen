@@ -27,6 +27,11 @@ func Parse(dir string) (*Group, error) {
 		return nil, xerrors.Errorf("failed to parse package: %w", err)
 	}
 
+	// Make the root path empty
+	gr.Path = ""
+	gr.RawPath = ""
+	gr.Placeholder = ""
+
 	return gr, nil
 }
 
@@ -171,7 +176,7 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 		Dir:        dir,
 		ImportPath: gomod,
 		RawPath:    filepath.Base(dir),
-		Path:       strcase.ToSnake(filepath.Base(dir)),
+		Path:       filepath.Base(dir),
 	}
 
 	if strings.HasPrefix(gr.RawPath, "_") {
@@ -200,6 +205,7 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 				v.ResponsePayload == nil {
 				continue
 			}
+			v.parentGroup = gr
 
 			gr.Endpoints = append(gr.Endpoints, v)
 		}

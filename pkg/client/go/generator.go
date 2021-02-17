@@ -1,9 +1,11 @@
 package clientgo
 
 import (
+	"bytes"
 	"embed"
 	"fmt"
-	"io"
+	"go/format"
+	"strings"
 	"text/template"
 
 	"github.com/go-generalize/api_gen/pkg/astutil"
@@ -12,28 +14,42 @@ import (
 )
 
 const (
-	queryTagKey = "query"
+	queryTagKey = "param"
 )
 
 //go:embed templates/client.go.tmpl
 var clientGoTemplate embed.FS
 
 // Generate generates a Go client for api_gen
-func Generate(writer io.Writer, gr *parser.Group) error {
-	params := generator{}
+func Generate(gr *parser.Group, packageName string) (string, error) {
+	params := generator{
+		PackageName: packageName,
+	}
 
 	params.generate(gr)
 
-	tmpl, err := template.ParseFS(clientGoTemplate)
+	tmpl, err := template.ParseFS(clientGoTemplate, "templates/client.go.tmpl")
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return tmpl.Execute(writer, params)
+	buf := bytes.NewBuffer(nil)
+	if err := tmpl.Execute(buf, params); err != nil {
+		return "", err
+	}
+
+	formatted, err := format.Source(buf.Bytes())
+
+	if err != nil {
+		return "", err
+	}
+
+	return string(formatted), nil
 }
 
 type endpoint struct {
+	Name     string
 	Method   string
 	Path     string
 	Request  string
@@ -47,12 +63,14 @@ type group struct {
 }
 
 type generator struct {
-	Groups  []*group
-	Imports map[string]string
-	Root    *group
+	PackageName string
+	Groups      []*group
+	Imports     map[string]string
+	Root        *group
 }
 
 func (g *generator) generate(gr *parser.Group) {
+	g.Imports = make(map[string]string)
 	g.Root = g.generateGroup(gr)
 }
 
@@ -64,16 +82,17 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint) *endpoint {
 	fullPath := ep.GetFullPath("/", func(rawPath, path, placeholder string) string {
 		if placeholder != "" {
 			return fmt.Sprintf(
-				`" + fmt.Sprint(g.%s) + "`,
+				`" + fmt.Sprint(reqPayload.%s) + "`,
 				astutil.FindStructField(ep.RequestPayload, queryTagKey, placeholder),
 			)
 		}
 
 		return path
 	})
-	fullPath = `"/` + fullPath + `"`
+	fullPath = `"` + fullPath + `"`
 
 	gen.Path = fullPath
+	gen.Name = strcase.ToCamel(strings.ToLower(string(ep.Method))) + ep.RawPath
 
 	importAlias := g.Imports[ep.GetParent().ImportPath]
 
@@ -96,6 +115,9 @@ func (g *generator) generateGroup(gr *parser.Group) *group {
 	importAlias := gr.GetFullPath("_", func(rawPath, path, placeholder string) string {
 		return rawPath
 	})
+	if importAlias == "" {
+		importAlias = "root"
+	}
 
 	g.Imports[gr.ImportPath] = importAlias
 

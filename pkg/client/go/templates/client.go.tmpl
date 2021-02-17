@@ -1,18 +1,21 @@
-package client
+package {{.PackageName}}
 
 import (
+	"fmt"
 	"bytes"
+	"net/url"
 	"net/http"
+	"encoding/json"
 
-{{- range $key, $value := .Imports }}
-	$key "$value"
-{{end}}
+{{ range $key, $value := .Imports }}
+	{{$value}} "{{$key}}"
+{{- end}}
 )
 
 {{ range $index, $elem := .Groups }}
 type {{ $elem.Name }} struct {
 {{- range $index, $e := $elem.Children }}
-	{{$e.ShortName}}: new{{$e.Name}}(client),
+	{{$e.ShortName}} *{{$e.Name}}
 {{- end }}
 	apiClient *APIClient
 }
@@ -22,19 +25,27 @@ func new{{ $elem.Name }}(client *APIClient) *{{ $elem.Name }} {
 		apiClient: client,
 {{- range $index, $e := $elem.Children }}
 		{{$e.ShortName}}: new{{$e.Name}}(client),
-{{end}}
+{{- end}}
 	}
 }
 
-{{- range $index, $e := $elem.Endpoints }}
+{{ range $index, $e := $elem.Endpoints }}
 func (g *{{ $elem.Name }}) {{$e.Name}}(reqPayload *{{$e.Request}}) (respPayload *{{$e.Response}}, err error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(req); err != nil {
+{{- if eq $e.Method "GET"}}
+	query, err := encodeQuery(reqPayload)
+	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("{{$e.Method}}", {{$e.Path}}, buf)
+	req, err := http.NewRequest("{{$e.Method}}", g.apiClient.base + {{$e.Path}} + "?" + query, nil)
+{{- else}}
+	buf := bytes.NewBuffer(nil)
+	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
+		return nil, err
+	}
 
+	req, err := http.NewRequest("{{$e.Method}}", g.apiClient.base + {{$e.Path}}, buf)
+{{- end}}
 	if err != nil {
 		return nil, err
 	}
@@ -54,16 +65,42 @@ func (g *{{ $elem.Name }}) {{$e.Name}}(reqPayload *{{$e.Request}}) (respPayload 
 	return respPayload, nil
 }
 {{end}}
-{{end}}
+{{- end}}
+
+func encodeQuery(v interface{}) (string, error) {
+	buf := bytes.NewBuffer(nil)
+
+	if err := json.NewEncoder(buf).Encode(v); err != nil {
+		return "", err
+	}
+
+	dict := map[string]interface{}{}
+	if err := json.NewDecoder(buf).Decode(&dict); err != nil {
+		return "", err
+	}
+
+	val := url.Values{}
+	for k, v := range dict {
+		val.Set(k, fmt.Sprint(v))
+	}
+
+	return val.Encode(), nil
+}
 
 type APIClient struct {
 	*{{.Root.Name}}
+
 	client http.Client
+	base   string
 }
 
-func NewClient(client http.Client) *APIClient {
+func NewClient(client http.Client, base string) *APIClient {
 	c := &APIClient {
 		client: client,
+		base:   base,
+	}
+	if c.base[len(c.base) - 1] == '/' {
+		c.base = c.base[:len(c.base) - 1]
 	}
 
 	c.{{.Root.Name}} = new{{.Root.Name}}(c)
