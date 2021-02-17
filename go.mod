@@ -1,6 +1,6 @@
 module github.com/go-generalize/api_gen
 
-go 1.15
+go 1.16
 
 require (
 	github.com/go-generalize/go2ts v1.0.4
