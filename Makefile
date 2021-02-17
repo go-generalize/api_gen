@@ -64,3 +64,7 @@ sample_server_generator_run: sample_server_generator
 
 build-release:
 	$(shell bash ./scripts/build_release.sh)
+
+.PHONY: cmd
+cmd:
+	go build -o ./bin/api_gen ./cmd/*.go
