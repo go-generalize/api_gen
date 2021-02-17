@@ -1,0 +1,72 @@
+package client
+
+import (
+	"bytes"
+	"net/http"
+
+{{- range $key, $value := .Imports }}
+	$key "$value"
+{{end}}
+)
+
+{{ range $index, $elem := .Groups }}
+type {{ $elem.Name }} struct {
+{{- range $index, $e := $elem.Children }}
+
+{{- end }}
+	apiClient *APIClient
+}
+
+func new{{ $elem.Name }}(client *APIClient) *{{ $elem.Name }} {
+	return &{{ $elem.Name }} {
+		apiClient: client,
+{{- range $index, $e := $elem.Children }}
+		{{$e.Name}}: new{{$e.Name}}(client),
+{{end}}
+	}
+}
+
+{{- range $index, $e := $elem.Endpoints }}
+func (g *{{ $elem.Name }}) {{$e.Name}}(reqPayload *{{$e.Request}}) (respPayload *{{$e.Response}}, err error) {
+	buf := bytes.NewBuffer(nil)
+	if err := json.NewEncoder(buf).Encode(req); err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("{{$e.Method}}", {{$e.Path}}, buf)
+
+	if err != nil {
+		return nil, err
+	}
+	
+	resp, err := g.apiClient.client.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	respPayload = &{{$e.Response}}{}
+	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
+		return nil, err
+	}
+
+	return respPayload, nil
+}
+{{end}}
+{{end}}
+
+type APIClient struct {
+	*{{.Root.Name}}
+	client http.Client
+}
+
+func NewClient(client http.Client) *APIClient {
+	c := &APIClient {
+		client: client,
+	}
+
+	c.{{.Root.Name}} = new{{.Root.Name}}(c)
+
+	return c
+}

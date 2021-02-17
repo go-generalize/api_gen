@@ -50,12 +50,24 @@ type Endpoint struct {
 	RawPath, Path string
 	Placeholder   string
 
-	RequestPayload  *ast.StructType
-	ResponsePayload *ast.StructType
+	RequestPayloadName  string
+	ResponsePayloadName string
+	RequestPayload      *ast.StructType
+	ResponsePayload     *ast.StructType
+}
+
+func (e *Endpoint) GetFullPath(splitter string, fn func(rawPath, path, placeholder string) string) string {
+	return e.parentGroup.GetFullPath(splitter, fn) + splitter + fn(e.RawPath, e.Path, e.Placeholder)
+}
+
+func (e *Endpoint) GetParent() *Group {
+	return e.parentGroup
 }
 
 // Group is a layer for endpoints
 type Group struct {
+	parentGroup *Group
+
 	ImportPath    string
 	RawPath, Path string
 	Dir           string
@@ -63,4 +75,27 @@ type Group struct {
 
 	Children  []*Group
 	Endpoints []*Endpoint
+}
+
+func (g *Group) GetParent() *Group {
+	return g.parentGroup
+}
+
+func (g *Group) GetFullPath(splitter string, fn func(rawPath, path, placeholder string) string) string {
+	paths := make([]string, 0, 8)
+
+	paths = append(paths, fn(g.RawPath, g.Path, g.Placeholder))
+
+	gr := g.parentGroup
+	for gr != nil {
+		paths = append(paths, fn(g.RawPath, gr.Path, gr.Placeholder))
+
+		gr = gr.parentGroup
+	}
+
+	for i := 0; i < len(paths)/2; i++ {
+		paths[i], paths[len(paths)-i-1] = paths[len(paths)-i-1], paths[i]
+	}
+
+	return strings.Join(paths, splitter)
 }

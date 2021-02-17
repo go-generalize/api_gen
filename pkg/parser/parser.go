@@ -142,8 +142,10 @@ func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.
 
 			if isRequest {
 				ep.RequestPayload = structType
+				ep.RequestPayloadName = name
 			} else {
 				ep.ResponsePayload = structType
+				ep.ResponsePayloadName = name
 			}
 		}
 	}
@@ -225,6 +227,7 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 		if len(child.Endpoints) == 0 && len(child.Children) == 0 {
 			continue
 		}
+		child.parentGroup = gr
 
 		gr.Children = append(gr.Children, child)
 	}
