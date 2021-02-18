@@ -8,8 +8,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/go-generalize/api_gen/pkg/astutil"
 	"github.com/go-generalize/api_gen/pkg/parser"
+	"github.com/go-utils/astutil"
 	"github.com/iancoleman/strcase"
 )
 

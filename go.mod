@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/go-generalize/go2ts v1.0.4
+	github.com/go-utils/astutil v0.0.0-20210218045035-43feddb4f836 // indirect
 	github.com/go-utils/count v0.0.1
 	github.com/go-utils/gopackages v0.0.0-20210117150247-4bcdec6783b3
 	github.com/iancoleman/strcase v0.1.2

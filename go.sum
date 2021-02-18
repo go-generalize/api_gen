@@ -47,6 +47,8 @@ github.com/go-kit/kit v0.8.0/go.mod h1:xBxKIO96dXMWWy0MnWVtmwkA9/13aqxPnvrjFYMA2
 github.com/go-logfmt/logfmt v0.3.0/go.mod h1:Qt1PoO58o5twSAckw1HlFXLmHsOX5/0LbT9GBnD5lWE=
 github.com/go-logfmt/logfmt v0.4.0/go.mod h1:3RMwSq7FuexP4Kalkev3ejPJsZTpXXBr9+V4qmtdjCk=
 github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/melR3HDY=
+github.com/go-utils/astutil v0.0.0-20210218045035-43feddb4f836 h1:ZRpIy3JbeXXdC+5Gm4Brjmnv64csHaXpxTIzSrKirvE=
+github.com/go-utils/astutil v0.0.0-20210218045035-43feddb4f836/go.mod h1:6fAQi+Bm5S+AklVMi27JXg+Qu8whfkgb4BZBROj7B+Y=
 github.com/go-utils/count v0.0.1 h1:mt55LmS+NgZjldyZx5IQqpXcmbV1Zzsh+EtxSNW9YeM=
 github.com/go-utils/count v0.0.1/go.mod h1:jTOK09i9ez7PdsTjscdN+iDrXGq5YkDTDYuiVy7hRZw=
 github.com/go-utils/gopackages v0.0.0-20210117150247-4bcdec6783b3 h1:/6XeQL0Ol0158cpOQtHblmYpjeEFWsocNZjPA9YfiXQ=
