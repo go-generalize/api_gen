@@ -3,6 +3,7 @@ package clientcmd
 import (
 	"os"
 
+	"github.com/go-generalize/api_gen/common"
 	clientgo "github.com/go-generalize/api_gen/pkg/client/go"
 	"github.com/go-generalize/api_gen/pkg/parser"
 	"github.com/spf13/cobra"
@@ -25,7 +26,7 @@ Pass the directory to parse as the 1st argument.`,
 				return xerrors.Errorf("failed to parse the package(%s): %w", args[0], err)
 			}
 
-			code, err := clientgo.Generate(group, pkg)
+			code, err := clientgo.Generate(group, pkg, common.AppVersion)
 
 			if err != nil {
 				return xerrors.Errorf("failed to generate source code: %w", err)
