@@ -1,5 +1,6 @@
 // THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
+// api_gen version: 1.0
 package client
 
 import (
@@ -64,6 +65,32 @@ func newGroup_service_user(client *APIClient) *Group_service_user {
 	}
 }
 
+func (g *Group_service_user) PostUpdateUserName(reqPayload *_service_user.PostUpdateUserNameRequest) (respPayload *_service_user.PostUpdateUserNameResponse, err error) {
+	buf := bytes.NewBuffer(nil)
+	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", g.apiClient.base+"/service/user/update_user_name", buf)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := g.apiClient.client.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	respPayload = &_service_user.PostUpdateUserNameResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
+		return nil, err
+	}
+
+	return respPayload, nil
+}
+
 func (g *Group_service_user) PostUpdateUserPassword(reqPayload *_service_user.PostUpdateUserPasswordRequest) (respPayload *_service_user.PostUpdateUserPasswordResponse, err error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
@@ -109,32 +136,6 @@ func (g *Group_service_user) Get(reqPayload *_service_user.GetRequest) (respPayl
 	defer resp.Body.Close()
 
 	respPayload = &_service_user.GetResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-func (g *Group_service_user) PostUpdateUserName(reqPayload *_service_user.PostUpdateUserNameRequest) (respPayload *_service_user.PostUpdateUserNameResponse, err error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", g.apiClient.base+"/service/user/update_user_name", buf)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_service_user.PostUpdateUserNameResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}

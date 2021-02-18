@@ -22,9 +22,10 @@ const (
 var clientGoTemplate embed.FS
 
 // Generate generates a Go client for api_gen
-func Generate(gr *parser.Group, packageName string) (string, error) {
+func Generate(gr *parser.Group, packageName, version string) (string, error) {
 	params := generator{
 		PackageName: packageName,
+		Version:     version,
 	}
 
 	params.generate(gr)
@@ -68,6 +69,7 @@ type generator struct {
 	Groups      []*group
 	imports     map[string]string
 	Imports     []importPair
+	Version     string
 	Root        *group
 }
 
