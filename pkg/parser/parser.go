@@ -209,8 +209,6 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 
 			gr.Endpoints = append(gr.Endpoints, v)
 		}
-
-		continue
 	}
 
 	fifos, err := ioutil.ReadDir(dir)
