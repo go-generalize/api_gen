@@ -65,6 +65,32 @@ func newGroup_service_user(client *APIClient) *Group_service_user {
 	}
 }
 
+func (g *Group_service_user) Get(reqPayload *_service_user.GetRequest) (respPayload *_service_user.GetResponse, err error) {
+	query, err := encodeQuery(reqPayload)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", g.apiClient.base+"/service/user/"+"?"+query, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := g.apiClient.client.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	respPayload = &_service_user.GetResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
+		return nil, err
+	}
+
+	return respPayload, nil
+}
+
 func (g *Group_service_user) PostUpdateUserName(reqPayload *_service_user.PostUpdateUserNameRequest) (respPayload *_service_user.PostUpdateUserNameResponse, err error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
@@ -110,32 +136,6 @@ func (g *Group_service_user) PostUpdateUserPassword(reqPayload *_service_user.Po
 	defer resp.Body.Close()
 
 	respPayload = &_service_user.PostUpdateUserPasswordResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-func (g *Group_service_user) Get(reqPayload *_service_user.GetRequest) (respPayload *_service_user.GetResponse, err error) {
-	query, err := encodeQuery(reqPayload)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", g.apiClient.base+"/service/user/"+"?"+query, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_service_user.GetResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}
@@ -229,6 +229,32 @@ func newGroup_service_user2(client *APIClient) *Group_service_user2 {
 	}
 }
 
+func (g *Group_service_user2) GetUser(reqPayload *_service_user2.GetUserRequest) (respPayload *_service_user2.GetUserResponse, err error) {
+	query, err := encodeQuery(reqPayload)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", g.apiClient.base+"/service/user2/"+fmt.Sprint(reqPayload.ID)+""+"?"+query, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := g.apiClient.client.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	respPayload = &_service_user2.GetUserResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
+		return nil, err
+	}
+
+	return respPayload, nil
+}
+
 func (g *Group_service_user2) PostUpdateUserName(reqPayload *_service_user2.PostUpdateUserNameRequest) (respPayload *_service_user2.PostUpdateUserNameResponse, err error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
@@ -274,32 +300,6 @@ func (g *Group_service_user2) PostUpdateUserPassword(reqPayload *_service_user2.
 	defer resp.Body.Close()
 
 	respPayload = &_service_user2.PostUpdateUserPasswordResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-func (g *Group_service_user2) GetUser(reqPayload *_service_user2.GetUserRequest) (respPayload *_service_user2.GetUserResponse, err error) {
-	query, err := encodeQuery(reqPayload)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", g.apiClient.base+"/service/user2/"+fmt.Sprint(reqPayload.ID)+""+"?"+query, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_service_user2.GetUserResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}
@@ -361,6 +361,32 @@ func newGroup(client *APIClient) *Group {
 	}
 }
 
+func (g *Group) Get(reqPayload *root.GetRequest) (respPayload *root.GetResponse, err error) {
+	query, err := encodeQuery(reqPayload)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", g.apiClient.base+"/"+"?"+query, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := g.apiClient.client.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	respPayload = &root.GetResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
+		return nil, err
+	}
+
+	return respPayload, nil
+}
+
 func (g *Group) PostCreateTable(reqPayload *root.PostCreateTableRequest) (respPayload *root.PostCreateTableResponse, err error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
@@ -406,32 +432,6 @@ func (g *Group) PostCreateUser(reqPayload *root.PostCreateUserRequest) (respPayl
 	defer resp.Body.Close()
 
 	respPayload = &root.PostCreateUserResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-func (g *Group) Get(reqPayload *root.GetRequest) (respPayload *root.GetResponse, err error) {
-	query, err := encodeQuery(reqPayload)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", g.apiClient.base+"/"+"?"+query, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &root.GetResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}

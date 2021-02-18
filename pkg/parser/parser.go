@@ -6,6 +6,7 @@ import (
 	"go/token"
 	"io/ioutil"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/go-utils/gopackages"
@@ -209,6 +210,10 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 
 			gr.Endpoints = append(gr.Endpoints, v)
 		}
+
+		sort.Slice(gr.Endpoints, func(i, j int) bool {
+			return string(gr.Endpoints[i].Method)+gr.Endpoints[i].RawPath < string(gr.Endpoints[j].Method)+gr.Endpoints[j].RawPath
+		})
 	}
 
 	fifos, err := ioutil.ReadDir(dir)
@@ -235,6 +240,10 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 
 		gr.Children = append(gr.Children, child)
 	}
+
+	sort.Slice(gr.Children, func(i, j int) bool {
+		return gr.Children[i].RawPath < gr.Children[j].RawPath
+	})
 
 	return gr, nil
 }
