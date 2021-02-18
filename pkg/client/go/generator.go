@@ -5,6 +5,7 @@ import (
 	"embed"
 	"fmt"
 	"go/format"
+	"sort"
 	"strings"
 	"text/template"
 
@@ -65,13 +66,29 @@ type group struct {
 type generator struct {
 	PackageName string
 	Groups      []*group
-	Imports     map[string]string
+	imports     map[string]string
+	Imports     []importPair
 	Root        *group
 }
 
+type importPair struct {
+	Alias, Path string
+}
+
 func (g *generator) generate(gr *parser.Group) {
-	g.Imports = make(map[string]string)
+	g.imports = make(map[string]string)
 	g.Root = g.generateGroup(gr)
+
+	for k, v := range g.imports {
+		g.Imports = append(g.Imports, importPair{
+			Alias: v,
+			Path:  k,
+		})
+	}
+
+	sort.Slice(g.Imports, func(i, j int) bool {
+		return g.Imports[i].Path+g.Imports[i].Path < g.Imports[j].Path+g.Imports[j].Path
+	})
 }
 
 func (g *generator) generateEndpoint(ep *parser.Endpoint) *endpoint {
@@ -94,7 +111,7 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint) *endpoint {
 	gen.Path = fullPath
 	gen.Name = strcase.ToCamel(strings.ToLower(string(ep.Method))) + ep.RawPath
 
-	importAlias := g.Imports[ep.GetParent().ImportPath]
+	importAlias := g.imports[ep.GetParent().ImportPath]
 
 	gen.Request = fmt.Sprintf("%s.%s", importAlias, ep.RequestPayloadName)
 	gen.Response = fmt.Sprintf("%s.%s", importAlias, ep.ResponsePayloadName)
@@ -119,7 +136,7 @@ func (g *generator) generateGroup(gr *parser.Group) *group {
 		importAlias = "root"
 	}
 
-	g.Imports[gr.ImportPath] = importAlias
+	g.imports[gr.ImportPath] = importAlias
 
 	gen.Children = make([]*group, 0, len(gr.Children))
 	for i := range gr.Children {

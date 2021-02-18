@@ -9,8 +9,8 @@ import (
 	"net/http"
 	"encoding/json"
 
-{{ range $key, $value := .Imports }}
-	{{$value}} "{{$key}}"
+{{ range $idx, $elem := .Imports }}
+	{{$elem.Alias}} "{{$elem.Path}}"
 {{- end}}
 )
 
