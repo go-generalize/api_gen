@@ -1,0 +1,156 @@
+package clientgo
+
+import (
+	"bytes"
+	"embed"
+	"fmt"
+	"go/format"
+	"sort"
+	"strings"
+	"text/template"
+
+	"github.com/go-generalize/api_gen/pkg/parser"
+	"github.com/go-utils/astutil"
+	"github.com/iancoleman/strcase"
+)
+
+const (
+	queryTagKey = "param"
+)
+
+//go:embed templates/client.go.tmpl
+var clientGoTemplate embed.FS
+
+// Generate generates a Go client for api_gen
+func Generate(gr *parser.Group, packageName, version string) (string, error) {
+	params := generator{
+		PackageName: packageName,
+		Version:     version,
+	}
+
+	params.generate(gr)
+
+	tmpl, err := template.ParseFS(clientGoTemplate, "templates/client.go.tmpl")
+
+	if err != nil {
+		return "", err
+	}
+
+	buf := bytes.NewBuffer(nil)
+	if err := tmpl.Execute(buf, params); err != nil {
+		return "", err
+	}
+
+	formatted, err := format.Source(buf.Bytes())
+
+	if err != nil {
+		return "", err
+	}
+
+	return string(formatted), nil
+}
+
+type endpoint struct {
+	Name     string
+	Method   string
+	Path     string
+	Request  string
+	Response string
+}
+
+type group struct {
+	ShortName, Name string
+	Children        []*group
+	Endpoints       []*endpoint
+}
+
+type generator struct {
+	PackageName string
+	Groups      []*group
+	imports     map[string]string
+	Imports     []importPair
+	Version     string
+	Root        *group
+}
+
+type importPair struct {
+	Alias, Path string
+}
+
+func (g *generator) generate(gr *parser.Group) {
+	g.imports = make(map[string]string)
+	g.Root = g.generateGroup(gr)
+
+	for k, v := range g.imports {
+		g.Imports = append(g.Imports, importPair{
+			Alias: v,
+			Path:  k,
+		})
+	}
+
+	sort.Slice(g.Imports, func(i, j int) bool {
+		return g.Imports[i].Path+g.Imports[i].Path < g.Imports[j].Path+g.Imports[j].Path
+	})
+}
+
+func (g *generator) generateEndpoint(ep *parser.Endpoint) *endpoint {
+	gen := &endpoint{}
+
+	gen.Method = string(ep.Method)
+
+	fullPath := ep.GetFullPath("/", func(rawPath, path, placeholder string) string {
+		if placeholder != "" {
+			return fmt.Sprintf(
+				`" + fmt.Sprint(reqPayload.%s) + "`,
+				astutil.FindStructField(ep.RequestPayload, queryTagKey, placeholder),
+			)
+		}
+
+		return path
+	})
+	fullPath = `"` + fullPath + `"`
+
+	gen.Path = fullPath
+	gen.Name = strcase.ToCamel(strings.ToLower(string(ep.Method))) + ep.RawPath
+
+	importAlias := g.imports[ep.GetParent().ImportPath]
+
+	gen.Request = fmt.Sprintf("%s.%s", importAlias, ep.RequestPayloadName)
+	gen.Response = fmt.Sprintf("%s.%s", importAlias, ep.ResponsePayloadName)
+
+	return gen
+}
+
+func (g *generator) generateGroup(gr *parser.Group) *group {
+	gen := &group{}
+
+	p := gr.GetFullPath("_", func(rawPath, path, placeholder string) string {
+		return rawPath
+	})
+
+	gen.ShortName = strcase.ToCamel(gr.RawPath)
+	gen.Name = "Group" + p
+
+	importAlias := gr.GetFullPath("_", func(rawPath, path, placeholder string) string {
+		return rawPath
+	})
+	if importAlias == "" {
+		importAlias = "root"
+	}
+
+	g.imports[gr.ImportPath] = importAlias
+
+	gen.Children = make([]*group, 0, len(gr.Children))
+	for i := range gr.Children {
+		gen.Children = append(gen.Children, g.generateGroup(gr.Children[i]))
+	}
+
+	gen.Endpoints = make([]*endpoint, 0, len(gr.Endpoints))
+	for i := range gr.Endpoints {
+		gen.Endpoints = append(gen.Endpoints, g.generateEndpoint(gr.Endpoints[i]))
+	}
+
+	g.Groups = append(g.Groups, gen)
+
+	return gen
+}

@@ -1,0 +1,112 @@
+// THIS FILE IS A GENERATED CODE.
+// DO NOT EDIT THIS CODE BY YOUR OWN HANDS
+// api_gen version: {{.Version}}
+package {{.PackageName}}
+
+import (
+	"fmt"
+	"bytes"
+	"net/url"
+	"net/http"
+	"encoding/json"
+
+{{ range $idx, $elem := .Imports }}
+	{{$elem.Alias}} "{{$elem.Path}}"
+{{- end}}
+)
+
+{{ range $index, $elem := .Groups }}
+type {{ $elem.Name }} struct {
+{{- range $index, $e := $elem.Children }}
+	{{$e.ShortName}} *{{$e.Name}}
+{{- end }}
+	apiClient *APIClient
+}
+
+func new{{ $elem.Name }}(client *APIClient) *{{ $elem.Name }} {
+	return &{{ $elem.Name }} {
+		apiClient: client,
+{{- range $index, $e := $elem.Children }}
+		{{$e.ShortName}}: new{{$e.Name}}(client),
+{{- end}}
+	}
+}
+
+{{ range $index, $e := $elem.Endpoints }}
+func (g *{{ $elem.Name }}) {{$e.Name}}(reqPayload *{{$e.Request}}) (respPayload *{{$e.Response}}, err error) {
+{{- if eq $e.Method "GET"}}
+	query, err := encodeQuery(reqPayload)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("{{$e.Method}}", g.apiClient.base + {{$e.Path}} + "?" + query, nil)
+{{- else}}
+	buf := bytes.NewBuffer(nil)
+	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("{{$e.Method}}", g.apiClient.base + {{$e.Path}}, buf)
+{{- end}}
+	if err != nil {
+		return nil, err
+	}
+	
+	resp, err := g.apiClient.client.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	respPayload = &{{$e.Response}}{}
+	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
+		return nil, err
+	}
+
+	return respPayload, nil
+}
+{{end}}
+{{- end}}
+
+func encodeQuery(v interface{}) (string, error) {
+	buf := bytes.NewBuffer(nil)
+
+	if err := json.NewEncoder(buf).Encode(v); err != nil {
+		return "", err
+	}
+
+	dict := map[string]interface{}{}
+	if err := json.NewDecoder(buf).Decode(&dict); err != nil {
+		return "", err
+	}
+
+	val := url.Values{}
+	for k, v := range dict {
+		val.Set(k, fmt.Sprint(v))
+	}
+
+	return val.Encode(), nil
+}
+
+type APIClient struct {
+	*{{.Root.Name}}
+
+	client http.Client
+	base   string
+}
+
+func NewClient(client http.Client, base string) *APIClient {
+	c := &APIClient {
+		client: client,
+		base:   base,
+	}
+	if c.base[len(c.base) - 1] == '/' {
+		c.base = c.base[:len(c.base) - 1]
+	}
+
+	c.{{.Root.Name}} = new{{.Root.Name}}(c)
+
+	return c
+}
