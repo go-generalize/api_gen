@@ -1,8 +1,7 @@
 package clientgo
 
 import (
-	"fmt"
-	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/go-generalize/api_gen/pkg/parser"
@@ -20,15 +19,14 @@ func TestGenerate(t *testing.T) {
 	}
 
 	tests := []struct {
-		name       string
-		outputFile string
-		args       args
-		wantWriter string
-		wantErr    bool
+		name     string
+		args     args
+		wantPath string
+		wantErr  bool
 	}{
 		{
-			name:       "server_generator/sample",
-			outputFile: "./sample/client.go",
+			name:     "server_generator/sample",
+			wantPath: "./sample/client.go",
 			args: args{
 				gr:          group,
 				packageName: "client",
@@ -42,12 +40,15 @@ func TestGenerate(t *testing.T) {
 				t.Errorf("Generate() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if got != tt.wantWriter {
-				fmt.Println(got)
 
-				ioutil.WriteFile(tt.outputFile, []byte(got), 0644)
+			wantBytes, err := os.ReadFile(tt.wantPath)
 
-				t.Errorf("Generate() = %v, want %v", got, tt.wantWriter)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			if got != string(wantBytes) {
+				t.Errorf("Generate() = %v, want %v", got, wantBytes)
 			}
 		})
 	}
