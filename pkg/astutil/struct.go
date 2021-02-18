@@ -3,8 +3,6 @@ package astutil
 import (
 	"go/ast"
 	"reflect"
-
-	"github.com/k0kubun/pp"
 )
 
 // GetStructField gets the field name or matching tagged name
@@ -29,22 +27,6 @@ func FindStructField(strct *ast.StructType, tag, name string) string {
 			return field.Names[0].Name
 		}
 	}
-
-	pp.SetColorScheme(pp.ColorScheme{
-		Bool:            pp.NoColor,
-		Integer:         pp.NoColor,
-		Float:           pp.NoColor,
-		String:          pp.NoColor,
-		StringQuotation: pp.NoColor,
-		EscapedChar:     pp.NoColor,
-		FieldName:       pp.NoColor,
-		PointerAdress:   pp.NoColor,
-		Nil:             pp.NoColor,
-		Time:            pp.NoColor,
-		StructName:      pp.NoColor,
-		ObjectLength:    pp.NoColor,
-	})
-	pp.Println(strct, tag, name)
 
 	return ""
 }
