@@ -50,3 +50,8 @@ func ({{ .ControllerNameInitial }} *{{ .ControllerName }}) {{ .HandlerName }}(
 	{{- $fixme := "FIXME" }}
 	panic("require implements.") // {{ $fixme }} require implements.
 }
+
+// AutoBind - use echo.Bind
+func ({{ .ControllerNameInitial }} *{{ .ControllerName }}) AutoBind() bool {
+	return true
+}
