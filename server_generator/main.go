@@ -105,6 +105,7 @@ func run(arg string) error {
 		}
 		apiRootPathRel = r
 		apiRootPackage = filepath.Join(basePackagePath+"/", r)
+		apiRootPackage = strings.ReplaceAll(apiRootPackage, "\\", "/")
 	}
 
 	var controllerPropsPackage string
@@ -131,6 +132,8 @@ func run(arg string) error {
 		if err != nil {
 			return err
 		}
+
+		controllerPropsPackage = strings.ReplaceAll(controllerPropsPackage, "\\", "/")
 	}
 
 	var wrapperInternalPackage string
@@ -159,6 +162,8 @@ func run(arg string) error {
 		if err != nil {
 			return err
 		}
+
+		wrapperInternalPackage = strings.ReplaceAll(wrapperInternalPackage, "\\", "/")
 	}
 
 	var wrapperPackage string
@@ -188,6 +193,8 @@ func run(arg string) error {
 		if err != nil {
 			return err
 		}
+
+		wrapperPackage = strings.ReplaceAll(wrapperPackage, "\\", "/")
 	}
 
 	isExistRoot := false
@@ -340,6 +347,7 @@ func run(arg string) error {
 		if b.ImportPackageName == filepath.Base(b.PackagePath) {
 			b.ImportPackageName = ""
 		}
+		b.ImportPackageName = strings.ReplaceAll(b.ImportPackageName, "\\", "/")
 	}
 
 	bootstrapFilePath := filepath.Join(rootPath+"/", "bootstrap_gen.go")
