@@ -56,10 +56,12 @@ type Endpoint struct {
 	ResponsePayload     *ast.StructType
 }
 
+// GetFullPath - get the full path of a Endpoint
 func (e *Endpoint) GetFullPath(splitter string, fn func(rawPath, path, placeholder string) string) string {
 	return e.parentGroup.GetFullPath(splitter, fn) + splitter + fn(e.RawPath, e.Path, e.Placeholder)
 }
 
+// GetParent - get the parent group of Endpoint
 func (e *Endpoint) GetParent() *Group {
 	return e.parentGroup
 }
@@ -77,10 +79,12 @@ type Group struct {
 	Endpoints []*Endpoint
 }
 
+// GetParent - get the parent group of a Group
 func (g *Group) GetParent() *Group {
 	return g.parentGroup
 }
 
+// GetFullPath - get the full path of a Group
 func (g *Group) GetFullPath(splitter string, fn func(rawPath, path, placeholder string) string) string {
 	paths := make([]string, 0, 8)
 
