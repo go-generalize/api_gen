@@ -2,15 +2,17 @@
 package main
 
 import (
+	"embed"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"sort"
 	"text/template"
-
-	"github.com/rakyll/statik/fs"
 )
+
+//go:embed templates/*.tmpl
+var templatesFS embed.FS
 
 type methodType struct {
 	Name                      string
@@ -50,12 +52,7 @@ type clientGenerator struct {
 func (g *clientGenerator) generate() error {
 	g.sort()
 
-	statikFs, err := fs.New()
-	if err != nil {
-		return err
-	}
-
-	f, err := statikFs.Open("/templates/api.ts.tmpl")
+	f, err := templatesFS.Open("templates/api.ts.tmpl")
 	if err != nil {
 		return err
 	}
