@@ -2,6 +2,7 @@
 package main
 
 import (
+	"embed"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -15,12 +16,13 @@ import (
 
 	"github.com/go-generalize/api_gen/common"
 	"github.com/go-generalize/api_gen/server_generator/go2json"
-	_ "github.com/go-generalize/api_gen/server_generator/statik"
 	go2tsparser "github.com/go-generalize/go2ts/pkg/parser"
 	"github.com/iancoleman/strcase"
-	"github.com/rakyll/statik/fs"
 	"golang.org/x/xerrors"
 )
+
+//go:embed templates/*.tmpl
+var templatesFS embed.FS
 
 var (
 	supportHTTPMethod = []string{
@@ -123,7 +125,7 @@ func run(arg string) error {
 		controllerPropsPackage = filepath.Join(basePackagePath+"/", r)
 
 		err = createFromTemplate(
-			"/templates/controller_props.go.tmpl",
+			"templates/controller_props.go.tmpl",
 			filepath.Join(dir, "controller_props.go"),
 			nil, false, nil,
 		)
@@ -149,7 +151,7 @@ func run(arg string) error {
 		wrapperInternalPackage = filepath.Join(basePackagePath+"/", r)
 
 		err = createFromTemplate(
-			"/templates/fmt_template.go.tmpl",
+			"templates/fmt_template.go.tmpl",
 			filepath.Join(dir, "fmt.go"),
 			map[string]string{
 				"AppVersion": common.AppVersion,
@@ -177,7 +179,7 @@ func run(arg string) error {
 		wrapperPackage = filepath.Join(basePackagePath+"/", r)
 
 		err = createFromTemplate(
-			"/templates/wrapper_template.go.tmpl",
+			"templates/wrapper_template.go.tmpl",
 			filepath.Join(dir, "wrapper.go"),
 			map[string]string{
 				"AppVersion":      common.AppVersion,
@@ -350,7 +352,7 @@ func run(arg string) error {
 		ControllerPropsPackage: controllerPropsPackage,
 	}
 	err = createFromTemplate(
-		"/templates/bootstrap_template.go.tmpl",
+		"templates/bootstrap_template.go.tmpl",
 		bootstrapFilePath, bootstrapTemplate,
 		true, template.FuncMap{
 			"GetGroupName": getGroupName,
@@ -451,7 +453,7 @@ func parsePackages(
 
 		routes[createDir] = append(routes[createDir], ct)
 
-		err = createFromTemplate("/templates/controller_template.go.tmpl",
+		err = createFromTemplate("templates/controller_template.go.tmpl",
 			createPath, ct, false, template.FuncMap{})
 		if err != nil {
 			return nil, err
@@ -480,7 +482,7 @@ func parsePackages(
 		// routes_gen.go
 		{
 			routePath := filepath.Join(dir+"/", "routes_gen.go")
-			err := createFromTemplate("/templates/routes_template.go.tmpl", routePath, &RoutesTemplate{
+			err := createFromTemplate("templates/routes_template.go.tmpl", routePath, &RoutesTemplate{
 				AppVersion:             common.AppVersion,
 				Package:                packageName,
 				Controllers:            cs,
@@ -497,7 +499,7 @@ func parsePackages(
 		// mock_routes_gen.go
 		if withMock {
 			routePath := filepath.Join(dir+"/", "mock_routes_gen.go")
-			err := createFromTemplate("/templates/mock_routes_template.go.tmpl", routePath, &RoutesTemplate{
+			err := createFromTemplate("templates/mock_routes_template.go.tmpl", routePath, &RoutesTemplate{
 				AppVersion:             common.AppVersion,
 				Package:                packageName,
 				Controllers:            cs,
@@ -530,7 +532,7 @@ func createMock(req *CreateMockRequest) error {
 		}
 
 		mockMainPath := filepath.Join(mockPath, "main.go")
-		err := createFromTemplate("/templates/mock_main.go.tmpl", mockMainPath, &MockMainTemplate{
+		err := createFromTemplate("templates/mock_main.go.tmpl", mockMainPath, &MockMainTemplate{
 			AppVersion:             common.AppVersion,
 			APIPackageRoot:         req.APIRootPackage,
 			APIRootPackageName:     filepath.Base(req.APIRootPackage),
@@ -545,7 +547,7 @@ func createMock(req *CreateMockRequest) error {
 	// mock_bootstrap_gen.go
 	{
 		mockBootstrapPath := filepath.Join(req.RootPath+"/", "mock_bootstrap_gen.go")
-		err := createFromTemplate("/templates/mock_bootstrap_template.go.tmpl", mockBootstrapPath,
+		err := createFromTemplate("templates/mock_bootstrap_template.go.tmpl", mockBootstrapPath,
 			req.BootstrapTemplate,
 			true, template.FuncMap{
 				"GetGroupName":    getGroupName,
@@ -618,13 +620,9 @@ func createFromTemplate(templatePath, path string, m interface{}, isOverRide boo
 		}
 	}
 
-	statikFs, err := fs.New()
+	f, err := templatesFS.Open(templatePath)
 	if err != nil {
-		return xerrors.Errorf("statikFs init error: %w", err)
-	}
-	f, err := statikFs.Open(templatePath)
-	if err != nil {
-		return xerrors.Errorf("%s open error in statikFs: %w", templatePath, err)
+		return xerrors.Errorf("%s open error in embed fs: %w", templatePath, err)
 	}
 
 	t, err := ioutil.ReadAll(f)

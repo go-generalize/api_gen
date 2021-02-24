@@ -20,7 +20,6 @@ bootstrap:
 			github.com/golang/protobuf/protoc-gen-go \
 			github.com/favadi/protoc-go-inject-tag \
 			github.com/moznion/go-errgen/cmd/errgen \
-			github.com/rakyll/statik \
 	)
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.24.0
 
@@ -34,21 +33,12 @@ installdeps:
 test:
 	go test ./... -v
 
-.PHONY: statik
-statik:
-	cd server_generator && \
-	statik "-include=*.tmpl" -src=. && \
-	gofmt -w ./statik/statik.go
-	cd client_generator && \
-	statik "-include=*.tmpl" -src=. && \
-	gofmt -w ./statik/statik.go
-
 .PHONY: server_generator
-server_generator: statik
+server_generator:
 	go build -o ./bin/server_generator ./server_generator
 
 .PHONY: client_generator
-client_generator: statik
+client_generator:
 	go build -o ./bin/client_generator ./client_generator
 
 sample_server_generator: server_generator
