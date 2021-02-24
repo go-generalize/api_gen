@@ -1,3 +1,4 @@
+// Package servercmd has commands for "api_gen server"
 package servercmd
 
 import "github.com/spf13/cobra"

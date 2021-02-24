@@ -1,3 +1,4 @@
+// Package parser parses API definitions in Go
 package parser
 
 import (
@@ -56,12 +57,14 @@ type Endpoint struct {
 	ResponsePayload     *ast.StructType
 }
 
-func (e *Endpoint) GetFullPath(splitter string, fn func(rawPath, path, placeholder string) string) string {
-	return e.parentGroup.GetFullPath(splitter, fn) + splitter + fn(e.RawPath, e.Path, e.Placeholder)
-}
-
+// GetParent returns the parent Group
 func (e *Endpoint) GetParent() *Group {
 	return e.parentGroup
+}
+
+// GetFullPath returns the full path foe the endpoint
+func (e *Endpoint) GetFullPath(splitter string, fn func(rawPath, path, placeholder string) string) string {
+	return e.parentGroup.GetFullPath(splitter, fn) + splitter + fn(e.RawPath, e.Path, e.Placeholder)
 }
 
 // Group is a layer for endpoints
@@ -77,10 +80,12 @@ type Group struct {
 	Endpoints []*Endpoint
 }
 
+// GetParent returns the parent Group
 func (g *Group) GetParent() *Group {
 	return g.parentGroup
 }
 
+// GetFullPath returns the full path foe the endpoint
 func (g *Group) GetFullPath(splitter string, fn func(rawPath, path, placeholder string) string) string {
 	paths := make([]string, 0, 8)
 

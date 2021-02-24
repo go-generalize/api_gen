@@ -1,3 +1,4 @@
+// Package clientgo generates client-side Go library
 package clientgo
 
 import (

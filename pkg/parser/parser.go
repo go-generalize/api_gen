@@ -1,3 +1,4 @@
+// Package parser parses API definitions in Go
 package parser
 
 import (
