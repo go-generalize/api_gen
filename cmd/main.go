@@ -1,3 +1,4 @@
+// Package main is the entrypoint for  api_gen cmd
 package main
 
 import "github.com/spf13/cobra"

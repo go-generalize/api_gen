@@ -1,3 +1,4 @@
+// Package clientcmd has commands for "api_gen client"
 package clientcmd
 
 import "github.com/spf13/cobra"
