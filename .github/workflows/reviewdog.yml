@@ -6,12 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v1
-      - uses: actions/setup-go@v2
-        with:
-          go-version: 1.16
+        uses: actions/checkout@v2
       - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@v1
+        uses: golangci/golangci-lint-action@v2
         with:
-          github_token: ${{ secrets.github_token }}
-          golangci_lint_flags: "--config=.github/.golangci.yml"
+          args: "--config=.github/.golangci.yml"
