@@ -15,7 +15,6 @@ import (
 	"golang.org/x/xerrors"
 )
 
-// Parse parses
 func Parse(dir string) (*Group, error) {
 	parser, err := newParser(dir)
 
