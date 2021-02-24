@@ -7,6 +7,9 @@ jobs:
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
       - name: golangci-lint
         uses: cs3238-tsuzu/action-golangci-lint@master
         with:
