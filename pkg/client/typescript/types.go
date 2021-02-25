@@ -3,10 +3,24 @@ package clientts
 
 import (
 	"embed"
+
+	"github.com/go-generalize/api_gen/pkg/parser"
 )
 
 //go:embed templates/*.tmpl
 var clientTSTemplate embed.FS
+
+const headerComment = `// THIS FILE IS A GENERATED CODE.
+// DO NOT EDIT THIS CODE BY YOUR OWN HANDS
+// generated version: %s
+
+`
+
+// Generator generates a TypeScript client for api_gen
+type Generator interface {
+	GenerateClient() (string, error)
+	GenerateTypes(fn func(relPath, code string)) error
+}
 
 type endpointType struct {
 	Name                      string
@@ -36,9 +50,13 @@ type importType struct {
 }
 
 type generator struct {
+	root *parser.Group
+
 	AppVersion string
 	Imports    []importType
 	clientType
 	ChildrenClients []*clientType
 	OutputDir       string
 }
+
+var _ Generator = &generator{}

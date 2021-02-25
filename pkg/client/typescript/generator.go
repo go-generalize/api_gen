@@ -19,14 +19,18 @@ const (
 	jsonTagKey  = "json"
 )
 
-// Generate generates a Go client for api_gen
-func Generate(gr *parser.Group, packageName, version string) (string, error) {
-	params := generator{
+// NewGenerator returns a new client-side TypeScript library generator
+func NewGenerator(gr *parser.Group, version string) Generator {
+	return &generator{
 		AppVersion: version,
+		root:       gr,
 	}
+}
 
-	params.generateGroup(gr)
-	params.sort()
+// GenerateClient generates a Go client for api_gen
+func (g *generator) GenerateClient() (string, error) {
+	g.generateGroup(g.root)
+	g.sort()
 
 	tmpl, err := template.ParseFS(clientTSTemplate, "templates/api.ts.tmpl")
 
@@ -35,7 +39,7 @@ func Generate(gr *parser.Group, packageName, version string) (string, error) {
 	}
 
 	buf := bytes.NewBuffer(nil)
-	if err := tmpl.Execute(buf, params); err != nil {
+	if err := tmpl.Execute(buf, g); err != nil {
 		return "", err
 	}
 
