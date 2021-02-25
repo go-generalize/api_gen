@@ -18,17 +18,19 @@ func Test_generator_GenerateTypes(t *testing.T) {
 
 	g := NewGenerator(group, "1.0")
 
-	g.GenerateTypes(func(relPath, code string) {
+	g.GenerateTypes(func(relPath, code string) error {
 		file, err := os.ReadFile(filepath.Join("./testdata/", relPath))
 
 		if err != nil {
 			t.Errorf("failed to parse %s: %+v", relPath, err)
 
-			return
+			return nil
 		}
 
 		if diff := cmp.Diff(string(file), code); diff != "" {
 			t.Errorf("failed to parse %s: %s", relPath, diff)
 		}
+
+		return nil
 	})
 }

@@ -19,7 +19,7 @@ const headerComment = `// THIS FILE IS A GENERATED CODE.
 // Generator generates a TypeScript client for api_gen
 type Generator interface {
 	GenerateClient() (string, error)
-	GenerateTypes(fn func(relPath, code string)) error
+	GenerateTypes(fn func(relPath, code string) error) error
 }
 
 type endpointType struct {

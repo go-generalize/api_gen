@@ -26,7 +26,7 @@ func parserFilter(opt *go2tsparser.FilterOpt) bool {
 }
 
 // GenerateTypes generates request/response types in TypeScript
-func (g *generator) GenerateTypes(fn func(relPath, code string)) error {
+func (g *generator) GenerateTypes(fn func(relPath, code string) error) error {
 	err := g.generateTypes(g.root, fn)
 
 	if err != nil {
@@ -36,7 +36,7 @@ func (g *generator) GenerateTypes(fn func(relPath, code string)) error {
 	return nil
 }
 
-func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string)) error {
+func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string) error) error {
 	psr, err := go2tsparser.NewParser(gr.Dir, parserFilter)
 
 	if err != nil {
@@ -57,7 +57,10 @@ func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string
 
 	code = fmt.Sprintf(headerComment, g.AppVersion) + code
 
-	fn(filepath.Join("classes", relative, "types.ts"), code)
+	p := filepath.Join("classes", relative, "types.ts")
+	if err := fn(p, code); err != nil {
+		return xerrors.Errorf("failed to save %s: %w", p, err)
+	}
 
 	for _, child := range gr.Children {
 		if err := g.generateTypes(child, fn); err != nil {
