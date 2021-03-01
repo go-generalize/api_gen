@@ -5,7 +5,7 @@ import (
 	"embed"
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -633,9 +633,9 @@ func createFromTemplate(templatePath, path string, m interface{}, isOverRide boo
 		return xerrors.Errorf("%s open error in embed fs: %w", templatePath, err)
 	}
 
-	t, err := ioutil.ReadAll(f)
+	t, err := io.ReadAll(f)
 	if err != nil {
-		return xerrors.Errorf("%s read error in ioutil: %w", templatePath, err)
+		return xerrors.Errorf("%s read error in io: %w", templatePath, err)
 	}
 
 	tpl := template.Must(template.New("tmpl").Funcs(funcMap).Parse(string(t)))
