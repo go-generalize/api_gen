@@ -38,3 +38,8 @@ func getNewMockRoute(b *BootstrapTemplates) string {
 	}
 	return fmt.Sprintf("%s.%s", b.RouteGroupName, fn)
 }
+
+func getEndOfPackage(p string) string {
+	sp := strings.Split(p, "/")
+	return sp[len(sp)-1]
+}
