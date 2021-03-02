@@ -1,7 +1,10 @@
 // Package main is the entrypoint for api_gen cmd
 package main
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/go-generalize/api_gen/common"
+	"github.com/spf13/cobra"
+)
 
 var (
 	rootCmd = &cobra.Command{
@@ -13,7 +16,7 @@ GitHub: https://github.com/go-generalize/api_gen`,
 )
 
 func main() {
-	if err := rootCmd.Execute(); err != nil {
+	if err := rootCmd.Execute(); err != nil && common.AppVersion == "devel" { // NOTE(54m): debug during development
 		panic(err)
 	}
 }
