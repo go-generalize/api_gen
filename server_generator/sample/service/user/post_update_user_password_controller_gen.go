@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/go-generalize/api_gen/server_generator/sample/props"
+	"github.com/go-generalize/api_gen/server_generator/sample/api_gen/props"
 	"github.com/labstack/echo/v4"
 )
 
