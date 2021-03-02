@@ -567,7 +567,7 @@ func createMock(req *CreateMockRequest) error {
 		}
 	}
 
-	// mock_bootstrap_gen.go
+	// api_gen/bootstrap/mock_bootstrap_gen.go
 	{
 		mockBootstrapPath := filepath.Join(req.RootPath+"/", commonAPIGenDir, commonBootstrapDir, "mock_bootstrap_gen.go")
 		err := createFromTemplate("templates/mock_bootstrap_template.go.tmpl", mockBootstrapPath,
