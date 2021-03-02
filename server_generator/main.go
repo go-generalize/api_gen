@@ -613,15 +613,12 @@ func createMockJSON(rootPath, path string) error {
 	jsonRoot := filepath.Join(rootPath+"/", commonAPIGenDir, "mock_jsons/")
 	jsonDir := filepath.Join(jsonRoot, r)
 	i, err := os.Stat(jsonDir)
-	if err == nil {
-		if !i.IsDir() {
-			return xerrors.Errorf("%s must be dir", jsonDir)
-		}
-	} else {
-		err = os.MkdirAll(jsonDir, 0775)
-		if err != nil {
-			return xerrors.Errorf("failed to create %s: %w", jsonDir, err)
-		}
+	if err == nil && !i.IsDir() {
+		return xerrors.Errorf("%s must be dir", jsonDir)
+	}
+
+	if err = os.MkdirAll(jsonDir, 0775); err != nil {
+		return xerrors.Errorf("failed to create %s: %w", jsonDir, err)
 	}
 
 	ts, err := f.Parse()
@@ -633,8 +630,7 @@ func createMockJSON(rootPath, path string) error {
 }
 
 func createFromTemplate(templatePath, path string, m interface{}, isOverRide bool, funcMap template.FuncMap) error {
-	_, err := os.Stat(path)
-	if err == nil {
+	if _, err := os.Stat(path); err == nil {
 		if !isOverRide {
 			return nil
 		}
@@ -663,13 +659,11 @@ func createFromTemplate(templatePath, path string, m interface{}, isOverRide boo
 	}
 	defer w.Close()
 
-	err = tpl.Execute(w, m)
-	if err != nil {
+	if err = tpl.Execute(w, m); err != nil {
 		return xerrors.Errorf("template exec error in %s: %w", path, err)
 	}
 
-	_, err = ExecCommand("goimports", "-w", path)
-	if err != nil {
+	if _, err = ExecCommand("goimports", "-w", path); err != nil {
 		return xerrors.Errorf("goimports exec error (%s): %w", path, err)
 	}
 
