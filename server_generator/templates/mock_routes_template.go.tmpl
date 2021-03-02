@@ -55,7 +55,6 @@ func (r *MockRoutes) {{ .HandlerName }}(jsonDir string) echo.HandlerFunc {
 	type Mock struct {
 		Meta struct {
 			Status int `json:"status"`
-
 			MatchRequest *{{ .RequestStructName }} `json:"match_request"`
 		} `json:"meta"`
 		Payload interface{} `json:"payload"`
