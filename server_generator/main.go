@@ -77,7 +77,7 @@ func main() {
 }
 
 const (
-	commonApiGenDir    = "api_gen"
+	commonAPIGenDir    = "api_gen"
 	commonBootstrapDir = "bootstrap"
 	commonPropsDir     = "props"
 	commonWrapperDir   = "wrapper"
