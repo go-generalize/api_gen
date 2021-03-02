@@ -76,12 +76,15 @@ func main() {
 	}
 }
 
+const (
+	commonApiGenDir    = "api_gen"
+	commonBootstrapDir = "bootstrap"
+	commonPropsDir     = "props"
+	commonWrapperDir   = "wrapper"
+	commonInternalDir  = "internal"
+)
+
 func run(arg string) error {
-	const (
-		commonPropsDir    = "props"
-		commonWrapperDir  = "wrapper"
-		commonInternalDir = "internal"
-	)
 
 	rootPath, err := filepath.Abs(arg)
 	if err != nil {
