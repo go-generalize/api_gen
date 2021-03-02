@@ -54,7 +54,8 @@ func NewMockRoutes(router *echo.Group, jsonDir string, w io.Writer) *MockRoutes 
 func (r *MockRoutes) {{ .HandlerName }}(jsonDir string) echo.HandlerFunc {
 	type Mock struct {
 		Meta struct {
-			Status       int         `json:"status"`
+			Status int `json:"status"`
+
 			MatchRequest *{{ .RequestStructName }} `json:"match_request"`
 		} `json:"meta"`
 		Payload interface{} `json:"payload"`
@@ -83,7 +84,7 @@ func (r *MockRoutes) {{ .HandlerName }}(jsonDir string) echo.HandlerFunc {
 
 		if option.WaitMS > 0 {
 			ticker := time.NewTicker(time.Duration(option.WaitMS) * time.Millisecond)
-			<- ticker.C
+			<-ticker.C
 			ticker.Stop()
 		}
 
