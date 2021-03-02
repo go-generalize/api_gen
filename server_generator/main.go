@@ -94,7 +94,7 @@ func run(arg string) error {
 
 		return err
 	}
-	bootstrapTemplates := make([]*BootstrapTemplates, 0)
+
 	var (
 		packageName    string
 		apiRootPackage string
@@ -199,7 +199,8 @@ func run(arg string) error {
 		wrapperPackage = filepath.ToSlash(wrapperPackage)
 	}
 
-	isExistRoot := false
+	bootstrapTemplates := make([]*BootstrapTemplates, 0)
+	var isExistRoot bool
 	err = filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -374,14 +375,14 @@ func run(arg string) error {
 		Bootstraps:             bootstrapTemplates,
 		ControllerPropsPackage: controllerPropsPackage,
 	}
-	err = createFromTemplate(
+	if err = createFromTemplate(
 		"templates/bootstrap_template.go.tmpl",
 		bootstrapFilePath, bootstrapTemplate,
 		true, template.FuncMap{
 			"GetGroupName": getGroupName,
 			"GetNewRoute":  getNewRoute,
-		})
-	if err != nil {
+		},
+	); err != nil {
 		return err
 	}
 
