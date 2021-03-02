@@ -25,6 +25,7 @@ import (
 var templatesFS embed.FS
 
 var (
+	withMock          bool
 	supportHTTPMethod = []string{
 		"get",
 		"post",
@@ -32,10 +33,6 @@ var (
 		"delete",
 		"patch",
 	}
-	withMock bool
-)
-
-var (
 	replaceRule              = regexp.MustCompile(`:(.*?)(/|$)`)
 	endpointReplaceMatchRule = regexp.MustCompile(`:(.*?)/`)
 )
@@ -98,10 +95,11 @@ func run(arg string) error {
 		return err
 	}
 	bootstrapTemplates := make([]*BootstrapTemplates, 0)
-	packageName := ""
-
-	var apiRootPackage string
-	var apiRootPathRel string
+	var (
+		packageName    string
+		apiRootPackage string
+		apiRootPathRel string
+	)
 	{
 		r, err := filepath.Rel(packageRootPath, rootPath)
 		if err != nil {
