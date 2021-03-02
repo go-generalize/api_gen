@@ -349,6 +349,7 @@ func run(arg string) error {
 			b.ImportPackageName = ""
 			b.ParentPackageName = rootPackageName
 		}
+
 		b.ImportPackageName = filepath.ToSlash(b.ImportPackageName)
 	}
 
