@@ -3,6 +3,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 )
 
 func getGroupName(b *BootstrapTemplates) string {
@@ -18,11 +19,12 @@ func getNewRoute(b *BootstrapTemplates) string {
 		return ""
 	}
 
+	prefix := b.RouteGroupName
 	if b.Endpoint == "/" {
-		return fmt.Sprintf("NewRoutes(p, %sGroup, opts...)", b.RouteGroupName)
+		prefix = getEndOfPackage(b.PackagePath)
 	}
 
-	return fmt.Sprintf("%s.NewRoutes(p, %sGroup, opts...)", b.RouteGroupName, b.RouteGroupName)
+	return fmt.Sprintf("%s.NewRoutes(p, %sGroup, opts...)", prefix, b.RouteGroupName)
 }
 
 func getNewMockRoute(b *BootstrapTemplates) string {
@@ -33,10 +35,12 @@ func getNewMockRoute(b *BootstrapTemplates) string {
 	join := fmt.Sprintf(`filepath.Join(jsonDir, "%s")`, b.RawEndpointFilePath)
 	fn := fmt.Sprintf(`NewMockRoutes(%sGroup, %s, w)`, b.RouteGroupName, join)
 
+	prefix := b.RouteGroupName
 	if b.Endpoint == "/" {
-		return fn
+		prefix = getEndOfPackage(b.PackagePath)
 	}
-	return fmt.Sprintf("%s.%s", b.RouteGroupName, fn)
+
+	return fmt.Sprintf("%s.%s", prefix, fn)
 }
 
 func getEndOfPackage(p string) string {
