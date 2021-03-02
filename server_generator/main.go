@@ -229,9 +229,10 @@ func run(arg string) error {
 
 			if importPackageName == "" {
 				importPackageName += p
-			} else {
-				importPackageName += strings.ToUpper(p[:1]) + p[1:]
+				continue
 			}
+
+			importPackageName += strings.ToUpper(p[:1]) + p[1:]
 		}
 		if rootPath == path {
 			importPackageName = getEndOfPackage(packagePath)
