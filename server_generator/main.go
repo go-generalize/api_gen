@@ -85,7 +85,6 @@ const (
 )
 
 func run(arg string) error {
-
 	rootPath, err := filepath.Abs(arg)
 	if err != nil {
 		return err
