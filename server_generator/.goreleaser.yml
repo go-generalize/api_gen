@@ -1,6 +1,8 @@
 project_name: server_generator
+
 env:
   - GO111MODULE=on
+
 builds:
   - main: .
     binary: server_generator
@@ -27,5 +29,6 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
+
 release:
   prerelease: auto

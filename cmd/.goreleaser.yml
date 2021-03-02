@@ -1,6 +1,8 @@
 project_name: api_gen
+
 env:
   - GO111MODULE=on
+
 builds:
   - main: .
     binary: api_gen
@@ -27,5 +29,6 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
+
 release:
   prerelease: auto
