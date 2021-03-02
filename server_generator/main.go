@@ -114,7 +114,7 @@ func run(arg string) error {
 
 	var controllerPropsPackage string
 	{
-		dir := filepath.Join(rootPath, commonPropsDir)
+		dir := filepath.Join(rootPath, commonAPIGenDir, commonPropsDir)
 		if err := os.MkdirAll(dir, 0777); err != nil {
 			return err
 		}
@@ -142,7 +142,7 @@ func run(arg string) error {
 
 	var wrapperInternalPackage string
 	{
-		dir := filepath.Join(rootPath, commonWrapperDir, commonInternalDir)
+		dir := filepath.Join(rootPath, commonAPIGenDir, commonWrapperDir, commonInternalDir)
 		if err := os.MkdirAll(dir, 0777); err != nil {
 			return err
 		}
@@ -172,7 +172,7 @@ func run(arg string) error {
 
 	var wrapperPackage string
 	{
-		dir := filepath.Join(rootPath, commonWrapperDir)
+		dir := filepath.Join(rootPath, commonAPIGenDir, commonWrapperDir)
 		if err := os.MkdirAll(dir, 0777); err != nil {
 			return err
 		}
@@ -211,7 +211,7 @@ func run(arg string) error {
 			return nil
 		}
 
-		if p, _ := filepath.Rel(rootPath, path); p == commonPropsDir {
+		if p, _ := filepath.Rel(rootPath, path); strings.HasPrefix(p, commonAPIGenDir) {
 			return nil
 		}
 
@@ -220,9 +220,6 @@ func run(arg string) error {
 			return err
 		}
 		packagePath := filepath.Join(basePackagePath+"/", relPath)
-		if rootPath == path {
-			packagePath = ""
-		}
 
 		importPackageName := ""
 		for i, p := range strings.Split(relPath, "/") {
@@ -235,6 +232,9 @@ func run(arg string) error {
 			} else {
 				importPackageName += strings.ToUpper(p[:1]) + p[1:]
 			}
+		}
+		if rootPath == path {
+			importPackageName = getEndOfPackage(packagePath)
 		}
 
 		endpointPath, err := filepath.Rel(rootPath, path)
@@ -273,9 +273,6 @@ func run(arg string) error {
 		if endpointPath == "/" {
 			packageName = cs[0].Package
 			isExistRoot = true
-
-			packagePath = ""
-			importPackageName = ""
 		}
 
 		bootstrapTemplates = append(bootstrapTemplates, &BootstrapTemplates{
@@ -350,11 +347,27 @@ func run(arg string) error {
 	for _, b := range bootstrapTemplates {
 		if b.ImportPackageName == filepath.Base(b.PackagePath) {
 			b.ImportPackageName = ""
+			b.ParentPackageName = rootPackageName
 		}
 		b.ImportPackageName = filepath.ToSlash(b.ImportPackageName)
 	}
 
-	bootstrapFilePath := filepath.Join(rootPath+"/", "bootstrap_gen.go")
+	var bootstrapPackage string
+	{
+		dir := filepath.Join(rootPath+"/", commonAPIGenDir, commonBootstrapDir)
+		if err := os.MkdirAll(dir, 0777); err != nil {
+			return err
+		}
+
+		r, err := filepath.Rel(packageRootPath, dir)
+		if err != nil {
+			return err
+		}
+
+		bootstrapPackage = filepath.ToSlash(filepath.Join(basePackagePath+"/", r))
+	}
+
+	bootstrapFilePath := filepath.Join(rootPath+"/", commonAPIGenDir, commonBootstrapDir, "bootstrap_gen.go")
 	bootstrapTemplate := &BootstrapTemplate{
 		AppVersion:             common.AppVersion,
 		PackageName:            packageName,
@@ -375,6 +388,7 @@ func run(arg string) error {
 	if withMock {
 		if err = createMock(&CreateMockRequest{
 			RootPath:               rootPath,
+			BootstrapPackage:       bootstrapPackage,
 			ControllerPropsPackage: controllerPropsPackage,
 			APIRootPackage:         apiRootPackage,
 			BootstrapTemplate:      bootstrapTemplate,
@@ -544,10 +558,9 @@ func createMock(req *CreateMockRequest) error {
 		mockMainPath := filepath.Join(mockPath, "main.go")
 		err := createFromTemplate("templates/mock_main.go.tmpl", mockMainPath, &MockMainTemplate{
 			AppVersion:             common.AppVersion,
-			APIPackageRoot:         req.APIRootPackage,
-			APIRootPackageName:     filepath.Base(req.APIRootPackage),
+			BootstrapPackage:       req.BootstrapPackage,
 			ControllerPropsPackage: req.ControllerPropsPackage,
-			DefaultJSONDirPath:     filepath.Join(req.APIRootPathRel+"/", "mock_jsons/"),
+			DefaultJSONDirPath:     filepath.Join(req.APIRootPathRel+"/", commonAPIGenDir, "mock_jsons/"),
 		}, true, template.FuncMap{})
 		if err != nil {
 			return xerrors.Errorf("Failed create an %s: %w", mockMainPath, err)
@@ -556,7 +569,7 @@ func createMock(req *CreateMockRequest) error {
 
 	// mock_bootstrap_gen.go
 	{
-		mockBootstrapPath := filepath.Join(req.RootPath+"/", "mock_bootstrap_gen.go")
+		mockBootstrapPath := filepath.Join(req.RootPath+"/", commonAPIGenDir, commonBootstrapDir, "mock_bootstrap_gen.go")
 		err := createFromTemplate("templates/mock_bootstrap_template.go.tmpl", mockBootstrapPath,
 			req.BootstrapTemplate,
 			true, template.FuncMap{
@@ -595,7 +608,7 @@ func createMockJSON(rootPath, path string) error {
 		return err
 	}
 
-	jsonRoot := filepath.Join(rootPath+"/", "mock_jsons/")
+	jsonRoot := filepath.Join(rootPath+"/", commonAPIGenDir, "mock_jsons/")
 	jsonDir := filepath.Join(jsonRoot, r)
 	i, err := os.Stat(jsonDir)
 	if err == nil {
