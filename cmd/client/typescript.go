@@ -1,3 +1,4 @@
+// Package clientcmd has commands for "api_gen client"
 package clientcmd
 
 import (
@@ -43,7 +44,7 @@ Pass the directory to parse as the 1st argument.`,
 
 			err = generator.GenerateTypes(func(relPath, code string) error {
 				path := filepath.Join(dir, relPath)
-				dir := filepath.Dir(path)
+				dir = filepath.Dir(path)
 
 				if err := os.MkdirAll(dir, 0774); err != nil {
 					return xerrors.Errorf("failed to mkdir %s recursively: %w", dir, err)

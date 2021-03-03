@@ -1,3 +1,4 @@
+// Package clientts generates client-side TypeScript library
 package clientts
 
 import (

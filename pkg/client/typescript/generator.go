@@ -1,4 +1,4 @@
-// Package clientts generates client-side Go library
+// Package clientts generates client-side TypeScript library
 package clientts
 
 import (

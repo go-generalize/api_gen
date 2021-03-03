@@ -18,7 +18,7 @@ func Test_generator_GenerateTypes(t *testing.T) {
 
 	g := NewGenerator(group, "1.0")
 
-	g.GenerateTypes(func(relPath, code string) error {
+	err = g.GenerateTypes(func(relPath, code string) error {
 		file, err := os.ReadFile(filepath.Join("./testdata/", relPath))
 
 		if err != nil {
@@ -33,4 +33,8 @@ func Test_generator_GenerateTypes(t *testing.T) {
 
 		return nil
 	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
 }
