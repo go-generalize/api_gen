@@ -14,11 +14,9 @@ import (
 
 	"github.com/go-generalize/api_gen/server_generator/sample"
 	"github.com/go-generalize/api_gen/server_generator/sample/apigen/props"
-	"github.com/go-generalize/api_gen/server_generator/sample/service/user2"
-
-	"github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID/_JobID"
-
 	"github.com/go-generalize/api_gen/server_generator/sample/service"
+	"github.com/go-generalize/api_gen/server_generator/sample/service/user2"
+	"github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID/_JobID"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
