@@ -19,6 +19,7 @@ jobs:
           
           clean=$(git status | grep "nothing to commit" || true)
           if [ -z "$clean" ]; then
+            git diff
             echo 'Please run "make gen_samples"'
             exit 1
           fi
