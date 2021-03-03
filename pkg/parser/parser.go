@@ -5,7 +5,7 @@ import (
 	"go/ast"
 	goparser "go/parser"
 	"go/token"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -167,12 +167,6 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 
 	fset := token.NewFileSet()
 
-	pkgs, err := goparser.ParseDir(fset, dir, nil, goparser.AllErrors)
-
-	if err != nil {
-		return nil, xerrors.Errorf("failed to parse dir(%s): %w", dir, err)
-	}
-
 	endpoints := map[string]*Endpoint{}
 	gr := &Group{
 		Dir:        dir,
@@ -183,6 +177,53 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 
 	if strings.HasPrefix(gr.RawPath, "_") {
 		gr.Placeholder = gr.RawPath[1:]
+	}
+
+	fifos, err := os.ReadDir(dir)
+
+	if err != nil {
+		return nil, xerrors.Errorf("failed to list all child files/directories: %w", err)
+	}
+
+	for _, fifo := range fifos {
+		if !fifo.IsDir() {
+			continue
+		}
+
+		child, err := p.parsePackage(filepath.Join(dir, fifo.Name()))
+
+		if err != nil {
+			return nil, xerrors.Errorf("failed to parse package for %s: %w", fifo.Name(), err)
+		}
+
+		if len(child.Endpoints) == 0 && len(child.Children) == 0 {
+			continue
+		}
+		child.parentGroup = gr
+
+		gr.Children = append(gr.Children, child)
+	}
+
+	sort.Slice(gr.Children, func(i, j int) bool {
+		return gr.Children[i].RawPath < gr.Children[j].RawPath
+	})
+
+	hasGoFile := false
+	for _, fifo := range fifos {
+		if filepath.Ext(fifo.Name()) == ".go" {
+			hasGoFile = true
+			break
+		}
+	}
+
+	if !hasGoFile {
+		return gr, nil
+	}
+
+	pkgs, err := goparser.ParseDir(fset, dir, nil, goparser.AllErrors)
+
+	if err != nil {
+		return nil, xerrors.Errorf("failed to parse dir(%s): %w", dir, err)
 	}
 
 	for name, v := range pkgs {
@@ -216,35 +257,6 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 			return string(gr.Endpoints[i].Method)+gr.Endpoints[i].RawPath < string(gr.Endpoints[j].Method)+gr.Endpoints[j].RawPath
 		})
 	}
-
-	fifos, err := ioutil.ReadDir(dir)
-
-	if err != nil {
-		return nil, xerrors.Errorf("failed to list all child files/directories: %w", err)
-	}
-
-	for _, fifo := range fifos {
-		if !fifo.IsDir() {
-			continue
-		}
-
-		child, err := p.parsePackage(filepath.Join(dir, fifo.Name()))
-
-		if err != nil {
-			return nil, xerrors.Errorf("failed to parse package for %s: %w", fifo.Name(), err)
-		}
-
-		if len(child.Endpoints) == 0 && len(child.Children) == 0 {
-			continue
-		}
-		child.parentGroup = gr
-
-		gr.Children = append(gr.Children, child)
-	}
-
-	sort.Slice(gr.Children, func(i, j int) bool {
-		return gr.Children[i].RawPath < gr.Children[j].RawPath
-	})
 
 	return gr, nil
 }
