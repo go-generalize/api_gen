@@ -1,14 +1,11 @@
 // THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
-// generated version: {{ .AppVersion }}
-{{- range $index, $elem := .Imports }}
-{{- if ne (len $elem.Pairs) 0}}
+// generated version: devel
 
-import {{ "{" }}
-{{ range $i, $pair := $elem.Pairs }}	{{ $pair.Name }} as {{ $pair.NameAs }},
-{{ end }}{{ "}" }} from '{{ $elem.Path }}';
-{{- end}}
-{{- end }}
+import {
+	PostUserRequest as FooBarPostUserRequest,
+	PostUserResponse as FooBarPostUserResponse,
+} from './classes/foo/bar/types';
 
 export interface MiddlewareContext {
 	httpMethod: string;
@@ -32,15 +29,10 @@ export interface middlewareSet {
 	beforeMiddleware?: ApiClientMiddlewareFunc[];
 	afterMiddleware?: ApiClientMiddlewareFunc[];
 }
-{{- range $index, $elem := .ChildrenClients }}
 
-class {{ $elem.Name }} {
+class FooBarClient {
 	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
 	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
-
-{{- 	range $index, $elem := .Children }}
-	public {{ $elem.Name }}: {{ $elem.ClassName }};
-{{- 	end }}
 	constructor(
 		private headers: {[key: string]: string},
 		private options: {[key: string]: any},
@@ -49,20 +41,6 @@ class {{ $elem.Name }} {
 	) {
 		this.beforeMiddleware = middleware.beforeMiddleware!;
 		this.afterMiddleware = middleware.afterMiddleware!;
-{{- 	if $elem.Children }}
-		const childMiddlewareSet: middlewareSet = {
-			beforeMiddleware: this.beforeMiddleware,
-			afterMiddleware: this.afterMiddleware
-		};
-{{- 	end }}
-{{-  	range $index, $elem := $elem.Children }}
-		this.{{ $elem.Name }} = new {{ $elem.ClassName }}(
-			headers,
-			options,
-			baseURL,
-			childMiddlewareSet
-		);
-{{- 	end }}
 	}
 
 	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
@@ -97,14 +75,13 @@ class {{ $elem.Name }} {
 			}
 		}
 	}
-{{- 	range $index, $method := $elem.Methods }}
 
-	async {{ $method.Name }}(
-		param: {{ $method.RequestType }},
+	async postUser(
+		param: FooBarPostUserRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
-	): Promise<{{ $method.ResponseType }}> {
-	    const excludeParams: string[] = [{{ range $param := $method.URLParams }}'{{ $param }}', {{ end }}];
+	): Promise<FooBarPostUserResponse> {
+	    const excludeParams: string[] = [];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
@@ -121,26 +98,20 @@ class {{ $elem.Name }} {
 			...options,
 		};
 		const context: MiddlewareContext = {
-			httpMethod: '{{$method.Method}}',
-			endpoint: `${this.baseURL}{{ $method.Endpoint }}`,
+			httpMethod: 'POST',
+			endpoint: `${this.baseURL}/foo/bar/user`,
 			request: param,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-{{- 	if eq $method.Method "GET" }}
-		const url = `${this.baseURL}{{ $method.Endpoint }}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
-{{- 	else }}
-		const url = `${this.baseURL}{{ $method.Endpoint }}`;
-{{-      end }}
+		const url = `${this.baseURL}/foo/bar/user`;
 		const resp = await fetch(
 			url,
 			{
-				method: "{{ $method.Method }}",
-{{- 	if ne $method.Method "GET" }}
+				method: "POST",
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
-{{-       end }}
 				headers: reqHeader,
 				...reqOption,
 			}
@@ -150,19 +121,71 @@ class {{ $elem.Name }} {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-{{- 	if eq .HasFields true }}
-		const res = (await resp.json()) as {{ $method.ResponseType }};
-{{- 	else }}
 		await resp.text();
-		const res = {} as {{ $method.ResponseType }};
-{{- 	end }}
+		const res = {} as FooBarPostUserResponse;
 		context.response = res;
 		await this.callMiddleware(this.afterMiddleware, context);
 		return res;
 	}
-{{- 	end }}
 }
-{{- end }}
+
+class FooClient {
+	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
+	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
+	public bar: FooBarClient;
+	constructor(
+		private headers: {[key: string]: string},
+		private options: {[key: string]: any},
+		private baseURL: string,
+		middleware: middlewareSet
+	) {
+		this.beforeMiddleware = middleware.beforeMiddleware!;
+		this.afterMiddleware = middleware.afterMiddleware!;
+		const childMiddlewareSet: middlewareSet = {
+			beforeMiddleware: this.beforeMiddleware,
+			afterMiddleware: this.afterMiddleware
+		};
+		this.bar = new FooBarClient(
+			headers,
+			options,
+			baseURL,
+			childMiddlewareSet
+		);
+	}
+
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+		let res: { [key: string]: any } = {};
+		Object.keys(obj).forEach((key) => {
+			if (routingPath.indexOf(key) === -1) {
+				res[key] = obj[key];
+			}
+		});
+		return res;
+	}
+
+	async callMiddleware(
+		middlewares: ApiClientMiddlewareFunc[],
+		context: MiddlewareContext
+	) {
+		for (const m of middlewares) {
+			const func: ApiClientMiddlewareFunc = m;
+			const mr = await func(context);
+			if (typeof mr === 'boolean') {
+				if (!mr) {
+					break;
+				}
+			} else {
+				if (mr === MiddlewareResult.CONTINUE) {
+					continue;
+				} else if (mr === MiddlewareResult.MIDDLEWARE_STOP) {
+					break;
+				} else if (mr === MiddlewareResult.STOP) {
+					throw new ApiMiddlewareStop();
+				}
+			}
+		}
+	}
+}
 
 export class APIClient {
 	private headers: {[key: string]: string};
@@ -172,10 +195,7 @@ export class APIClient {
 	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
 	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
 
-{{- 	range $index, $elem := .Children }}
-
-	public {{ $elem.Name }}: {{ $elem.ClassName }};
-{{- 	end }}
+	public foo: FooClient;
 
 	constructor(
 		token?: string,
@@ -205,15 +225,13 @@ export class APIClient {
 			beforeMiddleware: this.beforeMiddleware,
 			afterMiddleware: this.afterMiddleware
 		};
-{{- 	range $index, $elem := .Children }}
 
-		this.{{ $elem.Name }} = new {{ $elem.ClassName }}(
+		this.foo = new FooClient(
 			headers,
 			this.options,
 			this.baseURL,
 			childMiddlewareSet
 		);
-{{- 	end }}
 	}
 
 	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
@@ -248,76 +266,6 @@ export class APIClient {
 			}
 		}
 	}
-{{- range $index, $method := .Methods }}
-
-	async {{ $method.Name }}(
-		param: {{ $method.RequestType }},
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<{{ $method.ResponseType }}> {
-	    const excludeParams: string[] = [{{ range $param := $method.URLParams }}'{{ $param }}', {{ end }}];
-	    let mockHeaders: {[key: string]: string} = {};
-	    if (options && options['mock_option']) {
-			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
-			delete options['mock_option'];
-		}
-
-		const reqHeader = {
-			...this.headers,
-			...headers,
-			...mockHeaders,
-		};
-		const reqOption = {
-			...this.options,
-			...options,
-		};
-		const context: MiddlewareContext = {
-			httpMethod: '{{$method.Method}}',
-			endpoint: `${this.baseURL}{{ $method.Endpoint }}`,
-			request: param,
-			baseURL: this.baseURL,
-			headers: reqHeader,
-			options: reqOption,
-		};
-		await this.callMiddleware(this.beforeMiddleware, context);
-{{- 	if eq $method.Method "GET" }}
-		const url = `${this.baseURL}{{ $method.Endpoint }}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
-{{- 	else }}
-		const url = `${this.baseURL}{{ $method.Endpoint }}`;
-{{      end }}
-		const resp = await fetch(
-			url,
-			{
-				method: "{{ $method.Method }}",
-{{- 	if ne $method.Method "GET" }}
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
-{{-       end }}
-				headers: {
-					...this.headers,
-					...headers,
-					...mockHeaders,
-				},
-				...this.options,
-				...options,
-			}
-		);
-
-		if (Math.floor(resp.status / 100) !== 2) {
-			const responseText = await resp.text();
-			throw new ApiError(resp, responseText);
-		}
-
-{{- if eq .HasFields true }}
-		const res = (await resp.json()) as {{ $method.ResponseType }};
-{{- else }}
-		await resp.text();
-		const res = {} as {{ $method.ResponseType }};
-{{- end }}
-		context.response = res;
-		await this.callMiddleware(this.afterMiddleware, context);
-		return res;
-	}
-{{- end }}
 }
 
 export class ApiError extends Error {

@@ -38,6 +38,16 @@ func (g *generator) GenerateTypes(fn func(relPath, code string) error) error {
 }
 
 func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string) error) error {
+	for _, child := range gr.Children {
+		if err := g.generateTypes(child, fn); err != nil {
+			return xerrors.Errorf("an error occurred in %s: %w", gr.Dir, err)
+		}
+	}
+
+	if len(gr.Endpoints) == 0 {
+		return nil
+	}
+
 	psr, err := go2tsparser.NewParser(gr.Dir, parserFilter)
 
 	if err != nil {
@@ -61,12 +71,6 @@ func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string
 	p := filepath.Join("classes", relative, "types.ts")
 	if err := fn(p, code); err != nil {
 		return xerrors.Errorf("failed to save %s: %w", p, err)
-	}
-
-	for _, child := range gr.Children {
-		if err := g.generateTypes(child, fn); err != nil {
-			return xerrors.Errorf("an error occurred in %s: %w", gr.Dir, err)
-		}
 	}
 
 	return nil

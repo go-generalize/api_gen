@@ -10,6 +10,20 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: 1.16
+      - name: Install dependencies
+        working-directory: /tmp
+        run: |
+          go get golang.org/x/tools/cmd/goimports
+      - name: Ensure samples are generated
+        run: |
+          make gen_samples
+          
+          clean=$(git status | grep "nothing to commit" || true)
+          if [ -z "$clean" ]; then
+            git diff
+            echo 'Please run "make gen_samples"'
+            exit 1
+          fi
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:
