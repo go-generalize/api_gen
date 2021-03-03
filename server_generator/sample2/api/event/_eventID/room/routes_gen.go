@@ -8,8 +8,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/go-generalize/api_gen/server_generator/sample2/api_gen/props"
-	"github.com/go-generalize/api_gen/server_generator/sample2/api_gen/wrapper"
+	"github.com/go-generalize/api_gen/server_generator/sample2/apigen/props"
+	"github.com/go-generalize/api_gen/server_generator/sample2/apigen/wrapper"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/xerrors"
 )

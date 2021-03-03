@@ -12,14 +12,14 @@ import (
 	"os"
 	"strings"
 
-	"github.com/go-generalize/api_gen/server_generator/sample/api_gen/bootstrap"
+	"github.com/go-generalize/api_gen/server_generator/sample/apigen"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
 	port := flag.Int("port", 15000, "mock server listen port")
-	jsonDir := flag.String("json-dir", "server_generator/sample/api_gen/mock_jsons", "mock jsons directory")
+	jsonDir := flag.String("json-dir", "server_generator/sample/apigen/mock_jsons", "mock jsons directory")
 	flag.Parse()
 
 	jsonDirPath := *jsonDir
@@ -41,7 +41,7 @@ func main() {
 		}
 	})
 
-	bootstrap.MockBootstrap(e, os.Stderr, jsonDirPath)
+	apigen.MockBootstrap(e, os.Stderr, jsonDirPath)
 
 	fmt.Println("All routes are...")
 	for _, r := range e.Routes() {

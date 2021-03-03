@@ -3,7 +3,7 @@
 package static
 
 import (
-	"github.com/go-generalize/api_gen/server_generator/sample/api_gen/props"
+	"github.com/go-generalize/api_gen/server_generator/sample/apigen/props"
 	"github.com/labstack/echo/v4"
 )
 

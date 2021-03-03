@@ -1,4 +1,4 @@
-package bootstrap
+package apigen
 
 import (
 	"bytes"
@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/go-generalize/api_gen/server_generator/sample"
-	"github.com/go-generalize/api_gen/server_generator/sample/api_gen/props"
+	"github.com/go-generalize/api_gen/server_generator/sample/apigen/props"
 	"github.com/go-generalize/api_gen/server_generator/sample/service/user2"
 
 	"github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID/_JobID"
