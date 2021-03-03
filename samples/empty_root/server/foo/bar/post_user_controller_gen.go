@@ -28,7 +28,7 @@ func NewPostUserController(cp *props.ControllerProps) *PostUserController {
 // @Success 200 {object} PostUserResponse
 // @Failure 400 {object} wrapper.APIError
 // @Failure 500 {object} wrapper.APIError
-// @Router /foo/user [POST]
+// @Router /foo/bar/user [POST]
 func (p *PostUserController) PostUser(
 	c echo.Context, req *PostUserRequest,
 ) (res *PostUserResponse, err error) {

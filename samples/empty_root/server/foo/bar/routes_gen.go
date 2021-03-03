@@ -49,7 +49,7 @@ func (r *Routes) PostUser(p *props.ControllerProps) echo.HandlerFunc {
 		if bindable {
 			req = new(PostUserRequest)
 			if err := c.Bind(req); err != nil {
-				log.Printf("failed to JSON binding(/foo/user): %+v", err)
+				log.Printf("failed to JSON binding(/foo/bar/user): %+v", err)
 				return c.JSON(http.StatusBadRequest, map[string]interface{}{
 					"code":    http.StatusBadRequest,
 					"message": "invalid request.",

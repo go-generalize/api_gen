@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"runtime/debug"
 
-	serverFoo "github.com/go-generalize/api_gen/samples/empty_root/server/foo"
+	serverFooBar "github.com/go-generalize/api_gen/samples/empty_root/server/foo/bar"
 	"github.com/go-generalize/api_gen/samples/empty_root/server/props"
 	"github.com/labstack/echo/v4"
 )
@@ -73,9 +73,9 @@ func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList Middleware
 	rootGroup := e.Group("/")
 	setMiddleware(rootGroup, "/", middleware)
 
-	serverFooGroup := rootGroup.Group("foo/")
-	setMiddleware(serverFooGroup, "/foo/", middleware)
-	serverFoo.NewRoutes(p, serverFooGroup, opts...)
+	serverFooBarGroup := rootGroup.Group("foo/bar/")
+	setMiddleware(serverFooBarGroup, "/foo/bar/", middleware)
+	serverFooBar.NewRoutes(p, serverFooBarGroup, opts...)
 }
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {

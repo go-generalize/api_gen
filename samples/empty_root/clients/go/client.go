@@ -10,26 +10,26 @@ import (
 	"net/http"
 	"net/url"
 
-	_foo "github.com/go-generalize/api_gen/samples/empty_root/server/foo"
+	_foo_bar "github.com/go-generalize/api_gen/samples/empty_root/server/foo/bar"
 )
 
-type Group_foo struct {
+type Group_foo_bar struct {
 	apiClient *APIClient
 }
 
-func newGroup_foo(client *APIClient) *Group_foo {
-	return &Group_foo{
+func newGroup_foo_bar(client *APIClient) *Group_foo_bar {
+	return &Group_foo_bar{
 		apiClient: client,
 	}
 }
 
-func (g *Group_foo) PostUser(reqPayload *_foo.PostUserRequest) (respPayload *_foo.PostUserResponse, err error) {
+func (g *Group_foo_bar) PostUser(reqPayload *_foo_bar.PostUserRequest) (respPayload *_foo_bar.PostUserResponse, err error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", g.apiClient.base+"/foo/user", buf)
+	req, err := http.NewRequest("POST", g.apiClient.base+"/foo/bar/user", buf)
 	if err != nil {
 		return nil, err
 	}
@@ -41,12 +41,24 @@ func (g *Group_foo) PostUser(reqPayload *_foo.PostUserRequest) (respPayload *_fo
 	}
 	defer resp.Body.Close()
 
-	respPayload = &_foo.PostUserResponse{}
+	respPayload = &_foo_bar.PostUserResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}
 
 	return respPayload, nil
+}
+
+type Group_foo struct {
+	Bar       *Group_foo_bar
+	apiClient *APIClient
+}
+
+func newGroup_foo(client *APIClient) *Group_foo {
+	return &Group_foo{
+		apiClient: client,
+		Bar:       newGroup_foo_bar(client),
+	}
 }
 
 type Group struct {

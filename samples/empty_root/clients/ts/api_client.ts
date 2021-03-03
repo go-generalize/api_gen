@@ -3,12 +3,9 @@
 // generated version: devel
 
 import {
-	PostUserRequest as FooPostUserRequest,
-	PostUserResponse as FooPostUserResponse,
-} from './classes/foo/types';
-
-import {
-} from './classes/types';
+	PostUserRequest as FooBarPostUserRequest,
+	PostUserResponse as FooBarPostUserResponse,
+} from './classes/foo/bar/types';
 
 export interface MiddlewareContext {
 	httpMethod: string;
@@ -33,7 +30,7 @@ export interface middlewareSet {
 	afterMiddleware?: ApiClientMiddlewareFunc[];
 }
 
-class FooClient {
+class FooBarClient {
 	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
 	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
 	constructor(
@@ -80,10 +77,10 @@ class FooClient {
 	}
 
 	async postUser(
-		param: FooPostUserRequest,
+		param: FooBarPostUserRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
-	): Promise<FooPostUserResponse> {
+	): Promise<FooBarPostUserResponse> {
 	    const excludeParams: string[] = [];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
@@ -102,14 +99,14 @@ class FooClient {
 		};
 		const context: MiddlewareContext = {
 			httpMethod: 'POST',
-			endpoint: `${this.baseURL}/foo/user`,
+			endpoint: `${this.baseURL}/foo/bar/user`,
 			request: param,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/foo/user`;
+		const url = `${this.baseURL}/foo/bar/user`;
 		const resp = await fetch(
 			url,
 			{
@@ -125,10 +122,68 @@ class FooClient {
 			throw new ApiError(resp, responseText);
 		}
 		await resp.text();
-		const res = {} as FooPostUserResponse;
+		const res = {} as FooBarPostUserResponse;
 		context.response = res;
 		await this.callMiddleware(this.afterMiddleware, context);
 		return res;
+	}
+}
+
+class FooClient {
+	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
+	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
+	public bar: FooBarClient;
+	constructor(
+		private headers: {[key: string]: string},
+		private options: {[key: string]: any},
+		private baseURL: string,
+		middleware: middlewareSet
+	) {
+		this.beforeMiddleware = middleware.beforeMiddleware!;
+		this.afterMiddleware = middleware.afterMiddleware!;
+		const childMiddlewareSet: middlewareSet = {
+			beforeMiddleware: this.beforeMiddleware,
+			afterMiddleware: this.afterMiddleware
+		};
+		this.bar = new FooBarClient(
+			headers,
+			options,
+			baseURL,
+			childMiddlewareSet
+		);
+	}
+
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+		let res: { [key: string]: any } = {};
+		Object.keys(obj).forEach((key) => {
+			if (routingPath.indexOf(key) === -1) {
+				res[key] = obj[key];
+			}
+		});
+		return res;
+	}
+
+	async callMiddleware(
+		middlewares: ApiClientMiddlewareFunc[],
+		context: MiddlewareContext
+	) {
+		for (const m of middlewares) {
+			const func: ApiClientMiddlewareFunc = m;
+			const mr = await func(context);
+			if (typeof mr === 'boolean') {
+				if (!mr) {
+					break;
+				}
+			} else {
+				if (mr === MiddlewareResult.CONTINUE) {
+					continue;
+				} else if (mr === MiddlewareResult.MIDDLEWARE_STOP) {
+					break;
+				} else if (mr === MiddlewareResult.STOP) {
+					throw new ApiMiddlewareStop();
+				}
+			}
+		}
 	}
 }
 
