@@ -1,7 +1,12 @@
-// Package main is the entrypoint for  api_gen cmd
+// Package main is the entrypoint for api_gen cmd
 package main
 
-import "github.com/spf13/cobra"
+import (
+	"fmt"
+	"os"
+
+	"github.com/spf13/cobra"
+)
 
 var (
 	rootCmd = &cobra.Command{
@@ -14,6 +19,7 @@ GitHub: https://github.com/go-generalize/api_gen`,
 
 func main() {
 	if err := rootCmd.Execute(); err != nil {
-		panic(err)
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 }
