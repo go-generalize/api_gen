@@ -4,6 +4,7 @@ package main
 // CreateMockRequest create mock request object
 type CreateMockRequest struct {
 	RootPath               string
+	BootstrapPackage       string
 	ControllerPropsPackage string
 	APIRootPackage         string
 	BootstrapTemplate      *BootstrapTemplate
@@ -14,7 +15,6 @@ type CreateMockRequest struct {
 type MockMainTemplate struct {
 	AppVersion             string
 	ControllerPropsPackage string
-	APIPackageRoot         string
-	APIRootPackageName     string
+	BootstrapPackage       string
 	DefaultJSONDirPath     string
 }

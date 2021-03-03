@@ -1,8 +1,10 @@
 name: release
+
 on:
   push:
     tags:
-    - "v[0-9]+.[0-9]+.[0-9]+"
+    - "v[0-9]+.[0-9]+.[0-9]+(.*)"
+
 jobs:
   goreleaser:
     runs-on: ubuntu-latest
@@ -11,10 +13,12 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 1
+
       - name: Setup Go
         uses: actions/setup-go@v2
         with:
           go-version: 1.16
+
       - name: Run GoReleaser for client_generator
         uses: goreleaser/goreleaser-action@v1
         with:
@@ -23,6 +27,7 @@ jobs:
           workdir: client_generator
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run GoReleaser for server_generator
         uses: goreleaser/goreleaser-action@v1
         with:
@@ -31,6 +36,7 @@ jobs:
           workdir: server_generator
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run GoReleaser for api_gen
         uses: goreleaser/goreleaser-action@v1
         with:

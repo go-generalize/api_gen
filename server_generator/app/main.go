@@ -5,16 +5,16 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/go-generalize/api_gen/server_generator/sample"
-	"github.com/go-generalize/api_gen/server_generator/sample/props"
+	"github.com/go-generalize/api_gen/server_generator/sample/apigen"
+	"github.com/go-generalize/api_gen/server_generator/sample/apigen/props"
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
 	e := echo.New()
-	sample.Bootstrap(&props.ControllerProps{
+	apigen.Bootstrap(&props.ControllerProps{
 		TestKey: "foobar",
-	}, e, sample.MiddlewareList{
+	}, e, apigen.MiddlewareList{
 		{
 			Path: "/service/user2/",
 			MiddlewareFunc: []echo.MiddlewareFunc{

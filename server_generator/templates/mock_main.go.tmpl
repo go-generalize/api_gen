@@ -12,7 +12,7 @@ import (
 	"os"
 	"strings"
 
-	"{{ .APIPackageRoot }}"
+	"{{ .BootstrapPackage }}"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -41,7 +41,7 @@ func main() {
 		}
 	})
 
-	{{ .APIRootPackageName }}.MockBootstrap(e, os.Stderr, jsonDirPath)
+	apigen.MockBootstrap(e, os.Stderr, jsonDirPath)
 
 	fmt.Println("All routes are...")
 	for _, r := range e.Routes() {

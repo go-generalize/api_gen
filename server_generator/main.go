@@ -5,7 +5,7 @@ import (
 	"embed"
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -25,6 +25,7 @@ import (
 var templatesFS embed.FS
 
 var (
+	withMock          bool
 	supportHTTPMethod = []string{
 		"get",
 		"post",
@@ -32,10 +33,6 @@ var (
 		"delete",
 		"patch",
 	}
-	withMock bool
-)
-
-var (
 	replaceRule              = regexp.MustCompile(`:(.*?)(/|$)`)
 	endpointReplaceMatchRule = regexp.MustCompile(`:(.*?)/`)
 )
@@ -76,13 +73,14 @@ func main() {
 	}
 }
 
-func run(arg string) error {
-	const (
-		commonPropsDir    = "props"
-		commonWrapperDir  = "wrapper"
-		commonInternalDir = "internal"
-	)
+const (
+	commonAPIGenDir   = "apigen"
+	commonPropsDir    = "props"
+	commonWrapperDir  = "wrapper"
+	commonInternalDir = "internal"
+)
 
+func run(arg string) error {
 	rootPath, err := filepath.Abs(arg)
 	if err != nil {
 		return err
@@ -95,11 +93,12 @@ func run(arg string) error {
 
 		return err
 	}
-	bootstrapTemplates := make([]*BootstrapTemplates, 0)
-	packageName := ""
 
-	var apiRootPackage string
-	var apiRootPathRel string
+	var (
+		packageName    string
+		apiRootPackage string
+		apiRootPathRel string
+	)
 	{
 		r, err := filepath.Rel(packageRootPath, rootPath)
 		if err != nil {
@@ -112,7 +111,7 @@ func run(arg string) error {
 
 	var controllerPropsPackage string
 	{
-		dir := filepath.Join(rootPath, commonPropsDir)
+		dir := filepath.Join(rootPath, commonAPIGenDir, commonPropsDir)
 		if err := os.MkdirAll(dir, 0777); err != nil {
 			return err
 		}
@@ -140,7 +139,7 @@ func run(arg string) error {
 
 	var wrapperInternalPackage string
 	{
-		dir := filepath.Join(rootPath, commonWrapperDir, commonInternalDir)
+		dir := filepath.Join(rootPath, commonAPIGenDir, commonWrapperDir, commonInternalDir)
 		if err := os.MkdirAll(dir, 0777); err != nil {
 			return err
 		}
@@ -170,7 +169,7 @@ func run(arg string) error {
 
 	var wrapperPackage string
 	{
-		dir := filepath.Join(rootPath, commonWrapperDir)
+		dir := filepath.Join(rootPath, commonAPIGenDir, commonWrapperDir)
 		if err := os.MkdirAll(dir, 0777); err != nil {
 			return err
 		}
@@ -199,7 +198,8 @@ func run(arg string) error {
 		wrapperPackage = filepath.ToSlash(wrapperPackage)
 	}
 
-	isExistRoot := false
+	bootstrapTemplates := make([]*BootstrapTemplates, 0)
+	var isExistRoot bool
 	err = filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -209,7 +209,7 @@ func run(arg string) error {
 			return nil
 		}
 
-		if p, _ := filepath.Rel(rootPath, path); p == commonPropsDir {
+		if p, _ := filepath.Rel(rootPath, path); strings.HasPrefix(p, commonAPIGenDir) {
 			return nil
 		}
 
@@ -218,9 +218,6 @@ func run(arg string) error {
 			return err
 		}
 		packagePath := filepath.Join(basePackagePath+"/", relPath)
-		if rootPath == path {
-			packagePath = ""
-		}
 
 		importPackageName := ""
 		for i, p := range strings.Split(relPath, "/") {
@@ -230,9 +227,13 @@ func run(arg string) error {
 
 			if importPackageName == "" {
 				importPackageName += p
-			} else {
-				importPackageName += strings.ToUpper(p[:1]) + p[1:]
+				continue
 			}
+
+			importPackageName += strings.ToUpper(p[:1]) + p[1:]
+		}
+		if rootPath == path {
+			importPackageName = getEndOfPackage(packagePath)
 		}
 
 		endpointPath, err := filepath.Rel(rootPath, path)
@@ -271,9 +272,6 @@ func run(arg string) error {
 		if endpointPath == "/" {
 			packageName = cs[0].Package
 			isExistRoot = true
-
-			packagePath = ""
-			importPackageName = ""
 		}
 
 		bootstrapTemplates = append(bootstrapTemplates, &BootstrapTemplates{
@@ -348,31 +346,49 @@ func run(arg string) error {
 	for _, b := range bootstrapTemplates {
 		if b.ImportPackageName == filepath.Base(b.PackagePath) {
 			b.ImportPackageName = ""
+			b.ParentPackageName = rootPackageName
 		}
+
 		b.ImportPackageName = filepath.ToSlash(b.ImportPackageName)
 	}
 
-	bootstrapFilePath := filepath.Join(rootPath+"/", "bootstrap_gen.go")
+	var bootstrapPackage string
+	{
+		dir := filepath.Join(rootPath+"/", commonAPIGenDir)
+		if err := os.MkdirAll(dir, 0777); err != nil {
+			return err
+		}
+
+		r, err := filepath.Rel(packageRootPath, dir)
+		if err != nil {
+			return err
+		}
+
+		bootstrapPackage = filepath.ToSlash(filepath.Join(basePackagePath+"/", r))
+	}
+
+	bootstrapFilePath := filepath.Join(rootPath+"/", commonAPIGenDir, "bootstrap_gen.go")
 	bootstrapTemplate := &BootstrapTemplate{
 		AppVersion:             common.AppVersion,
 		PackageName:            packageName,
 		Bootstraps:             bootstrapTemplates,
 		ControllerPropsPackage: controllerPropsPackage,
 	}
-	err = createFromTemplate(
+	if err = createFromTemplate(
 		"templates/bootstrap_template.go.tmpl",
 		bootstrapFilePath, bootstrapTemplate,
 		true, template.FuncMap{
 			"GetGroupName": getGroupName,
 			"GetNewRoute":  getNewRoute,
-		})
-	if err != nil {
+		},
+	); err != nil {
 		return err
 	}
 
 	if withMock {
 		if err = createMock(&CreateMockRequest{
 			RootPath:               rootPath,
+			BootstrapPackage:       bootstrapPackage,
 			ControllerPropsPackage: controllerPropsPackage,
 			APIRootPackage:         apiRootPackage,
 			BootstrapTemplate:      bootstrapTemplate,
@@ -542,19 +558,18 @@ func createMock(req *CreateMockRequest) error {
 		mockMainPath := filepath.Join(mockPath, "main.go")
 		err := createFromTemplate("templates/mock_main.go.tmpl", mockMainPath, &MockMainTemplate{
 			AppVersion:             common.AppVersion,
-			APIPackageRoot:         req.APIRootPackage,
-			APIRootPackageName:     filepath.Base(req.APIRootPackage),
+			BootstrapPackage:       req.BootstrapPackage,
 			ControllerPropsPackage: req.ControllerPropsPackage,
-			DefaultJSONDirPath:     filepath.Join(req.APIRootPathRel+"/", "mock_jsons/"),
+			DefaultJSONDirPath:     filepath.Join(req.APIRootPathRel+"/", commonAPIGenDir, "mock_jsons/"),
 		}, true, template.FuncMap{})
 		if err != nil {
 			return xerrors.Errorf("Failed create an %s: %w", mockMainPath, err)
 		}
 	}
 
-	// mock_bootstrap_gen.go
+	// api_gen/bootstrap/mock_bootstrap_gen.go
 	{
-		mockBootstrapPath := filepath.Join(req.RootPath+"/", "mock_bootstrap_gen.go")
+		mockBootstrapPath := filepath.Join(req.RootPath+"/", commonAPIGenDir, "mock_bootstrap_gen.go")
 		err := createFromTemplate("templates/mock_bootstrap_template.go.tmpl", mockBootstrapPath,
 			req.BootstrapTemplate,
 			true, template.FuncMap{
@@ -593,18 +608,15 @@ func createMockJSON(rootPath, path string) error {
 		return err
 	}
 
-	jsonRoot := filepath.Join(rootPath+"/", "mock_jsons/")
+	jsonRoot := filepath.Join(rootPath+"/", commonAPIGenDir, "mock_jsons/")
 	jsonDir := filepath.Join(jsonRoot, r)
 	i, err := os.Stat(jsonDir)
-	if err == nil {
-		if !i.IsDir() {
-			return xerrors.Errorf("%s must be dir", jsonDir)
-		}
-	} else {
-		err = os.MkdirAll(jsonDir, 0775)
-		if err != nil {
-			return xerrors.Errorf("failed to create %s: %w", jsonDir, err)
-		}
+	if err == nil && !i.IsDir() {
+		return xerrors.Errorf("%s must be dir", jsonDir)
+	}
+
+	if err = os.MkdirAll(jsonDir, 0775); err != nil {
+		return xerrors.Errorf("failed to create %s: %w", jsonDir, err)
 	}
 
 	ts, err := f.Parse()
@@ -616,8 +628,7 @@ func createMockJSON(rootPath, path string) error {
 }
 
 func createFromTemplate(templatePath, path string, m interface{}, isOverRide bool, funcMap template.FuncMap) error {
-	_, err := os.Stat(path)
-	if err == nil {
+	if _, err := os.Stat(path); err == nil {
 		if !isOverRide {
 			return nil
 		}
@@ -633,9 +644,9 @@ func createFromTemplate(templatePath, path string, m interface{}, isOverRide boo
 		return xerrors.Errorf("%s open error in embed fs: %w", templatePath, err)
 	}
 
-	t, err := ioutil.ReadAll(f)
+	t, err := io.ReadAll(f)
 	if err != nil {
-		return xerrors.Errorf("%s read error in ioutil: %w", templatePath, err)
+		return xerrors.Errorf("%s read error in io: %w", templatePath, err)
 	}
 
 	tpl := template.Must(template.New("tmpl").Funcs(funcMap).Parse(string(t)))
@@ -646,13 +657,11 @@ func createFromTemplate(templatePath, path string, m interface{}, isOverRide boo
 	}
 	defer w.Close()
 
-	err = tpl.Execute(w, m)
-	if err != nil {
+	if err = tpl.Execute(w, m); err != nil {
 		return xerrors.Errorf("template exec error in %s: %w", path, err)
 	}
 
-	_, err = ExecCommand("goimports", "-w", path)
-	if err != nil {
+	if _, err = ExecCommand("goimports", "-w", path); err != nil {
 		return xerrors.Errorf("goimports exec error (%s): %w", path, err)
 	}
 

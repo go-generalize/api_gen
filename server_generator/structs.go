@@ -22,7 +22,7 @@ func findStructPairList(path string, endpointParams []string) (map[string]*Packa
 	}
 
 	structList := findStructList(pkgs)
-	structPair := make(map[string]*PackageStructPair, 0)
+	structPair := make(map[string]*PackageStructPair)
 	for _, s := range structList {
 		structEndpointParams := make([]string, len(endpointParams))
 		copy(structEndpointParams, endpointParams)

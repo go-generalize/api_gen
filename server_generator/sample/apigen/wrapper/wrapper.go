@@ -5,7 +5,7 @@ package wrapper
 import (
 	"fmt"
 
-	"github.com/go-generalize/api_gen/server_generator/sample2/wrapper/internal"
+	"github.com/go-generalize/api_gen/server_generator/sample/apigen/wrapper/internal"
 )
 
 // APIError - API Error

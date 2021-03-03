@@ -1,4 +1,4 @@
-package sample
+package apigen
 
 import (
 	"bytes"
@@ -12,12 +12,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/go-generalize/api_gen/server_generator/sample/props"
-	"github.com/go-generalize/api_gen/server_generator/sample/service/user2"
-
-	"github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID/_JobID"
-
+	"github.com/go-generalize/api_gen/server_generator/sample"
+	"github.com/go-generalize/api_gen/server_generator/sample/apigen/props"
 	"github.com/go-generalize/api_gen/server_generator/sample/service"
+	"github.com/go-generalize/api_gen/server_generator/sample/service/user2"
+	"github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID/_JobID"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -196,7 +195,7 @@ func TestBootstrap(t *testing.T) {
 			t.Fatalf("server http response read error: %s", err.Error())
 		}
 
-		res := new(PostCreateUserResponse)
+		res := new(sample.PostCreateUserResponse)
 		err = json.Unmarshal(resByte, res)
 		if err != nil {
 			t.Fatalf("server http get response parse error: %s", err.Error())
@@ -208,8 +207,8 @@ func TestBootstrap(t *testing.T) {
 		if !res.Status {
 			t.Fatalf("unexpected Status: %v (expected:%v)", res.Status, true)
 		}
-		if res.CreatedType != CreatedTypeMember {
-			t.Fatalf("unexpected CreatedType: %v (expected:%v)", res.CreatedType, CreatedTypeMember)
+		if res.CreatedType != sample.CreatedTypeMember {
+			t.Fatalf("unexpected CreatedType: %v (expected:%v)", res.CreatedType, sample.CreatedTypeMember)
 		}
 	})
 
@@ -232,7 +231,7 @@ func TestBootstrap(t *testing.T) {
 			t.Fatalf("server http response read error: %s", err.Error())
 		}
 
-		res := new(PostCreateTableResponse)
+		res := new(sample.PostCreateTableResponse)
 		err = json.Unmarshal(resByte, res)
 		if err != nil {
 			t.Fatalf("server http get response parse error: %s", err.Error())

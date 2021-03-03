@@ -3,7 +3,7 @@
 package room
 
 import (
-	"github.com/go-generalize/api_gen/server_generator/sample2/props"
+	"github.com/go-generalize/api_gen/server_generator/sample2/apigen/props"
 	"github.com/labstack/echo/v4"
 )
 
