@@ -4,7 +4,7 @@ set -eu
 
 WORKDIR=$(dirname $0)
 
-PATH=$WORKDIR/../bin:$PATH
+export PATH=$WORKDIR/../bin:$PATH
 cd $WORKDIR
 
 clients=(ts go)
