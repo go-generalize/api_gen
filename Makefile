@@ -58,3 +58,6 @@ build-release:
 .PHONY: cmd
 cmd:
 	go build -o ./bin/api_gen ./cmd/*.go
+
+gen_samples: cmd server_generator
+	bash ./samples/generate.sh

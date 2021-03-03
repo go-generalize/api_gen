@@ -132,14 +132,16 @@ func (g *generator) generateGroup(gr *parser.Group) *group {
 	gen.ShortName = strcase.ToCamel(gr.RawPath)
 	gen.Name = "Group" + p
 
-	importAlias := gr.GetFullPath("_", func(rawPath, path, placeholder string) string {
-		return rawPath
-	})
-	if importAlias == "" {
-		importAlias = "root"
-	}
+	if len(gr.Endpoints) != 0 {
+		importAlias := gr.GetFullPath("_", func(rawPath, path, placeholder string) string {
+			return rawPath
+		})
+		if importAlias == "" {
+			importAlias = "root"
+		}
 
-	g.imports[gr.ImportPath] = importAlias
+		g.imports[gr.ImportPath] = importAlias
+	}
 
 	gen.Children = make([]*group, 0, len(gr.Children))
 	for i := range gr.Children {

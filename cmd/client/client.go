@@ -7,5 +7,6 @@ import "github.com/spf13/cobra"
 func Initialize() []*cobra.Command {
 	return []*cobra.Command{
 		goCommand,
+		tsCommand,
 	}
 }
