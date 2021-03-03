@@ -74,11 +74,10 @@ func main() {
 }
 
 const (
-	commonAPIGenDir    = "api_gen"
-	commonBootstrapDir = "bootstrap"
-	commonPropsDir     = "props"
-	commonWrapperDir   = "wrapper"
-	commonInternalDir  = "internal"
+	commonAPIGenDir   = "apigen"
+	commonPropsDir    = "props"
+	commonWrapperDir  = "wrapper"
+	commonInternalDir = "internal"
 )
 
 func run(arg string) error {
@@ -355,7 +354,7 @@ func run(arg string) error {
 
 	var bootstrapPackage string
 	{
-		dir := filepath.Join(rootPath+"/", commonAPIGenDir, commonBootstrapDir)
+		dir := filepath.Join(rootPath+"/", commonAPIGenDir)
 		if err := os.MkdirAll(dir, 0777); err != nil {
 			return err
 		}
@@ -368,7 +367,7 @@ func run(arg string) error {
 		bootstrapPackage = filepath.ToSlash(filepath.Join(basePackagePath+"/", r))
 	}
 
-	bootstrapFilePath := filepath.Join(rootPath+"/", commonAPIGenDir, commonBootstrapDir, "bootstrap_gen.go")
+	bootstrapFilePath := filepath.Join(rootPath+"/", commonAPIGenDir, "bootstrap_gen.go")
 	bootstrapTemplate := &BootstrapTemplate{
 		AppVersion:             common.AppVersion,
 		PackageName:            packageName,
@@ -570,7 +569,7 @@ func createMock(req *CreateMockRequest) error {
 
 	// api_gen/bootstrap/mock_bootstrap_gen.go
 	{
-		mockBootstrapPath := filepath.Join(req.RootPath+"/", commonAPIGenDir, commonBootstrapDir, "mock_bootstrap_gen.go")
+		mockBootstrapPath := filepath.Join(req.RootPath+"/", commonAPIGenDir, "mock_bootstrap_gen.go")
 		err := createFromTemplate("templates/mock_bootstrap_template.go.tmpl", mockBootstrapPath,
 			req.BootstrapTemplate,
 			true, template.FuncMap{
