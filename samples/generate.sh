@@ -3,9 +3,10 @@
 set -eu
 
 WORKDIR=$(dirname $0)
+cd $WORKDIR
+WORKDIR=$(pwd) # Make $WORKDIR abolute
 
 export PATH=$WORKDIR/../bin:$PATH
-cd $WORKDIR
 
 clients=(ts go)
 targets=(empty_root)
