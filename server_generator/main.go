@@ -224,7 +224,7 @@ func run(arg string) error {
 
 		importPackageName := ""
 		for i, p := range strings.Split(relPath, "/") {
-			if i < 2 {
+			if i < 1 {
 				continue
 			}
 
