@@ -73,6 +73,10 @@ func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string
 
 	code, err := go2go.NewGenerator(parsed, endpointStructs).Generate()
 
+	if err != nil {
+		return xerrors.Errorf("failed to initialize new go2go generator: %w", err)
+	}
+
 	relative := gr.GetFullPath(string(filepath.Separator), func(rawPath, path, placeholder string) string {
 		return rawPath
 	})
