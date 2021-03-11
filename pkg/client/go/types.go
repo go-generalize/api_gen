@@ -32,6 +32,7 @@ func parserFilter(opt *go2tsparser.FilterOpt) bool {
 	return strings.HasSuffix(opt.Name, "Request") || strings.HasSuffix(opt.Name, "Response")
 }
 
+// GenerateTypes generates request/response types in Go
 func (g *generator) GenerateTypes(fn func(relPath, code string) error) error {
 	err := g.generateTypes(g.baseGroup, fn)
 

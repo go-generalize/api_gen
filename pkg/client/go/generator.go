@@ -72,6 +72,7 @@ type importPair struct {
 	Alias, Path string
 }
 
+// GenerateClient generates a Go client for api_gen
 func (g *generator) GenerateClient() (string, error) {
 	g.imports = make(map[string]string)
 	g.Root = g.generateGroup(g.baseGroup)

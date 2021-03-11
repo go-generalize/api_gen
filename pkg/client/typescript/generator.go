@@ -27,7 +27,7 @@ func NewGenerator(gr *parser.Group, version string) Generator {
 	}
 }
 
-// GenerateClient generates a Go client for api_gen
+// GenerateClient generates a TypeScript client for api_gen
 func (g *generator) GenerateClient() (string, error) {
 	g.generateGroup(g.root)
 	g.sort()
