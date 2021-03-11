@@ -10,13 +10,13 @@ import (
 	"net/http"
 	"net/url"
 
-	root "root/classes"
-	_service "root/classes/service"
-	_service_static_page "root/classes/service/static_page"
-	_service_user "root/classes/service/user"
-	_service_user2 "root/classes/service/user2"
-	_service_user2__userID "root/classes/service/user2/_userID"
-	_service_user2__userID__JobID "root/classes/service/user2/_userID/_JobID"
+	root "root"
+	_service "root/service"
+	_service_static_page "root/service/static_page"
+	_service_user "root/service/user"
+	_service_user2 "root/service/user2"
+	_service_user2__userID "root/service/user2/_userID"
+	_service_user2__userID__JobID "root/service/user2/_userID/_JobID"
 )
 
 type Group_service_static_page struct {
