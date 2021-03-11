@@ -51,7 +51,7 @@ func TestGenerate(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			if diff := cmp.Diff(got, string(wantBytes)); diff != "" {
+			if diff := cmp.Diff(string(wantBytes), got); diff != "" {
 				t.Errorf("Generate() diff: %v", diff)
 			}
 		})
