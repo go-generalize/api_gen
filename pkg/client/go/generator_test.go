@@ -28,7 +28,7 @@ func TestGenerate(t *testing.T) {
 	}{
 		{
 			name:     "server_generator/sample",
-			wantPath: "./sample/client.go",
+			wantPath: "./sample/client.go.want",
 			args: args{
 				gr:                group,
 				baseDirImportPath: "root",
