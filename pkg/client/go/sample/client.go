@@ -10,13 +10,13 @@ import (
 	"net/http"
 	"net/url"
 
-	root "github.com/go-generalize/api_gen/server_generator/sample"
-	_service "github.com/go-generalize/api_gen/server_generator/sample/service"
-	_service_static_page "github.com/go-generalize/api_gen/server_generator/sample/service/static_page"
-	_service_user "github.com/go-generalize/api_gen/server_generator/sample/service/user"
-	_service_user2 "github.com/go-generalize/api_gen/server_generator/sample/service/user2"
-	_service_user2__userID "github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID"
-	_service_user2__userID__JobID "github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID/_JobID"
+	root "github.com/go-generalize/api_gen/pkg/client/go/sample/classes"
+	_service "github.com/go-generalize/api_gen/pkg/client/go/sample/classes/service"
+	_service_static_page "github.com/go-generalize/api_gen/pkg/client/go/sample/classes/service/static_page"
+	_service_user "github.com/go-generalize/api_gen/pkg/client/go/sample/classes/service/user"
+	_service_user2 "github.com/go-generalize/api_gen/pkg/client/go/sample/classes/service/user2"
+	_service_user2__userID "github.com/go-generalize/api_gen/pkg/client/go/sample/classes/service/user2/_userID"
+	_service_user2__userID__JobID "github.com/go-generalize/api_gen/pkg/client/go/sample/classes/service/user2/_userID/_JobID"
 )
 
 type Group_service_static_page struct {

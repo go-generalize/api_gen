@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/go-generalize/api_gen/pkg/parser"
+	"github.com/google/go-cmp/cmp"
 )
 
 func TestGenerate(t *testing.T) {
@@ -50,8 +51,8 @@ func TestGenerate(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			if got != string(wantBytes) {
-				t.Errorf("Generate() = %v, want %v", got, wantBytes)
+			if diff := cmp.Diff(got, string(wantBytes)); diff != "" {
+				t.Errorf("Generate() diff: %v", diff)
 			}
 		})
 	}
