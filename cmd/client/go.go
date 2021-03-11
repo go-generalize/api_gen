@@ -5,10 +5,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/go-utils/gopackages"
-
 	"github.com/go-generalize/api_gen/common"
 	clientgo "github.com/go-generalize/api_gen/pkg/client/go"
+	"github.com/go-utils/gopackages"
 	"github.com/go-generalize/api_gen/pkg/parser"
 	"github.com/spf13/cobra"
 	"golang.org/x/xerrors"
