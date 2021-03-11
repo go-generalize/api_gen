@@ -31,11 +31,12 @@ type Generator interface {
 var _ Generator = &generator{}
 
 // NewGenerator generates a Go client for api_gen
-func NewGenerator(gr *parser.Group, packageName, version string) Generator {
+func NewGenerator(gr *parser.Group, baseDirImportPath, packageName, version string) Generator {
 	gen := &generator{
-		PackageName: packageName,
-		Version:     version,
-		baseGroup:   gr,
+		PackageName:       packageName,
+		Version:           version,
+		baseDirImportPath: baseDirImportPath,
+		baseGroup:         gr,
 	}
 
 	return gen
@@ -63,7 +64,8 @@ type generator struct {
 	Version     string
 	Root        *group
 
-	baseGroup *parser.Group
+	baseGroup         *parser.Group
+	baseDirImportPath string
 }
 
 type importPair struct {
@@ -75,9 +77,12 @@ func (g *generator) GenerateClient() (string, error) {
 	g.Root = g.generateGroup(g.baseGroup)
 
 	for k, v := range g.imports {
+		// Overwrite import path to ./classes
+		path := g.baseDirImportPath + strings.TrimPrefix(k, g.baseGroup.ImportPath)
+
 		g.Imports = append(g.Imports, importPair{
 			Alias: v,
-			Path:  k,
+			Path:  path,
 		})
 	}
 

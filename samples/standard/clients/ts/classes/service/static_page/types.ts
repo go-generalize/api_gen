@@ -2,10 +2,8 @@
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
 // generated version: devel
 
-package types
-
-type PostUserRequest struct {
-}
-
-type PostUserResponse struct {
+export type GetStaticPageRequest = {}
+export type GetStaticPageResponse = {
+	body: string;
+	title: string;
 }

@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/go-utils/gopackages"
+
 	"github.com/go-generalize/api_gen/common"
 	clientgo "github.com/go-generalize/api_gen/pkg/client/go"
 	"github.com/go-generalize/api_gen/pkg/parser"
@@ -28,7 +30,21 @@ Pass the directory to parse as the 1st argument.`,
 				return xerrors.Errorf("failed to parse the package(%s): %w", args[0], err)
 			}
 
-			generator := clientgo.NewGenerator(group, pkg, common.AppVersion)
+			classesRoot := filepath.Join(dir, "classes")
+
+			mod, err := gopackages.NewModule(classesRoot)
+
+			if err != nil {
+				return xerrors.Errorf("failed to analyze module in %s: %w", dir, err)
+			}
+
+			importPath, err := mod.GetImportPath(classesRoot)
+
+			if err != nil {
+				return xerrors.Errorf("failed to get import path for %s: %w", dir, err)
+			}
+
+			generator := clientgo.NewGenerator(group, importPath, pkg, common.AppVersion)
 
 			code, err := generator.GenerateClient()
 
@@ -43,7 +59,7 @@ Pass the directory to parse as the 1st argument.`,
 
 			err = generator.GenerateTypes(func(relPath, code string) error {
 				path := filepath.Join(dir, relPath)
-				dir = filepath.Dir(path)
+				dir := filepath.Dir(path)
 
 				if err := os.MkdirAll(dir, 0774); err != nil {
 					return xerrors.Errorf("failed to mkdir %s recursively: %w", dir, err)

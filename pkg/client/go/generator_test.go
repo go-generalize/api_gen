@@ -9,8 +9,9 @@ import (
 
 func TestGenerate(t *testing.T) {
 	type args struct {
-		gr          *parser.Group
-		packageName string
+		gr                *parser.Group
+		baseDirImportPath string
+		packageName       string
 	}
 	group, err := parser.Parse("../../../server_generator/sample")
 
@@ -28,15 +29,16 @@ func TestGenerate(t *testing.T) {
 			name:     "server_generator/sample",
 			wantPath: "./sample/client.go",
 			args: args{
-				gr:          group,
-				packageName: "client",
+				gr:                group,
+				baseDirImportPath: "root",
+				packageName:       "client",
 			},
 		},
 	}
 	for _, tt := range tests {
 		tt := tt // escape: Using the variable on range scope `tt` in function literal
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewGenerator(tt.args.gr, tt.args.packageName, "1.0").GenerateClient()
+			got, err := NewGenerator(tt.args.gr, tt.args.baseDirImportPath, tt.args.packageName, "1.0").GenerateClient()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Generate() error = %v, wantErr %v", err, tt.wantErr)
 				return
