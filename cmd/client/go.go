@@ -3,6 +3,7 @@ package clientcmd
 
 import (
 	"os"
+	"path/filepath"
 
 	"github.com/go-generalize/api_gen/common"
 	clientgo "github.com/go-generalize/api_gen/pkg/client/go"
@@ -12,7 +13,7 @@ import (
 )
 
 var goCommand = func() *cobra.Command {
-	var file, pkg string
+	var dir, pkg string
 
 	cmd := &cobra.Command{
 		Use:   "go [path]",
@@ -27,20 +28,42 @@ Pass the directory to parse as the 1st argument.`,
 				return xerrors.Errorf("failed to parse the package(%s): %w", args[0], err)
 			}
 
-			code, err := clientgo.Generate(group, pkg, common.AppVersion)
+			generator := clientgo.NewGenerator(group, pkg, common.AppVersion)
+
+			code, err := generator.GenerateClient()
 
 			if err != nil {
 				return xerrors.Errorf("failed to generate source code: %w", err)
 			}
 
+			file := filepath.Join(dir, "api_client.go")
 			if err := os.WriteFile(file, []byte(code), 0664); err != nil {
 				return xerrors.Errorf("failed to save in %s: %w", file, err)
+			}
+
+			err = generator.GenerateTypes(func(relPath, code string) error {
+				path := filepath.Join(dir, relPath)
+				dir = filepath.Dir(path)
+
+				if err := os.MkdirAll(dir, 0774); err != nil {
+					return xerrors.Errorf("failed to mkdir %s recursively: %w", dir, err)
+				}
+
+				if err := os.WriteFile(path, []byte(code), 0664); err != nil {
+					return xerrors.Errorf("failed to save code in %s: %w", path, err)
+				}
+
+				return nil
+			})
+
+			if err != nil {
+				return xerrors.Errorf("failed to generate types: %w", err)
 			}
 
 			return nil
 		},
 	}
-	cmd.Flags().StringVarP(&file, "file", "o", "./client.go", "The path to generated client library")
+	cmd.Flags().StringVarP(&dir, "output", "o", "./", "The directory to generated client library in")
 	cmd.Flags().StringVarP(&pkg, "package", "p", "client", "The package name of the generated library")
 
 	return cmd
