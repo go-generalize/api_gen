@@ -22,33 +22,24 @@ const (
 //go:embed templates/client.go.tmpl
 var clientGoTemplate embed.FS
 
-// Generate generates a Go client for api_gen
-func Generate(gr *parser.Group, packageName, version string) (string, error) {
-	params := generator{
-		PackageName: packageName,
-		Version:     version,
+// Generator generates a Go client for api_gen
+type Generator interface {
+	GenerateClient() (string, error)
+	GenerateTypes(fn func(relPath, code string) error) error
+}
+
+var _ Generator = &generator{}
+
+// NewGenerator generates a Go client for api_gen
+func NewGenerator(gr *parser.Group, typesDirImportPath, packageName, version string) Generator {
+	gen := &generator{
+		PackageName:        packageName,
+		Version:            version,
+		typesDirImportPath: typesDirImportPath,
+		baseGroup:          gr,
 	}
 
-	params.generate(gr)
-
-	tmpl, err := template.ParseFS(clientGoTemplate, "templates/client.go.tmpl")
-
-	if err != nil {
-		return "", err
-	}
-
-	buf := bytes.NewBuffer(nil)
-	if err := tmpl.Execute(buf, params); err != nil {
-		return "", err
-	}
-
-	formatted, err := format.Source(buf.Bytes())
-
-	if err != nil {
-		return "", err
-	}
-
-	return string(formatted), nil
+	return gen
 }
 
 type endpoint struct {
@@ -72,26 +63,52 @@ type generator struct {
 	Imports     []importPair
 	Version     string
 	Root        *group
+
+	baseGroup          *parser.Group
+	typesDirImportPath string
 }
 
 type importPair struct {
 	Alias, Path string
 }
 
-func (g *generator) generate(gr *parser.Group) {
+// GenerateClient generates a Go client for api_gen
+func (g *generator) GenerateClient() (string, error) {
 	g.imports = make(map[string]string)
-	g.Root = g.generateGroup(gr)
+	g.Root = g.generateGroup(g.baseGroup)
 
 	for k, v := range g.imports {
+		// Overwrite import path to ./classes
+		path := g.typesDirImportPath + strings.TrimPrefix(k, g.baseGroup.ImportPath)
+
 		g.Imports = append(g.Imports, importPair{
 			Alias: v,
-			Path:  k,
+			Path:  path,
 		})
 	}
 
 	sort.Slice(g.Imports, func(i, j int) bool {
 		return g.Imports[i].Path+g.Imports[i].Path < g.Imports[j].Path+g.Imports[j].Path
 	})
+
+	tmpl, err := template.ParseFS(clientGoTemplate, "templates/client.go.tmpl")
+
+	if err != nil {
+		return "", err
+	}
+
+	buf := bytes.NewBuffer(nil)
+	if err := tmpl.Execute(buf, g); err != nil {
+		return "", err
+	}
+
+	formatted, err := format.Source(buf.Bytes())
+
+	if err != nil {
+		return "", err
+	}
+
+	return string(formatted), nil
 }
 
 func (g *generator) generateEndpoint(ep *parser.Endpoint) *endpoint {
