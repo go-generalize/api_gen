@@ -44,10 +44,10 @@ Pass the directory to parse as the 1st argument.`,
 
 			err = generator.GenerateTypes(func(relPath, code string) error {
 				path := filepath.Join(dir, relPath)
-				dir = filepath.Dir(path)
+				d := filepath.Dir(path)
 
-				if err := os.MkdirAll(dir, 0774); err != nil {
-					return xerrors.Errorf("failed to mkdir %s recursively: %w", dir, err)
+				if err := os.MkdirAll(d, 0774); err != nil {
+					return xerrors.Errorf("failed to mkdir %s recursively: %w", d, err)
 				}
 
 				if err := os.WriteFile(path, []byte(code), 0664); err != nil {

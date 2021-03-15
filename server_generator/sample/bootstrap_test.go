@@ -80,12 +80,11 @@ func TestBootstrap(t *testing.T) {
 	}, e, m)
 
 	var wg sync.WaitGroup
+	var serverErr error
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		if err := e.Start(":" + PORT); err != nil && err != http.ErrServerClosed {
-			t.Fatalf("server listen error %s", err.Error())
-		}
+		serverErr = e.Start(":" + PORT)
 	}()
 
 	defer t.Cleanup(func() {
@@ -93,6 +92,10 @@ func TestBootstrap(t *testing.T) {
 			t.Errorf("failed to shutdown server: %+v", err)
 		}
 		wg.Wait()
+
+		if serverErr != nil && serverErr != http.ErrServerClosed {
+			t.Fatalf("server listen error %s", serverErr)
+		}
 	})
 
 	start := time.Now().Unix()
