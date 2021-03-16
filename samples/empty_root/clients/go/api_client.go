@@ -34,6 +34,8 @@ func (g *Group_foo_bar) PostUser(reqPayload *_foo_bar.PostUserRequest) (respPayl
 		return nil, err
 	}
 
+	req.Header.Add("Content-Type", "application/json")
+
 	resp, err := g.apiClient.client.Do(req)
 
 	if err != nil {
