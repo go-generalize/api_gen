@@ -60,13 +60,25 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint) (*endpointType, []impo
 
 			for _, f := range ep.RequestPayload.Fields.List {
 				if f.Names[0].Name == field && f.Tag != nil {
-					j, ok := reflect.
-						StructTag(strings.Trim(f.Tag.Value, "`")).
-						Lookup(jsonTagKey)
+					tags := reflect.StructTag(strings.Trim(f.Tag.Value, "`"))
 
-					if ok {
+					if j, ok := tags.Lookup(jsonTagKey); ok {
 						jsonKey = j
 					}
+
+					if jsonKey != "-" {
+						continue
+					}
+
+					if p, ok := tags.Lookup(queryTagKey); ok {
+						jsonKey = p
+					}
+
+					if jsonKey != "-" {
+						continue
+					}
+
+					jsonKey = field
 				}
 			}
 
@@ -97,6 +109,10 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint) (*endpointType, []impo
 
 			if ok {
 				param = tag
+			}
+
+			if jsonKey == "-" {
+				jsonKey = tag
 			}
 		}
 
