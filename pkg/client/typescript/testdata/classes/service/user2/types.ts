@@ -3,7 +3,6 @@
 // generated version: 1.0
 
 export type GetUserRequest = {
-	id: string;
 	search_request: string;
 }
 export type GetUserResponse = {
