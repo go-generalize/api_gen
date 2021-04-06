@@ -56,35 +56,35 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint) (*endpointType, []impo
 	endpoint.Endpoint = ep.GetFullPath("/", func(rawPath, path, placeholder string) string {
 		if placeholder != "" {
 			field := astutil.FindStructField(ep.RequestPayload, queryTagKey, placeholder)
-			jsonKey := field
+			key := field
 
 			for _, f := range ep.RequestPayload.Fields.List {
 				if f.Names[0].Name == field && f.Tag != nil {
 					tags := reflect.StructTag(strings.Trim(f.Tag.Value, "`"))
 
 					if j, ok := tags.Lookup(jsonTagKey); ok {
-						jsonKey = j
+						key = j
 					}
 
-					if jsonKey != "-" {
+					if key != "-" {
 						continue
 					}
 
 					if p, ok := tags.Lookup(queryTagKey); ok {
-						jsonKey = p
+						key = p
 					}
 
-					if jsonKey != "-" {
+					if key != "-" {
 						continue
 					}
 
-					jsonKey = field
+					key = field
 				}
 			}
 
 			return fmt.Sprintf(
 				`${encodeURI(param.%s.toString())}`,
-				jsonKey,
+				key,
 			)
 		}
 
