@@ -5,7 +5,7 @@ import "time"
 
 // GetUserRequest ...
 type GetUserRequest struct {
-	ID            string `json:"id" param:"userID"`
+	ID            string `json:"-" param:"userID"`
 	SearchRequest string `json:"search_request" query:"search_request"`
 }
 

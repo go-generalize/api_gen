@@ -353,7 +353,7 @@ class ServiceUser2Client {
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceUser2GetUserResponse> {
-	    const excludeParams: string[] = ['id', ];
+	    const excludeParams: string[] = ['userID', ];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
@@ -371,14 +371,14 @@ class ServiceUser2Client {
 		};
 		const context: MiddlewareContext = {
 			httpMethod: 'GET',
-			endpoint: `${this.baseURL}/service/user2/${encodeURI(param.id.toString())}`,
+			endpoint: `${this.baseURL}/service/user2/${encodeURI(param.userID.toString())}`,
 			request: param,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/service/user2/${encodeURI(param.id.toString())}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
+		const url = `${this.baseURL}/service/user2/${encodeURI(param.userID.toString())}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
 		const resp = await fetch(
 			url,
 			{
