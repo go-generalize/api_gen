@@ -15,12 +15,14 @@ type middleware struct {
     middleware echo.MiddlewareFunc
 }
 
+// Controllers binds handlers to echo
 type Controllers struct {
     props *props.ControllerProps
 
     middlewares []middleware
 }
 
+// NewControllers returns a new Controllers
 func NewControllers(
     props *props.ControllerProps, e *echo.Echo, 
 ) *Controllers {
@@ -66,6 +68,7 @@ func NewControllers(
     return ctrl
 }
 
+// AddMiddleware adds 'm' to the paths starting with the 'path'.
 func (c *Controllers) AddMiddleware(path string, m echo.MiddlewareFunc) {
     c.middlewares = append(c.middlewares, middleware {
         path: path,
