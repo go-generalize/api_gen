@@ -14,13 +14,14 @@ targets=(empty_root standard)
 for t in ${targets[@]}; do
     pushd ${t}
 
-    cd server && server_generator .
+    mkdir -p server clients
+    cd server && api_gen s ../api
     cd ../clients
     for c in ${clients[@]}; do
         mkdir -p ${c}
         pushd ${c}
 
-        api_gen c $c ../../server
+        api_gen c $c ../../api
 
         popd
     done
