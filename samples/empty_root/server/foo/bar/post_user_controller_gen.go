@@ -3,7 +3,7 @@
 package foo
 
 import (
-	"github.com/go-generalize/api_gen/samples/empty_root/server/apigen/props"
+	"github.com/go-generalize/api_gen/samples/empty_root/server/props"
 	"github.com/labstack/echo/v4"
 )
 
