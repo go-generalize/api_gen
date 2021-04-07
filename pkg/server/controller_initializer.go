@@ -31,7 +31,9 @@ func (g *Generator) generateControllerInitializer(initializerPath, propsPackage 
 		return xerrors.Errorf("failed to format code: %w", err)
 	}
 
-	io.Copy(fp, bytes.NewBuffer(src))
+	if _, err := io.Copy(fp, bytes.NewBuffer(src)); err != nil {
+		return xerrors.Errorf("failed to write controller_initializer.go: %w", err)
+	}
 
 	return nil
 }

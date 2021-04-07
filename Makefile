@@ -59,5 +59,5 @@ build-release:
 cmd:
 	go build -o ./bin/api_gen ./cmd/*.go
 
-gen_samples: cmd server_generator
+gen_samples: cmd
 	bash ./samples/generate.sh

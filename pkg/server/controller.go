@@ -95,7 +95,9 @@ func (g *Generator) generateController(root, propsPackage string, ep *parser.End
 		return nil, xerrors.Errorf("failed to format code: %w", err)
 	}
 
-	io.Copy(fp, bytes.NewBuffer(src))
+	if _, err := io.Copy(fp, bytes.NewBuffer(src)); err != nil {
+		return nil, xerrors.Errorf("failed to write %s: %w", path, err)
+	}
 
 	return be, nil
 }
