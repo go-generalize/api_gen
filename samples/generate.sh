@@ -9,7 +9,7 @@ WORKDIR=$(pwd) # Make $WORKDIR abolute
 export PATH=$WORKDIR/../bin:$PATH
 
 clients=(ts go)
-targets=(empty_root)
+targets=(empty_root standard)
 
 for t in ${targets[@]}; do
     pushd ${t}

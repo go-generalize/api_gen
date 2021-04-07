@@ -86,8 +86,14 @@ func run(arg string) error {
 		return err
 	}
 
-	packageRootPath := GetGoRootPath()
-	basePackagePath, err := GetGoRootPackageName()
+	packageRootPath, err := GetGoRootPath(rootPath)
+	if err != nil {
+		fmt.Println("Make sure go.mod exists")
+
+		return err
+	}
+
+	basePackagePath, err := GetGoRootPackageName(rootPath)
 	if err != nil {
 		fmt.Println("Make sure go.mod exists")
 

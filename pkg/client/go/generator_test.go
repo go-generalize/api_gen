@@ -5,12 +5,14 @@ import (
 	"testing"
 
 	"github.com/go-generalize/api_gen/pkg/parser"
+	"github.com/google/go-cmp/cmp"
 )
 
 func TestGenerate(t *testing.T) {
 	type args struct {
-		gr          *parser.Group
-		packageName string
+		gr                *parser.Group
+		baseDirImportPath string
+		packageName       string
 	}
 	group, err := parser.Parse("../../../server_generator/sample")
 
@@ -26,17 +28,18 @@ func TestGenerate(t *testing.T) {
 	}{
 		{
 			name:     "server_generator/sample",
-			wantPath: "./sample/client.go",
+			wantPath: "./sample/client.go.want",
 			args: args{
-				gr:          group,
-				packageName: "client",
+				gr:                group,
+				baseDirImportPath: "root",
+				packageName:       "client",
 			},
 		},
 	}
 	for _, tt := range tests {
 		tt := tt // escape: Using the variable on range scope `tt` in function literal
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := Generate(tt.args.gr, tt.args.packageName, "1.0")
+			got, err := NewGenerator(tt.args.gr, tt.args.baseDirImportPath, tt.args.packageName, "1.0").GenerateClient()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Generate() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -48,8 +51,8 @@ func TestGenerate(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			if got != string(wantBytes) {
-				t.Errorf("Generate() = %v, want %v", got, wantBytes)
+			if diff := cmp.Diff(string(wantBytes), got); diff != "" {
+				t.Errorf("Generate() diff: %v", diff)
 			}
 		})
 	}
