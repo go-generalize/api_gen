@@ -9,7 +9,7 @@ import (
 
 func TestGenerate(t *testing.T) {
 
-	gr, err := parser.Parse("../../samples/standard/server")
+	gr, err := parser.Parse("../../samples/standard/api")
 
 	if err != nil {
 		t.Fatal(err)
