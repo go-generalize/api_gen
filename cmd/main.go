@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/go-generalize/api_gen/common"
 	"github.com/spf13/cobra"
 )
 
@@ -15,7 +14,6 @@ var (
 		Short: "Generates client/server API library from definitions in Go",
 		Long: `api_gen generates client/server API library from definitions in Go.
 GitHub: https://github.com/go-generalize/api_gen`,
-		Version: common.AppVersion,
 	}
 )
 

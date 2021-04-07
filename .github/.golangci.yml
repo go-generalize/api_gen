@@ -77,7 +77,6 @@ run:
     - internal/cache
     - internal/renameio
     - internal/robustio
-    - samples/*/server/controller
 
 service:
   golangci-lint-version: 1.23.x
