@@ -1,3 +1,4 @@
+// Package server generates server-side library
 package server
 
 import (
@@ -103,7 +104,9 @@ func (g *Generator) generateControllerBundler(
 		return xerrors.Errorf("failed to format code: %w", err)
 	}
 
-	io.Copy(fp, bytes.NewBuffer(src))
+	if _, err := io.Copy(fp, bytes.NewBuffer(src)); err != nil {
+		return xerrors.Errorf("failed to write apierror.go: %w", err)
+	}
 
 	return nil
 }

@@ -1,3 +1,4 @@
+// Package server generates server-side library
 package server
 
 import (

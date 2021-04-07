@@ -1,3 +1,4 @@
+// Package server generates server-side library
 package server
 
 import (
@@ -29,6 +30,7 @@ type Generator struct {
 	AppVersion string
 }
 
+// NewGenerator returns a new Generator
 func NewGenerator(group *parser.Group, base, version string) (*Generator, error) {
 	g := &Generator{
 		group:      group,
@@ -52,6 +54,7 @@ func NewGenerator(group *parser.Group, base, version string) (*Generator, error)
 	return g, nil
 }
 
+// Generate generates controllers and related packages in the specified directory
 func (g *Generator) Generate() error {
 	propsPath := filepath.Join(g.base, "props")
 
