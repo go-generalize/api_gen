@@ -9,14 +9,13 @@ import (
 )
 
 func TestGenerate(t *testing.T) {
-
 	gr, err := parser.Parse("../../samples/standard/api")
 
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	os.RemoveAll("./testfiles")
+	_ = os.RemoveAll("./testfiles")
 
 	gen, err := NewGenerator(gr, "./testfiles", "devel")
 
@@ -27,5 +26,4 @@ func TestGenerate(t *testing.T) {
 	if err := gen.Generate(); err != nil {
 		t.Fatal(err)
 	}
-
 }

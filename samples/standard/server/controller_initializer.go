@@ -1,45 +1,44 @@
-// Package controller is for 
+// Package controller binds handlers to echo
 // generated version: devel
 package controller
 
 import (
-    "strings"
 	"net/http"
 	"runtime/debug"
-    props "github.com/go-generalize/api_gen/samples/standard/server/props"
-    "github.com/labstack/echo/v4"
+	"strings"
+
+	props "github.com/go-generalize/api_gen/samples/standard/server/props"
+	"github.com/labstack/echo/v4"
 )
 
 type middleware struct {
-    path       string
-    middleware echo.MiddlewareFunc
+	path       string
+	middleware echo.MiddlewareFunc
 }
 
 // Controllers binds handlers to echo
 type Controllers struct {
-    props *props.ControllerProps
-
-    middlewares []middleware
+	middlewares []middleware
 }
 
 // NewControllers returns a new Controllers
 func NewControllers(
-    props *props.ControllerProps, e *echo.Echo, 
+	props *props.ControllerProps, e *echo.Echo,
 ) *Controllers {
-    ctrl := &Controllers{}
-    
-    e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
-        return func(c echo.Context) error {
-            for _, m := range ctrl.middlewares {
-                if strings.HasPrefix(c.Request().URL.Path, m.path) {
-                    next = m.middleware(next)
-                }
-            }
+	ctrl := &Controllers{}
 
-            return next(c)
-        }
-    })
-    e.Use(func(before echo.HandlerFunc) echo.HandlerFunc {
+	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			for _, m := range ctrl.middlewares {
+				if strings.HasPrefix(c.Request().URL.Path, m.path) {
+					next = m.middleware(next)
+				}
+			}
+
+			return next(c)
+		}
+	})
+	e.Use(func(before echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {
 			defer func() {
 				recoverErr := recover()
@@ -63,15 +62,15 @@ func NewControllers(
 		}
 	})
 
-    addRoutes(e, props)
+	addRoutes(e, props)
 
-    return ctrl
+	return ctrl
 }
 
 // AddMiddleware adds 'm' to the paths starting with the 'path'.
 func (c *Controllers) AddMiddleware(path string, m echo.MiddlewareFunc) {
-    c.middlewares = append(c.middlewares, middleware {
-        path: path,
-        middleware: m,
-    })
+	c.middlewares = append(c.middlewares, middleware{
+		path:       path,
+		middleware: m,
+	})
 }
