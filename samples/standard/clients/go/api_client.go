@@ -1,6 +1,6 @@
 // THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
-// api_gen version: 1.0
+// api_gen version: devel
 package client
 
 import (
@@ -10,13 +10,13 @@ import (
 	"net/http"
 	"net/url"
 
-	root "github.com/go-generalize/api_gen/server_generator/sample"
-	_service "github.com/go-generalize/api_gen/server_generator/sample/service"
-	_service_static_page "github.com/go-generalize/api_gen/server_generator/sample/service/static_page"
-	_service_user "github.com/go-generalize/api_gen/server_generator/sample/service/user"
-	_service_user2 "github.com/go-generalize/api_gen/server_generator/sample/service/user2"
-	_service_user2__userID "github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID"
-	_service_user2__userID__JobID "github.com/go-generalize/api_gen/server_generator/sample/service/user2/_userID/_JobID"
+	root "github.com/go-generalize/api_gen/samples/standard/clients/go/classes"
+	_service "github.com/go-generalize/api_gen/samples/standard/clients/go/classes/service"
+	_service_static_page "github.com/go-generalize/api_gen/samples/standard/clients/go/classes/service/static_page"
+	_service_user "github.com/go-generalize/api_gen/samples/standard/clients/go/classes/service/user"
+	_service_user2 "github.com/go-generalize/api_gen/samples/standard/clients/go/classes/service/user2"
+	_service_user2__userID "github.com/go-generalize/api_gen/samples/standard/clients/go/classes/service/user2/_userID"
+	_service_user2__userID__JobID "github.com/go-generalize/api_gen/samples/standard/clients/go/classes/service/user2/_userID/_JobID"
 )
 
 type Group_service_static_page struct {
@@ -102,6 +102,8 @@ func (g *Group_service_user) PostUpdateUserName(reqPayload *_service_user.PostUp
 		return nil, err
 	}
 
+	req.Header.Add("Content-Type", "application/json")
+
 	resp, err := g.apiClient.client.Do(req)
 
 	if err != nil {
@@ -127,6 +129,8 @@ func (g *Group_service_user) PostUpdateUserPassword(reqPayload *_service_user.Po
 	if err != nil {
 		return nil, err
 	}
+
+	req.Header.Add("Content-Type", "application/json")
 
 	resp, err := g.apiClient.client.Do(req)
 
@@ -163,6 +167,8 @@ func (g *Group_service_user2__userID__JobID) PutJob(reqPayload *_service_user2__
 	if err != nil {
 		return nil, err
 	}
+
+	req.Header.Add("Content-Type", "application/json")
 
 	resp, err := g.apiClient.client.Do(req)
 
@@ -266,6 +272,8 @@ func (g *Group_service_user2) PostUpdateUserName(reqPayload *_service_user2.Post
 		return nil, err
 	}
 
+	req.Header.Add("Content-Type", "application/json")
+
 	resp, err := g.apiClient.client.Do(req)
 
 	if err != nil {
@@ -291,6 +299,8 @@ func (g *Group_service_user2) PostUpdateUserPassword(reqPayload *_service_user2.
 	if err != nil {
 		return nil, err
 	}
+
+	req.Header.Add("Content-Type", "application/json")
 
 	resp, err := g.apiClient.client.Do(req)
 
@@ -398,6 +408,8 @@ func (g *Group) PostCreateTable(reqPayload *root.PostCreateTableRequest) (respPa
 		return nil, err
 	}
 
+	req.Header.Add("Content-Type", "application/json")
+
 	resp, err := g.apiClient.client.Do(req)
 
 	if err != nil {
@@ -423,6 +435,8 @@ func (g *Group) PostCreateUser(reqPayload *root.PostCreateUserRequest) (respPayl
 	if err != nil {
 		return nil, err
 	}
+
+	req.Header.Add("Content-Type", "application/json")
 
 	resp, err := g.apiClient.client.Do(req)
 

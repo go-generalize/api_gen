@@ -3,14 +3,11 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-	"log"
-	"os"
 	"os/exec"
 	"path/filepath"
-	"strings"
 
-	"golang.org/x/mod/modfile"
+	"github.com/go-utils/gopackages"
+	"golang.org/x/xerrors"
 )
 
 // ExecCommand - コマンドを実行して出力結果とエラーを返す
@@ -29,79 +26,25 @@ func ExecCommand(command string, args ...string) (string, error) {
 	return string(b), nil
 }
 
-// GetGitRootPath - カレントディレクトリが所属するGitリポジトリの直下のパスを返す
-func GetGitRootPath() string {
-	s, err := ExecCommand("git", "rev-parse", "--show-superproject-working-tree", "--show-toplevel")
-
-	if err != nil {
-		log.Fatalf("failed to exec git command: %v", err)
-	}
-
-	return strings.TrimRight(s, "\r\n")
-}
-
-// GetGoModPath - Gitリポジトリ直下から幅優先探索でgo.modを探す
-func GetGoModPath() string {
-	dirs := []string{
-		GetGitRootPath(),
-	}
-
-	result := ""
-	for len(dirs) != 0 && result == "" {
-		d := dirs[0]
-		dirs = dirs[1:]
-
-		err := filepath.Walk(d, func(path string, info os.FileInfo, err error) error {
-			if info.IsDir() {
-				// 直下はSkipしない
-				if path == d {
-					return nil
-				}
-
-				if filepath.Base(path) == "node_modules" {
-					return filepath.SkipDir
-				}
-
-				dirs = append(dirs, path)
-
-				return filepath.SkipDir
-			}
-
-			if filepath.Base(path) == "go.mod" {
-				result = path
-			}
-
-			return nil
-		})
-		if err != nil {
-			return ""
-		}
-	}
-
-	return result
-}
-
 // GetGoRootPath - go.modがあるフォルダを返す
-func GetGoRootPath() string {
-	return filepath.Dir(GetGoModPath())
+func GetGoRootPath(in string) (string, error) {
+	d, err := gopackages.GetGoModPath(in)
+	if err != nil {
+		return "", xerrors.Errorf("failed to get go.mod directory: %w", err)
+	}
+	return filepath.Dir(d), nil
 }
 
 // GetGoRootPackageName - Goのルートパッケージ名をgo.modから取得する
-func GetGoRootPackageName() (string, error) {
-	goModPath := GetGoModPath()
-	d, err := ioutil.ReadFile(goModPath)
+func GetGoRootPackageName(in string) (string, error) {
+	fp, err := gopackages.GetGoModPath(in)
 	if err != nil {
-		return "", err
+		return "", xerrors.Errorf("failed to get go.mod file: %w", err)
 	}
 
-	f, err := modfile.Parse("", d, nil)
+	p, err := gopackages.GetGoModule(fp)
 	if err != nil {
-		return "", err
+		return "", xerrors.Errorf("failed to read go.mod: %w", err)
 	}
-
-	if len(f.Module.Mod.Path) == 0 {
-		return "", fmt.Errorf("package name was not found")
-	}
-
-	return f.Module.Mod.Path, nil
+	return p, nil
 }

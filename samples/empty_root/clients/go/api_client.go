@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"net/url"
 
-	_foo_bar "github.com/go-generalize/api_gen/samples/empty_root/server/foo/bar"
+	_foo_bar "github.com/go-generalize/api_gen/samples/empty_root/clients/go/classes/foo/bar"
 )
 
 type Group_foo_bar struct {
@@ -33,6 +33,8 @@ func (g *Group_foo_bar) PostUser(reqPayload *_foo_bar.PostUserRequest) (respPayl
 	if err != nil {
 		return nil, err
 	}
+
+	req.Header.Add("Content-Type", "application/json")
 
 	resp, err := g.apiClient.client.Do(req)
 
