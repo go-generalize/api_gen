@@ -29,15 +29,15 @@ func New{{ .ControllerInterfaceName }}(cp *props.ControllerProps) {{ .Controller
 func (ctrl *{{ .ControllerName }}) {{ .HandlerName }}(
 	c echo.Context, req *types.{{ .RequestStructName }},
 ) (res *types.{{ .ResponseStructName }}, err error) {
-	// return nil, wrapper.NewAPIError(http.StatusBadRequest)
+	// return nil, apierror.NewAPIError(http.StatusBadRequest)
 	//
-	// return nil, wrapper.NewAPIError(http.StatusBadRequest).SetError(err)
+	// return nil, apierror.NewAPIError(http.StatusBadRequest).SetError(err)
 	//
 	// body := map[string]interface{}{
 	// 	"code": http.StatusBadRequest,
 	// 	"message": "invalid request parameter.",
 	// }
-	// return nil, wrapper.NewAPIError(http.StatusBadRequest, body).SetError(err)
+	// return nil, apierror.NewAPIError(http.StatusBadRequest, body).SetError(err)
 	panic("require implements.") // FIXME require implements.
 }
 

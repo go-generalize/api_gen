@@ -3,6 +3,9 @@
 package controller
 
 import (
+    "strings"
+	"net/http"
+	"runtime/debug"
     props "{{ .ControllerPropsPackage }}"
     "github.com/labstack/echo/v4"
 )
@@ -26,12 +29,12 @@ func NewControllers(
     e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
         return func(c echo.Context) error {
             for _, m := range ctrl.middlewares {
-                if strings.HasPrefix(req.Request().URL.Path, m.path) {
+                if strings.HasPrefix(c.Request().URL.Path, m.path) {
                     next = m.middleware(next)
                 }
             }
 
-            return next
+            return next(c)
         }
     })
     e.Use(func(before echo.HandlerFunc) echo.HandlerFunc {

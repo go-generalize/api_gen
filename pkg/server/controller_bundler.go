@@ -45,7 +45,7 @@ func (g *Generator) generateControllerBundler(
 	propsPackage string,
 	apierrorPath string,
 ) error {
-	path := filepath.Join(g.base, "controller_bundler.go")
+	path := filepath.Join(g.base, "bundler.go")
 
 	fp, err := os.Create(path)
 

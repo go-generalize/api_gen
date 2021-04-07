@@ -20,10 +20,11 @@ type Generator struct {
 	base   string
 	module *gopackages.Module
 
-	controllerTemplate        *template.Template
-	controllerBundlerTemplate *template.Template
-	propsTemplate             *template.Template
-	apierrorTemplate          *template.Template
+	controllerTemplate            *template.Template
+	controllerBundlerTemplate     *template.Template
+	controllerInitializerTemplate *template.Template
+	propsTemplate                 *template.Template
+	apierrorTemplate              *template.Template
 
 	AppVersion string
 }
@@ -34,10 +35,11 @@ func NewGenerator(group *parser.Group, base, version string) (*Generator, error)
 		base:       base,
 		AppVersion: version,
 
-		controllerTemplate:        template.Must(template.ParseFS(templates, "templates/controller_template.go.tmpl")),
-		controllerBundlerTemplate: template.Must(template.ParseFS(templates, "templates/controller_bundler_template.go.tmpl")),
-		propsTemplate:             template.Must(template.ParseFS(templates, "templates/props_template.go.tmpl")),
-		apierrorTemplate:          template.Must(template.ParseFS(templates, "templates/apierror_template.go.tmpl")),
+		controllerTemplate:            template.Must(template.ParseFS(templates, "templates/controller_template.go.tmpl")),
+		controllerBundlerTemplate:     template.Must(template.ParseFS(templates, "templates/controller_bundler_template.go.tmpl")),
+		controllerInitializerTemplate: template.Must(template.ParseFS(templates, "templates/controller_initializer_template.go.tmpl")),
+		propsTemplate:                 template.Must(template.ParseFS(templates, "templates/props_template.go.tmpl")),
+		apierrorTemplate:              template.Must(template.ParseFS(templates, "templates/apierror_template.go.tmpl")),
 	}
 
 	module, err := gopackages.NewModule(base)
@@ -60,6 +62,11 @@ func (g *Generator) Generate() error {
 
 	if err := g.generateProps(propsPath); err != nil {
 		return xerrors.Errorf("failed to generate props in %s: %w", propsPath, err)
+	}
+
+	err = g.generateControllerInitializer(g.base, propsPackage)
+	if err != nil {
+		return xerrors.Errorf("failed to generate controller initializer: %w", err)
 	}
 
 	apierrorPath := filepath.Join(g.base, "pkg/apierror")
