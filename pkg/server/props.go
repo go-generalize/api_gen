@@ -1,6 +1,9 @@
 package server
 
 import (
+	"bytes"
+	"go/format"
+	"io"
 	"os"
 	"path/filepath"
 
@@ -18,9 +21,18 @@ func (g *Generator) generateProps(propsPath string) error {
 	}
 	defer fp.Close()
 
+	buf := bytes.NewBuffer(nil)
 	if err := g.propsTemplate.Execute(fp, nil); err != nil {
 		return xerrors.Errorf("failed to execute template: %w", err)
 	}
+
+	src, err := format.Source(buf.Bytes())
+
+	if err != nil {
+		return xerrors.Errorf("failed to format code: %w", err)
+	}
+
+	io.Copy(fp, bytes.NewBuffer(src))
 
 	return nil
 }

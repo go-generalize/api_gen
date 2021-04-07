@@ -1,7 +1,10 @@
 package server
 
 import (
+	"bytes"
 	"fmt"
+	"go/format"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -11,12 +14,14 @@ import (
 	"golang.org/x/xerrors"
 )
 
-func (g *Generator) generateController(root, propsPackage string, ep *parser.Endpoint) error {
+func (g *Generator) generateController(root, propsPackage string, ep *parser.Endpoint) (*bundlerEndpoint, error) {
 	rel := ep.GetParent().GetFullPath("/", func(rawPath, path, placeholder string) string {
 		return rawPath
 	})
-	if err := os.MkdirAll(filepath.Join(root, rel), 0777); err != nil {
-		return xerrors.Errorf("failed to mkdir %s: %w", filepath.Join(root, rel), err)
+	dir := filepath.Join(root, rel)
+
+	if err := os.MkdirAll(dir, 0777); err != nil {
+		return nil, xerrors.Errorf("failed to mkdir %s: %w", filepath.Join(root, rel), err)
 	}
 
 	filename := fmt.Sprintf("%s_%s.go", strings.ToLower(string(ep.Method)), strcase.ToSnake(ep.Path))
@@ -24,20 +29,42 @@ func (g *Generator) generateController(root, propsPackage string, ep *parser.End
 		filename = fmt.Sprintf("%s.go", strings.ToLower(string(ep.Method)))
 	}
 
+	controllerImportPath, err := g.module.GetImportPath(dir)
+	if err != nil {
+		return nil, xerrors.Errorf("failed to get import path for dir: %w", err)
+	}
+
+	handler := strcase.ToCamel(strings.ToLower(string(ep.Method)) + ep.RawPath)
+	be := &bundlerEndpoint{
+		ControllerImport:      controllerImportPath,
+		ControllerInitializer: "New" + handler + "Controller",
+		TypesImport:           ep.GetParent().ImportPath,
+		Method:                string(ep.Method),
+		Path: ep.GetFullPath("/", func(rawPath, path, placeholder string) string {
+			if placeholder != "" {
+				return ":" + placeholder
+			}
+
+			return path
+		}),
+		RequestStructName: ep.RequestPayloadName,
+		HandlerName:       handler,
+	}
+
 	path := filepath.Join(root, rel, filename)
 
 	if _, err := os.Stat(path); err == nil {
-		return nil
+		return be, nil
 	}
 
 	fp, err := os.Create(path)
 	if err != nil {
-		return xerrors.Errorf("failed to create %s: %w", path, err)
+		return nil, xerrors.Errorf("failed to create %s: %w", path, err)
 	}
 	defer fp.Close()
 
-	handler := strcase.ToCamel(strings.ToLower(string(ep.Method)) + ep.RawPath)
-	if err := g.controllerTemplate.Execute(fp, struct {
+	buf := bytes.NewBuffer(nil)
+	if err := g.controllerTemplate.Execute(buf, struct {
 		*parser.Endpoint
 		ControllerName                        string
 		ControllerInterfaceName               string
@@ -46,6 +73,7 @@ func (g *Generator) generateController(root, propsPackage string, ep *parser.End
 		ControllerPropsPackage                string
 		RequestStructName, ResponseStructName string
 		TypesPackage                          string
+		FullPath                              string
 	}{
 		Endpoint:                ep,
 		ControllerName:          strcase.ToLowerCamel(handler) + "Controller",
@@ -56,9 +84,18 @@ func (g *Generator) generateController(root, propsPackage string, ep *parser.End
 		ResponseStructName:      ep.ResponsePayloadName,
 		ControllerPropsPackage:  propsPackage,
 		TypesPackage:            ep.GetParent().ImportPath,
+		FullPath:                rel,
 	}); err != nil {
-		return xerrors.Errorf("failed to generate controller: %w", err)
+		return nil, xerrors.Errorf("failed to generate controller: %w", err)
 	}
 
-	return nil
+	src, err := format.Source(buf.Bytes())
+
+	if err != nil {
+		return nil, xerrors.Errorf("failed to format code: %w", err)
+	}
+
+	io.Copy(fp, bytes.NewBuffer(src))
+
+	return be, nil
 }

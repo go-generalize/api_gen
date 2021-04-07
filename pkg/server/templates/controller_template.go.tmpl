@@ -1,6 +1,6 @@
-// Package handler ...
+// Package controller is for 
 // generated version: {{ .AppVersion }}
-package handler
+package controller
 
 import (
 	"github.com/labstack/echo/v4"
@@ -17,8 +17,8 @@ type {{ .ControllerName }} struct {
 	*props.ControllerProps
 }
 
-// New{{ .ControllerName }} ...
-func New{{ .ControllerName }}(cp *props.ControllerProps) {{ .ControllerInterfaceName }} {
+// New{{ .ControllerInterfaceName }} ...
+func New{{ .ControllerInterfaceName }}(cp *props.ControllerProps) {{ .ControllerInterfaceName }} {
 	return &{{ .ControllerName }}{
 		ControllerProps: cp,
 	}
