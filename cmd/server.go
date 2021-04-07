@@ -37,7 +37,7 @@ func init() {
 			return nil
 		},
 	}
-	serverCommand.Flags().StringVarP(&dir, "output", "o", "./", "The directory to generated client library in")
+	serverCommand.Flags().StringVarP(&dir, "output", "o", "./", "The directory to generated server library in")
 
 	rootCmd.AddCommand(serverCommand)
 }
