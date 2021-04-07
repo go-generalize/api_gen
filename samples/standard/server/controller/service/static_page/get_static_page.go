@@ -1,5 +1,6 @@
 // Package controller is for
 // generated version: devel
+// nolint:dupl
 package controller
 
 import (
