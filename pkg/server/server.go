@@ -3,7 +3,6 @@ package server
 
 import (
 	"embed"
-	"os"
 	"path/filepath"
 	"text/template"
 
@@ -94,37 +93,4 @@ func (g *Generator) Generate() error {
 	}
 
 	return nil
-}
-
-func (g *Generator) generateControllers(
-	root, propsPackage string, gr *parser.Group,
-) ([]*bundlerEndpoint, error) {
-	if err := os.MkdirAll(root, 0777); err != nil {
-		return nil, xerrors.Errorf("failed to mkdir %s: %w", root, err)
-	}
-
-	endpoints := make([]*bundlerEndpoint, 0, len(gr.Endpoints))
-	for _, ep := range gr.Endpoints {
-		be, err := g.generateController(root, propsPackage, ep)
-
-		if err != nil {
-			return nil, xerrors.Errorf("failed to generate controller for %s: %w", ep.GetFullPath("/", func(rawPath, path, placeholder string) string {
-				return path
-			}), err)
-		}
-
-		endpoints = append(endpoints, be)
-	}
-
-	for _, child := range gr.Children {
-		be, err := g.generateControllers(root, propsPackage, child)
-
-		if err != nil {
-			return nil, xerrors.Errorf("failed to generate %s: %w", child.Path, err)
-		}
-
-		endpoints = append(endpoints, be...)
-	}
-
-	return endpoints, nil
 }
