@@ -25,6 +25,8 @@ type Generator struct {
 	controllerInitializerTemplate *template.Template
 	propsTemplate                 *template.Template
 	apierrorTemplate              *template.Template
+	mockJsonFSTemplate            *template.Template
+	mockControllerTemplate        *template.Template
 
 	AppVersion string
 }
@@ -41,6 +43,8 @@ func NewGenerator(group *parser.Group, base, version string) (*Generator, error)
 		controllerInitializerTemplate: template.Must(template.ParseFS(templates, "templates/controller_initializer_template.go.tmpl")),
 		propsTemplate:                 template.Must(template.ParseFS(templates, "templates/props_template.go.tmpl")),
 		apierrorTemplate:              template.Must(template.ParseFS(templates, "templates/apierror_template.go.tmpl")),
+		mockJsonFSTemplate:            template.Must(template.ParseFS(templates, "templates/mock_jsonfs_template.go.tmpl")),
+		mockControllerTemplate:        template.Must(template.ParseFS(templates, "templates/mock_controller_template.go.tmpl")),
 	}
 
 	module, err := gopackages.NewModule(base)
@@ -62,6 +66,13 @@ func (g *Generator) Generate() error {
 		return xerrors.Errorf("failed to get import path for %s: %w", propsPath, err)
 	}
 
+	apierrorPath := filepath.Join(g.base, "pkg/apierror")
+
+	apierrorPackage, err := g.module.GetImportPath(apierrorPath)
+	if err != nil {
+		return xerrors.Errorf("failed to get import path for %s: %w", propsPath, err)
+	}
+
 	if err := g.generateProps(propsPath); err != nil {
 		return xerrors.Errorf("failed to generate props in %s: %w", propsPath, err)
 	}
@@ -71,25 +82,34 @@ func (g *Generator) Generate() error {
 		return xerrors.Errorf("failed to generate controller initializer: %w", err)
 	}
 
-	apierrorPath := filepath.Join(g.base, "pkg/apierror")
-
-	apierrorPackage, err := g.module.GetImportPath(apierrorPath)
-	if err != nil {
-		return xerrors.Errorf("failed to get import path for %s: %w", propsPath, err)
-	}
-
 	if err := g.generateAPIErrorPackage(apierrorPath); err != nil {
 		return xerrors.Errorf("failed to generate props in %s: %w", apierrorPackage, err)
 	}
 
-	endpoints, err := g.generateControllers(filepath.Join(g.base, "controller"), propsPackage, g.group)
+	controllerPath := filepath.Join(g.base, "controller")
+	endpoints, err := g.generateControllers(
+		controllerPath,
+		g.group,
+		func(ep *parser.Endpoint) (*bundlerEndpoint, error) {
+			return g.generateController(controllerPath, propsPackage, ep)
+		},
+	)
 	if err != nil {
 		return xerrors.Errorf("failed to generate controllers: %w", err)
 	}
 
-	err = g.generateControllerBundler(endpoints, propsPackage, apierrorPackage)
-	if err != nil {
+	if err = g.generateControllerBundler(
+		endpoints,
+		propsPackage,
+		apierrorPackage,
+		"bundler.go",
+		false,
+	); err != nil {
 		return xerrors.Errorf("failed to generate controller bundler: %w", err)
+	}
+
+	if err := g.generateMock(apierrorPackage, propsPackage); err != nil {
+		return xerrors.Errorf("failed to generate mock: %w", err)
 	}
 
 	return nil

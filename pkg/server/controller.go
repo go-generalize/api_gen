@@ -93,7 +93,7 @@ func (g *Generator) generateController(root, propsPackage string, ep *parser.End
 	src, err := format.Source(buf.Bytes())
 
 	if err != nil {
-		return nil, xerrors.Errorf("failed to format code: %w", err)
+		return nil, xerrors.Errorf("failed to format code(%s): %w", buf.String(), err)
 	}
 
 	if _, err := io.Copy(fp, bytes.NewBuffer(src)); err != nil {
@@ -104,7 +104,8 @@ func (g *Generator) generateController(root, propsPackage string, ep *parser.End
 }
 
 func (g *Generator) generateControllers(
-	root, propsPackage string, gr *parser.Group,
+	root string, gr *parser.Group,
+	endpointGenerator func(ep *parser.Endpoint) (*bundlerEndpoint, error),
 ) ([]*bundlerEndpoint, error) {
 	if err := os.MkdirAll(root, 0777); err != nil {
 		return nil, xerrors.Errorf("failed to mkdir %s: %w", root, err)
@@ -112,7 +113,7 @@ func (g *Generator) generateControllers(
 
 	endpoints := make([]*bundlerEndpoint, 0, len(gr.Endpoints))
 	for _, ep := range gr.Endpoints {
-		be, err := g.generateController(root, propsPackage, ep)
+		be, err := endpointGenerator(ep)
 
 		if err != nil {
 			return nil, xerrors.Errorf("failed to generate controller for %s: %w", ep.GetFullPath("/", func(rawPath, path, placeholder string) string {
@@ -124,7 +125,7 @@ func (g *Generator) generateControllers(
 	}
 
 	for _, child := range gr.Children {
-		be, err := g.generateControllers(root, propsPackage, child)
+		be, err := g.generateControllers(root, child, endpointGenerator)
 
 		if err != nil {
 			return nil, xerrors.Errorf("failed to generate %s: %w", child.Path, err)

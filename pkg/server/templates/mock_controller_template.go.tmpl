@@ -1,0 +1,45 @@
+// Package controller is for {{ .Method }} {{ .Path }}
+// generated version: {{ .AppVersion }}
+// nolint:dupl
+package controller
+
+import (
+	"github.com/labstack/echo/v4"
+	types "{{ .TypesPackage }}"
+    mock "{{ .MockPackage }}"
+)
+
+// {{ .ControllerInterfaceName }} ...
+type {{ .ControllerInterfaceName }} interface {
+	{{ .HandlerName }}(c echo.Context, req *types.{{ .RequestStructName }}) (res *types.{{ .ResponseStructName }}, err error)
+}
+
+type {{ .ControllerName }} struct {
+}
+
+// New{{ .ControllerInterfaceName }} ...
+func New{{ .ControllerInterfaceName }}(cp interface{}) {{ .ControllerInterfaceName }} {
+	return &{{ .ControllerName }}{}
+}
+
+
+// {{ .HandlerName }} - {{.Method}} {{.Path}}
+func (ctrl *{{ .ControllerName }}) {{ .HandlerName }}(
+	c echo.Context, req *types.{{ .RequestStructName }},
+) (res *types.{{ .ResponseStructName }}, err error) {
+	// return nil, apierror.NewAPIError(http.StatusBadRequest)
+	//
+	// return nil, apierror.NewAPIError(http.StatusBadRequest).SetError(err)
+	//
+	// body := map[string]interface{}{
+	// 	"code": http.StatusBadRequest,
+	// 	"message": "invalid request parameter.",
+	// }
+	// return nil, apierror.NewAPIError(http.StatusBadRequest, body).SetError(err)
+	panic("require implements.") // FIXME require implements.
+}
+
+// AutoBind - use echo.Bind
+func (ctrl *{{ .ControllerName }}) AutoBind() bool {
+	return true
+}

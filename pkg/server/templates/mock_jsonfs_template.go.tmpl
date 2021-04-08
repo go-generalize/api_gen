@@ -1,0 +1,11 @@
+// Package mock provides embed.FS for mock json
+// generated version: {{ .AppVersion }}
+package mock
+
+import (
+    "embed"
+)
+
+// MockJsonFS provides embed.FS for mock json
+//go:embed json/*
+var MockJsonFS embed.FS
