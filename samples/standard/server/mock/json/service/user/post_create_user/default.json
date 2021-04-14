@@ -1,0 +1,334 @@
+{
+    "meta": {
+        "status": 200,
+        "match_request": {
+            "Birthday": "2006-01-02T15:04:05+09:00",
+            "Gender": 1234,
+            "ID": "string",
+            "Password": "string",
+            "Roles": [
+                {
+                    "ID": 1234,
+                    "Name": "string",
+                    "RecursionRoles": [
+                        {
+                            "ID": 1234,
+                            "Name": "string",
+                            "RecursionRoles": [
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "ID": 1234,
+                            "Name": "string",
+                            "RecursionRoles": [
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "ID": 1234,
+                            "Name": "string",
+                            "RecursionRoles": [
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "ID": 1234,
+                    "Name": "string",
+                    "RecursionRoles": [
+                        {
+                            "ID": 1234,
+                            "Name": "string",
+                            "RecursionRoles": [
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "ID": 1234,
+                            "Name": "string",
+                            "RecursionRoles": [
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "ID": 1234,
+                            "Name": "string",
+                            "RecursionRoles": [
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "ID": 1234,
+                    "Name": "string",
+                    "RecursionRoles": [
+                        {
+                            "ID": 1234,
+                            "Name": "string",
+                            "RecursionRoles": [
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "ID": 1234,
+                            "Name": "string",
+                            "RecursionRoles": [
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "ID": 1234,
+                            "Name": "string",
+                            "RecursionRoles": [
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                },
+                                {
+                                    "ID": 1234,
+                                    "Name": "string",
+                                    "RecursionRoles": [
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP",
+                                        "Role INFINITY LOOP"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "payload": {
+        "CreatedType": 1234,
+        "Message": "string",
+        "RequestedAt": "2006-01-02T15:04:05+09:00",
+        "Status": true
+    }
+}
