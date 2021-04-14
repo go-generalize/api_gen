@@ -12,7 +12,6 @@ import (
 	go2json "github.com/go-generalize/api_gen/pkg/go2json"
 	"github.com/go-generalize/api_gen/pkg/parser"
 	go2tsp "github.com/go-generalize/go2ts/pkg/parser"
-	go2tst "github.com/go-generalize/go2ts/pkg/types"
 	"github.com/iancoleman/strcase"
 	"golang.org/x/xerrors"
 )
@@ -27,12 +26,6 @@ func (g *Generator) generateMock(apierrorPackage, propsPackage string) error {
 		return xerrors.Errorf("failed to get import path for %s: %w", mockPath, err)
 	}
 
-	types, err := g.parsePackage()
-
-	if err != nil {
-		return xerrors.Errorf("failed to parse package: %w", err)
-	}
-
 	if err := os.MkdirAll(mockJsonPath, 0777); err != nil {
 		return xerrors.Errorf("failed to create %s: %w", mockPath, err)
 	}
@@ -43,8 +36,8 @@ func (g *Generator) generateMock(apierrorPackage, propsPackage string) error {
 	}
 
 	// mock/json/**/*.json
-	if err := go2json.NewGenerator(types).Generate(mockJsonPath); err != nil {
-		return xerrors.Errorf("failed to generate mock json: %w", err)
+	if err := g.generateMockJson(g.group.Dir, mockJsonPath); err != nil {
+		return xerrors.Errorf("failed to generate mock JSONs: %w", err)
 	}
 
 	// mock/controller/**/*.go
@@ -74,8 +67,24 @@ func (g *Generator) generateMock(apierrorPackage, propsPackage string) error {
 	return nil
 }
 
-func (g *Generator) parsePackage() (map[string]go2tst.Type, error) {
-	psr, err := go2tsp.NewParser(g.group.Dir, func(opt *go2tsp.FilterOpt) bool {
+func (g *Generator) generateMockJson(base, generatedIn string) error {
+	dirs, err := os.ReadDir(base)
+
+	if err != nil {
+		return xerrors.Errorf("failed to list entries in %s: %w", base, err)
+	}
+
+	for _, d := range dirs {
+		if !d.IsDir() {
+			continue
+		}
+
+		if err := g.generateMockJson(filepath.Join(base, d.Name()), filepath.Join(generatedIn, d.Name())); err != nil {
+			return xerrors.Errorf("failed to generate mock: %w", err)
+		}
+	}
+
+	psr, err := go2tsp.NewParser(base, func(opt *go2tsp.FilterOpt) bool {
 		if opt.Dependency {
 			return true
 		}
@@ -90,16 +99,20 @@ func (g *Generator) parsePackage() (map[string]go2tst.Type, error) {
 	})
 
 	if err != nil {
-		return nil, xerrors.Errorf("failed to initializer go2ts parser: %w", err)
+		return nil
 	}
 
 	types, err := psr.Parse()
 
 	if err != nil {
-		return nil, xerrors.Errorf("failed to parse %s: %w", g.group.Dir)
+		return xerrors.Errorf("failed to parse %s: %w", base)
 	}
 
-	return types, nil
+	if err := go2json.NewGenerator(types).Generate(generatedIn); err != nil {
+		return xerrors.Errorf("failed to generate mock json: %w", err)
+	}
+
+	return nil
 }
 
 func (g *Generator) generateMockController(root, mockPackage string, ep *parser.Endpoint) (*bundlerEndpoint, error) {
