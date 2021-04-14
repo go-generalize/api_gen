@@ -163,6 +163,8 @@ func (g *Generator) generateMockController(root, mockPackage string, ep *parser.
 		TypesPackage                          string
 		FullPath                              string
 		MockPackage                           string
+		RawEndpointPath                       string
+		JsonDir                               string
 	}{
 		Endpoint:                ep,
 		ControllerName:          strcase.ToLowerCamel(handler) + "Controller",
@@ -174,6 +176,15 @@ func (g *Generator) generateMockController(root, mockPackage string, ep *parser.
 		TypesPackage:            ep.GetParent().ImportPath,
 		FullPath:                rel,
 		MockPackage:             mockPackage, // TODO: Update mock package
+		RawEndpointPath: ep.GetFullPath("/", func(rawPath, path, placeholder string) string {
+			return path
+		}),
+		JsonDir: ep.GetParent().GetFullPath("/", func(rawPath, path, placeholder string) string {
+			if placeholder != "" {
+				return placeholder
+			}
+			return path
+		}) + "/" + strings.ToLower(string(ep.Method)) + "_" + ep.Path,
 	}); err != nil {
 		return nil, xerrors.Errorf("failed to generate controller: %w", err)
 	}
@@ -202,7 +213,7 @@ func (g *Generator) generateMockJsonFS(mockPath string) error {
 	}
 	defer fp.Close()
 
-	if err := g.mockJsonFSTemplate.Execute(buf, map[string]string{
+	if err := g.mockTemplate.Execute(buf, map[string]string{
 		"AppVersion": g.AppVersion,
 	}); err != nil {
 		return xerrors.Errorf("failed to execute template: %w", err)

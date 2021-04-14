@@ -25,7 +25,7 @@ type Generator struct {
 	controllerInitializerTemplate *template.Template
 	propsTemplate                 *template.Template
 	apierrorTemplate              *template.Template
-	mockJsonFSTemplate            *template.Template
+	mockTemplate                  *template.Template
 	mockControllerTemplate        *template.Template
 
 	AppVersion string
@@ -43,7 +43,7 @@ func NewGenerator(group *parser.Group, base, version string) (*Generator, error)
 		controllerInitializerTemplate: template.Must(template.ParseFS(templates, "templates/controller_initializer_template.go.tmpl")),
 		propsTemplate:                 template.Must(template.ParseFS(templates, "templates/props_template.go.tmpl")),
 		apierrorTemplate:              template.Must(template.ParseFS(templates, "templates/apierror_template.go.tmpl")),
-		mockJsonFSTemplate:            template.Must(template.ParseFS(templates, "templates/mock_jsonfs_template.go.tmpl")),
+		mockTemplate:                  template.Must(template.ParseFS(templates, "templates/mock_template.go.tmpl")),
 		mockControllerTemplate:        template.Must(template.ParseFS(templates, "templates/mock_controller_template.go.tmpl")),
 	}
 
