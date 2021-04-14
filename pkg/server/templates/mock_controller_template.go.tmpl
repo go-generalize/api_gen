@@ -64,7 +64,7 @@ func (ctrl *{{ .ControllerName }}) {{ .HandlerName }}(
 	}
 
 	jsons := make(map[string]*Mock)
-	err = fs.WalkDir(mock.MockJSONFS, "json{{ .JsonDir }}", fs.WalkDirFunc(func(path string, info fs.DirEntry, err error) error {
+	err = fs.WalkDir(mock.MockJSONFS, "json{{ .JSONDir }}", fs.WalkDirFunc(func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
