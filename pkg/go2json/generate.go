@@ -126,9 +126,9 @@ func (g *Generator) Generate(dir string) error {
 
 	for c, gs := range typeSets {
 		packageStack := make([]string, 0)
-		req := g.generateType(gs.Request, packageStack)
+		req := g.generateType(gs.Request, packageStack, false)
 		packageStack = make([]string, 0)
-		res := g.generateType(gs.Response, packageStack)
+		res := g.generateType(gs.Response, packageStack, false)
 
 		gt := &GenerateType{
 			Meta: &MockMeta{
@@ -186,16 +186,16 @@ func (g *Generator) Generate(dir string) error {
 	return nil
 }
 
-func (g *Generator) generateType(t tstypes.Type, packageStack []string) interface{} {
+func (g *Generator) generateType(t tstypes.Type, packageStack []string, exitRecursion bool) interface{} {
 	if t == nil {
 		return nil
 	}
 
 	switch v := t.(type) {
 	case *tstypes.Array:
-		return g.generateArray(v, packageStack)
+		return g.generateArray(v, packageStack, exitRecursion)
 	case *tstypes.Object:
-		return g.generateObject(v, packageStack)
+		return g.generateObject(v, packageStack, exitRecursion)
 	case *tstypes.String:
 		return "string"
 	case *tstypes.Number:
@@ -205,11 +205,15 @@ func (g *Generator) generateType(t tstypes.Type, packageStack []string) interfac
 	case *tstypes.Date:
 		return fixedTime
 	case *tstypes.Nullable:
-		return g.generateType(v.Inner, packageStack)
+		if exitRecursion {
+			return nil
+		}
+
+		return g.generateType(v.Inner, packageStack, false)
 	case *tstypes.Any:
 		return "any"
 	case *tstypes.Map:
-		return g.generateMap(v, packageStack)
+		return g.generateMap(v, packageStack, exitRecursion)
 	default:
 		panic("unsupported")
 	}

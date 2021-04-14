@@ -2,7 +2,6 @@
 package go2json
 
 import (
-	"fmt"
 	"sort"
 	"strings"
 
@@ -10,14 +9,14 @@ import (
 	"github.com/go-utils/count"
 )
 
-func (g *Generator) generateArray(typ *tstypes.Array, packageStack []string) interface{} {
-	item := g.generateType(typ.Inner, packageStack)
+func (g *Generator) generateArray(typ *tstypes.Array, packageStack []string, exitRecursion bool) interface{} {
+	item := g.generateType(typ.Inner, packageStack, exitRecursion)
 	return []interface{}{item, item, item}
 }
 
-func (g *Generator) generateMap(obj *tstypes.Map, packageStack []string) interface{} {
-	key := g.generateType(obj.Key, packageStack)
-	val := g.generateType(obj.Value, packageStack)
+func (g *Generator) generateMap(obj *tstypes.Map, packageStack []string, exitRecursion bool) interface{} {
+	key := g.generateType(obj.Key, packageStack, exitRecursion)
+	val := g.generateType(obj.Value, packageStack, exitRecursion)
 	switch obj.Key.(type) {
 	case *tstypes.String:
 		return map[string]interface{}{
@@ -31,7 +30,7 @@ func (g *Generator) generateMap(obj *tstypes.Map, packageStack []string) interfa
 	panic("map key is `string` or `number`")
 }
 
-func (g *Generator) generateObject(obj *tstypes.Object, packageStack []string) interface{} {
+func (g *Generator) generateObject(obj *tstypes.Object, packageStack []string, exitRecursion bool) interface{} {
 	sp := strings.Split(obj.Name, ".")
 	name := sp[len(sp)-1]
 
@@ -41,7 +40,7 @@ func (g *Generator) generateObject(obj *tstypes.Object, packageStack []string) i
 	}
 
 	if cnt > 2 {
-		return fmt.Sprintf("%s INFINITY LOOP", name)
+		exitRecursion = true
 	}
 
 	packageStack = append(packageStack, name)
@@ -55,6 +54,10 @@ func (g *Generator) generateObject(obj *tstypes.Object, packageStack []string) i
 	entries := make([]*entry, 0, len(obj.Entries))
 
 	for k, v := range obj.Entries {
+		if exitRecursion && v.Optional {
+			continue
+		}
+
 		entries = append(entries, &entry{
 			Name:     k,
 			Type:     v.Type,
@@ -72,11 +75,7 @@ func (g *Generator) generateObject(obj *tstypes.Object, packageStack []string) i
 
 	r := make(map[string]interface{})
 	for _, e := range entries {
-		if e.Optional {
-			r[e.Name] = nil
-		} else {
-			r[e.Name] = g.generateType(e.Type, packageStack)
-		}
+		r[e.Name] = g.generateType(e.Type, packageStack, exitRecursion)
 	}
 
 	return r
