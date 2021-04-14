@@ -36,6 +36,8 @@ func NewGetStaticPageController(cp interface{}) GetStaticPageController {
 func (ctrl *getStaticPageController) GetStaticPage(
 	c echo.Context, req *types.GetStaticPageRequest,
 ) (res *types.GetStaticPageResponse, err error) {
+	const jsonExt = ".json"
+
 	option := &mock.HeaderOption{}
 	ago := c.Request().Header.Get("Api-Gen-Option")
 	if ago != "" {
@@ -61,7 +63,7 @@ func (ctrl *getStaticPageController) GetStaticPage(
 	}
 
 	jsons := make(map[string]*Mock)
-	err = fs.WalkDir(mock.MockJsonFS, "json/service/static_page/get_static_page", fs.WalkDirFunc(func(path string, info fs.DirEntry, err error) error {
+	err = fs.WalkDir(mock.MockJSONFS, "json/service/static_page/get_static_page", fs.WalkDirFunc(func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
@@ -70,7 +72,7 @@ func (ctrl *getStaticPageController) GetStaticPage(
 			return nil
 		}
 
-		fp, err := mock.MockJsonFS.Open(path)
+		fp, err := mock.MockJSONFS.Open(path)
 		if err != nil {
 			log.Printf("SKIP: load mock json error in %s: %+v", path, err)
 			return nil
@@ -103,8 +105,8 @@ func (ctrl *getStaticPageController) GetStaticPage(
 	var resMock *Mock = nil
 	if option.TargetFile != "" {
 		target := option.TargetFile
-		if !strings.HasSuffix(target, ".json") {
-			target += ".json"
+		if !strings.HasSuffix(target, jsonExt) {
+			target += jsonExt
 		}
 		mock, ok := jsons[target]
 		if ok {

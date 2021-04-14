@@ -36,6 +36,8 @@ func NewGetUserJobGetController(cp interface{}) GetUserJobGetController {
 func (ctrl *getUserJobGetController) GetUserJobGet(
 	c echo.Context, req *types.GetUserJobGetRequest,
 ) (res *types.GetUserJobGetResponse, err error) {
+	const jsonExt = ".json"
+
 	option := &mock.HeaderOption{}
 	ago := c.Request().Header.Get("Api-Gen-Option")
 	if ago != "" {
@@ -61,7 +63,7 @@ func (ctrl *getUserJobGetController) GetUserJobGet(
 	}
 
 	jsons := make(map[string]*Mock)
-	err = fs.WalkDir(mock.MockJsonFS, "json/service/user2/userID/get_user_job_get", fs.WalkDirFunc(func(path string, info fs.DirEntry, err error) error {
+	err = fs.WalkDir(mock.MockJSONFS, "json/service/user2/userID/get_user_job_get", fs.WalkDirFunc(func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
@@ -70,7 +72,7 @@ func (ctrl *getUserJobGetController) GetUserJobGet(
 			return nil
 		}
 
-		fp, err := mock.MockJsonFS.Open(path)
+		fp, err := mock.MockJSONFS.Open(path)
 		if err != nil {
 			log.Printf("SKIP: load mock json error in %s: %+v", path, err)
 			return nil
@@ -103,8 +105,8 @@ func (ctrl *getUserJobGetController) GetUserJobGet(
 	var resMock *Mock = nil
 	if option.TargetFile != "" {
 		target := option.TargetFile
-		if !strings.HasSuffix(target, ".json") {
-			target += ".json"
+		if !strings.HasSuffix(target, jsonExt) {
+			target += jsonExt
 		}
 		mock, ok := jsons[target]
 		if ok {

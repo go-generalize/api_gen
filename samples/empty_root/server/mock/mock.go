@@ -6,9 +6,9 @@ import (
 	"embed"
 )
 
-// MockJsonFS provides embed.FS for mock json
+// MockJSONFS provides embed.FS for mock json
 //go:embed json/*
-var MockJsonFS embed.FS
+var MockJSONFS embed.FS
 
 // HeaderOption is the header of Api-Gen-Option in JSON
 type HeaderOption struct {

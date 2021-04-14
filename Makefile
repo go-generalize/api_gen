@@ -59,5 +59,10 @@ build-release:
 cmd:
 	go build -o ./bin/api_gen ./cmd/*.go
 
+.PHONY: gen_samples
 gen_samples: cmd
 	bash ./samples/generate.sh
+
+.PHONY: lint
+lint:
+	golangci-lint run --config .github/.golangci.yml

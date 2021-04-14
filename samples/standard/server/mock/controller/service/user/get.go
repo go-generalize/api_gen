@@ -36,6 +36,8 @@ func NewGetController(cp interface{}) GetController {
 func (ctrl *getController) Get(
 	c echo.Context, req *types.GetRequest,
 ) (res *types.GetResponse, err error) {
+	const jsonExt = ".json"
+
 	option := &mock.HeaderOption{}
 	ago := c.Request().Header.Get("Api-Gen-Option")
 	if ago != "" {
@@ -61,7 +63,7 @@ func (ctrl *getController) Get(
 	}
 
 	jsons := make(map[string]*Mock)
-	err = fs.WalkDir(mock.MockJsonFS, "json/service/user/get_", fs.WalkDirFunc(func(path string, info fs.DirEntry, err error) error {
+	err = fs.WalkDir(mock.MockJSONFS, "json/service/user/get_", fs.WalkDirFunc(func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
@@ -70,7 +72,7 @@ func (ctrl *getController) Get(
 			return nil
 		}
 
-		fp, err := mock.MockJsonFS.Open(path)
+		fp, err := mock.MockJSONFS.Open(path)
 		if err != nil {
 			log.Printf("SKIP: load mock json error in %s: %+v", path, err)
 			return nil
@@ -103,8 +105,8 @@ func (ctrl *getController) Get(
 	var resMock *Mock = nil
 	if option.TargetFile != "" {
 		target := option.TargetFile
-		if !strings.HasSuffix(target, ".json") {
-			target += ".json"
+		if !strings.HasSuffix(target, jsonExt) {
+			target += jsonExt
 		}
 		mock, ok := jsons[target]
 		if ok {

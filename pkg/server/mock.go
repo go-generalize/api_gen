@@ -1,3 +1,4 @@
+// Package server generates server-side library
 package server
 
 import (
@@ -18,7 +19,7 @@ import (
 
 func (g *Generator) generateMock(apierrorPackage, propsPackage string) error {
 	mockPath := filepath.Join(g.base, "mock")
-	mockJsonPath := filepath.Join(mockPath, "json")
+	mockJSONPath := filepath.Join(mockPath, "json")
 	mockControllerPath := filepath.Join(mockPath, "controller")
 
 	mockPackage, err := g.module.GetImportPath(mockPath)
@@ -26,17 +27,17 @@ func (g *Generator) generateMock(apierrorPackage, propsPackage string) error {
 		return xerrors.Errorf("failed to get import path for %s: %w", mockPath, err)
 	}
 
-	if err := os.MkdirAll(mockJsonPath, 0777); err != nil {
+	if err := os.MkdirAll(mockJSONPath, 0777); err != nil {
 		return xerrors.Errorf("failed to create %s: %w", mockPath, err)
 	}
 
 	// mock/mock.go
-	if err := g.generateMockJsonFS(mockPath); err != nil {
+	if err := g.generateMockJSONFS(mockPath); err != nil {
 		return xerrors.Errorf("failed to generate mock.go: %w", err)
 	}
 
 	// mock/json/**/*.json
-	if err := g.generateMockJson(g.group.Dir, mockJsonPath); err != nil {
+	if err := g.generateMockJSON(g.group.Dir, mockJSONPath); err != nil {
 		return xerrors.Errorf("failed to generate mock JSONs: %w", err)
 	}
 
@@ -67,7 +68,7 @@ func (g *Generator) generateMock(apierrorPackage, propsPackage string) error {
 	return nil
 }
 
-func (g *Generator) generateMockJson(base, generatedIn string) error {
+func (g *Generator) generateMockJSON(base, generatedIn string) error {
 	dirs, err := os.ReadDir(base)
 
 	if err != nil {
@@ -79,7 +80,7 @@ func (g *Generator) generateMockJson(base, generatedIn string) error {
 			continue
 		}
 
-		if err := g.generateMockJson(filepath.Join(base, d.Name()), filepath.Join(generatedIn, d.Name())); err != nil {
+		if err := g.generateMockJSON(filepath.Join(base, d.Name()), filepath.Join(generatedIn, d.Name())); err != nil {
 			return xerrors.Errorf("failed to generate mock: %w", err)
 		}
 	}
@@ -154,10 +155,6 @@ func (g *Generator) generateMockController(root, mockPackage string, ep *parser.
 
 	path := filepath.Join(root, rel, filename)
 
-	if _, err := os.Stat(path); err == nil {
-		return be, nil
-	}
-
 	fp, err := os.Create(path)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to create %s: %w", path, err)
@@ -177,7 +174,7 @@ func (g *Generator) generateMockController(root, mockPackage string, ep *parser.
 		FullPath                              string
 		MockPackage                           string
 		RawEndpointPath                       string
-		JsonDir                               string
+		JSONDir                               string
 	}{
 		Endpoint:                ep,
 		ControllerName:          strcase.ToLowerCamel(handler) + "Controller",
@@ -192,7 +189,7 @@ func (g *Generator) generateMockController(root, mockPackage string, ep *parser.
 		RawEndpointPath: ep.GetFullPath("/", func(rawPath, path, placeholder string) string {
 			return path
 		}),
-		JsonDir: ep.GetParent().GetFullPath("/", func(rawPath, path, placeholder string) string {
+		JSONDir: ep.GetParent().GetFullPath("/", func(rawPath, path, placeholder string) string {
 			if placeholder != "" {
 				return placeholder
 			}
@@ -215,7 +212,7 @@ func (g *Generator) generateMockController(root, mockPackage string, ep *parser.
 	return be, nil
 }
 
-func (g *Generator) generateMockJsonFS(mockPath string) error {
+func (g *Generator) generateMockJSONFS(mockPath string) error {
 	buf := bytes.NewBuffer(nil)
 
 	file := filepath.Join(mockPath, "mock.go")
