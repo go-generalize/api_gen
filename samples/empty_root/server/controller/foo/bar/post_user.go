@@ -1,4 +1,4 @@
-// Package controller is for
+// Package controller handles requests and returns responses. api_gen users directly edit this file.
 // generated version: devel
 // nolint:dupl
 package controller
