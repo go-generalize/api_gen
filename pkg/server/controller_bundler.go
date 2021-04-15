@@ -39,14 +39,17 @@ type bundlerData struct {
 	Endpoints  []bundlerEndpointForImports
 	Imports    []bundlerImport
 	AppVersion string
+	Mock       bool
 }
 
 func (g *Generator) generateControllerBundler(
 	endpoints []*bundlerEndpoint,
 	propsPackage string,
-	apierrorPath string,
+	apierrorPackage string,
+	filename string,
+	mock bool,
 ) error {
-	path := filepath.Join(g.base, "bundler.go")
+	path := filepath.Join(g.base, filename)
 
 	fp, err := os.Create(path)
 
@@ -57,6 +60,7 @@ func (g *Generator) generateControllerBundler(
 
 	bd := &bundlerData{
 		AppVersion: g.AppVersion,
+		Mock:       mock,
 	}
 
 	bd.Endpoints = make([]bundlerEndpointForImports, 0, len(endpoints))
@@ -78,7 +82,7 @@ func (g *Generator) generateControllerBundler(
 	imports[propsPackage] = "props"
 	imports["golang.org/x/xerrors"] = "xerrors"
 	imports["github.com/labstack/echo/v4"] = "echo"
-	imports[apierrorPath] = "apierror"
+	imports[apierrorPackage] = "apierror"
 
 	bd.Imports = make([]bundlerImport, 0, len(imports))
 	for k, v := range imports {
