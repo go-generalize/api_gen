@@ -26,6 +26,7 @@ func (g *Generator) generateAPIErrorPackage(apierrorPath string) error {
 
 	if err := g.apierrorTemplate.Execute(buf, map[string]string{
 		"XerrorsPackage": "golang.org/x/xerrors",
+		"AppVersion":     g.AppVersion,
 	}); err != nil {
 		return xerrors.Errorf("failed to execute template: %w", err)
 	}

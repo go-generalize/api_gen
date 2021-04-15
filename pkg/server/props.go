@@ -16,7 +16,13 @@ func (g *Generator) generateProps(propsPath string) error {
 		return xerrors.Errorf("failed to mkdir all %s: %w", propsPath, err)
 	}
 
-	fp, err := os.Create(filepath.Join(propsPath, "props.go"))
+	path := filepath.Join(propsPath, "props.go")
+
+	if _, err := os.Stat(path); err == nil {
+		return nil
+	}
+
+	fp, err := os.Create(path)
 	if err != nil {
 		return xerrors.Errorf("failed to create %s: %w", propsPath, err)
 	}
