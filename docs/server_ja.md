@@ -37,10 +37,15 @@ $ cd api
         - 例: `/service/:id` にしたい場合は `/service/0_id.go` のようにする。
 
 - ルートとなるディレクトリパスを指定して以下のファイルを生成する。
-    - `*_controller_gen.go`: Controller
+    - `controller/**/*.go`: Controller(ユーザが直接編集する場所)
         - すでにファイルが存在する場合は、上書きしない。
-    - `routes_gen.go`: Route定義
-    - `bootstrap_gen.go`: 上記ふたつをまとめたもの
+    - `mock/`: mock用ファイル
+        - `controller/`: mock用のcontroller(ユーザは編集しない)
+        - `json/`: mockの内容が書かれている
+    - `controller_initializer.go`: コントローラをecho.Echoに設定するNewControllersを持つ
+        - このファイルがあるディレクトリをimportして使用する
+    - `bundler.go`: controller以下をまとめる関数(内部でのみ使用)
+    - `mock_bundler.go`: mock向けのcontroller以下をまとめる関数(内部でのみ使用)
 
 
 #### api_genを実行する
@@ -50,10 +55,10 @@ $ cd ../ # api_genフォルダ
 $ api_gen server -o . ./api # '-o .' は省略可
 ```
 
-#### モックサーバ
+### モックサーバ
 
-モックサーバは生成対象としたディレクトリの直下に `cmd/mock/main.go` として生成される。モックサーバを起動するためにはビルドオプションで `-tags mock` を付ける必要がある。  
-また、モックサーバが返すjsonは生成対象としたディレクトリ直下に生成される`mock_jsons`へルーティングと同じ階層構造で生成される。  
+モックサーバを起動するためにはビルドオプションで `-tags mock` を付ける必要がある。  
+また、モックサーバが返すjsonは生成対象としたディレクトリ直下に生成される`mock/json`へルーティングと同じ階層構造で生成される。  
 例として以下の構造で生成される。 
 ```text
 interfaces/
@@ -84,10 +89,10 @@ default.jsonは他にマッチするものがないか指定されたファイ�
 
 モックサーバ起動手順
 ```shell script
-go run -tags mock sample/cmd/mock/main.go
+go run -tags mock sample/cmd/main.go
 ```
 
-#### コードサンプル
+### コードサンプル
 
 指定したmiddlewareはendpoint以下のすべてに適用される。
 

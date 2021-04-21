@@ -1,12 +1,47 @@
-# api_gen
-## server_generator
+# api_gen server
 
 - Generate routers/controllers from the minimal endpoint definition
-- You can write controllers in the generated `.go` files(`*_controller_gen.go`)
+- You can write controllers in the generated `controller/**/*.go` files
 - CAUTION: All files other than `*_controller_gen.go` will be overwritten.
 
-### Usage
-#### How to execute
+## Usage
+### How to execute
+#### Create a directory for api_gen
+```console
+$ mkdir api_gen
+$ cd api_gen
+```
+
+#### Create juhubujua directory for API definitions
+- The relative path from `api/` directory will be the path in URL
+- Each endpoint consists of two structs: `*Request`, `*Response`
+    - The name should be `{HTTP_METHOD}Name{Request|Response}`
+        - Available methods: `get` , `post` , `put` , `delete` , `patch`
+    - If `json` tags are specified for `GET` endpoints,  specify also `query` tags with the same name
+    - Both `*Request` and `*Response` structs are necessary.
+
+- Ex: GET /v2/user
+    - Create a `.go` with an arbitrary name file in api_gen/api/v2
+    - Prepare `GetUserRequest` and `GetUserResponse`  struct
+        - struct names are converted into snake case
+
+- For path parameters
+    - The directory must start with `_`.
+        - Example: If you want to use `/service/:id/hogehoge`, use `/service/_id/*.go`.
+    - The file must start with `0_`.
+        - Example: If you want to use `/service/:id`, use `/service/0_id.go`.
+
+- By specifing the root directory(api_gen), following files will be generated:
+    - `controller/**/*.go`: Controller: Users will directly edit them
+        - Existing files won't be overwritten.
+    - `mock/`: For mock
+        - `controller/`: Controllers for mock: Users won't edit them
+        - `json/`: JSON to be returned from mock server
+    - `controller_initializer.go`: Has NewControllers binds controllers to *echo.Echo
+        - Import api_gen
+    - `bundler.go`: Only internal usage
+    - `mock_bundler.go`: Only internal usage for mock
+
 - Execute `server_generator` with the path to the root directory of controllers
 - This generates the following files:
     - Controller(`*_controller_gen.go`)
@@ -15,25 +50,17 @@
     - Route defitinion(`routes_gen.go`)
         - All directories
     - echo.Echo initializer(`bootstrap_gen.go`)
-- Each endpoint consists of two structs: `*Request`, `*Response`
-    - The name should be `{HTTP_METHOD}Name{Request|Response}`
-        - Available methods: `get` , `post` , `put` , `delete` , `patch`
-    - If `json` tags are specified for `GET` endpoints,  specify also `query` tags with the same name
-    - Both `*Request` and `*Response` structs are necessary.
-- For path routing.
-    - The directory must start with `_`.
-        - Example: If you want to use `/service/:id/hogehoge`, use `/service/_id/*.go`.
-    - The file must start with `0_`.
-        - Example: If you want to use `/service/:id`, use `/service/0_id.go`.
+
+#### api_genを実行する
 
 ```console
-$ server_generator ./sample/
+$ cd ../ # api_gen directory
+$ api_gen server -o . ./api # '-o .' can be omitted
 ```
-
 
 #### Mock server
 
-The mock server is created as `cmd/mock/main.go` directly under the directory to be created. In order to start the mock server, you should add the build option `-tags mock`.  
+In order to start the mock server, you should add the build option `-tags mock`.  
 Moreover, the json returned by the mock server is generated in the same hierarchical structure as the routing to `mock_jsons` which is generated directly under the directory to be generated.  
 As an example, json is generated with the following structure. 
 ```text
@@ -69,37 +96,30 @@ go run -tags mock sample/cmd/mock/main.go
 ```
 
 
-#### Example
+### Example
 
-You can define middlewares in `map[endpoint]middleware`.
-Middlewares will be applied to all endpoints under the specified path
+Middlewares will be applied to 
 
-To start a new project with api_gen, a boilerplate is available at [templates](../templates).
+指定したmiddlewareはendpoint以下のすべてに適用される。
 
 ```go
 e := echo.New()
 // Show access logs
 e.Use(middleware.Logger())
-// Recover from panic()
+// Automatically panic if panicked
 e.Use(middleware.Recover())
 
-m := make([]*MiddlewareSet, 0)
-m = append(m, &MiddlewareSet{
-	Path: "/service/user/",
-	MiddlewareFunc: []echo.MiddlewareFunc{
-		func(handlerFunc echo.HandlerFunc) echo.HandlerFunc {
-			return func(context echo.Context) error {
-				// Apply this function as a middleware
-				//     for all paths under /service/user/
-			}
-		},
-	},
-})
+ctrl := controller.NewControllers(&props.ControllerProps{
+    // Initialize ControllerProps in ./api_gen/props
+}, e)
 
-// Initialize all handlers
-service.Bootstrap(&props.ControllerProps{
-    // Initialize ControllerProps defined in ./sample/props
-}, e, m)
+ctrl.AddMiddleware("/user", func(next echo.HandlerFunc) echo.HandlerFunc {
+    return func(c echo.Context) error {
+        // Do something
+
+        return next(c)
+    }
+})
 
 if err := e.Start(":" + PORT); err != nil {
 	t.Fatalf("server listen error %s", err.Error())
