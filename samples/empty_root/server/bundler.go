@@ -61,6 +61,9 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 			res, err := ctrl.PostUser(c, req)
 
 			if err != nil {
+				if xerrors.As(err, &werr) {
+					return nil, c.JSON(werr.Status, werr.Body)
+				}
 				return nil, xerrors.Errorf("PostUser returned an error: %w", err)
 			}
 

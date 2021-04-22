@@ -73,6 +73,9 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 			res, err := ctrl.Get(c, req)
 
 			if err != nil {
+				if xerrors.As(err, &werr) {
+					return nil, c.JSON(werr.Status, werr.Body)
+				}
 				return nil, xerrors.Errorf("Get returned an error: %w", err)
 			}
 
@@ -108,6 +111,9 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 			res, err := ctrl.PostCreateTable(c, req)
 
 			if err != nil {
+				if xerrors.As(err, &werr) {
+					return nil, c.JSON(werr.Status, werr.Body)
+				}
 				return nil, xerrors.Errorf("PostCreateTable returned an error: %w", err)
 			}
 
@@ -143,6 +149,9 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 			res, err := ctrl.PostCreateUser(c, req)
 
 			if err != nil {
+				if xerrors.As(err, &werr) {
+					return nil, c.JSON(werr.Status, werr.Body)
+				}
 				return nil, xerrors.Errorf("PostCreateUser returned an error: %w", err)
 			}
 
@@ -178,6 +187,9 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 			res, err := ctrl.GetArticle(c, req)
 
 			if err != nil {
+				if xerrors.As(err, &werr) {
+					return nil, c.JSON(werr.Status, werr.Body)
+				}
 				return nil, xerrors.Errorf("GetArticle returned an error: %w", err)
 			}
 
@@ -213,6 +225,9 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 			res, err := ctrl.GetStaticPage(c, req)
 
 			if err != nil {
+				if xerrors.As(err, &werr) {
+					return nil, c.JSON(werr.Status, werr.Body)
+				}
 				return nil, xerrors.Errorf("GetStaticPage returned an error: %w", err)
 			}
 
@@ -248,6 +263,9 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 			res, err := ctrl.Get(c, req)
 
 			if err != nil {
+				if xerrors.As(err, &werr) {
+					return nil, c.JSON(werr.Status, werr.Body)
+				}
 				return nil, xerrors.Errorf("Get returned an error: %w", err)
 			}
 
@@ -283,6 +301,9 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 			res, err := ctrl.PostUpdateUserName(c, req)
 
 			if err != nil {
+				if xerrors.As(err, &werr) {
+					return nil, c.JSON(werr.Status, werr.Body)
+				}
 				return nil, xerrors.Errorf("PostUpdateUserName returned an error: %w", err)
 			}
 
@@ -318,6 +339,9 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 			res, err := ctrl.PostUpdateUserPassword(c, req)
 
 			if err != nil {
+				if xerrors.As(err, &werr) {
+					return nil, c.JSON(werr.Status, werr.Body)
+				}
 				return nil, xerrors.Errorf("PostUpdateUserPassword returned an error: %w", err)
 			}
 
@@ -353,6 +377,9 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 			res, err := ctrl.GetUser(c, req)
 
 			if err != nil {
+				if xerrors.As(err, &werr) {
+					return nil, c.JSON(werr.Status, werr.Body)
+				}
 				return nil, xerrors.Errorf("GetUser returned an error: %w", err)
 			}
 
@@ -388,6 +415,9 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 			res, err := ctrl.PostUpdateUserName(c, req)
 
 			if err != nil {
+				if xerrors.As(err, &werr) {
+					return nil, c.JSON(werr.Status, werr.Body)
+				}
 				return nil, xerrors.Errorf("PostUpdateUserName returned an error: %w", err)
 			}
 
@@ -423,6 +453,9 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 			res, err := ctrl.PostUpdateUserPassword(c, req)
 
 			if err != nil {
+				if xerrors.As(err, &werr) {
+					return nil, c.JSON(werr.Status, werr.Body)
+				}
 				return nil, xerrors.Errorf("PostUpdateUserPassword returned an error: %w", err)
 			}
 
@@ -458,6 +491,9 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 			res, err := ctrl.GetUserJobGet(c, req)
 
 			if err != nil {
+				if xerrors.As(err, &werr) {
+					return nil, c.JSON(werr.Status, werr.Body)
+				}
 				return nil, xerrors.Errorf("GetUserJobGet returned an error: %w", err)
 			}
 
@@ -493,6 +529,9 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 			res, err := ctrl.PutJob(c, req)
 
 			if err != nil {
+				if xerrors.As(err, &werr) {
+					return nil, c.JSON(werr.Status, werr.Body)
+				}
 				return nil, xerrors.Errorf("PutJob returned an error: %w", err)
 			}
 
