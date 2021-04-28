@@ -19,7 +19,7 @@ $ cd api
 ```
 
 #### API定義を用意する
-- apiフォルダからのフォルダのパスがURLのパスとなる。
+- apiディレクトリからのディレクトリのパスがURLのパスとなる。
 - 生成対象は、 `{HTTP_METHOD}{EndpointName}{Request|Response}` といった命名をしたStructでなければならない。
     - 対応しているHTTPメソッドは、 `GET` , `POST` , `PUT` , `DELETE` , `PATCH`
     - GETメソッドでは、Requestの、json tagとquery tagの両方に同じ値を入れなくてはならない。
