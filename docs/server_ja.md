@@ -12,7 +12,7 @@ $ mkdir api_gen
 $ cd api_gen
 ```
 
-#### API定義を書くフォルダを用意する
+#### API定義を書くディレクトリを用意する
 ```console
 $ mkdir api
 $ cd api
