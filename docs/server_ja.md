@@ -51,7 +51,7 @@ $ cd api
 #### api_genを実行する
 
 ```console
-$ cd ../ # api_genフォルダ
+$ cd ../ # api_genディレクトリ
 $ api_gen server -o . ./api # '-o .' は省略可
 ```
 
