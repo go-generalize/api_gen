@@ -33,6 +33,11 @@ func NewGetArticleController(cp interface{}) GetArticleController {
 }
 
 // GetArticle - GET article
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} types.GetArticleResponse
+// @Success 200 {object} types.GetArticleResponse
+// @Router /service/article [get]
 func (ctrl *getArticleController) GetArticle(
 	c echo.Context, req *types.GetArticleRequest,
 ) (res *types.GetArticleResponse, err error) {

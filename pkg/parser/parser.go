@@ -91,7 +91,10 @@ func (p *parser) getGoModulePackage(dir string) (string, error) {
 	return filepath.Join(p.module, rel), nil
 }
 
-func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.File, endpoints map[string]*Endpoint) {
+func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.File) (string, *Endpoint) {
+	var key string
+	var ep *Endpoint
+
 	for _, decl := range file.Decls {
 		genDecl, ok := decl.(*ast.GenDecl)
 		if !ok {
@@ -131,12 +134,10 @@ func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.
 				continue
 			}
 
-			ep, found := endpoints[me]
-
-			if !found {
+			if ep == nil {
 				ep = &Endpoint{}
-				endpoints[me] = ep
 			}
+			key = me
 
 			rawPath := me[len(method):]
 			ep.Method = method
@@ -156,6 +157,25 @@ func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.
 			}
 		}
 	}
+
+	if ep == nil {
+		return "", nil
+	}
+
+	for _, gr := range file.Comments {
+		for _, cmnt := range gr.List {
+			txt := cmnt.Text
+
+			txt = strings.TrimPrefix(txt, "//")
+			txt = strings.TrimSpace(txt)
+
+			if strings.HasPrefix(txt, "@") {
+				ep.SwagComments = append(ep.SwagComments, "// "+txt)
+			}
+		}
+	}
+
+	return key, ep
 }
 
 func (p *parser) parsePackage(dir string) (*Group, error) {
@@ -220,7 +240,7 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 		return gr, nil
 	}
 
-	pkgs, err := goparser.ParseDir(fset, dir, nil, goparser.AllErrors)
+	pkgs, err := goparser.ParseDir(fset, dir, nil, goparser.AllErrors|goparser.ParseComments)
 
 	if err != nil {
 		return nil, xerrors.Errorf("failed to parse dir(%s): %w", dir, err)
@@ -238,7 +258,11 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 				continue
 			}
 
-			p.parseFile(dir, name, fset, file, endpoints)
+			key, ep := p.parseFile(dir, name, fset, file)
+
+			if ep != nil {
+				endpoints[key] = ep
+			}
 		}
 
 		gr.Endpoints = make([]*Endpoint, 0, len(endpoints))

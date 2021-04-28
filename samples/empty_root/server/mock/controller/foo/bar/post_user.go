@@ -33,6 +33,12 @@ func NewPostUserController(cp interface{}) PostUserController {
 }
 
 // PostUser - POST user
+// @Accept  json
+// @Produce  json
+// @Param body body types.PostUserRequest true "request parameter"
+// @Success 200 {object} types.PostUserResponse
+// @Success 200 {object} types.PostUserResponse
+// @Router /foo/bar/user [post]
 func (ctrl *postUserController) PostUser(
 	c echo.Context, req *types.PostUserRequest,
 ) (res *types.PostUserResponse, err error) {

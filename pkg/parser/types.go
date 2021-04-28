@@ -55,6 +55,8 @@ type Endpoint struct {
 	ResponsePayloadName string
 	RequestPayload      *ast.StructType
 	ResponsePayload     *ast.StructType
+
+	SwagComments []string
 }
 
 // GetParent returns the parent Group

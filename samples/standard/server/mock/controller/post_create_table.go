@@ -33,6 +33,12 @@ func NewPostCreateTableController(cp interface{}) PostCreateTableController {
 }
 
 // PostCreateTable - POST create_table
+// @Accept  json
+// @Produce  json
+// @Param body body types.PostCreateTableRequest true "request parameter"
+// @Success 200 {object} types.PostCreateTableResponse
+// @Success 200 {object} types.PostCreateTableResponse
+// @Router /create_table [post]
 func (ctrl *postCreateTableController) PostCreateTable(
 	c echo.Context, req *types.PostCreateTableRequest,
 ) (res *types.PostCreateTableResponse, err error) {

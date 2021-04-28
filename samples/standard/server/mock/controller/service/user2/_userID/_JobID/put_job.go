@@ -33,6 +33,14 @@ func NewPutJobController(cp interface{}) PutJobController {
 }
 
 // PutJob - PUT job
+// @Accept  json
+// @Produce  json
+// @Param body body types.PutJobRequest true "request parameter"
+// @Param JobID path string true "JobID"
+// @Param userID path string true "userID"
+// @Success 200 {object} types.PutJobResponse
+// @Success 200 {object} types.PutJobResponse
+// @Router /service/user2/{userID}/{JobID}/job [put]
 func (ctrl *putJobController) PutJob(
 	c echo.Context, req *types.PutJobRequest,
 ) (res *types.PutJobResponse, err error) {

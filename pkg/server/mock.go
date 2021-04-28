@@ -175,6 +175,7 @@ func (g *Generator) generateMockController(root, mockPackage string, ep *parser.
 		MockPackage                           string
 		RawEndpointPath                       string
 		JSONDir                               string
+		SwagGo                                string
 	}{
 		Endpoint:                ep,
 		ControllerName:          strcase.ToLowerCamel(handler) + "Controller",
@@ -195,6 +196,7 @@ func (g *Generator) generateMockController(root, mockPackage string, ep *parser.
 			}
 			return path
 		}) + "/" + strings.ToLower(string(ep.Method)) + "_" + ep.Path,
+		SwagGo: g.generateSwagComment(ep),
 	}); err != nil {
 		return nil, xerrors.Errorf("failed to generate controller: %w", err)
 	}
