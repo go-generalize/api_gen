@@ -6,7 +6,7 @@
 
 ## 使い方
 ### 生成方法
-#### api_genで利用するフォルダを作成する
+#### api_genで利用するディレクトリを作成する
 ```console
 $ mkdir api_gen
 $ cd api_gen
