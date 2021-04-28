@@ -12,7 +12,7 @@ $ mkdir api_gen
 $ cd api_gen
 ```
 
-#### Create juhubujua directory for API definitions
+#### Create a directory for API definitions
 - The relative path from `api/` directory will be the path in URL
 - Each endpoint consists of two structs: `*Request`, `*Response`
     - The name should be `{HTTP_METHOD}Name{Request|Response}`
