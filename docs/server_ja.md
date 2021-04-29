@@ -1,35 +1,64 @@
-# api_gen
-## server_generator
+# api_gen server
 
-- APIのRootingやControllerを階層から自動的に判定し、生成する。
+- APIのRoutingやControllerを階層から自動的に判定し、生成する。
 - 自動生成されたControllerに対して実際の処理を書いていく。
 - 基本的に生成物は既存のファイルを上書きする。(Controllerはすでにファイルが存在した場合は上書きしない。)
 
-### 使い方
-#### 生成方法
-- ルートとなるディレクトリパスを指定して以下のファイルを生成する。
-    - `*_controller_gen.go`: Controller
-        - すでにファイルが存在する場合は、上書きしない。
-    - `routes_gen.go`: Route定義
-    - `bootstrap_gen.go`: 上記ふたつをまとめたもの
-- 生成対象は、 `{HTTP_METHOD}Name{Request|Response}` といった命名をしたStructでなければならない。
-     - 対応しているHTTPメソッドは、 `get` , `post` , `put` , `delete` , `patch`
-     - GETメソッドでは、Requestの、json tagとquery tagの両方に同じ値を入れなくてはならない。
-- 必ず、 Request と Response がそれぞれ対になるようになっていなければならない。
+## 使い方
+### 生成方法
+#### api_genで利用するディレクトリを作成する
+```console
+$ mkdir api_gen
+$ cd api_gen
+```
+
+#### API定義を書くディレクトリを用意する
+```console
+$ mkdir api
+$ cd api
+```
+
+#### API定義を用意する
+- apiディレクトリからのディレクトリのパスがURLのパスとなる。
+- 生成対象は、 `{HTTP_METHOD}{EndpointName}{Request|Response}` といった命名をしたStructでなければならない。
+    - 対応しているHTTPメソッドは、 `GET` , `POST` , `PUT` , `DELETE` , `PATCH`
+    - GETメソッドでは、Requestの、json tagとquery tagの両方に同じ値を入れなくてはならない。
+    - 必ず、 Request と Response がそれぞれ対になるようになっていなければならない。
+
+- 例: GET /v2/userを作成したい場合
+    - api_gen/api/v2にget_user.goを作成(ファイル名は任意)
+    - GetUserRequestとGetUserResponseのstructを用意(struct名はsnake caseに変換される)
+    - Requestにはquery、ResponseにはJSONレスポンスの内容を記述する
+
 - パスルーティングをする場合。
     - ディレクトリは `_` 始まりしなければならない。
         - 例: `/service/:id/hogehoge` にしたい場合は `/service/_id/*.go` のようにする。
     - ファイルは `0_` 始まりしなければならない。
         - 例: `/service/:id` にしたい場合は `/service/0_id.go` のようにする。
 
+- ルートとなるディレクトリパスを指定して以下のファイルを生成する。
+    - `controller/**/*.go`: Controller(ユーザが直接編集する場所)
+        - すでにファイルが存在する場合は、上書きしない。
+    - `mock/`: mock用ファイル
+        - `controller/`: mock用のcontroller(ユーザは編集しない)
+        - `json/`: mockの内容が書かれている
+    - `controller_initializer.go`: コントローラをecho.Echoに設定するNewControllersを持つ
+        - このファイルがあるディレクトリをimportして使用する
+    - `bundler.go`: controller以下をまとめる関数(内部でのみ使用)
+    - `mock_bundler.go`: mock向けのcontroller以下をまとめる関数(内部でのみ使用)
+
+
+#### api_genを実行する
+
 ```console
-$ server_generator ./sample/
+$ cd ../ # api_genディレクトリ
+$ api_gen server -o . ./api # '-o .' は省略可
 ```
 
-#### モックサーバ
+### モックサーバ
 
-モックサーバは生成対象としたディレクトリの直下に `cmd/mock/main.go` として生成される。モックサーバを起動するためにはビルドオプションで `-tags mock` を付ける必要がある。  
-また、モックサーバが返すjsonは生成対象としたディレクトリ直下に生成される`mock_jsons`へルーティングと同じ階層構造で生成される。  
+モックサーバを起動するためにはビルドオプションで `-tags mock` を付ける必要がある。  
+また、モックサーバが返すjsonは生成対象としたディレクトリ直下に生成される`mock/json`へルーティングと同じ階層構造で生成される。  
 例として以下の構造で生成される。 
 ```text
 interfaces/
@@ -60,14 +89,12 @@ default.jsonは他にマッチするものがないか指定されたファイ�
 
 モックサーバ起動手順
 ```shell script
-go run -tags mock sample/cmd/mock/main.go
+go run -tags mock sample/cmd/main.go
 ```
 
-#### コードサンプル
+### コードサンプル
 
-middlewareは `map[endpoint]middleware` の形式で追加していく。指定したmiddlewareはendpoint以下のすべてに適用される。
-
-[templates](../templates)にapi_genでプロジェクトを始める時のテンプレートを参照できる。
+指定したmiddlewareはendpoint以下のすべてに適用される。
 
 ```go
 e := echo.New()
@@ -76,22 +103,17 @@ e.Use(middleware.Logger())
 // panic時に自動でrecoverする
 e.Use(middleware.Recover())
 
-m := make([]*MiddlewareSet, 0)
-m = append(m, &MiddlewareSet{
-	Path: "/service/user/",
-	MiddlewareFunc: []echo.MiddlewareFunc{
-		func(handlerFunc echo.HandlerFunc) echo.HandlerFunc {
-			return func(context echo.Context) error {
-				// /service/user/以下の全てのハンドラーにこの関数を適用
-			}
-		},
-	},
-})
+ctrl := controller.NewControllers(&props.ControllerProps{
+    // ./api_gen/propsに定義したControllerPropsを初期化
+}, e)
 
-// 全てのハンドラーを初期化する
-service.Bootstrap(&props.ControllerProps{
-    // ./sample/propsに定義したControllerPropsを初期化
-}, e, m)
+ctrl.AddMiddleware("/user", func(next echo.HandlerFunc) echo.HandlerFunc {
+    return func(c echo.Context) error {
+        // Do something
+
+        return next(c)
+    }
+})
 
 if err := e.Start(":" + PORT); err != nil {
 	t.Fatalf("server listen error %s", err.Error())
