@@ -14,7 +14,7 @@ func TestGenerate(t *testing.T) {
 		baseDirImportPath string
 		packageName       string
 	}
-	group, err := parser.Parse("../../../server_generator/sample")
+	group, err := parser.Parse("../../../samples/standard")
 
 	if err != nil {
 		t.Fatal(err)
@@ -27,7 +27,7 @@ func TestGenerate(t *testing.T) {
 		wantErr  bool
 	}{
 		{
-			name:     "server_generator/sample",
+			name:     "samples/standard",
 			wantPath: "./sample/client.go.want",
 			args: args{
 				gr:                group,
