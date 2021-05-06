@@ -19,24 +19,6 @@ jobs:
         with:
           go-version: 1.16
 
-      - name: Run GoReleaser for client_generator
-        uses: goreleaser/goreleaser-action@v1
-        with:
-          version: latest
-          args: release --rm-dist
-          workdir: client_generator
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run GoReleaser for server_generator
-        uses: goreleaser/goreleaser-action@v1
-        with:
-          version: latest
-          args: release --rm-dist
-          workdir: server_generator
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Run GoReleaser for api_gen
         uses: goreleaser/goreleaser-action@v1
         with:
