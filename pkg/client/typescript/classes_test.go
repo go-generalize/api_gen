@@ -10,7 +10,7 @@ import (
 )
 
 func Test_generator_GenerateTypes(t *testing.T) {
-	group, err := parser.Parse("../../../server_generator/sample")
+	group, err := parser.Parse("../../../samples/standard/api")
 
 	if err != nil {
 		t.Fatal(err)
