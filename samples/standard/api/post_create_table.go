@@ -5,9 +5,6 @@ import (
 	"time"
 )
 
-// @Summary Create new table
-// @Description Create new table
-
 // Flag - type alias(int)
 type Flag int
 
