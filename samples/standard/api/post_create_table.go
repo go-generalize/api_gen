@@ -7,9 +7,6 @@ import (
 	"github.com/go-generalize/api_gen/server_generator/sample/service/table"
 )
 
-// @Summary Create new table
-// @Description Create new table
-
 // Flag - type alias(int)
 type Flag int
 

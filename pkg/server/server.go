@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-generalize/api_gen/pkg/parser"
 	"github.com/go-utils/gopackages"
+	"golang.org/x/sync/singleflight"
 	"golang.org/x/xerrors"
 )
 
@@ -29,6 +30,8 @@ type Generator struct {
 	mockControllerTemplate        *template.Template
 
 	AppVersion string
+
+	sfGroup singleflight.Group
 }
 
 // NewGenerator returns a new Generator
