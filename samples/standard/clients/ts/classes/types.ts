@@ -16,7 +16,6 @@ export type PostCreateTableRequest = {
 }
 export type PostCreateTableResponse = {
 	ID: string;
-	Payload: Table;
 	RequestTime: string;
 }
 export type PostCreateUserRequest = {
@@ -36,11 +35,4 @@ export type Role = {
 	ID: number;
 	Name: string;
 	RecursionRoles: Role[] | null;
-}
-export type Pos = {
-	X: number;
-	Y: number;
-}
-export type Table = {
-	Pos: Pos;
 }
