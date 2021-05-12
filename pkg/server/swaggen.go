@@ -38,7 +38,7 @@ func (g *Generator) generateSwagComment(ep *parser.Endpoint, tstypes map[string]
 		}
 
 		if _, ok := placeholders[param]; ok {
-			params = append(params, fmt.Sprintf(`// @Param %s path %s %v "%s"%s`+"\n", param, t, v.Optional, k, enum))
+			params = append(params, fmt.Sprintf(`// @Param %s path %s %v "%s"%s`+"\n", param, t, true, k, enum))
 		} else if ep.Method == parser.GET {
 			params = append(params, fmt.Sprintf(`// @Param %s query %s %v "%s"%s`+"\n", k, t, v.Optional, k, enum))
 		}
