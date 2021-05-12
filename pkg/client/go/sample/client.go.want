@@ -506,60 +506,6 @@ func newGroup_clients_go_classes_service_user(client *APIClient) *Group_clients_
 	}
 }
 
-func (g *Group_clients_go_classes_service_user) Get(reqPayload *_clients_go_classes_service_user.GetRequest) (respPayload *_clients_go_classes_service_user.GetResponse, err error) {
-	query, err := encodeQuery(reqPayload)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", g.apiClient.base+"/clients/go/classes/service/user/"+"?"+query, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes_service_user.GetResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-func (g *Group_clients_go_classes_service_user) PostUpdateUserName(reqPayload *_clients_go_classes_service_user.PostUpdateUserNameRequest) (respPayload *_clients_go_classes_service_user.PostUpdateUserNameResponse, err error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", g.apiClient.base+"/clients/go/classes/service/user/update_user_name", buf)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes_service_user.PostUpdateUserNameResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
 func (g *Group_clients_go_classes_service_user) PostUpdateUserPassword(reqPayload *_clients_go_classes_service_user.PostUpdateUserPasswordRequest) (respPayload *_clients_go_classes_service_user.PostUpdateUserPasswordResponse, err error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
@@ -676,60 +622,6 @@ func newGroup_clients_go_classes_service_user2(client *APIClient) *Group_clients
 	}
 }
 
-func (g *Group_clients_go_classes_service_user2) GetUser(reqPayload *_clients_go_classes_service_user2.GetUserRequest) (respPayload *_clients_go_classes_service_user2.GetUserResponse, err error) {
-	query, err := encodeQuery(reqPayload)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", g.apiClient.base+"/clients/go/classes/service/user2/user"+"?"+query, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes_service_user2.GetUserResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-func (g *Group_clients_go_classes_service_user2) PostUpdateUserName(reqPayload *_clients_go_classes_service_user2.PostUpdateUserNameRequest) (respPayload *_clients_go_classes_service_user2.PostUpdateUserNameResponse, err error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", g.apiClient.base+"/clients/go/classes/service/user2/update_user_name", buf)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes_service_user2.PostUpdateUserNameResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
 func (g *Group_clients_go_classes_service_user2) PostUpdateUserPassword(reqPayload *_clients_go_classes_service_user2.PostUpdateUserPasswordRequest) (respPayload *_clients_go_classes_service_user2.PostUpdateUserPasswordResponse, err error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
@@ -810,60 +702,6 @@ func newGroup_clients_go_classes(client *APIClient) *Group_clients_go_classes {
 		apiClient: client,
 		Service:   newGroup_clients_go_classes_service(client),
 	}
-}
-
-func (g *Group_clients_go_classes) Get(reqPayload *_clients_go_classes.GetRequest) (respPayload *_clients_go_classes.GetResponse, err error) {
-	query, err := encodeQuery(reqPayload)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", g.apiClient.base+"/clients/go/classes/"+"?"+query, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes.GetResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-func (g *Group_clients_go_classes) PostCreateTable(reqPayload *_clients_go_classes.PostCreateTableRequest) (respPayload *_clients_go_classes.PostCreateTableResponse, err error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", g.apiClient.base+"/clients/go/classes/create_table", buf)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes.PostCreateTableResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
 }
 
 func (g *Group_clients_go_classes) PostCreateUser(reqPayload *_clients_go_classes.PostCreateUserRequest) (respPayload *_clients_go_classes.PostCreateUserResponse, err error) {

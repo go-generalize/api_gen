@@ -1,3 +1,4 @@
+// Package server generates server-side library
 package server
 
 import (
@@ -15,7 +16,11 @@ import (
 
 func (g *Generator) generateSwagComment(ep *parser.Endpoint, tstypes map[string]types.Type) string {
 	t := tstypes[ep.GetParent().ImportPath+"."+ep.RequestPayloadName]
-	obj := t.(*types.Object)
+	obj, ok := t.(*types.Object)
+
+	if !ok {
+		return ""
+	}
 	placeholders := map[string]struct{}{}
 
 	path := ep.GetFullPath("/", func(rawPath, path, placeholder string) string {
