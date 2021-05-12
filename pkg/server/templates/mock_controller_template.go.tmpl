@@ -34,6 +34,7 @@ func New{{ .ControllerInterfaceName }}(cp interface{}) {{ .ControllerInterfaceNa
 
 
 // {{ .HandlerName }} - {{.Method}} {{.Path}}
+{{ .SwagGo -}}
 func (ctrl *{{ .ControllerName }}) {{ .HandlerName }}(
 	c echo.Context, req *types.{{ .RequestStructName }},
 ) (res *types.{{ .ResponseStructName }}, err error) {

@@ -33,6 +33,11 @@ func NewGetController(cp interface{}) GetController {
 }
 
 // Get - GET
+// @Accept json
+// @Produce json
+// @Success 200 {object} types.GetResponse
+// @Success 200 {object} types.GetResponse
+// @Router /service/user/ [get]
 func (ctrl *getController) Get(
 	c echo.Context, req *types.GetRequest,
 ) (res *types.GetResponse, err error) {
