@@ -39,7 +39,7 @@ func TestGenerate(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt // escape: Using the variable on range scope `tt` in function literal
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewGenerator(tt.args.gr, tt.args.baseDirImportPath, tt.args.packageName, "1.0").GenerateClient()
+			got, err := NewGenerator(tt.args.gr, tt.args.baseDirImportPath, tt.args.packageName, "2.0").GenerateClient()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Generate() error = %v, wantErr %v", err, tt.wantErr)
 				return
