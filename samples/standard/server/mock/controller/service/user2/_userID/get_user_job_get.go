@@ -33,8 +33,8 @@ func NewGetUserJobGetController(cp interface{}) GetUserJobGetController {
 }
 
 // GetUserJobGet - GET user_job_get
-// @Accept  json
-// @Produce  json
+// @Accept json
+// @Produce json
 // @Param userID path string true "UserID"
 // @Success 200 {object} types.GetUserJobGetResponse
 // @Success 200 {object} types.GetUserJobGetResponse

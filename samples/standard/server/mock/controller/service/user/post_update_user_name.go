@@ -33,8 +33,8 @@ func NewPostUpdateUserNameController(cp interface{}) PostUpdateUserNameControlle
 }
 
 // PostUpdateUserName - POST update_user_name
-// @Accept  json
-// @Produce  json
+// @Accept json
+// @Produce json
 // @Param body body types.PostUpdateUserNameRequest true "request parameter"
 // @Success 200 {object} types.PostUpdateUserNameResponse
 // @Success 200 {object} types.PostUpdateUserNameResponse

@@ -33,8 +33,8 @@ func NewGetStaticPageController(cp interface{}) GetStaticPageController {
 }
 
 // GetStaticPage - GET static_page
-// @Accept  json
-// @Produce  json
+// @Accept json
+// @Produce json
 // @Success 200 {object} types.GetStaticPageResponse
 // @Success 200 {object} types.GetStaticPageResponse
 // @Router /service/static_page/static_page [get]

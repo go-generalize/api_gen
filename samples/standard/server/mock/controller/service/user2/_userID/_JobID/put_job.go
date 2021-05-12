@@ -33,8 +33,8 @@ func NewPutJobController(cp interface{}) PutJobController {
 }
 
 // PutJob - PUT job
-// @Accept  json
-// @Produce  json
+// @Accept json
+// @Produce json
 // @Param JobID path string true "JobID"
 // @Param body body types.PutJobRequest true "request parameter"
 // @Param userID path string true "UserID"

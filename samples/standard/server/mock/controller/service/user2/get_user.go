@@ -33,8 +33,8 @@ func NewGetUserController(cp interface{}) GetUserController {
 }
 
 // GetUser - GET user
-// @Accept  json
-// @Produce  json
+// @Accept json
+// @Produce json
 // @Param search_request query string false "search_request"
 // @Param userID path string true "id"
 // @Success 200 {object} types.GetUserResponse
