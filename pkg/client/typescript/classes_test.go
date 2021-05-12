@@ -16,7 +16,7 @@ func Test_generator_GenerateTypes(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	g := NewGenerator(group, "1.0")
+	g := NewGenerator(group, "2.0")
 
 	err = g.GenerateTypes(func(relPath, code string) error {
 		file, err := os.ReadFile(filepath.Join("./testdata/", relPath))
