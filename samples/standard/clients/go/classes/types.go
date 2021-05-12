@@ -16,11 +16,6 @@ type GetResponse struct {
 	Data string
 }
 
-type Pos struct {
-	X int
-	Y int
-}
-
 type PostCreateTableRequest struct {
 	Flag int
 	ID   string
@@ -30,7 +25,6 @@ type PostCreateTableRequest struct {
 
 type PostCreateTableResponse struct {
 	ID          string
-	Payload     Table
 	RequestTime time.Time
 }
 
@@ -53,10 +47,6 @@ type Role struct {
 	ID             int
 	Name           string
 	RecursionRoles *[]Role
-}
-
-type Table struct {
-	Pos Pos
 }
 
 type CreatedType int

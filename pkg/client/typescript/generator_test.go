@@ -12,7 +12,7 @@ func TestGenerate(t *testing.T) {
 	type args struct {
 		gr *parser.Group
 	}
-	group, err := parser.Parse("../../../server_generator/sample")
+	group, err := parser.Parse("../../../samples/standard/api")
 
 	if err != nil {
 		t.Fatal(err)
@@ -25,7 +25,7 @@ func TestGenerate(t *testing.T) {
 		wantErr  bool
 	}{
 		{
-			name:     "server_generator/sample",
+			name:     "samples/standard",
 			wantPath: "./testdata/api_client.ts",
 			args: args{
 				gr: group,
@@ -35,7 +35,7 @@ func TestGenerate(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt // escape: Using the variable on range scope `tt` in function literal
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewGenerator(tt.args.gr, "1.0").GenerateClient()
+			got, err := NewGenerator(tt.args.gr, "devel").GenerateClient()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Generate() error = %v, wantErr %v", err, tt.wantErr)
 				return
