@@ -1,0 +1,48 @@
+// Package controller handles requests and returns responses. api_gen users directly edit this file.
+// generated version: {{ .AppVersion }}
+// nolint:dupl
+package controller
+
+import (
+	"github.com/labstack/echo/v4"
+	props "{{ .ControllerPropsPackage }}"
+	types "{{ .TypesPackage }}"
+)
+
+// {{ .ControllerInterfaceName }} ...
+type {{ .ControllerInterfaceName }} interface {
+	{{ .HandlerName }}(c echo.Context, req *types.{{ .RequestStructName }}) (res *types.{{ .ResponseStructName }}, err error)
+}
+
+type {{ .ControllerName }} struct {
+	*props.ControllerProps
+}
+
+// New{{ .ControllerInterfaceName }} ...
+func New{{ .ControllerInterfaceName }}(cp *props.ControllerProps) {{ .ControllerInterfaceName }} {
+	return &{{ .ControllerName }}{
+		ControllerProps: cp,
+	}
+}
+
+
+// {{ .HandlerName }} - {{.Method}} {{.Path}}
+func (ctrl *{{ .ControllerName }}) {{ .HandlerName }}(
+	c echo.Context, req *types.{{ .RequestStructName }},
+) (res *types.{{ .ResponseStructName }}, err error) {
+	// return nil, apierror.NewAPIError(http.StatusBadRequest)
+	//
+	// return nil, apierror.NewAPIError(http.StatusBadRequest).SetError(err)
+	//
+	// body := map[string]interface{}{
+	// 	"code": http.StatusBadRequest,
+	// 	"message": "invalid request parameter.",
+	// }
+	// return nil, apierror.NewAPIError(http.StatusBadRequest, body).SetError(err)
+	panic("require implements.") // FIXME require implements.
+}
+
+// AutoBind - use echo.Bind
+func (ctrl *{{ .ControllerName }}) AutoBind() bool {
+	return true
+}

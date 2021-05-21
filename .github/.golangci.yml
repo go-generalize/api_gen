@@ -3,7 +3,7 @@ linters-settings:
     threshold: 100
   errcheck:
     check-type-assertions: true
-    ignore: fmt:.*,io/ioutil:^Read.*,io:Close,os:Close
+    ignore: fmt:.*,io/ioutil:^Read.*,io:Close,os:Close,io/fs:Close
   goconst:
     min-len: 2
     min-occurrences: 2

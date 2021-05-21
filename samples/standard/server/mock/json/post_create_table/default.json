@@ -1,0 +1,17 @@
+{
+    "meta": {
+        "status": 200,
+        "match_request": {
+            "Flag": 1234,
+            "ID": "string",
+            "Text": "string",
+            "map": {
+                "1234": 1234
+            }
+        }
+    },
+    "payload": {
+        "ID": "string",
+        "RequestTime": "2006-01-02T15:04:05+09:00"
+    }
+}
