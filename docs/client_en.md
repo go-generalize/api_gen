@@ -1,5 +1,4 @@
-# api_gen
-## client_generator
+# api_gen client
 
 Execute client_generator for the same root directory as server_generator.
 The library will generated in the current working directory.

@@ -1,5 +1,4 @@
-# api_gen
-## client_generator
+# api_gen client
 
 server_generator向けの用意したフォルダに対して実行する。
 ライブラリは今いるディレクトリに対して生成される。
