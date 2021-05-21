@@ -17,9 +17,9 @@ var templates embed.FS
 
 // Generator generates handlers
 type Generator struct {
-	group  *parser.Group
-	base   string
-	module *gopackages.Module
+	group             *parser.Group
+	base, basePackage string
+	module            *gopackages.Module
 
 	controllerTemplate            *template.Template
 	controllerBundlerTemplate     *template.Template
@@ -35,11 +35,12 @@ type Generator struct {
 }
 
 // NewGenerator returns a new Generator
-func NewGenerator(group *parser.Group, base, version string) (*Generator, error) {
+func NewGenerator(group *parser.Group, base, basePackage, version string) (*Generator, error) {
 	g := &Generator{
-		group:      group,
-		base:       base,
-		AppVersion: version,
+		group:       group,
+		base:        base,
+		basePackage: basePackage,
+		AppVersion:  version,
 
 		controllerTemplate:            template.Must(template.ParseFS(templates, "templates/controller_template.go.tmpl")),
 		controllerBundlerTemplate:     template.Must(template.ParseFS(templates, "templates/controller_bundler_template.go.tmpl")),
