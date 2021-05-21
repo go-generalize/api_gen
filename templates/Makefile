@@ -21,7 +21,7 @@ bootstrap: goimports
 
 .PHONY: server_generate
 server_generate:
-	cd ./backend && ../bin/api_gen server ./interfaces
+	cd ./backend && ../bin/api_gen server -p main ./interfaces
 
 .PHONY: client_generate
 client_generate:

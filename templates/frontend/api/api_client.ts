@@ -1,6 +1,6 @@
 // THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
-// generated version: 2.0.0
+// generated version: 2.0.1
 
 import {
 	PostCreateUserRequest as PostCreateUserRequest,

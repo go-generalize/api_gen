@@ -1,12 +1,12 @@
 // THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
-// generated version: 2.0.0
+// generated version: 2.0.1
 
 export type PostCreateUserRequest = {
+	Birthday: string;
+	Gender: number;
 	ID: string;
-	birthday: string;
-	gender: number;
-	password: string;
+	Password: string;
 }
 export type PostCreateUserResponse = {
 	CreatedType: 0 | 1 | 2;
