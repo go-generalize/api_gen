@@ -4,4 +4,4 @@ dev:
 
 .PHONY: run_mock
 run_mock:
-	go run -tags mock interfaces/cmd/mock/main.go -port 1323
+	go run -tags mock main.go

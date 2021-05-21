@@ -6,7 +6,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-generalize/api_gen/templates/backend/interfaces"
-	"github.com/go-generalize/api_gen/templates/backend/interfaces/props"
+	"github.com/go-generalize/api_gen/templates/backend/pkg/props"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
