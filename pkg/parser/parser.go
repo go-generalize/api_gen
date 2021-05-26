@@ -145,7 +145,7 @@ func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.
 			ep.Path = strcase.ToSnake(rawPath)
 
 			if strings.HasPrefix(filepath.Base(fileName), "0_") {
-				ep.Placeholder = strings.ReplaceAll(stem(fileName), "_id", "ID")[2:]
+				ep.Placeholder = stem(fileName)[2:]
 			}
 
 			if isRequest {
