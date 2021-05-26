@@ -106,7 +106,7 @@ export class APIClient {
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<PostCreateUserResponse> {
-	    const excludeParams: string[] = ['', ];
+	    const excludeParams: string[] = ['ID', ];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
@@ -124,14 +124,14 @@ export class APIClient {
 		};
 		const context: MiddlewareContext = {
 			httpMethod: 'POST',
-			endpoint: `${this.baseURL}/${encodeURI(param..toString())}`,
+			endpoint: `${this.baseURL}/${encodeURI(param.ID.toString())}`,
 			request: param,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/${encodeURI(param..toString())}`;
+		const url = `${this.baseURL}/${encodeURI(param.ID.toString())}`;
 
 		const resp = await fetch(
 			url,
