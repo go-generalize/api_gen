@@ -1,7 +1,7 @@
 .PHONY: dev
 dev: export LOCAL_ENV = 1
 dev:
-	go run cmd/*.go
+	go run cmd/api_gen/*.go
 
 .PHONY: init
 init: bootstrap
