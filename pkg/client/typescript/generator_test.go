@@ -44,9 +44,10 @@ func TestGenerate(t *testing.T) {
 			wantBytes, err := os.ReadFile(tt.wantPath)
 
 			if err != nil {
+				// nolint:errcheck
+				os.WriteFile(tt.wantPath, []byte(got), 0774)
 				t.Fatal(err)
 			}
-
 			if diff := cmp.Diff(string(wantBytes), got); diff != "" {
 				t.Errorf("Generate() = %v, diff = %v", got, diff)
 			}

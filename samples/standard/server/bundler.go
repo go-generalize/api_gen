@@ -356,12 +356,12 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 	{
 		ctrl := ctrl_user2_7d7519cf.NewGetUserController(p)
 
-		add("GET", "/service/user2/:userID", func(c echo.Context) (interface{}, error) {
+		add("GET", "/service/user2/:user_id", func(c echo.Context) (interface{}, error) {
 			var werr *apierror.APIError
 
 			req := new(types_user2_058d5a8a.GetUserRequest)
 			if err := c.Bind(req); err != nil {
-				c.Logger().Errorf("failed to bind a request for (/service/user2/:userID): %+v", err)
+				c.Logger().Errorf("failed to bind a request for (/service/user2/:user_id): %+v", err)
 				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
 					"code":    http.StatusBadRequest,
 					"message": "invalid request.",

@@ -2,38 +2,29 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/go-generalize/api_gen/templates/backend/interfaces"
-	"github.com/go-generalize/api_gen/templates/backend/interfaces/props"
+	"github.com/go-generalize/api_gen/templates/backend/props"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	echoMiddleware "github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
 	e := echo.New()
 
-	middlewareList := make([]*interfaces.MiddlewareSet, 0)
-	mid := &interfaces.MiddlewareSet{
-		Path: "/api/",
-		MiddlewareFunc: []echo.MiddlewareFunc{
-			middleware.JWTWithConfig(middleware.JWTConfig{
-				ContextKey:     "jwt",
-				SuccessHandler: nil,
-				SigningKey:     []byte("key"),
-				SigningMethod:  jwt.SigningMethodHS512.Name,
-				Claims:         new(jwt.StandardClaims),
-				TokenLookup:    "cookie:ApiGenSession",
-			}),
-		},
-	}
-	middlewareList = append(middlewareList, mid)
-
 	e.Debug = true
-	e.Use(middleware.Recover())
+	e.Use(echoMiddleware.Recover())
 
-	interfaces.Bootstrap(new(props.ControllerProps), e, nil, os.Stdout)
+	ctrl := NewControllers(new(props.ControllerProps), e)
+
+	ctrl.AddMiddleware("/api/", echoMiddleware.JWTWithConfig(echoMiddleware.JWTConfig{
+		ContextKey:     "jwt",
+		SuccessHandler: nil,
+		SigningKey:     []byte("key"),
+		SigningMethod:  jwt.SigningMethodHS512.Name,
+		Claims:         new(jwt.StandardClaims),
+		TokenLookup:    "cookie:ApiGenSession",
+	}))
 
 	fmt.Println("All routes are...")
 	for _, r := range e.Routes() {
