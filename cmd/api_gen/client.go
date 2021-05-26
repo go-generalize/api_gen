@@ -2,7 +2,7 @@
 package main
 
 import (
-	clientcmd "github.com/go-generalize/api_gen/cmd/client"
+	clientcmd "github.com/go-generalize/api_gen/cmd/api_gen/client"
 	"github.com/spf13/cobra"
 )
 

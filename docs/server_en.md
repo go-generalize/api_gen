@@ -42,7 +42,7 @@ $ cd api_gen
     - `bundler.go`: Only internal usage
     - `mock_bundler.go`: Only internal usage for mock
 
-- Execute `server_generator` with the path to the root directory of controllers
+- Execute `api_gen server` with the path to the root directory of controllers
 - This generates the following files:
     - Controller(`*_controller_gen.go`)
         - Not overwritten if it already exists
