@@ -28,5 +28,9 @@ client_generate:
 	mkdir -p ./frontend/api
 	cd ./frontend/api && ../../bin/api_gen client ts ../../backend/interfaces
 
+.PHONY: swaggo_generate
+swaggo_generate:
+	cd ./backend && swag init --parseDependency
+
 .PHONY: generate
-generate: server_generate client_generate
+generate: server_generate client_generate swaggo_generate

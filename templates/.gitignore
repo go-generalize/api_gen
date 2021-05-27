@@ -3,6 +3,7 @@ bin/
 # Remove following files/directories to use this template
 
 backend/controller
+backend/docs
 backend/mock
 backend/pkg
 backend/props
