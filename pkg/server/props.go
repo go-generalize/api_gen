@@ -29,7 +29,7 @@ func (g *Generator) generateProps(propsPath string) error {
 	defer fp.Close()
 
 	buf := bytes.NewBuffer(nil)
-	if err := g.propsTemplate.Execute(fp, nil); err != nil {
+	if err := g.propsTemplate.Execute(buf, nil); err != nil {
 		return xerrors.Errorf("failed to execute template: %w", err)
 	}
 
