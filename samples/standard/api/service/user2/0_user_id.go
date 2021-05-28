@@ -3,6 +3,8 @@ package user2
 
 import "time"
 
+// @Summary Get user information by user id
+
 // GetUserRequest ...
 type GetUserRequest struct {
 	ID            string `json:"id" param:"user_id"`

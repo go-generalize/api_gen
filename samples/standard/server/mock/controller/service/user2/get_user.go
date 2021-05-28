@@ -33,6 +33,7 @@ func NewGetUserController(cp interface{}) GetUserController {
 }
 
 // GetUser - GET user
+// @Summary Get user information by user id
 // @Accept json
 // @Produce json
 // @Param search_request query string false "search_request"
