@@ -57,6 +57,9 @@ func (g *Generator) generateSwagComment(ep *parser.Endpoint, tstypes map[string]
 
 	buf := bytes.NewBuffer(nil)
 
+	if len(ep.SwagComments) != 0 {
+		buf.WriteString(strings.Join(ep.SwagComments, "\n") + "\n")
+	}
 	buf.WriteString("// @Accept json\n")
 	buf.WriteString("// @Produce json\n")
 	buf.WriteString(strings.Join(params, ""))
