@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	var dir string
+	var dir, basePackage string
 
 	serverCommand := &cobra.Command{
 		Use:     "server [path]",
@@ -24,7 +24,7 @@ func init() {
 				return xerrors.Errorf("failed to parse the package(%s): %w", args[0], err)
 			}
 
-			generator, err := server.NewGenerator(group, dir, common.AppVersion)
+			generator, err := server.NewGenerator(group, dir, basePackage, common.AppVersion)
 
 			if err != nil {
 				return xerrors.Errorf("failed to initialize generator: %w", err)
@@ -38,6 +38,7 @@ func init() {
 		},
 	}
 	serverCommand.Flags().StringVarP(&dir, "output", "o", "./", "The directory to generated server library in")
+	serverCommand.Flags().StringVarP(&basePackage, "package", "p", "controller", "Package name of the base directory")
 
 	rootCmd.AddCommand(serverCommand)
 }

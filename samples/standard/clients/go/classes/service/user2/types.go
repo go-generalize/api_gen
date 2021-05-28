@@ -9,7 +9,7 @@ import (
 )
 
 type GetUserRequest struct {
-	ID            string `json:"id" param:"userID"`
+	ID            string `json:"id" param:"user_id"`
 	SearchRequest string `json:"search_request" query:"search_request"`
 }
 

@@ -1,1 +1,14 @@
 bin/
+
+# Remove following files/directories to use this template
+
+backend/controller
+backend/docs
+backend/mock
+backend/pkg
+backend/props
+backend/bundler.go
+backend/controller_initializer.go
+backend/mock_bundler.go
+
+frontend/api

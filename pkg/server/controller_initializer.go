@@ -19,8 +19,9 @@ func (g *Generator) generateControllerInitializer(initializerPath, propsPackage 
 	defer fp.Close()
 
 	buf := bytes.NewBuffer(nil)
-	if err := g.controllerInitializerTemplate.Execute(fp, map[string]string{
+	if err := g.controllerInitializerTemplate.Execute(buf, map[string]string{
 		"ControllerPropsPackage": propsPackage,
+		"Package":                g.basePackage,
 		"AppVersion":             g.AppVersion,
 	}); err != nil {
 		return xerrors.Errorf("failed to execute template: %w", err)

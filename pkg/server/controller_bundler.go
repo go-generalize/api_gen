@@ -39,6 +39,7 @@ type bundlerData struct {
 	Endpoints  []bundlerEndpointForImports
 	Imports    []bundlerImport
 	AppVersion string
+	Package    string
 	Mock       bool
 }
 
@@ -60,6 +61,7 @@ func (g *Generator) generateControllerBundler(
 
 	bd := &bundlerData{
 		AppVersion: g.AppVersion,
+		Package:    g.basePackage,
 		Mock:       mock,
 	}
 
