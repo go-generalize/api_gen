@@ -354,6 +354,44 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 	}
 
 	{
+		ctrl := ctrl_user2_2348a599.NewDeleteUserController(p)
+
+		add("DELETE", "/service/user2/:user_id", func(c echo.Context) (interface{}, error) {
+			var werr *apierror.APIError
+
+			req := new(types_user2_058d5a8a.DeleteUserRequest)
+			if err := c.Bind(req); err != nil {
+				c.Logger().Errorf("failed to bind a request for (/service/user2/:user_id): %+v", err)
+				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
+					"code":    http.StatusBadRequest,
+					"message": "invalid request.",
+				})
+			}
+			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
+				if xerrors.As(err, &werr) {
+					return nil, c.JSON(werr.Status, werr.Body)
+				}
+				return nil, err
+			}
+
+			res, err := ctrl.DeleteUser(c, req)
+
+			if err != nil {
+				if xerrors.As(err, &werr) {
+					return nil, c.JSON(werr.Status, werr.Body)
+				}
+				return nil, xerrors.Errorf("DeleteUser returned an error: %w", err)
+			}
+
+			if res == nil {
+				return nil, nil
+			}
+
+			return res, nil
+		})
+	}
+
+	{
 		ctrl := ctrl_user2_2348a599.NewGetUserController(p)
 
 		add("GET", "/service/user2/:user_id", func(c echo.Context) (interface{}, error) {

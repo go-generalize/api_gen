@@ -19,31 +19,31 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// GetUserController ...
-type GetUserController interface {
-	GetUser(c echo.Context, req *types.GetUserRequest) (res *types.GetUserResponse, err error)
+// DeleteUserController ...
+type DeleteUserController interface {
+	DeleteUser(c echo.Context, req *types.DeleteUserRequest) (res *types.DeleteUserResponse, err error)
 }
 
-type getUserController struct {
+type deleteUserController struct {
 }
 
-// NewGetUserController ...
-func NewGetUserController(cp interface{}) GetUserController {
-	return &getUserController{}
+// NewDeleteUserController ...
+func NewDeleteUserController(cp interface{}) DeleteUserController {
+	return &deleteUserController{}
 }
 
-// GetUser - GET user
-// @Summary Get user information by user id
+// DeleteUser - DELETE user
+// @Summary Delete a user by user id
 // @Accept json
 // @Produce json
-// @Param search_request query string false "search_request"
+// @Param body body types.DeleteUserRequest true "request parameter"
 // @Param user_id path string true "id"
-// @Success 200 {object} types.GetUserResponse
-// @Success 200 {object} types.GetUserResponse
-// @Router /service/user2/{user_id} [get]
-func (ctrl *getUserController) GetUser(
-	c echo.Context, req *types.GetUserRequest,
-) (res *types.GetUserResponse, err error) {
+// @Success 200 {object} types.DeleteUserResponse
+// @Success 200 {object} types.DeleteUserResponse
+// @Router /service/user2/{user_id} [delete]
+func (ctrl *deleteUserController) DeleteUser(
+	c echo.Context, req *types.DeleteUserRequest,
+) (res *types.DeleteUserResponse, err error) {
 	const jsonExt = ".json"
 
 	option := &mock.HeaderOption{}
@@ -64,14 +64,14 @@ func (ctrl *getUserController) GetUser(
 
 	type Mock struct {
 		Meta struct {
-			Status       int                   `json:"status"`
-			MatchRequest *types.GetUserRequest `json:"match_request"`
+			Status       int                      `json:"status"`
+			MatchRequest *types.DeleteUserRequest `json:"match_request"`
 		} `json:"meta"`
 		Payload interface{} `json:"payload"`
 	}
 
 	jsons := make(map[string]*Mock)
-	err = fs.WalkDir(mock.MockJSONFS, "json/service/user2/get_user", fs.WalkDirFunc(func(path string, info fs.DirEntry, err error) error {
+	err = fs.WalkDir(mock.MockJSONFS, "json/service/user2/delete_user", fs.WalkDirFunc(func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
@@ -155,6 +155,6 @@ func (ctrl *getUserController) GetUser(
 }
 
 // AutoBind - use echo.Bind
-func (ctrl *getUserController) AutoBind() bool {
+func (ctrl *deleteUserController) AutoBind() bool {
 	return true
 }

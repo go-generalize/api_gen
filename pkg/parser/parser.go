@@ -91,9 +91,8 @@ func (p *parser) getGoModulePackage(dir string) (string, error) {
 	return filepath.Join(p.module, rel), nil
 }
 
-func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.File) (string, *Endpoint) {
-	var key string
-	var ep *Endpoint
+func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.File) (map[string]*Endpoint, error) {
+	eps := make(map[string]*Endpoint)
 
 	for _, decl := range file.Decls {
 		genDecl, ok := decl.(*ast.GenDecl)
@@ -134,10 +133,11 @@ func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.
 				continue
 			}
 
+			ep := eps[me]
 			if ep == nil {
 				ep = &Endpoint{}
+				eps[me] = ep
 			}
-			key = me
 
 			rawPath := me[len(method):]
 			ep.Method = method
@@ -151,16 +151,38 @@ func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.
 			if isRequest {
 				ep.RequestPayload = structType
 				ep.RequestPayloadName = name
+				ep.requestPos = typeSpec.Pos()
 			} else {
 				ep.ResponsePayload = structType
 				ep.ResponsePayloadName = name
+				ep.responsePos = typeSpec.Pos()
 			}
 		}
 	}
 
-	if ep == nil {
-		return "", nil
+	type posEndpoint struct {
+		pos token.Pos
+		ep  *Endpoint
 	}
+
+	peps := make([]*posEndpoint, 0, len(eps)*2)
+	for k, v := range eps {
+		if v.RequestPayload == nil || v.ResponsePayload == nil {
+			return nil, xerrors.Errorf("missing declaration for %s", k)
+		}
+
+		peps = append(peps, &posEndpoint{
+			pos: v.requestPos,
+			ep:  v,
+		})
+		peps = append(peps, &posEndpoint{
+			pos: v.responsePos,
+			ep:  v,
+		})
+	}
+	sort.Slice(peps, func(i, j int) bool {
+		return peps[i].pos < peps[j].pos
+	})
 
 	for _, gr := range file.Comments {
 		for _, cmnt := range gr.List {
@@ -169,13 +191,26 @@ func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.
 			txt = strings.TrimPrefix(txt, "//")
 			txt = strings.TrimSpace(txt)
 
-			if strings.HasPrefix(txt, "@") {
+			if !strings.HasPrefix(txt, "@") {
+				continue
+			}
+
+			pos := cmnt.Pos()
+			var ep *Endpoint
+			for i := range peps {
+				if peps[i].pos > pos {
+					ep = peps[i].ep
+					break
+				}
+			}
+
+			if ep != nil {
 				ep.SwagComments = append(ep.SwagComments, "// "+txt)
 			}
 		}
 	}
 
-	return key, ep
+	return eps, nil
 }
 
 func (p *parser) parsePackage(dir string) (*Group, error) {
@@ -258,10 +293,14 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 				continue
 			}
 
-			key, ep := p.parseFile(dir, name, fset, file)
+			eps, err := p.parseFile(dir, name, fset, file)
 
-			if ep != nil {
-				endpoints[key] = ep
+			if err != nil {
+				return nil, xerrors.Errorf("failed to parse %s in %s: %w", name, dir, err)
+			}
+
+			for k, v := range eps {
+				endpoints[k] = v
 			}
 		}
 

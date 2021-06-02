@@ -2,6 +2,10 @@
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
 // generated version: devel
 
+export type DeleteUserRequest = {
+	id: string;
+}
+export type DeleteUserResponse = {}
 export type GetUserRequest = {
 	id: string;
 	search_request: string;

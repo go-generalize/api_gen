@@ -235,6 +235,34 @@ func newGroup_service_user2(client *APIClient) *Group_service_user2 {
 	}
 }
 
+func (g *Group_service_user2) DeleteUser(reqPayload *_service_user2.DeleteUserRequest) (respPayload *_service_user2.DeleteUserResponse, err error) {
+	buf := bytes.NewBuffer(nil)
+	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", g.apiClient.base+"/service/user2/"+fmt.Sprint(reqPayload.ID)+"", buf)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+
+	resp, err := g.apiClient.client.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	respPayload = &_service_user2.DeleteUserResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
+		return nil, err
+	}
+
+	return respPayload, nil
+}
+
 func (g *Group_service_user2) GetUser(reqPayload *_service_user2.GetUserRequest) (respPayload *_service_user2.GetUserResponse, err error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
