@@ -27,7 +27,7 @@ func (e *ParserError) Error() string {
 	return fmt.Sprintf("%s:%d: %s", e.File, e.Line, e.Message)
 }
 
-// Error is for Formatted interface
+// Formatted is for Formatted interface
 func (e *ParserError) Formatted() string {
 	return e.Error()
 }
