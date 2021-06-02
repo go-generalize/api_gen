@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/go-utils/astutil"
 	"github.com/go-utils/gopackages"
 	"github.com/iancoleman/strcase"
 	"golang.org/x/xerrors"
@@ -312,6 +313,22 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 				continue
 			}
 			v.parentGroup = gr
+
+			var err error
+			v.GetFullPath("", func(rawPath, path, placeholder string) string {
+				if placeholder != "" {
+					queryParamField := astutil.FindStructField(v.RequestPayload, QueryParamTag, placeholder)
+					if queryParamField == "" {
+						err = xerrors.Errorf("failed to find a field for %s in %s ./%s", placeholder, v.Method, placeholder)
+					}
+				}
+
+				return ""
+			})
+
+			if err != nil {
+				return nil, xerrors.Errorf("invalid endpoint: %w", err)
+			}
 
 			gr.Endpoints = append(gr.Endpoints, v)
 		}

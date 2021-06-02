@@ -14,11 +14,6 @@ import (
 	"github.com/iancoleman/strcase"
 )
 
-const (
-	queryTagKey = "param"
-	jsonTagKey  = "json"
-)
-
 // NewGenerator returns a new client-side TypeScript library generator
 func NewGenerator(gr *parser.Group, version string) Generator {
 	return &generator{
@@ -55,14 +50,14 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint) (*endpointType, []impo
 
 	endpoint.Endpoint = ep.GetFullPath("/", func(rawPath, path, placeholder string) string {
 		if placeholder != "" {
-			field := astutil.FindStructField(ep.RequestPayload, queryTagKey, placeholder)
+			field := astutil.FindStructField(ep.RequestPayload, parser.QueryParamTag, placeholder)
 			jsonKey := field
 
 			for _, f := range ep.RequestPayload.Fields.List {
 				if f.Names[0].Name == field && f.Tag != nil {
 					j, ok := reflect.
 						StructTag(strings.Trim(f.Tag.Value, "`")).
-						Lookup(jsonTagKey)
+						Lookup(parser.JSONParamTag)
 
 					if ok {
 						jsonKey = j
@@ -87,13 +82,13 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint) (*endpointType, []impo
 		if field.Tag != nil {
 			tags := reflect.StructTag(strings.Trim(field.Tag.Value, "`"))
 
-			tag, ok := tags.Lookup("json")
+			tag, ok := tags.Lookup(parser.JSONParamTag)
 
 			if ok {
 				jsonKey = tag
 			}
 
-			tag, ok = tags.Lookup(queryTagKey)
+			tag, ok = tags.Lookup(parser.QueryParamTag)
 
 			if ok {
 				param = tag

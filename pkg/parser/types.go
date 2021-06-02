@@ -23,6 +23,14 @@ const (
 	PATCH MethodType = "PATCH"
 )
 
+const (
+	// QueryParamTag is the tag name for parameters in query
+	QueryParamTag = "param"
+
+	// JSONParamTag is the tag name for JSON
+	JSONParamTag = "json"
+)
+
 var (
 	methods = []MethodType{
 		GET,
