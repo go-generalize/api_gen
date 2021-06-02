@@ -67,8 +67,9 @@ type Endpoint struct {
 
 	SwagComments []string
 
-	requestPos  token.Pos
-	responsePos token.Pos
+	File                      string
+	RequestPos, ResponsePos   token.Pos
+	RequestLine, ResponseLine int
 }
 
 // GetParent returns the parent Group

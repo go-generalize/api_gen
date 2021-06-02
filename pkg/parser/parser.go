@@ -144,6 +144,7 @@ func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.
 			ep.Method = method
 			ep.RawPath = rawPath
 			ep.Path = strcase.ToSnake(rawPath)
+			ep.File = fileName
 
 			if strings.HasPrefix(filepath.Base(fileName), "0_") {
 				ep.Placeholder = stem(fileName)[2:]
@@ -152,11 +153,13 @@ func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.
 			if isRequest {
 				ep.RequestPayload = structType
 				ep.RequestPayloadName = name
-				ep.requestPos = typeSpec.Pos()
+				ep.RequestPos = typeSpec.Pos()
+				ep.RequestLine = fset.Position(typeSpec.Pos()).Line
 			} else {
 				ep.ResponsePayload = structType
 				ep.ResponsePayloadName = name
-				ep.responsePos = typeSpec.Pos()
+				ep.ResponsePos = typeSpec.Pos()
+				ep.ResponseLine = fset.Position(typeSpec.Pos()).Line
 			}
 		}
 	}
@@ -173,11 +176,11 @@ func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.
 		}
 
 		peps = append(peps, &posEndpoint{
-			pos: v.requestPos,
+			pos: v.RequestPos,
 			ep:  v,
 		})
 		peps = append(peps, &posEndpoint{
-			pos: v.responsePos,
+			pos: v.ResponsePos,
 			ep:  v,
 		})
 	}
@@ -320,7 +323,7 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 				if placeholder != "" {
 					queryParamField := astutil.FindStructField(v.RequestPayload, QueryParamTag, placeholder)
 					if queryParamField == "" {
-						err = xerrors.Errorf("failed to find a field for %s in %s ./%s", placeholder, v.Method, placeholder)
+						err = xerrors.Errorf("failed to find a field for %s in %s ./%s(%s:%d)", placeholder, v.Method, placeholder, v.File, v.RequestLine)
 					}
 				}
 
