@@ -308,6 +308,7 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 		gr.Endpoints = make([]*Endpoint, 0, len(endpoints))
 
 		for _, v := range endpoints {
+			v := v
 			if v.RequestPayload == nil ||
 				v.ResponsePayload == nil {
 				continue
