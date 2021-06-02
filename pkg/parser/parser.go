@@ -2,6 +2,7 @@
 package parser
 
 import (
+	"fmt"
 	"go/ast"
 	goparser "go/parser"
 	"go/token"
@@ -10,6 +11,8 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/go-generalize/api_gen/pkg/agerrors"
+	"github.com/go-utils/astutil"
 	"github.com/go-utils/gopackages"
 	"github.com/iancoleman/strcase"
 	"golang.org/x/xerrors"
@@ -143,6 +146,7 @@ func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.
 			ep.Method = method
 			ep.RawPath = rawPath
 			ep.Path = strcase.ToSnake(rawPath)
+			ep.File = fileName
 
 			if strings.HasPrefix(filepath.Base(fileName), "0_") {
 				ep.Placeholder = stem(fileName)[2:]
@@ -151,11 +155,13 @@ func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.
 			if isRequest {
 				ep.RequestPayload = structType
 				ep.RequestPayloadName = name
-				ep.requestPos = typeSpec.Pos()
+				ep.RequestPos = typeSpec.Pos()
+				ep.RequestLine = fset.Position(typeSpec.Pos()).Line
 			} else {
 				ep.ResponsePayload = structType
 				ep.ResponsePayloadName = name
-				ep.responsePos = typeSpec.Pos()
+				ep.ResponsePos = typeSpec.Pos()
+				ep.ResponseLine = fset.Position(typeSpec.Pos()).Line
 			}
 		}
 	}
@@ -172,11 +178,11 @@ func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.
 		}
 
 		peps = append(peps, &posEndpoint{
-			pos: v.requestPos,
+			pos: v.RequestPos,
 			ep:  v,
 		})
 		peps = append(peps, &posEndpoint{
-			pos: v.responsePos,
+			pos: v.ResponsePos,
 			ep:  v,
 		})
 	}
@@ -307,11 +313,35 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 		gr.Endpoints = make([]*Endpoint, 0, len(endpoints))
 
 		for _, v := range endpoints {
+			v := v
 			if v.RequestPayload == nil ||
 				v.ResponsePayload == nil {
 				continue
 			}
 			v.parentGroup = gr
+
+			var err error
+			v.GetFullPath("", func(rawPath, path, placeholder string) string {
+				if placeholder != "" {
+					queryParamField := astutil.FindStructField(v.RequestPayload, QueryParamTag, placeholder)
+					if queryParamField == "" {
+						err = agerrors.NewParserError(
+							v.File,
+							v.RequestLine,
+							fmt.Sprintf(
+								"'%s' is missing in %s as field name or param tag",
+								placeholder, v.RequestPayloadName,
+							),
+						)
+					}
+				}
+
+				return ""
+			})
+
+			if err != nil {
+				return nil, xerrors.Errorf("invalid endpoint: %w", err)
+			}
 
 			gr.Endpoints = append(gr.Endpoints, v)
 		}

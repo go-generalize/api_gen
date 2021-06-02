@@ -15,10 +15,6 @@ import (
 	"github.com/iancoleman/strcase"
 )
 
-const (
-	queryTagKey = "param"
-)
-
 //go:embed templates/client.go.tmpl
 var clientGoTemplate embed.FS
 
@@ -120,7 +116,7 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint) *endpoint {
 		if placeholder != "" {
 			return fmt.Sprintf(
 				`" + fmt.Sprint(reqPayload.%s) + "`,
-				astutil.FindStructField(ep.RequestPayload, queryTagKey, placeholder),
+				astutil.FindStructField(ep.RequestPayload, parser.QueryParamTag, placeholder),
 			)
 		}
 

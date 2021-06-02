@@ -23,6 +23,14 @@ const (
 	PATCH MethodType = "PATCH"
 )
 
+const (
+	// QueryParamTag is the tag name for parameters in query
+	QueryParamTag = "param"
+
+	// JSONParamTag is the tag name for JSON
+	JSONParamTag = "json"
+)
+
 var (
 	methods = []MethodType{
 		GET,
@@ -59,8 +67,9 @@ type Endpoint struct {
 
 	SwagComments []string
 
-	requestPos  token.Pos
-	responsePos token.Pos
+	File                      string
+	RequestPos, ResponsePos   token.Pos
+	RequestLine, ResponseLine int
 }
 
 // GetParent returns the parent Group
