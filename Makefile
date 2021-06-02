@@ -24,8 +24,8 @@ bootstrap:
 test:
 	go test ./... -v
 
-.PHONY: cmd
-cmd:
+.PHONY: api_gen
+api_gen:
 	go build -o ./bin/api_gen ./cmd/api_gen
 
 .PHONY: gen_samples
