@@ -17,3 +17,14 @@ type GetUserResponse struct {
 	SearchRequest string
 	RequestTime   time.Time
 }
+
+// @Summary Delete a user by user id
+
+// DeleteUserRequest ...
+type DeleteUserRequest struct {
+	ID string `json:"id" param:"user_id"`
+}
+
+// DeleteUserResponse ...
+type DeleteUserResponse struct {
+}

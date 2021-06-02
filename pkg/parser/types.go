@@ -3,6 +3,7 @@ package parser
 
 import (
 	"go/ast"
+	"go/token"
 	"strings"
 )
 
@@ -57,6 +58,9 @@ type Endpoint struct {
 	ResponsePayload     *ast.StructType
 
 	SwagComments []string
+
+	requestPos  token.Pos
+	responsePos token.Pos
 }
 
 // GetParent returns the parent Group

@@ -8,6 +8,13 @@ import (
 	"time"
 )
 
+type DeleteUserRequest struct {
+	ID string `json:"id" param:"user_id"`
+}
+
+type DeleteUserResponse struct {
+}
+
 type GetUserRequest struct {
 	ID            string `json:"id" param:"user_id"`
 	SearchRequest string `json:"search_request" query:"search_request"`
