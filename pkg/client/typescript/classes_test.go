@@ -19,9 +19,12 @@ func Test_generator_GenerateTypes(t *testing.T) {
 	g := NewGenerator(group, "devel")
 
 	err = g.GenerateTypes(func(relPath, code string) error {
-		file, err := os.ReadFile(filepath.Join("./testdata/", relPath))
+		p := filepath.Join("./testdata/", relPath)
+		file, err := os.ReadFile(p)
 
 		if err != nil {
+			os.WriteFile(p, []byte(code), 0777)
+
 			t.Errorf("failed to parse %s: %+v", relPath, err)
 
 			return nil

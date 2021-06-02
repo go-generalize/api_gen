@@ -32,6 +32,8 @@ import {
 } from './classes/service/user2/_userID/types';
 
 import {
+	DeleteUserRequest as ServiceUser2DeleteUserRequest,
+	DeleteUserResponse as ServiceUser2DeleteUserResponse,
 	GetUserRequest as ServiceUser2GetUserRequest,
 	GetUserResponse as ServiceUser2GetUserResponse,
 	PostUpdateUserNameRequest as ServiceUser2PostUpdateUserNameRequest,
@@ -346,6 +348,58 @@ class ServiceUser2Client {
 				}
 			}
 		}
+	}
+
+	async deleteUser(
+		param: ServiceUser2DeleteUserRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
+	): Promise<ServiceUser2DeleteUserResponse> {
+	    const excludeParams: string[] = ['id', ];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
+
+		const reqHeader = {
+			...this.headers,
+			...headers,
+			...mockHeaders,
+		};
+		const reqOption = {
+			...this.options,
+			...options,
+		};
+		const context: MiddlewareContext = {
+			httpMethod: 'DELETE',
+			endpoint: `${this.baseURL}/service/user2/${encodeURI(param.id.toString())}`,
+			request: param,
+			baseURL: this.baseURL,
+			headers: reqHeader,
+			options: reqOption,
+		};
+		await this.callMiddleware(this.beforeMiddleware, context);
+		const url = `${this.baseURL}/service/user2/${encodeURI(param.id.toString())}`;
+		const resp = await fetch(
+			url,
+			{
+				method: "DELETE",
+				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				headers: reqHeader,
+				...reqOption,
+			}
+		);
+
+		if (Math.floor(resp.status / 100) !== 2) {
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
+		}
+		await resp.text();
+		const res = {} as ServiceUser2DeleteUserResponse;
+		context.response = res;
+		await this.callMiddleware(this.afterMiddleware, context);
+		return res;
 	}
 
 	async getUser(
