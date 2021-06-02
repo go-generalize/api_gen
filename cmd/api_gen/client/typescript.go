@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/go-generalize/api_gen/common"
+	"github.com/go-generalize/api_gen/pkg/agerrors"
 	clientts "github.com/go-generalize/api_gen/pkg/client/typescript"
 	"github.com/go-generalize/api_gen/pkg/parser"
 	"github.com/spf13/cobra"
@@ -22,7 +23,7 @@ var tsCommand = func() *cobra.Command {
 		Long: `Generate TypeScript client library.
 Pass the directory to parse as the 1st argument.`,
 		Args: cobra.MinimumNArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: agerrors.UnwrapFormattedRunE(func(cmd *cobra.Command, args []string) error {
 			group, err := parser.Parse(args[0])
 
 			if err != nil {
@@ -62,7 +63,7 @@ Pass the directory to parse as the 1st argument.`,
 			}
 
 			return nil
-		},
+		}),
 	}
 	cmd.Flags().StringVarP(&dir, "file", "o", "./", "The directory to generate client library in")
 

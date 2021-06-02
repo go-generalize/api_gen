@@ -2,6 +2,7 @@
 package parser
 
 import (
+	"fmt"
 	"go/ast"
 	goparser "go/parser"
 	"go/token"
@@ -10,6 +11,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/go-generalize/api_gen/pkg/agerrors"
 	"github.com/go-utils/astutil"
 	"github.com/go-utils/gopackages"
 	"github.com/iancoleman/strcase"
@@ -323,7 +325,14 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 				if placeholder != "" {
 					queryParamField := astutil.FindStructField(v.RequestPayload, QueryParamTag, placeholder)
 					if queryParamField == "" {
-						err = xerrors.Errorf("failed to find a field for %s in %s ./%s(%s:%d)", placeholder, v.Method, placeholder, v.File, v.RequestLine)
+						err = agerrors.NewParserError(
+							v.File,
+							v.RequestLine,
+							fmt.Sprintf(
+								"'%s' is missing in %s as field name or param tag",
+								placeholder, v.RequestPayloadName,
+							),
+						)
 					}
 				}
 

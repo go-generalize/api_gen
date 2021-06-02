@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/go-generalize/api_gen/common"
+	"github.com/go-generalize/api_gen/pkg/agerrors"
 	clientgo "github.com/go-generalize/api_gen/pkg/client/go"
 	"github.com/go-generalize/api_gen/pkg/parser"
 	"github.com/go-utils/gopackages"
@@ -22,7 +23,7 @@ var goCommand = func() *cobra.Command {
 		Long: `Generate go client library.
 Pass the directory to parse as the 1st argument.`,
 		Args: cobra.MinimumNArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: agerrors.UnwrapFormattedRunE(func(cmd *cobra.Command, args []string) error {
 			group, err := parser.Parse(args[0])
 
 			if err != nil {
@@ -76,8 +77,9 @@ Pass the directory to parse as the 1st argument.`,
 			}
 
 			return nil
-		},
+		}),
 	}
+	cmd.UsageFunc()
 	cmd.Flags().StringVarP(&dir, "output", "o", "./", "The directory to generated client library in")
 	cmd.Flags().StringVarP(&pkg, "package", "p", "client", "The package name of the generated library")
 
