@@ -1,4 +1,3 @@
-// Package clientcmd has commands for "api_gen client"
 package clientcmd
 
 import (
