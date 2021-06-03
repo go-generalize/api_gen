@@ -27,9 +27,6 @@ jobs:
             exit 1
           fi
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
+        uses: reviewdog/action-golangci-lint@v1
         with:
-          args: "--config=.github/.golangci.yml"
-          skip-go-installation: true
-          skip-pkg-cache: true
-          skip-build-cache: true
+          golangci_lint_flags: "--config=.github/.golangci.yml"
