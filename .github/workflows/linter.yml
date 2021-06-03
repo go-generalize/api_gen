@@ -31,3 +31,5 @@ jobs:
         with:
           args: "--config=.github/.golangci.yml"
           skip-go-installation: true
+          skip-pkg-cache: true
+          skip-build-cache: true
