@@ -36,16 +36,16 @@ linters:
     - gofmt
     # goimports
     - goimports
-    # golint
-    - golint
+    # alternative to golint
+    - revive
     # 引数がフォーマット文字列と一致しないものを検出
     - govet
     # 意味のない再代入を検出
     - ineffassign
     # スペルチェック
     - misspell
-    # for中などで固定されてない変数を検出
-    - scopelint
+    # for中などで固定されてない変数を検出(alternative to scopelint)
+    - exportloopref
     # 構造体の未使用フィールドを検出
     - structcheck
     # 不要な型変換を検出
