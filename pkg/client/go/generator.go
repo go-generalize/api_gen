@@ -18,7 +18,7 @@ import (
 //go:embed templates/client.go.tmpl
 var clientGoTemplate embed.FS
 
-type Generator interface {
+type Generator interface { // a
 	GenerateClient() (string, error)
 	GenerateTypes(fn func(relPath, code string) error) error
 }
