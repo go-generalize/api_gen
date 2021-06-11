@@ -136,7 +136,7 @@ func (ctrl *getUserJobGetController) GetUserJobGet(
 				continue
 			}
 			resMock = jsons[jsonName]
-			log.Printf("[%s] Return the %s because it match rule.", jsonName, jsonName)
+			log.Printf("[%s] Return the %s because it matches a rule.", jsonName, jsonName)
 			break
 		}
 	}
