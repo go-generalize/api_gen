@@ -71,7 +71,7 @@ func (ctrl *putJobController) PutJob(
 	}
 
 	jsons := make(map[string]*Mock)
-	err = fs.WalkDir(mock.MockJSONFS, "json/service/user2/userID/JobID/put_job", fs.WalkDirFunc(func(path string, info fs.DirEntry, err error) error {
+	err = fs.WalkDir(mock.MockJSONFS, "json/service/user2/_userID/_JobID/put_job", fs.WalkDirFunc(func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}

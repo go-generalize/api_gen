@@ -213,9 +213,6 @@ func (g *Generator) generateMockController(root, mockPackage string, ep *parser.
 			return path
 		}),
 		JSONDir: ep.GetParent().GetFullPath("/", func(rawPath, path, placeholder string) string {
-			if placeholder != "" {
-				return placeholder
-			}
 			return path
 		}) + "/" + strings.ToLower(string(ep.Method)) + "_" + ep.Path,
 		SwagGo: g.generateSwagComment(ep, v.(map[string]types.Type)),
