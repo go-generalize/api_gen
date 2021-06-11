@@ -58,6 +58,11 @@ func (ctrl *putJobController) PutJob(
 		}
 	}
 
+	if option.UseMatchRequest == nil {
+		flag := true
+		option.UseMatchRequest = &flag
+	}
+
 	if option.WaitMS > 0 {
 		<-time.After(time.Duration(option.WaitMS) * time.Millisecond)
 	}
@@ -120,7 +125,7 @@ func (ctrl *putJobController) PutJob(
 		if ok {
 			resMock = mock
 		}
-	} else {
+	} else if *option.UseMatchRequest {
 		jsonNameList := make([]string, 0, len(jsons))
 		for key := range jsons {
 			jsonNameList = append(jsonNameList, key)
@@ -133,7 +138,7 @@ func (ctrl *putJobController) PutJob(
 				continue
 			}
 			resMock = jsons[jsonName]
-			log.Printf("[%s] Return the %s because it match rule.", jsonName, jsonName)
+			log.Printf("[%s] Return the %s because it matches a rule.", jsonName, jsonName)
 			break
 		}
 	}
@@ -147,7 +152,13 @@ func (ctrl *putJobController) PutJob(
 				"message": m,
 			})
 		}
-		log.Println("[default.json] Return the default.json because it did not match rule.")
+
+		if *option.UseMatchRequest {
+			log.Println("[default.json] Return the default.json because it did not match rule.")
+		} else {
+			log.Println("[default.json] Return the default.json because use_match_request is disabled.")
+		}
+
 		resMock = mock
 	}
 
