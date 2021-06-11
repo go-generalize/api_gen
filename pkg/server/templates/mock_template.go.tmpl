@@ -12,6 +12,7 @@ var MockJSONFS embed.FS
 
 // HeaderOption is the header of Api-Gen-Option in JSON
 type HeaderOption struct {
-    WaitMS     int64  `json:"wait_ms"`
-    TargetFile string `json:"target_file"`
+    WaitMS          int64  `json:"wait_ms"`
+    TargetFile      string `json:"target_file"`
+    UseMatchRequest *bool  `json:"use_match_request"`
 }

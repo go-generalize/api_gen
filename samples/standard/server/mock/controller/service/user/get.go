@@ -55,6 +55,11 @@ func (ctrl *getController) Get(
 		}
 	}
 
+	if option.UseMatchRequest == nil {
+		flag := true
+		option.UseMatchRequest = &flag
+	}
+
 	if option.WaitMS > 0 {
 		<-time.After(time.Duration(option.WaitMS) * time.Millisecond)
 	}
@@ -117,7 +122,7 @@ func (ctrl *getController) Get(
 		if ok {
 			resMock = mock
 		}
-	} else {
+	} else if *option.UseMatchRequest {
 		jsonNameList := make([]string, 0, len(jsons))
 		for key := range jsons {
 			jsonNameList = append(jsonNameList, key)
@@ -144,7 +149,13 @@ func (ctrl *getController) Get(
 				"message": m,
 			})
 		}
-		log.Println("[default.json] Return the default.json because it did not match rule.")
+
+		if *option.UseMatchRequest {
+			log.Println("[default.json] Return the default.json because it did not match rule.")
+		} else {
+			log.Println("[default.json] Return the default.json because use_match_request is disabled.")
+		}
+
 		resMock = mock
 	}
 
