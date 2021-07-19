@@ -103,6 +103,8 @@ func getSwagType(t types.Type) (typeName string, enums string) {
 	case *types.Array:
 		typeName, _ = getSwagType(t.Inner)
 		return "[]" + typeName, ""
+	case *types.Date:
+		return "string", ""
 	default:
 		return "interface{}", ""
 	}
