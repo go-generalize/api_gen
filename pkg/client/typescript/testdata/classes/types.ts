@@ -4,6 +4,7 @@
 
 export type GetRequest = {
 	Param: string;
+	Time: string;
 }
 export type GetResponse = {
 	Data: string;
