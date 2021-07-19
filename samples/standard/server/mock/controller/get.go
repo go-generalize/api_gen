@@ -36,6 +36,7 @@ func NewGetController(cp interface{}) GetController {
 // @Accept json
 // @Produce json
 // @Param Param query string false "Param"
+// @Param Time query string false "Time"
 // @Success 200 {object} types.GetResponse
 // @Success 200 {object} types.GetResponse
 // @Router / [get]

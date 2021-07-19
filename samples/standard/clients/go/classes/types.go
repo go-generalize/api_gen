@@ -10,6 +10,7 @@ import (
 
 type GetRequest struct {
 	Param string
+	Time  time.Time
 }
 
 type GetResponse struct {

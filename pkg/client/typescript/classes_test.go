@@ -24,7 +24,9 @@ func Test_generator_GenerateTypes(t *testing.T) {
 
 		if err != nil {
 			// nolint:errcheck
-			os.WriteFile(p, []byte(code), 0777)
+			os.MkdirAll(filepath.Dir(p), 0755)
+			// nolint:errcheck
+			os.WriteFile(p, []byte(code), 0644)
 
 			t.Errorf("failed to parse %s: %+v", relPath, err)
 
