@@ -71,6 +71,12 @@ func (g *Generator) generateSwagComment(ep *parser.Endpoint, tstypes map[string]
 	return buf.String()
 }
 
+const (
+	swagParamInteger = "integer"
+	swagParamString  = "string"
+	swagParamBoolean = "boolean"
+)
+
 func getSwagType(t types.Type) (typeName string, enums string) {
 	switch t := t.(type) {
 	case *types.Nullable:
@@ -90,21 +96,21 @@ func getSwagType(t types.Type) (typeName string, enums string) {
 			return "number", enums
 		}
 
-		return "integer", enums
+		return swagParamInteger, enums
 	case *types.Boolean:
-		return "boolean", ""
+		return swagParamBoolean, ""
 	case *types.String:
 		enums = strings.Join(t.Enum, ", ")
 		if len(enums) != 0 {
 			enums = "Enums(" + enums + ")"
 		}
 
-		return "string", enums
+		return swagParamString, enums
 	case *types.Array:
 		typeName, _ = getSwagType(t.Inner)
 		return "[]" + typeName, ""
 	case *types.Date:
-		return "string", ""
+		return swagParamString, ""
 	default:
 		return "interface{}", ""
 	}
