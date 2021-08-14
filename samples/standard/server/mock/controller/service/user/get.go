@@ -36,7 +36,7 @@ func NewGetController(cp interface{}) GetController {
 // @Accept json
 // @Produce json
 // @Success 200 {object} types.GetResponse
-// @Success 200 {object} types.GetResponse
+// @Failure 500 {object} apierror.APIError
 // @Router /service/user/ [get]
 func (ctrl *getController) Get(
 	c echo.Context, req *types.GetRequest,

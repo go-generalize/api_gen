@@ -37,7 +37,7 @@ func NewGetArticleController(cp interface{}) GetArticleController {
 // @Produce json
 // @Param ID query integer false "ID"
 // @Success 200 {object} types.GetArticleResponse
-// @Success 200 {object} types.GetArticleResponse
+// @Failure 500 {object} apierror.APIError
 // @Router /service/article [get]
 func (ctrl *getArticleController) GetArticle(
 	c echo.Context, req *types.GetArticleRequest,

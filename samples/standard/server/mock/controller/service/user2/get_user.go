@@ -39,7 +39,7 @@ func NewGetUserController(cp interface{}) GetUserController {
 // @Param search_request query string false "search_request"
 // @Param user_id path string true "id"
 // @Success 200 {object} types.GetUserResponse
-// @Success 200 {object} types.GetUserResponse
+// @Failure 500 {object} apierror.APIError
 // @Router /service/user2/{user_id} [get]
 func (ctrl *getUserController) GetUser(
 	c echo.Context, req *types.GetUserRequest,

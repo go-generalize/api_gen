@@ -37,7 +37,7 @@ func NewPostUpdateUserPasswordController(cp interface{}) PostUpdateUserPasswordC
 // @Produce json
 // @Param body body types.PostUpdateUserPasswordRequest true "request parameter"
 // @Success 200 {object} types.PostUpdateUserPasswordResponse
-// @Success 200 {object} types.PostUpdateUserPasswordResponse
+// @Failure 500 {object} apierror.APIError
 // @Router /service/user/update_user_password [post]
 func (ctrl *postUpdateUserPasswordController) PostUpdateUserPassword(
 	c echo.Context, req *types.PostUpdateUserPasswordRequest,
