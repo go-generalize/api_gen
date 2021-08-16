@@ -37,7 +37,6 @@ func NewPostUserController(cp interface{}) PostUserController {
 // @Produce json
 // @Param body body types.PostUserRequest true "request parameter"
 // @Success 200 {object} types.PostUserResponse
-// @Failure 500 {object} apierror.APIError
 // @Router /foo/bar/user [post]
 func (ctrl *postUserController) PostUser(
 	c echo.Context, req *types.PostUserRequest,

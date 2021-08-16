@@ -37,7 +37,6 @@ func NewPostCreateTableController(cp interface{}) PostCreateTableController {
 // @Produce json
 // @Param body body types.PostCreateTableRequest true "request parameter"
 // @Success 200 {object} types.PostCreateTableResponse
-// @Failure 500 {object} apierror.APIError
 // @Router /create_table [post]
 func (ctrl *postCreateTableController) PostCreateTable(
 	c echo.Context, req *types.PostCreateTableRequest,

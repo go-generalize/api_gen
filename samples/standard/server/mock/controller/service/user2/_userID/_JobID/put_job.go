@@ -39,7 +39,6 @@ func NewPutJobController(cp interface{}) PutJobController {
 // @Param body body types.PutJobRequest true "request parameter"
 // @Param userID path string true "UserID"
 // @Success 200 {object} types.PutJobResponse
-// @Failure 500 {object} apierror.APIError
 // @Router /service/user2/{userID}/{JobID}/job [put]
 func (ctrl *putJobController) PutJob(
 	c echo.Context, req *types.PutJobRequest,

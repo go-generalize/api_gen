@@ -39,7 +39,6 @@ func NewDeleteUserController(cp interface{}) DeleteUserController {
 // @Param body body types.DeleteUserRequest true "request parameter"
 // @Param user_id path string true "id"
 // @Success 200 {object} types.DeleteUserResponse
-// @Failure 500 {object} apierror.APIError
 // @Router /service/user2/{user_id} [delete]
 func (ctrl *deleteUserController) DeleteUser(
 	c echo.Context, req *types.DeleteUserRequest,

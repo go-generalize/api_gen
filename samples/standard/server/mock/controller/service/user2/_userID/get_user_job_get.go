@@ -37,7 +37,6 @@ func NewGetUserJobGetController(cp interface{}) GetUserJobGetController {
 // @Produce json
 // @Param userID path string true "UserID"
 // @Success 200 {object} types.GetUserJobGetResponse
-// @Failure 500 {object} apierror.APIError
 // @Router /service/user2/{userID}/user_job_get [get]
 func (ctrl *getUserJobGetController) GetUserJobGet(
 	c echo.Context, req *types.GetUserJobGetRequest,

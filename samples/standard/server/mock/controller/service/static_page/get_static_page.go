@@ -36,7 +36,6 @@ func NewGetStaticPageController(cp interface{}) GetStaticPageController {
 // @Accept json
 // @Produce json
 // @Success 200 {object} types.GetStaticPageResponse
-// @Failure 500 {object} apierror.APIError
 // @Router /service/static_page/static_page [get]
 func (ctrl *getStaticPageController) GetStaticPage(
 	c echo.Context, req *types.GetStaticPageRequest,
