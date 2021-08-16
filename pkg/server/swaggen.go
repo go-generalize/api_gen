@@ -65,7 +65,7 @@ func (g *Generator) generateSwagComment(ep *parser.Endpoint, tstypes map[string]
 	buf.WriteString(strings.Join(params, ""))
 
 	buf.WriteString(fmt.Sprintf("// @Success 200 {object} types.%s\n", ep.ResponsePayloadName))
-	buf.WriteString("// @Failure 500 {object} apierror.APIError\n")
+	buf.WriteString("// @Failure 500 {object} apierror.APIError")
 	buf.WriteString(fmt.Sprintf("// @Router %s [%s]\n", path, strings.ToLower(string(ep.Method))))
 
 	return buf.String()
