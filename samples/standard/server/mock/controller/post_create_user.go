@@ -37,7 +37,6 @@ func NewPostCreateUserController(cp interface{}) PostCreateUserController {
 // @Produce json
 // @Param body body types.PostCreateUserRequest true "request parameter"
 // @Success 200 {object} types.PostCreateUserResponse
-// @Success 200 {object} types.PostCreateUserResponse
 // @Router /create_user [post]
 func (ctrl *postCreateUserController) PostCreateUser(
 	c echo.Context, req *types.PostCreateUserRequest,

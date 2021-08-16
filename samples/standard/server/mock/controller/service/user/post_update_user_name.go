@@ -37,7 +37,6 @@ func NewPostUpdateUserNameController(cp interface{}) PostUpdateUserNameControlle
 // @Produce json
 // @Param body body types.PostUpdateUserNameRequest true "request parameter"
 // @Success 200 {object} types.PostUpdateUserNameResponse
-// @Success 200 {object} types.PostUpdateUserNameResponse
 // @Router /service/user/update_user_name [post]
 func (ctrl *postUpdateUserNameController) PostUpdateUserName(
 	c echo.Context, req *types.PostUpdateUserNameRequest,

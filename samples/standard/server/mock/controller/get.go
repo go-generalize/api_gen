@@ -38,7 +38,6 @@ func NewGetController(cp interface{}) GetController {
 // @Param Param query string false "Param"
 // @Param Time query string false "Time"
 // @Success 200 {object} types.GetResponse
-// @Success 200 {object} types.GetResponse
 // @Router / [get]
 func (ctrl *getController) Get(
 	c echo.Context, req *types.GetRequest,
