@@ -3,12 +3,16 @@ package sample
 
 import "time"
 
+// Enum ...
 type Enum string
 
 const (
-	Enum_A Enum = "A"
-	Enum_B Enum = "B"
-	Enum_C Enum = "C"
+	// EnumA ...
+	EnumA Enum = "A"
+	// EnumB ...
+	EnumB Enum = "B"
+	// EnumC ...
+	EnumC Enum = "C"
 )
 
 // GetRequest ...

@@ -62,7 +62,7 @@ const (
 type Enum string
 
 const (
-	Enum_A string = "A"
-	Enum_B string = "B"
-	Enum_C string = "C"
+	EnumA string = "A"
+	EnumB string = "B"
+	EnumC string = "C"
 )
