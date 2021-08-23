@@ -22,7 +22,7 @@ bootstrap:
 	GOBIN=${PWD}/bin go install github.com/swaggo/swag/cmd/swag@latest
 
 .PHONY: test
-test: bootstrap
+test:
 	go test ./... -v
 
 .PHONY: api_gen
