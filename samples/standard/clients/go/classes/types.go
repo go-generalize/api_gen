@@ -9,6 +9,7 @@ import (
 )
 
 type GetRequest struct {
+	Enum  Enum
 	Param string
 	Time  time.Time
 }
@@ -56,4 +57,12 @@ const (
 	CreatedTypeGuest  int = 2
 	CreatedTypeMember int = 1
 	CreatedTypeOwner  int = 0
+)
+
+type Enum string
+
+const (
+	EnumA string = "A"
+	EnumB string = "B"
+	EnumC string = "C"
 )

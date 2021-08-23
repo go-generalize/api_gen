@@ -11,9 +11,9 @@ jobs:
         with:
           go-version: 1.17
       - name: Install dependencies
-        working-directory: /tmp
         run: |
-          go get golang.org/x/tools/cmd/goimports
+          go install golang.org/x/tools/cmd/goimports@latest
+          make bootstrap
       - name: Ensure samples are generated
         env:
           TZ: Asia/Tokyo

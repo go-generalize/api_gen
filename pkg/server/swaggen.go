@@ -35,17 +35,21 @@ func (g *Generator) generateSwagComment(ep *parser.Endpoint, tstypes map[string]
 
 	params := make([]string, 0)
 	for k, v := range obj.Entries {
-		t, enum := getSwagType(v.Type)
+		t, attrs := getSwagType(v.Type)
 
 		param, ok := reflect.StructTag(v.RawTag).Lookup("param")
 		if !ok {
 			param = k
 		}
 
+		if attrs != "" {
+			attrs = " " + attrs
+		}
+
 		if _, ok := placeholders[param]; ok {
-			params = append(params, fmt.Sprintf(`// @Param %s path %s %v "%s"%s`+"\n", param, t, true, k, enum))
+			params = append(params, fmt.Sprintf(`// @Param %s path %s %v "%s"%s`+"\n", param, t, true, k, attrs))
 		} else if ep.Method == parser.GET {
-			params = append(params, fmt.Sprintf(`// @Param %s query %s %v "%s"%s`+"\n", k, t, !v.Optional, k, enum))
+			params = append(params, fmt.Sprintf(`// @Param %s query %s %v "%s"%s`+"\n", k, t, !v.Optional, k, attrs))
 		}
 	}
 
@@ -76,7 +80,7 @@ const (
 	swagParamBoolean = "boolean"
 )
 
-func getSwagType(t types.Type) (typeName string, enums string) {
+func getSwagType(t types.Type) (typeName string, attrs string) {
 	switch t := t.(type) {
 	case *types.Nullable:
 		return getSwagType(t.Inner)
@@ -85,7 +89,7 @@ func getSwagType(t types.Type) (typeName string, enums string) {
 		for i, e := range t.Enum {
 			enumArray[i] = strconv.FormatInt(e, 10)
 		}
-		enums = strings.Join(enumArray, ", ")
+		enums := strings.Join(enumArray, ", ")
 
 		if len(enums) != 0 {
 			enums = "Enums(" + enums + ")"
@@ -99,7 +103,7 @@ func getSwagType(t types.Type) (typeName string, enums string) {
 	case *types.Boolean:
 		return swagParamBoolean, ""
 	case *types.String:
-		enums = strings.Join(t.Enum, ", ")
+		enums := strings.Join(t.Enum, ", ")
 		if len(enums) != 0 {
 			enums = "Enums(" + enums + ")"
 		}
@@ -109,7 +113,7 @@ func getSwagType(t types.Type) (typeName string, enums string) {
 		typeName, _ = getSwagType(t.Inner)
 		return "[]" + typeName, ""
 	case *types.Date:
-		return swagParamString, ""
+		return swagParamString, "Format(date-time)"
 	default:
 		return "interface{}", ""
 	}

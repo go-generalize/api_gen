@@ -31,4 +31,5 @@ jobs:
 
     - name: Run tests
       run: |
+        make bootstrap
         make test

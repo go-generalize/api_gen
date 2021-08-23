@@ -9,7 +9,7 @@
 
 .PHONY: goimports
 goimports:
-	cd /tmp && go get golang.org/x/tools/cmd/goimports
+	cd /tmp && go install golang.org/x/tools/cmd/goimports@latest
 
 .PHONY: bootstrap
 bootstrap: goimports

@@ -5,6 +5,7 @@ set -eu
 WORKDIR=$(dirname $0)
 cd $WORKDIR
 WORKDIR=$(pwd) # Make $WORKDIR abolute
+SWAG=${PWD}/../bin/swag
 
 export PATH=$WORKDIR/../bin:$PATH
 
@@ -25,6 +26,8 @@ for t in ${targets[@]}; do
 
         popd
     done
+    cd ../
+    ${SWAG} init --parseDependency
 
     popd
 done
