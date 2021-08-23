@@ -13,7 +13,7 @@ jobs:
       - name: Install dependencies
         working-directory: /tmp
         run: |
-          go get golang.org/x/tools/cmd/goimports
+          go install golang.org/x/tools/cmd/goimports@latest
           make bootstrap
       - name: Ensure samples are generated
         env:
