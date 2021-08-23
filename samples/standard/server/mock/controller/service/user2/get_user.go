@@ -36,7 +36,7 @@ func NewGetUserController(cp interface{}) GetUserController {
 // @Summary Get user information by user id
 // @Accept json
 // @Produce json
-// @Param search_request query string false "search_request"
+// @Param search_request query string true "search_request"
 // @Param user_id path string true "id"
 // @Success 200 {object} types.GetUserResponse
 // @Router /service/user2/{user_id} [get]
