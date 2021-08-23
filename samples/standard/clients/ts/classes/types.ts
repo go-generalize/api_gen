@@ -3,6 +3,7 @@
 // generated version: devel
 
 export type GetRequest = {
+	Enum: "A" | "B" | "C";
 	Param: string;
 	Time: string;
 }

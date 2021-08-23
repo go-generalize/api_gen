@@ -19,6 +19,7 @@ bootstrap:
 			github.com/moznion/go-errgen/cmd/errgen \
 	)
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.24.0
+	GOBIN=${PWD}/bin go install github.com/swaggo/swag/cmd/swag@latest
 
 .PHONY: test
 test:

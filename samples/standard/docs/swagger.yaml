@@ -1,0 +1,458 @@
+definitions:
+  _JobID.PutJobRequest:
+    properties:
+      jobID:
+        type: string
+      userID:
+        type: string
+    type: object
+  _JobID.PutJobResponse:
+    properties:
+      jobID:
+        type: string
+      requestTime:
+        type: string
+      userID:
+        type: string
+    type: object
+  _userID.GetUserJobGetResponse:
+    properties:
+      jobName:
+        type: string
+      requestTime:
+        type: string
+    type: object
+  sample.GetResponse:
+    properties:
+      data:
+        type: string
+    type: object
+  sample.PostCreateTableRequest:
+    properties:
+      flag:
+        type: integer
+      id:
+        type: string
+      map:
+        additionalProperties:
+          type: integer
+        type: object
+      text:
+        type: string
+    type: object
+  sample.PostCreateTableResponse:
+    properties:
+      id:
+        type: string
+      requestTime:
+        type: string
+    type: object
+  sample.PostCreateUserRequest:
+    properties:
+      birthday:
+        type: string
+      gender:
+        type: integer
+      id:
+        type: string
+      password:
+        type: string
+      roles:
+        items:
+          $ref: '#/definitions/sample.Role'
+        type: array
+    type: object
+  sample.PostCreateUserResponse:
+    properties:
+      createdType:
+        type: integer
+      message:
+        type: string
+      requestedAt:
+        type: string
+      status:
+        type: boolean
+    type: object
+  sample.Role:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      recursionRoles:
+        items:
+          $ref: '#/definitions/sample.Role'
+        type: array
+    type: object
+  service.GetArticleResponse:
+    properties:
+      body:
+        type: string
+      group:
+        items:
+          type: string
+        type: array
+      id:
+        type: integer
+      requestTime:
+        type: string
+    type: object
+  static.GetStaticPageResponse:
+    properties:
+      body:
+        type: string
+      title:
+        type: string
+    type: object
+  user.GetResponse:
+    type: object
+  user.PostUpdateUserNameRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  user.PostUpdateUserNameResponse:
+    properties:
+      message:
+        type: string
+      requestTime:
+        type: string
+      status:
+        type: boolean
+    type: object
+  user.PostUpdateUserPasswordRequest:
+    properties:
+      password:
+        type: string
+      passwordConfirm:
+        type: string
+    type: object
+  user.PostUpdateUserPasswordResponse:
+    properties:
+      message:
+        type: string
+      requestTime:
+        type: string
+      status:
+        type: boolean
+    type: object
+  user2.DeleteUserRequest:
+    properties:
+      id:
+        type: string
+    type: object
+  user2.DeleteUserResponse:
+    type: object
+  user2.GetUserResponse:
+    properties:
+      id:
+        type: string
+      requestTime:
+        type: string
+      searchRequest:
+        type: string
+    type: object
+  user2.PostUpdateUserNameRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  user2.PostUpdateUserNameResponse:
+    properties:
+      message:
+        type: string
+      requestTime:
+        type: string
+      status:
+        type: boolean
+    type: object
+  user2.PostUpdateUserPasswordRequest:
+    properties:
+      password:
+        type: string
+      passwordConfirm:
+        type: string
+    type: object
+  user2.PostUpdateUserPasswordResponse:
+    properties:
+      message:
+        type: string
+      requestTime:
+        type: string
+      status:
+        type: boolean
+    type: object
+info:
+  contact: {}
+paths:
+  /:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Enum
+        enum:
+        - A
+        - B
+        - C
+        in: query
+        name: Enum
+        required: true
+        type: string
+      - description: Param
+        in: query
+        name: Param
+        required: true
+        type: string
+      - description: Time
+        format: date-time
+        in: query
+        name: Time
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/sample.GetResponse'
+  /create_table:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: request parameter
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/sample.PostCreateTableRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/sample.PostCreateTableResponse'
+  /create_user:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: request parameter
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/sample.PostCreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/sample.PostCreateUserResponse'
+  /service/article:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID
+        in: query
+        name: ID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/service.GetArticleResponse'
+  /service/static_page/static_page:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/static.GetStaticPageResponse'
+  /service/user/:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.GetResponse'
+  /service/user/update_user_name:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: request parameter
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user.PostUpdateUserNameRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.PostUpdateUserNameResponse'
+  /service/user/update_user_password:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: request parameter
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user.PostUpdateUserPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.PostUpdateUserPasswordResponse'
+  /service/user2/{user_id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: request parameter
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user2.DeleteUserRequest'
+      - description: id
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user2.DeleteUserResponse'
+      summary: Delete a user by user id
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: search_request
+        in: query
+        name: search_request
+        required: true
+        type: string
+      - description: id
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user2.GetUserResponse'
+      summary: Get user information by user id
+  /service/user2/{userID}/{JobID}/job:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: JobID
+        in: path
+        name: JobID
+        required: true
+        type: string
+      - description: request parameter
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/_JobID.PutJobRequest'
+      - description: UserID
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/_JobID.PutJobResponse'
+  /service/user2/{userID}/user_job_get:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: UserID
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/_userID.GetUserJobGetResponse'
+  /service/user2/update_user_name:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: request parameter
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user2.PostUpdateUserNameRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user2.PostUpdateUserNameResponse'
+  /service/user2/update_user_password:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: request parameter
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user2.PostUpdateUserPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user2.PostUpdateUserPasswordResponse'
+swagger: "2.0"

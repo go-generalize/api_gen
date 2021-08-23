@@ -1,0 +1,27 @@
+definitions:
+  foo.PostUserRequest:
+    type: object
+  foo.PostUserResponse:
+    type: object
+info:
+  contact: {}
+paths:
+  /foo/bar/user:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: request parameter
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/foo.PostUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/foo.PostUserResponse'
+swagger: "2.0"
