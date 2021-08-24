@@ -43,8 +43,6 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
         ctrl := {{ $elem.ControllerImportAlias }}.{{ $elem.ControllerInitializer }}(p)
 
         add("{{ $elem.Method }}", "{{ $elem.Path }}", func(c echo.Context) (interface{}, error) {
-            var werr *apierror.APIError
-
             req := new({{ $elem.TypesImportAlias }}.{{ $elem.RequestStructName }})
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for ({{ $elem.Path }}): %+v", err)
@@ -54,18 +52,12 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
 				return nil, err
 			}
 
             res, err := ctrl.{{ $elem.HandlerName }}(c, req)
 
             if err != nil {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
                 return nil, xerrors.Errorf("{{ $elem.HandlerName }} returned an error: %w", err)
             }
 

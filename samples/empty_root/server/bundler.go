@@ -42,8 +42,6 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 		ctrl := ctrl_bar_ab9de98c.NewPostUserController(p)
 
 		add("POST", "/foo/bar/user", func(c echo.Context) (interface{}, error) {
-			var werr *apierror.APIError
-
 			req := new(types_bar_8619c483.PostUserRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/foo/bar/user): %+v", err)
@@ -53,18 +51,12 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
 				return nil, err
 			}
 
 			res, err := ctrl.PostUser(c, req)
 
 			if err != nil {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
 				return nil, xerrors.Errorf("PostUser returned an error: %w", err)
 			}
 

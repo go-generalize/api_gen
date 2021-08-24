@@ -4,6 +4,7 @@ package apierror
 
 import (
 	"fmt"
+	"net/http"
 
 	"golang.org/x/xerrors"
 )
@@ -18,13 +19,19 @@ type APIError struct {
 // NewAPIError - constructor
 func NewAPIError(status int, bodies ...interface{}) *APIError {
 	ae := &APIError{Status: status}
-	if length := len(bodies); length > 0 {
-		if length == 1 {
-			ae.Body = bodies[0]
-		} else {
-			ae.Body = bodies
+
+	switch len(bodies) {
+	case 0:
+		ae.Body = map[string]interface{}{
+			"code":    status,
+			"message": http.StatusText(status),
 		}
+	case 1:
+		ae.Body = bodies[0]
+	default:
+		ae.Body = bodies
 	}
+
 	return ae
 }
 
