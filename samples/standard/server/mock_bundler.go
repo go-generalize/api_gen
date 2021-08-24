@@ -54,8 +54,6 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 		ctrl := ctrl_controller_12c43f8d.NewGetController(p)
 
 		add("GET", "/", func(c echo.Context) (interface{}, error) {
-			var werr *apierror.APIError
-
 			req := new(types_api_0b9a5e6c.GetRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/): %+v", err)
@@ -65,19 +63,13 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, err
+				return nil, xerrors.Errorf("the validator returned an error: %w", err)
 			}
 
 			res, err := ctrl.Get(c, req)
 
 			if err != nil {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, xerrors.Errorf("Get returned an error: %w", err)
+				return nil, xerrors.Errorf("the handler(Get) returned an error: %w", err)
 			}
 
 			if res == nil {
@@ -92,8 +84,6 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 		ctrl := ctrl_controller_12c43f8d.NewPostCreateTableController(p)
 
 		add("POST", "/create_table", func(c echo.Context) (interface{}, error) {
-			var werr *apierror.APIError
-
 			req := new(types_api_0b9a5e6c.PostCreateTableRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/create_table): %+v", err)
@@ -103,19 +93,13 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, err
+				return nil, xerrors.Errorf("the validator returned an error: %w", err)
 			}
 
 			res, err := ctrl.PostCreateTable(c, req)
 
 			if err != nil {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, xerrors.Errorf("PostCreateTable returned an error: %w", err)
+				return nil, xerrors.Errorf("the handler(PostCreateTable) returned an error: %w", err)
 			}
 
 			if res == nil {
@@ -130,8 +114,6 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 		ctrl := ctrl_controller_12c43f8d.NewPostCreateUserController(p)
 
 		add("POST", "/create_user", func(c echo.Context) (interface{}, error) {
-			var werr *apierror.APIError
-
 			req := new(types_api_0b9a5e6c.PostCreateUserRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/create_user): %+v", err)
@@ -141,19 +123,13 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, err
+				return nil, xerrors.Errorf("the validator returned an error: %w", err)
 			}
 
 			res, err := ctrl.PostCreateUser(c, req)
 
 			if err != nil {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, xerrors.Errorf("PostCreateUser returned an error: %w", err)
+				return nil, xerrors.Errorf("the handler(PostCreateUser) returned an error: %w", err)
 			}
 
 			if res == nil {
@@ -168,8 +144,6 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 		ctrl := ctrl_service_61e5de06.NewGetArticleController(p)
 
 		add("GET", "/service/article", func(c echo.Context) (interface{}, error) {
-			var werr *apierror.APIError
-
 			req := new(types_service_9e7a8e17.GetArticleRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/article): %+v", err)
@@ -179,19 +153,13 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, err
+				return nil, xerrors.Errorf("the validator returned an error: %w", err)
 			}
 
 			res, err := ctrl.GetArticle(c, req)
 
 			if err != nil {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, xerrors.Errorf("GetArticle returned an error: %w", err)
+				return nil, xerrors.Errorf("the handler(GetArticle) returned an error: %w", err)
 			}
 
 			if res == nil {
@@ -206,8 +174,6 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 		ctrl := ctrl_static_page_87ad62fe.NewGetStaticPageController(p)
 
 		add("GET", "/service/static_page/static_page", func(c echo.Context) (interface{}, error) {
-			var werr *apierror.APIError
-
 			req := new(types_static_page_de0aba5f.GetStaticPageRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/static_page/static_page): %+v", err)
@@ -217,19 +183,13 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, err
+				return nil, xerrors.Errorf("the validator returned an error: %w", err)
 			}
 
 			res, err := ctrl.GetStaticPage(c, req)
 
 			if err != nil {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, xerrors.Errorf("GetStaticPage returned an error: %w", err)
+				return nil, xerrors.Errorf("the handler(GetStaticPage) returned an error: %w", err)
 			}
 
 			if res == nil {
@@ -244,8 +204,6 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 		ctrl := ctrl_user_e4c8f2cf.NewGetController(p)
 
 		add("GET", "/service/user/", func(c echo.Context) (interface{}, error) {
-			var werr *apierror.APIError
-
 			req := new(types_user_256eedda.GetRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user/): %+v", err)
@@ -255,19 +213,13 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, err
+				return nil, xerrors.Errorf("the validator returned an error: %w", err)
 			}
 
 			res, err := ctrl.Get(c, req)
 
 			if err != nil {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, xerrors.Errorf("Get returned an error: %w", err)
+				return nil, xerrors.Errorf("the handler(Get) returned an error: %w", err)
 			}
 
 			if res == nil {
@@ -282,8 +234,6 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 		ctrl := ctrl_user_e4c8f2cf.NewPostUpdateUserNameController(p)
 
 		add("POST", "/service/user/update_user_name", func(c echo.Context) (interface{}, error) {
-			var werr *apierror.APIError
-
 			req := new(types_user_256eedda.PostUpdateUserNameRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user/update_user_name): %+v", err)
@@ -293,19 +243,13 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, err
+				return nil, xerrors.Errorf("the validator returned an error: %w", err)
 			}
 
 			res, err := ctrl.PostUpdateUserName(c, req)
 
 			if err != nil {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, xerrors.Errorf("PostUpdateUserName returned an error: %w", err)
+				return nil, xerrors.Errorf("the handler(PostUpdateUserName) returned an error: %w", err)
 			}
 
 			if res == nil {
@@ -320,8 +264,6 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 		ctrl := ctrl_user_e4c8f2cf.NewPostUpdateUserPasswordController(p)
 
 		add("POST", "/service/user/update_user_password", func(c echo.Context) (interface{}, error) {
-			var werr *apierror.APIError
-
 			req := new(types_user_256eedda.PostUpdateUserPasswordRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user/update_user_password): %+v", err)
@@ -331,19 +273,13 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, err
+				return nil, xerrors.Errorf("the validator returned an error: %w", err)
 			}
 
 			res, err := ctrl.PostUpdateUserPassword(c, req)
 
 			if err != nil {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, xerrors.Errorf("PostUpdateUserPassword returned an error: %w", err)
+				return nil, xerrors.Errorf("the handler(PostUpdateUserPassword) returned an error: %w", err)
 			}
 
 			if res == nil {
@@ -358,8 +294,6 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 		ctrl := ctrl_user2_2348a599.NewDeleteUserController(p)
 
 		add("DELETE", "/service/user2/:user_id", func(c echo.Context) (interface{}, error) {
-			var werr *apierror.APIError
-
 			req := new(types_user2_058d5a8a.DeleteUserRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user2/:user_id): %+v", err)
@@ -369,19 +303,13 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, err
+				return nil, xerrors.Errorf("the validator returned an error: %w", err)
 			}
 
 			res, err := ctrl.DeleteUser(c, req)
 
 			if err != nil {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, xerrors.Errorf("DeleteUser returned an error: %w", err)
+				return nil, xerrors.Errorf("the handler(DeleteUser) returned an error: %w", err)
 			}
 
 			if res == nil {
@@ -396,8 +324,6 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 		ctrl := ctrl_user2_2348a599.NewGetUserController(p)
 
 		add("GET", "/service/user2/:user_id", func(c echo.Context) (interface{}, error) {
-			var werr *apierror.APIError
-
 			req := new(types_user2_058d5a8a.GetUserRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user2/:user_id): %+v", err)
@@ -407,19 +333,13 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, err
+				return nil, xerrors.Errorf("the validator returned an error: %w", err)
 			}
 
 			res, err := ctrl.GetUser(c, req)
 
 			if err != nil {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, xerrors.Errorf("GetUser returned an error: %w", err)
+				return nil, xerrors.Errorf("the handler(GetUser) returned an error: %w", err)
 			}
 
 			if res == nil {
@@ -434,8 +354,6 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 		ctrl := ctrl_user2_2348a599.NewPostUpdateUserNameController(p)
 
 		add("POST", "/service/user2/update_user_name", func(c echo.Context) (interface{}, error) {
-			var werr *apierror.APIError
-
 			req := new(types_user2_058d5a8a.PostUpdateUserNameRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user2/update_user_name): %+v", err)
@@ -445,19 +363,13 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, err
+				return nil, xerrors.Errorf("the validator returned an error: %w", err)
 			}
 
 			res, err := ctrl.PostUpdateUserName(c, req)
 
 			if err != nil {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, xerrors.Errorf("PostUpdateUserName returned an error: %w", err)
+				return nil, xerrors.Errorf("the handler(PostUpdateUserName) returned an error: %w", err)
 			}
 
 			if res == nil {
@@ -472,8 +384,6 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 		ctrl := ctrl_user2_2348a599.NewPostUpdateUserPasswordController(p)
 
 		add("POST", "/service/user2/update_user_password", func(c echo.Context) (interface{}, error) {
-			var werr *apierror.APIError
-
 			req := new(types_user2_058d5a8a.PostUpdateUserPasswordRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user2/update_user_password): %+v", err)
@@ -483,19 +393,13 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, err
+				return nil, xerrors.Errorf("the validator returned an error: %w", err)
 			}
 
 			res, err := ctrl.PostUpdateUserPassword(c, req)
 
 			if err != nil {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, xerrors.Errorf("PostUpdateUserPassword returned an error: %w", err)
+				return nil, xerrors.Errorf("the handler(PostUpdateUserPassword) returned an error: %w", err)
 			}
 
 			if res == nil {
@@ -510,8 +414,6 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 		ctrl := ctrl__userID_145a08ca.NewGetUserJobGetController(p)
 
 		add("GET", "/service/user2/:userID/user_job_get", func(c echo.Context) (interface{}, error) {
-			var werr *apierror.APIError
-
 			req := new(types__userID_c13e838d.GetUserJobGetRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user2/:userID/user_job_get): %+v", err)
@@ -521,19 +423,13 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, err
+				return nil, xerrors.Errorf("the validator returned an error: %w", err)
 			}
 
 			res, err := ctrl.GetUserJobGet(c, req)
 
 			if err != nil {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, xerrors.Errorf("GetUserJobGet returned an error: %w", err)
+				return nil, xerrors.Errorf("the handler(GetUserJobGet) returned an error: %w", err)
 			}
 
 			if res == nil {
@@ -548,8 +444,6 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 		ctrl := ctrl__JobID_59b29e1f.NewPutJobController(p)
 
 		add("PUT", "/service/user2/:userID/:JobID/job", func(c echo.Context) (interface{}, error) {
-			var werr *apierror.APIError
-
 			req := new(types__JobID_3469130f.PutJobRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user2/:userID/:JobID/job): %+v", err)
@@ -559,19 +453,13 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, err
+				return nil, xerrors.Errorf("the validator returned an error: %w", err)
 			}
 
 			res, err := ctrl.PutJob(c, req)
 
 			if err != nil {
-				if xerrors.As(err, &werr) {
-					return nil, c.JSON(werr.Status, werr.Body)
-				}
-				return nil, xerrors.Errorf("PutJob returned an error: %w", err)
+				return nil, xerrors.Errorf("the handler(PutJob) returned an error: %w", err)
 			}
 
 			if res == nil {
