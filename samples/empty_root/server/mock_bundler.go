@@ -51,7 +51,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				return nil, err
+				return nil, xerrors.Errorf("Validate returned an error: %w", err)
 			}
 
 			res, err := ctrl.PostUser(c, req)

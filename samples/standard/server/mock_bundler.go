@@ -63,7 +63,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				return nil, err
+				return nil, xerrors.Errorf("Validate returned an error: %w", err)
 			}
 
 			res, err := ctrl.Get(c, req)
@@ -93,7 +93,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				return nil, err
+				return nil, xerrors.Errorf("Validate returned an error: %w", err)
 			}
 
 			res, err := ctrl.PostCreateTable(c, req)
@@ -123,7 +123,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				return nil, err
+				return nil, xerrors.Errorf("Validate returned an error: %w", err)
 			}
 
 			res, err := ctrl.PostCreateUser(c, req)
@@ -153,7 +153,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				return nil, err
+				return nil, xerrors.Errorf("Validate returned an error: %w", err)
 			}
 
 			res, err := ctrl.GetArticle(c, req)
@@ -183,7 +183,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				return nil, err
+				return nil, xerrors.Errorf("Validate returned an error: %w", err)
 			}
 
 			res, err := ctrl.GetStaticPage(c, req)
@@ -213,7 +213,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				return nil, err
+				return nil, xerrors.Errorf("Validate returned an error: %w", err)
 			}
 
 			res, err := ctrl.Get(c, req)
@@ -243,7 +243,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				return nil, err
+				return nil, xerrors.Errorf("Validate returned an error: %w", err)
 			}
 
 			res, err := ctrl.PostUpdateUserName(c, req)
@@ -273,7 +273,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				return nil, err
+				return nil, xerrors.Errorf("Validate returned an error: %w", err)
 			}
 
 			res, err := ctrl.PostUpdateUserPassword(c, req)
@@ -303,7 +303,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				return nil, err
+				return nil, xerrors.Errorf("Validate returned an error: %w", err)
 			}
 
 			res, err := ctrl.DeleteUser(c, req)
@@ -333,7 +333,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				return nil, err
+				return nil, xerrors.Errorf("Validate returned an error: %w", err)
 			}
 
 			res, err := ctrl.GetUser(c, req)
@@ -363,7 +363,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				return nil, err
+				return nil, xerrors.Errorf("Validate returned an error: %w", err)
 			}
 
 			res, err := ctrl.PostUpdateUserName(c, req)
@@ -393,7 +393,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				return nil, err
+				return nil, xerrors.Errorf("Validate returned an error: %w", err)
 			}
 
 			res, err := ctrl.PostUpdateUserPassword(c, req)
@@ -423,7 +423,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				return nil, err
+				return nil, xerrors.Errorf("Validate returned an error: %w", err)
 			}
 
 			res, err := ctrl.GetUserJobGet(c, req)
@@ -453,7 +453,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 				})
 			}
 			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
-				return nil, err
+				return nil, xerrors.Errorf("Validate returned an error: %w", err)
 			}
 
 			res, err := ctrl.PutJob(c, req)
