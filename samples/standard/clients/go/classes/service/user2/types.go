@@ -15,8 +15,13 @@ type DeleteUserRequest struct {
 type DeleteUserResponse struct {
 }
 
+type Embedding struct {
+	Page string `json:"page" query:"p"`
+}
+
 type GetUserRequest struct {
 	ID            string `json:"id" param:"user_id"`
+	Page          string `json:"page" query:"p"`
 	SearchRequest string `json:"search_request" query:"search_request"`
 }
 

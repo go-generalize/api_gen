@@ -10,7 +10,7 @@ import (
 	"text/template"
 
 	"github.com/go-generalize/api_gen/pkg/parser"
-	"github.com/go-utils/astutil"
+	"github.com/go-generalize/api_gen/pkg/util"
 	"github.com/iancoleman/strcase"
 )
 
@@ -50,13 +50,13 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint) (*endpointType, []impo
 
 	endpoint.Endpoint = ep.GetFullPath("/", func(rawPath, path, placeholder string) string {
 		if placeholder != "" {
-			field := astutil.FindStructField(ep.RequestPayload, parser.QueryParamTag, placeholder)
+			field := util.FindStructField(ep.RequestGo2tsPayload, parser.QueryParamTag, placeholder)
 			jsonKey := field
 
-			for _, f := range ep.RequestPayload.Fields.List {
-				if f.Names[0].Name == field && f.Tag != nil {
+			for _, f := range ep.RequestGo2tsPayload.Entries {
+				if f.RawName == field {
 					j, ok := reflect.
-						StructTag(strings.Trim(f.Tag.Value, "`")).
+						StructTag(f.RawTag).
 						Lookup(parser.JSONParamTag)
 
 					if ok {
@@ -75,12 +75,12 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint) (*endpointType, []impo
 	})
 
 	urlParams := make(map[string]string)
-	for _, field := range ep.RequestPayload.Fields.List {
-		param := field.Names[0].Name
-		jsonKey := field.Names[0].Name
+	for key, field := range ep.RequestGo2tsPayload.Entries {
+		param := field.RawName
+		jsonKey := key
 
-		if field.Tag != nil {
-			tags := reflect.StructTag(strings.Trim(field.Tag.Value, "`"))
+		if field.RawTag != "" {
+			tags := reflect.StructTag(field.RawTag)
 
 			tag, ok := tags.Lookup(parser.JSONParamTag)
 

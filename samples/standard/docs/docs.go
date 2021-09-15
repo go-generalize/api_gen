@@ -389,6 +389,13 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "search_request",
                         "name": "search_request",
                         "in": "query",

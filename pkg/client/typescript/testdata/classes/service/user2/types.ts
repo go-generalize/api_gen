@@ -6,8 +6,12 @@ export type DeleteUserRequest = {
 	id: string;
 }
 export type DeleteUserResponse = {}
+export type Embedding = {
+	page: string;
+}
 export type GetUserRequest = {
 	id: string;
+	page: string;
 	search_request: string;
 }
 export type GetUserResponse = {

@@ -356,6 +356,11 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: string
       - description: search_request
         in: query
         name: search_request
