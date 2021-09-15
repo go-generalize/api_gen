@@ -13,9 +13,9 @@ import (
 
 	"github.com/go-generalize/api_gen/pkg/agerrors"
 	"github.com/go-generalize/api_gen/pkg/common"
+	"github.com/go-generalize/api_gen/pkg/util"
 	go2tsparser "github.com/go-generalize/go2ts/pkg/parser"
 	go2tstypes "github.com/go-generalize/go2ts/pkg/types"
-	"github.com/go-utils/astutil"
 	"github.com/go-utils/gopackages"
 	"github.com/iancoleman/strcase"
 	"golang.org/x/xerrors"
@@ -370,7 +370,7 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 			var err error
 			v.GetFullPath("", func(rawPath, path, placeholder string) string {
 				if placeholder != "" {
-					queryParamField := astutil.FindStructField(v.RequestPayload, QueryParamTag, placeholder)
+					queryParamField := util.FindStructField(v.RequestGo2tsPayload, QueryParamTag, placeholder)
 					if queryParamField == "" {
 						err = agerrors.NewParserError(
 							v.File,
