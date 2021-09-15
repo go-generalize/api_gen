@@ -5,6 +5,7 @@ import "time"
 
 // @Summary Get user information by user id
 
+// Embedding ...
 type Embedding struct {
 	Page string `json:"page" query:"p"`
 }
