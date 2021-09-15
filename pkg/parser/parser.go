@@ -367,6 +367,26 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 			}
 			v.parentGroup = gr
 
+			req, ok := go2tsTypes[v.RequestPayloadName]
+			if !ok {
+				return nil, xerrors.Errorf("request type is not found from types parsed by go2ts: %s", v.RequestPayloadName)
+			}
+			reqObj, ok := req.(*go2tstypes.Object)
+			if !ok {
+				return nil, xerrors.Errorf("request type is not object: %s", v.RequestPayloadName)
+			}
+			v.RequestGo2tsPayload = reqObj
+
+			res, ok := go2tsTypes[v.ResponsePayloadName]
+			if !ok {
+				return nil, xerrors.Errorf("response type is not found from types parsed by go2ts: %s", v.ResponsePayloadName)
+			}
+			resObj, ok := res.(*go2tstypes.Object)
+			if !ok {
+				return nil, xerrors.Errorf("response type is not object: %s", v.ResponsePayloadName)
+			}
+			v.ResponseGo2tsPayload = resObj
+
 			var err error
 			v.GetFullPath("", func(rawPath, path, placeholder string) string {
 				if placeholder != "" {
@@ -389,26 +409,6 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 			if err != nil {
 				return nil, xerrors.Errorf("invalid endpoint: %w", err)
 			}
-
-			req, ok := go2tsTypes[v.RequestPayloadName]
-			if !ok {
-				return nil, xerrors.Errorf("request type is not found from types parsed by go2ts: %s", v.RequestPayloadName)
-			}
-			reqObj, ok := req.(*go2tstypes.Object)
-			if !ok {
-				return nil, xerrors.Errorf("request type is not object: %s", v.RequestPayloadName)
-			}
-			v.RequestGo2tsPayload = reqObj
-
-			res, ok := go2tsTypes[v.ResponsePayloadName]
-			if !ok {
-				return nil, xerrors.Errorf("response type is not found from types parsed by go2ts: %s", v.ResponsePayloadName)
-			}
-			resObj, ok := res.(*go2tstypes.Object)
-			if !ok {
-				return nil, xerrors.Errorf("response type is not object: %s", v.ResponsePayloadName)
-			}
-			v.ResponseGo2tsPayload = resObj
 
 			gr.Endpoints = append(gr.Endpoints, v)
 		}
