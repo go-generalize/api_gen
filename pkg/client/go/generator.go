@@ -11,7 +11,7 @@ import (
 	"text/template"
 
 	"github.com/go-generalize/api_gen/pkg/parser"
-	"github.com/go-utils/astutil"
+	"github.com/go-generalize/api_gen/pkg/util"
 	"github.com/iancoleman/strcase"
 )
 
@@ -116,7 +116,7 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint) *endpoint {
 		if placeholder != "" {
 			return fmt.Sprintf(
 				`" + fmt.Sprint(reqPayload.%s) + "`,
-				astutil.FindStructField(ep.RequestPayload, parser.QueryParamTag, placeholder),
+				util.FindStructField(ep.RequestGo2tsPayload, parser.QueryParamTag, placeholder),
 			)
 		}
 

@@ -4,8 +4,8 @@ package clientgo
 import (
 	"fmt"
 	"path/filepath"
-	"strings"
 
+	"github.com/go-generalize/api_gen/pkg/common"
 	"github.com/go-generalize/api_gen/pkg/parser"
 	"github.com/go-generalize/go2go"
 	go2tsparser "github.com/go-generalize/go2ts/pkg/parser"
@@ -17,20 +17,6 @@ const headerComment = `// THIS FILE IS A GENERATED CODE.
 // generated version: %s
 
 `
-
-func parserFilter(opt *go2tsparser.FilterOpt) bool {
-	if opt.Dependency {
-		return true
-	}
-	if !opt.BasePackage {
-		return false
-	}
-	if !opt.Exported {
-		return false
-	}
-
-	return strings.HasSuffix(opt.Name, "Request") || strings.HasSuffix(opt.Name, "Response")
-}
 
 // GenerateTypes generates request/response types in Go
 func (g *generator) GenerateTypes(fn func(relPath, code string) error) error {
@@ -54,7 +40,7 @@ func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string
 		return nil
 	}
 
-	psr, err := go2tsparser.NewParser(gr.Dir, parserFilter)
+	psr, err := go2tsparser.NewParser(gr.Dir, common.ParserFilter)
 
 	if err != nil {
 		return xerrors.Errorf("failed to parse %s: %w", gr.Dir, err)

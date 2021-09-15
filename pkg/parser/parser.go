@@ -12,6 +12,9 @@ import (
 	"strings"
 
 	"github.com/go-generalize/api_gen/pkg/agerrors"
+	"github.com/go-generalize/api_gen/pkg/common"
+	go2tsparser "github.com/go-generalize/go2ts/pkg/parser"
+	go2tstypes "github.com/go-generalize/go2ts/pkg/types"
 	"github.com/go-utils/astutil"
 	"github.com/go-utils/gopackages"
 	"github.com/iancoleman/strcase"
@@ -219,6 +222,44 @@ func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.
 	return eps, nil
 }
 
+func (p *parser) parseGo2tsDir(dir string) (map[string]go2tstypes.Type, error) {
+	psr, err := go2tsparser.NewParser(dir, func(fo *go2tsparser.FilterOpt) bool {
+		if !fo.BasePackage {
+			return false
+		}
+
+		return common.ParserFilter(fo)
+	})
+
+	if err != nil {
+		return nil, xerrors.Errorf("failed to parse %s: %w", dir, err)
+	}
+
+	parsed, err := psr.Parse()
+
+	if err != nil {
+		return nil, xerrors.Errorf("failed to parse %s: %w", dir, err)
+	}
+
+	results := make(map[string]go2tstypes.Type)
+	for key, pkg := range parsed {
+		if !(strings.HasSuffix(key, "Request") || strings.HasSuffix(key, "Response")) {
+			continue
+		}
+
+		idx := strings.LastIndex(key, ".")
+		if idx == -1 {
+			continue
+		}
+
+		name := key[idx+1:]
+
+		results[name] = pkg
+	}
+
+	return results, nil
+}
+
 func (p *parser) parsePackage(dir string) (*Group, error) {
 	gomod, err := p.getGoModulePackage(dir)
 
@@ -279,6 +320,12 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 
 	if !hasGoFile {
 		return gr, nil
+	}
+
+	go2tsTypes, err := p.parseGo2tsDir(dir)
+
+	if err != nil {
+		return nil, xerrors.Errorf("failed to parse dir with go2ts parser: %w", err)
 	}
 
 	pkgs, err := goparser.ParseDir(fset, dir, nil, goparser.AllErrors|goparser.ParseComments)
@@ -342,6 +389,26 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 			if err != nil {
 				return nil, xerrors.Errorf("invalid endpoint: %w", err)
 			}
+
+			req, ok := go2tsTypes[v.RequestPayloadName]
+			if !ok {
+				return nil, xerrors.Errorf("request type is not found from types parsed by go2ts: %s", v.RequestPayloadName)
+			}
+			reqObj, ok := req.(*go2tstypes.Object)
+			if !ok {
+				return nil, xerrors.Errorf("request type is not object: %s", v.RequestPayloadName)
+			}
+			v.RequestGo2tsPayload = reqObj
+
+			res, ok := go2tsTypes[v.ResponsePayloadName]
+			if !ok {
+				return nil, xerrors.Errorf("response type is not found from types parsed by go2ts: %s", v.ResponsePayloadName)
+			}
+			resObj, ok := res.(*go2tstypes.Object)
+			if !ok {
+				return nil, xerrors.Errorf("response type is not object: %s", v.ResponsePayloadName)
+			}
+			v.ResponseGo2tsPayload = resObj
 
 			gr.Endpoints = append(gr.Endpoints, v)
 		}

@@ -5,6 +5,8 @@ import (
 	"go/ast"
 	"go/token"
 	"strings"
+
+	go2tstypes "github.com/go-generalize/go2ts/pkg/types"
 )
 
 // MethodType represents methods for HTTP
@@ -60,10 +62,12 @@ type Endpoint struct {
 	RawPath, Path string
 	Placeholder   string
 
-	RequestPayloadName  string
-	ResponsePayloadName string
-	RequestPayload      *ast.StructType
-	ResponsePayload     *ast.StructType
+	RequestPayloadName   string
+	ResponsePayloadName  string
+	RequestPayload       *ast.StructType
+	ResponsePayload      *ast.StructType
+	RequestGo2tsPayload  *go2tstypes.Object
+	ResponseGo2tsPayload *go2tstypes.Object
 
 	SwagComments []string
 
