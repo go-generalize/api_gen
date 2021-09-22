@@ -24,5 +24,5 @@ func main() {
 	}))
 
 	// Start echo server
-	e.Start(":5050")
+	panic(e.Start(":5050"))
 }
