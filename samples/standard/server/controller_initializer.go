@@ -8,6 +8,7 @@ import (
 	"runtime/debug"
 	"strings"
 
+	apierror "github.com/go-generalize/api_gen/samples/standard/server/pkg/apierror"
 	props "github.com/go-generalize/api_gen/samples/standard/server/props"
 	"github.com/labstack/echo/v4"
 )
@@ -17,9 +18,14 @@ type middleware struct {
 	middleware echo.MiddlewareFunc
 }
 
+type options struct {
+	disableErrorHandling bool
+}
+
 // Controllers binds handlers to echo
 type Controllers struct {
 	middlewares []middleware
+	options
 }
 
 // NewControllers returns a new Controllers
@@ -51,19 +57,16 @@ func NewControllers(
 
 				if httpErr, ok := recoverErr.(*echo.HTTPError); ok {
 					err = c.JSON(httpErr.Code, httpErr.Message)
+				} else {
+					err = apierror.NewAPIError(http.StatusInternalServerError, "internal server error.")
 				}
-
-				err = c.JSON(http.StatusInternalServerError, map[string]interface{}{
-					"code":    http.StatusInternalServerError,
-					"message": "internal server error.",
-				})
 			}()
 
 			return before(c)
 		}
 	})
 
-	addRoutes(e, props)
+	addRoutes(e, props, &ctrl.options)
 
 	return ctrl
 }
@@ -74,4 +77,9 @@ func (c *Controllers) AddMiddleware(path string, m echo.MiddlewareFunc) {
 		path:       path,
 		middleware: m,
 	})
+}
+
+// DisableErrorHandling disables
+func (c *Controllers) DisableErrorHandling() {
+	c.disableErrorHandling = true
 }

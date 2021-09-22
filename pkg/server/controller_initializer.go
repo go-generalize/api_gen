@@ -11,7 +11,7 @@ import (
 	"golang.org/x/xerrors"
 )
 
-func (g *Generator) generateControllerInitializer(initializerPath, propsPackage string) error {
+func (g *Generator) generateControllerInitializer(initializerPath, propsPackage, apiErrorPackage string) error {
 	fp, err := os.Create(filepath.Join(initializerPath, "controller_initializer.go"))
 	if err != nil {
 		return xerrors.Errorf("failed to create %s: %w", initializerPath, err)
@@ -21,6 +21,7 @@ func (g *Generator) generateControllerInitializer(initializerPath, propsPackage 
 	buf := bytes.NewBuffer(nil)
 	if err := g.controllerInitializerTemplate.Execute(buf, map[string]string{
 		"ControllerPropsPackage": propsPackage,
+		"ApiErrorPackage":        apiErrorPackage,
 		"Package":                g.basePackage,
 		"AppVersion":             g.AppVersion,
 	}); err != nil {

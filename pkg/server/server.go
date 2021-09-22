@@ -81,7 +81,7 @@ func (g *Generator) Generate() error {
 		return xerrors.Errorf("failed to generate props in %s: %w", propsPath, err)
 	}
 
-	err = g.generateControllerInitializer(g.base, propsPackage)
+	err = g.generateControllerInitializer(g.base, propsPackage, apierrorPackage)
 	if err != nil {
 		return xerrors.Errorf("failed to generate controller initializer: %w", err)
 	}
