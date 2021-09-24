@@ -45,7 +45,7 @@ func NewControllers(
 			return next(c)
 		}
 	})
-	e.Use(func(before echo.HandlerFunc) echo.HandlerFunc {
+	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {
 			defer func() {
 				recoverErr := recover()
@@ -57,12 +57,14 @@ func NewControllers(
 
 				if httpErr, ok := recoverErr.(*echo.HTTPError); ok {
 					err = c.JSON(httpErr.Code, httpErr.Message)
-				} else {
-					err = apierror.NewAPIError(http.StatusInternalServerError, "internal server error.")
+
+					return
 				}
+
+				err = apierror.NewAPIError(http.StatusInternalServerError, "internal server error.")
 			}()
 
-			return before(c)
+			return next(c)
 		}
 	})
 
