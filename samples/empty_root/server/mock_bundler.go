@@ -16,7 +16,7 @@ import (
 	xerrors "golang.org/x/xerrors"
 )
 
-func addRoutes(e *echo.Echo, p *props.ControllerProps) {
+func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 	add := func(method, path string, handler func(c echo.Context) (interface{}, error)) {
 		e.Add(method, path, func(c echo.Context) error {
 			var werr *apierror.APIError
@@ -24,7 +24,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps) {
 			res, err := handler(c)
 
 			if err != nil {
-				if xerrors.As(err, &werr) {
+				if !opt.disableErrorHandling && xerrors.As(err, &werr) {
 					c.Logger().Errorf("%+v", werr)
 					return c.JSON(werr.Status, werr.Body)
 				}
