@@ -28,7 +28,7 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
                     c.Logger().Errorf("%+v", werr)
                     return c.JSON(werr.Status, werr.Body)
                 }
-                return err
+                return xerrors.Errorf("%s %s returned an error: %w", method, path, err)
             }
             if res == nil {
                 return nil
