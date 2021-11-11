@@ -5,12 +5,12 @@
 import {
 	GetStaticPageRequest as ServiceStaticPageGetStaticPageRequest,
 	GetStaticPageResponse as ServiceStaticPageGetStaticPageResponse,
-} from './classes/service/static_page/types.ts';
+} from './classes/service/static_page/types';
 
 import {
 	GetArticleRequest as ServiceGetArticleRequest,
 	GetArticleResponse as ServiceGetArticleResponse,
-} from './classes/service/types.ts';
+} from './classes/service/types';
 
 import {
 	GetRequest as ServiceUserGetRequest,
@@ -19,17 +19,17 @@ import {
 	PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse,
 	PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest,
 	PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse,
-} from './classes/service/user/types.ts';
+} from './classes/service/user/types';
 
 import {
 	PutJobRequest as ServiceUser2UserIDJobIDPutJobRequest,
 	PutJobResponse as ServiceUser2UserIDJobIDPutJobResponse,
-} from './classes/service/user2/_userID/_JobID/types.ts';
+} from './classes/service/user2/_userID/_JobID/types';
 
 import {
 	GetUserJobGetRequest as ServiceUser2UserIDGetUserJobGetRequest,
 	GetUserJobGetResponse as ServiceUser2UserIDGetUserJobGetResponse,
-} from './classes/service/user2/_userID/types.ts';
+} from './classes/service/user2/_userID/types';
 
 import {
 	DeleteUserRequest as ServiceUser2DeleteUserRequest,
@@ -40,7 +40,7 @@ import {
 	PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse,
 	PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest,
 	PostUpdateUserPasswordResponse as ServiceUser2PostUpdateUserPasswordResponse,
-} from './classes/service/user2/types.ts';
+} from './classes/service/user2/types';
 
 import {
 	GetRequest as GetRequest,
@@ -49,7 +49,7 @@ import {
 	PostCreateTableResponse as PostCreateTableResponse,
 	PostCreateUserRequest as PostCreateUserRequest,
 	PostCreateUserResponse as PostCreateUserResponse,
-} from './classes/types.ts';
+} from './classes/types';
 
 export interface MiddlewareContext {
 	httpMethod: string;
