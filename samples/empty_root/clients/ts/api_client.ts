@@ -76,11 +76,39 @@ class FooBarClient {
 		}
 	}
 
+	/** @deprecated */
 	async postUser(
 		param: FooBarPostUserRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<FooBarPostUserResponse>;
+	async postUser(
+		param: FooBarPostUserRequest,
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<FooBarPostUserResponse>;
+
+	async postUser(
+		param: FooBarPostUserRequest,
+		arg1?: any,
+		arg2?: any
 	): Promise<FooBarPostUserResponse> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			headers = arg1.options;
+		}
+
 	    const excludeParams: string[] = [];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {

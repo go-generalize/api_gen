@@ -99,11 +99,39 @@ class {{ $elem.Name }} {
 	}
 {{- 	range $index, $method := $elem.Methods }}
 
+	/** @deprecated */
 	async {{ $method.Name }}(
 		param: {{ $method.RequestType }},
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<{{ $method.ResponseType }}>;
+	async {{ $method.Name }}(
+		param: {{ $method.RequestType }},
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<{{ $method.ResponseType }}>;
+
+	async {{ $method.Name }}(
+		param: {{ $method.RequestType }},
+		arg1?: any,
+		arg2?: any
 	): Promise<{{ $method.ResponseType }}> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			headers = arg1.options;
+		}
+
 	    const excludeParams: string[] = [{{ range $param := $method.URLParams }}'{{ $param }}', {{ end }}];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
@@ -250,11 +278,39 @@ export class APIClient {
 	}
 {{- range $index, $method := .Methods }}
 
+	/** @deprecated */
 	async {{ $method.Name }}(
 		param: {{ $method.RequestType }},
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<{{ $method.ResponseType }}>;
+	async {{ $method.Name }}(
+		param: {{ $method.RequestType }},
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<{{ $method.ResponseType }}>;
+
+	async {{ $method.Name }}(
+		param: {{ $method.RequestType }},
+		arg1?: any,
+		arg2?: any
 	): Promise<{{ $method.ResponseType }}> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			headers = arg1.options;
+		}
+
 	    const excludeParams: string[] = [{{ range $param := $method.URLParams }}'{{ $param }}', {{ end }}];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
