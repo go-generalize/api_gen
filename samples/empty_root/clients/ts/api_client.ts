@@ -106,7 +106,7 @@ class FooBarClient {
 			options = arg2;
 		} else {
 			headers = arg1.headers;
-			headers = arg1.options;
+			options = arg1.options;
 		}
 
 	    const excludeParams: string[] = [];

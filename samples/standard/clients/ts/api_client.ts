@@ -5,12 +5,12 @@
 import {
 	GetStaticPageRequest as ServiceStaticPageGetStaticPageRequest,
 	GetStaticPageResponse as ServiceStaticPageGetStaticPageResponse,
-} from './classes/service/static_page/types';
+} from './classes/service/static_page/types.ts';
 
 import {
 	GetArticleRequest as ServiceGetArticleRequest,
 	GetArticleResponse as ServiceGetArticleResponse,
-} from './classes/service/types';
+} from './classes/service/types.ts';
 
 import {
 	GetRequest as ServiceUserGetRequest,
@@ -19,17 +19,17 @@ import {
 	PostUpdateUserNameResponse as ServiceUserPostUpdateUserNameResponse,
 	PostUpdateUserPasswordRequest as ServiceUserPostUpdateUserPasswordRequest,
 	PostUpdateUserPasswordResponse as ServiceUserPostUpdateUserPasswordResponse,
-} from './classes/service/user/types';
+} from './classes/service/user/types.ts';
 
 import {
 	PutJobRequest as ServiceUser2UserIDJobIDPutJobRequest,
 	PutJobResponse as ServiceUser2UserIDJobIDPutJobResponse,
-} from './classes/service/user2/_userID/_JobID/types';
+} from './classes/service/user2/_userID/_JobID/types.ts';
 
 import {
 	GetUserJobGetRequest as ServiceUser2UserIDGetUserJobGetRequest,
 	GetUserJobGetResponse as ServiceUser2UserIDGetUserJobGetResponse,
-} from './classes/service/user2/_userID/types';
+} from './classes/service/user2/_userID/types.ts';
 
 import {
 	DeleteUserRequest as ServiceUser2DeleteUserRequest,
@@ -40,7 +40,7 @@ import {
 	PostUpdateUserNameResponse as ServiceUser2PostUpdateUserNameResponse,
 	PostUpdateUserPasswordRequest as ServiceUser2PostUpdateUserPasswordRequest,
 	PostUpdateUserPasswordResponse as ServiceUser2PostUpdateUserPasswordResponse,
-} from './classes/service/user2/types';
+} from './classes/service/user2/types.ts';
 
 import {
 	GetRequest as GetRequest,
@@ -49,7 +49,7 @@ import {
 	PostCreateTableResponse as PostCreateTableResponse,
 	PostCreateUserRequest as PostCreateUserRequest,
 	PostCreateUserResponse as PostCreateUserResponse,
-} from './classes/types';
+} from './classes/types.ts';
 
 export interface MiddlewareContext {
 	httpMethod: string;
@@ -175,7 +175,7 @@ class ServiceClient {
 			options = arg2;
 		} else {
 			headers = arg1.headers;
-			headers = arg1.options;
+			options = arg1.options;
 		}
 
 	    const excludeParams: string[] = [];
@@ -300,7 +300,7 @@ class ServiceStaticPageClient {
 			options = arg2;
 		} else {
 			headers = arg1.headers;
-			headers = arg1.options;
+			options = arg1.options;
 		}
 
 	    const excludeParams: string[] = [];
@@ -436,7 +436,7 @@ class ServiceUser2Client {
 			options = arg2;
 		} else {
 			headers = arg1.headers;
-			headers = arg1.options;
+			options = arg1.options;
 		}
 
 	    const excludeParams: string[] = ['id', ];
@@ -516,7 +516,7 @@ class ServiceUser2Client {
 			options = arg2;
 		} else {
 			headers = arg1.headers;
-			headers = arg1.options;
+			options = arg1.options;
 		}
 
 	    const excludeParams: string[] = ['id', ];
@@ -594,7 +594,7 @@ class ServiceUser2Client {
 			options = arg2;
 		} else {
 			headers = arg1.headers;
-			headers = arg1.options;
+			options = arg1.options;
 		}
 
 	    const excludeParams: string[] = [];
@@ -673,7 +673,7 @@ class ServiceUser2Client {
 			options = arg2;
 		} else {
 			headers = arg1.headers;
-			headers = arg1.options;
+			options = arg1.options;
 		}
 
 	    const excludeParams: string[] = [];
@@ -810,7 +810,7 @@ class ServiceUser2UserIDClient {
 			options = arg2;
 		} else {
 			headers = arg1.headers;
-			headers = arg1.options;
+			options = arg1.options;
 		}
 
 	    const excludeParams: string[] = ['UserID', ];
@@ -935,7 +935,7 @@ class ServiceUser2UserIDJobIDClient {
 			options = arg2;
 		} else {
 			headers = arg1.headers;
-			headers = arg1.options;
+			options = arg1.options;
 		}
 
 	    const excludeParams: string[] = ['JobID', 'UserID', ];
@@ -1061,7 +1061,7 @@ class ServiceUserClient {
 			options = arg2;
 		} else {
 			headers = arg1.headers;
-			headers = arg1.options;
+			options = arg1.options;
 		}
 
 	    const excludeParams: string[] = [];
@@ -1140,7 +1140,7 @@ class ServiceUserClient {
 			options = arg2;
 		} else {
 			headers = arg1.headers;
-			headers = arg1.options;
+			options = arg1.options;
 		}
 
 	    const excludeParams: string[] = [];
@@ -1219,7 +1219,7 @@ class ServiceUserClient {
 			options = arg2;
 		} else {
 			headers = arg1.headers;
-			headers = arg1.options;
+			options = arg1.options;
 		}
 
 	    const excludeParams: string[] = [];
@@ -1379,7 +1379,7 @@ export class APIClient {
 			options = arg2;
 		} else {
 			headers = arg1.headers;
-			headers = arg1.options;
+			options = arg1.options;
 		}
 
 	    const excludeParams: string[] = [];
@@ -1462,7 +1462,7 @@ export class APIClient {
 			options = arg2;
 		} else {
 			headers = arg1.headers;
-			headers = arg1.options;
+			options = arg1.options;
 		}
 
 	    const excludeParams: string[] = [];
@@ -1547,7 +1547,7 @@ export class APIClient {
 			options = arg2;
 		} else {
 			headers = arg1.headers;
-			headers = arg1.options;
+			options = arg1.options;
 		}
 
 	    const excludeParams: string[] = [];
