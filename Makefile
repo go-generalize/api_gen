@@ -10,16 +10,9 @@ init: bootstrap
 
 .PHONY: bootstrap
 bootstrap:
-	(cd $(mktemp -d); GO111MODULE=on \
-			go get \
-			github.com/golang/mock/gomock \
-			github.com/golang/mock/mockgen \
-			github.com/golang/protobuf/protoc-gen-go \
-			github.com/favadi/protoc-go-inject-tag \
-			github.com/moznion/go-errgen/cmd/errgen \
-	)
-	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.24.0
-	GOBIN=${PWD}/bin go install github.com/swaggo/swag/cmd/swag@latest
+	# Installed in ./bin
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.43.0
+	GOBIN=${PWD}/bin go install github.com/swaggo/swag/cmd/swag@v1.7.4
 
 .PHONY: test
 test:
