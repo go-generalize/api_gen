@@ -145,11 +145,39 @@ class ServiceClient {
 		}
 	}
 
+	/** @deprecated */
 	async getArticle(
 		param: ServiceGetArticleRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<ServiceGetArticleResponse>;
+	async getArticle(
+		param: ServiceGetArticleRequest,
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<ServiceGetArticleResponse>;
+
+	async getArticle(
+		param: ServiceGetArticleRequest,
+		arg1?: any,
+		arg2?: any
 	): Promise<ServiceGetArticleResponse> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			options = arg1.options;
+		}
+
 	    const excludeParams: string[] = [];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
@@ -242,11 +270,39 @@ class ServiceStaticPageClient {
 		}
 	}
 
+	/** @deprecated */
 	async getStaticPage(
 		param: ServiceStaticPageGetStaticPageRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<ServiceStaticPageGetStaticPageResponse>;
+	async getStaticPage(
+		param: ServiceStaticPageGetStaticPageRequest,
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<ServiceStaticPageGetStaticPageResponse>;
+
+	async getStaticPage(
+		param: ServiceStaticPageGetStaticPageRequest,
+		arg1?: any,
+		arg2?: any
 	): Promise<ServiceStaticPageGetStaticPageResponse> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			options = arg1.options;
+		}
+
 	    const excludeParams: string[] = [];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
@@ -350,11 +406,39 @@ class ServiceUser2Client {
 		}
 	}
 
+	/** @deprecated */
 	async deleteUser(
 		param: ServiceUser2DeleteUserRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<ServiceUser2DeleteUserResponse>;
+	async deleteUser(
+		param: ServiceUser2DeleteUserRequest,
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<ServiceUser2DeleteUserResponse>;
+
+	async deleteUser(
+		param: ServiceUser2DeleteUserRequest,
+		arg1?: any,
+		arg2?: any
 	): Promise<ServiceUser2DeleteUserResponse> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			options = arg1.options;
+		}
+
 	    const excludeParams: string[] = ['id', ];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
@@ -402,11 +486,39 @@ class ServiceUser2Client {
 		return res;
 	}
 
+	/** @deprecated */
 	async getUser(
 		param: ServiceUser2GetUserRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<ServiceUser2GetUserResponse>;
+	async getUser(
+		param: ServiceUser2GetUserRequest,
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<ServiceUser2GetUserResponse>;
+
+	async getUser(
+		param: ServiceUser2GetUserRequest,
+		arg1?: any,
+		arg2?: any
 	): Promise<ServiceUser2GetUserResponse> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			options = arg1.options;
+		}
+
 	    const excludeParams: string[] = ['id', ];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
@@ -452,11 +564,39 @@ class ServiceUser2Client {
 		return res;
 	}
 
+	/** @deprecated */
 	async postUpdateUserName(
 		param: ServiceUser2PostUpdateUserNameRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<ServiceUser2PostUpdateUserNameResponse>;
+	async postUpdateUserName(
+		param: ServiceUser2PostUpdateUserNameRequest,
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<ServiceUser2PostUpdateUserNameResponse>;
+
+	async postUpdateUserName(
+		param: ServiceUser2PostUpdateUserNameRequest,
+		arg1?: any,
+		arg2?: any
 	): Promise<ServiceUser2PostUpdateUserNameResponse> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			options = arg1.options;
+		}
+
 	    const excludeParams: string[] = [];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
@@ -503,11 +643,39 @@ class ServiceUser2Client {
 		return res;
 	}
 
+	/** @deprecated */
 	async postUpdateUserPassword(
 		param: ServiceUser2PostUpdateUserPasswordRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<ServiceUser2PostUpdateUserPasswordResponse>;
+	async postUpdateUserPassword(
+		param: ServiceUser2PostUpdateUserPasswordRequest,
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<ServiceUser2PostUpdateUserPasswordResponse>;
+
+	async postUpdateUserPassword(
+		param: ServiceUser2PostUpdateUserPasswordRequest,
+		arg1?: any,
+		arg2?: any
 	): Promise<ServiceUser2PostUpdateUserPasswordResponse> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			options = arg1.options;
+		}
+
 	    const excludeParams: string[] = [];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
@@ -612,11 +780,39 @@ class ServiceUser2UserIDClient {
 		}
 	}
 
+	/** @deprecated */
 	async getUserJobGet(
 		param: ServiceUser2UserIDGetUserJobGetRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<ServiceUser2UserIDGetUserJobGetResponse>;
+	async getUserJobGet(
+		param: ServiceUser2UserIDGetUserJobGetRequest,
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<ServiceUser2UserIDGetUserJobGetResponse>;
+
+	async getUserJobGet(
+		param: ServiceUser2UserIDGetUserJobGetRequest,
+		arg1?: any,
+		arg2?: any
 	): Promise<ServiceUser2UserIDGetUserJobGetResponse> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			options = arg1.options;
+		}
+
 	    const excludeParams: string[] = ['UserID', ];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
@@ -709,11 +905,39 @@ class ServiceUser2UserIDJobIDClient {
 		}
 	}
 
+	/** @deprecated */
 	async putJob(
 		param: ServiceUser2UserIDJobIDPutJobRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<ServiceUser2UserIDJobIDPutJobResponse>;
+	async putJob(
+		param: ServiceUser2UserIDJobIDPutJobRequest,
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<ServiceUser2UserIDJobIDPutJobResponse>;
+
+	async putJob(
+		param: ServiceUser2UserIDJobIDPutJobRequest,
+		arg1?: any,
+		arg2?: any
 	): Promise<ServiceUser2UserIDJobIDPutJobResponse> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			options = arg1.options;
+		}
+
 	    const excludeParams: string[] = ['JobID', 'UserID', ];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
@@ -807,11 +1031,39 @@ class ServiceUserClient {
 		}
 	}
 
+	/** @deprecated */
 	async get(
 		param: ServiceUserGetRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<ServiceUserGetResponse>;
+	async get(
+		param: ServiceUserGetRequest,
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<ServiceUserGetResponse>;
+
+	async get(
+		param: ServiceUserGetRequest,
+		arg1?: any,
+		arg2?: any
 	): Promise<ServiceUserGetResponse> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			options = arg1.options;
+		}
+
 	    const excludeParams: string[] = [];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
@@ -858,11 +1110,39 @@ class ServiceUserClient {
 		return res;
 	}
 
+	/** @deprecated */
 	async postUpdateUserName(
 		param: ServiceUserPostUpdateUserNameRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<ServiceUserPostUpdateUserNameResponse>;
+	async postUpdateUserName(
+		param: ServiceUserPostUpdateUserNameRequest,
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<ServiceUserPostUpdateUserNameResponse>;
+
+	async postUpdateUserName(
+		param: ServiceUserPostUpdateUserNameRequest,
+		arg1?: any,
+		arg2?: any
 	): Promise<ServiceUserPostUpdateUserNameResponse> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			options = arg1.options;
+		}
+
 	    const excludeParams: string[] = [];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
@@ -909,11 +1189,39 @@ class ServiceUserClient {
 		return res;
 	}
 
+	/** @deprecated */
 	async postUpdateUserPassword(
 		param: ServiceUserPostUpdateUserPasswordRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<ServiceUserPostUpdateUserPasswordResponse>;
+	async postUpdateUserPassword(
+		param: ServiceUserPostUpdateUserPasswordRequest,
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<ServiceUserPostUpdateUserPasswordResponse>;
+
+	async postUpdateUserPassword(
+		param: ServiceUserPostUpdateUserPasswordRequest,
+		arg1?: any,
+		arg2?: any
 	): Promise<ServiceUserPostUpdateUserPasswordResponse> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			options = arg1.options;
+		}
+
 	    const excludeParams: string[] = [];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
@@ -1041,11 +1349,39 @@ export class APIClient {
 		}
 	}
 
+	/** @deprecated */
 	async get(
 		param: GetRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<GetResponse>;
+	async get(
+		param: GetRequest,
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<GetResponse>;
+
+	async get(
+		param: GetRequest,
+		arg1?: any,
+		arg2?: any
 	): Promise<GetResponse> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			options = arg1.options;
+		}
+
 	    const excludeParams: string[] = [];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
@@ -1096,11 +1432,39 @@ export class APIClient {
 		return res;
 	}
 
+	/** @deprecated */
 	async postCreateTable(
 		param: PostCreateTableRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<PostCreateTableResponse>;
+	async postCreateTable(
+		param: PostCreateTableRequest,
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<PostCreateTableResponse>;
+
+	async postCreateTable(
+		param: PostCreateTableRequest,
+		arg1?: any,
+		arg2?: any
 	): Promise<PostCreateTableResponse> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			options = arg1.options;
+		}
+
 	    const excludeParams: string[] = [];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
@@ -1153,11 +1517,39 @@ export class APIClient {
 		return res;
 	}
 
+	/** @deprecated */
 	async postCreateUser(
 		param: PostCreateUserRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
+	): Promise<PostCreateUserResponse>;
+	async postCreateUser(
+		param: PostCreateUserRequest,
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<PostCreateUserResponse>;
+
+	async postCreateUser(
+		param: PostCreateUserRequest,
+		arg1?: any,
+		arg2?: any
 	): Promise<PostCreateUserResponse> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			options = arg1.options;
+		}
+
 	    const excludeParams: string[] = [];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
