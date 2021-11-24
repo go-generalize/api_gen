@@ -20,7 +20,7 @@ require (
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 )
 
-require github.com/swaggo/swag v1.7.1
+require github.com/swaggo/swag v1.7.4
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
