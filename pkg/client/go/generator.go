@@ -10,8 +10,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/go-generalize/api_gen/pkg/parser"
-	"github.com/go-generalize/api_gen/pkg/util"
+	"github.com/go-generalize/api_gen/v2/pkg/parser"
+	"github.com/go-generalize/api_gen/v2/pkg/util"
 	"github.com/iancoleman/strcase"
 )
 

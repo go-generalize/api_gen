@@ -8,22 +8,22 @@ package controller
 import (
 	"net/http"
 
-	types_api_0b9a5e6c "github.com/go-generalize/api_gen/samples/standard/api"
-	types_service_9e7a8e17 "github.com/go-generalize/api_gen/samples/standard/api/service"
-	types_static_page_de0aba5f "github.com/go-generalize/api_gen/samples/standard/api/service/static_page"
-	types_user_256eedda "github.com/go-generalize/api_gen/samples/standard/api/service/user"
-	types_user2_058d5a8a "github.com/go-generalize/api_gen/samples/standard/api/service/user2"
-	types__userID_c13e838d "github.com/go-generalize/api_gen/samples/standard/api/service/user2/_userID"
-	types__JobID_3469130f "github.com/go-generalize/api_gen/samples/standard/api/service/user2/_userID/_JobID"
-	ctrl_controller_12c43f8d "github.com/go-generalize/api_gen/samples/standard/server/mock/controller"
-	ctrl_service_61e5de06 "github.com/go-generalize/api_gen/samples/standard/server/mock/controller/service"
-	ctrl_static_page_87ad62fe "github.com/go-generalize/api_gen/samples/standard/server/mock/controller/service/static_page"
-	ctrl_user_e4c8f2cf "github.com/go-generalize/api_gen/samples/standard/server/mock/controller/service/user"
-	ctrl_user2_2348a599 "github.com/go-generalize/api_gen/samples/standard/server/mock/controller/service/user2"
-	ctrl__userID_145a08ca "github.com/go-generalize/api_gen/samples/standard/server/mock/controller/service/user2/_userID"
-	ctrl__JobID_59b29e1f "github.com/go-generalize/api_gen/samples/standard/server/mock/controller/service/user2/_userID/_JobID"
-	apierror "github.com/go-generalize/api_gen/samples/standard/server/pkg/apierror"
-	props "github.com/go-generalize/api_gen/samples/standard/server/props"
+	types_api_e3c6fe7f "github.com/go-generalize/api_gen/v2/samples/standard/api"
+	types_service_004a0f6b "github.com/go-generalize/api_gen/v2/samples/standard/api/service"
+	types_static_page_88819fa5 "github.com/go-generalize/api_gen/v2/samples/standard/api/service/static_page"
+	types_user_b2fb2440 "github.com/go-generalize/api_gen/v2/samples/standard/api/service/user"
+	types_user2_fc0fa272 "github.com/go-generalize/api_gen/v2/samples/standard/api/service/user2"
+	types__userID_341bfdbf "github.com/go-generalize/api_gen/v2/samples/standard/api/service/user2/_userID"
+	types__JobID_550441cf "github.com/go-generalize/api_gen/v2/samples/standard/api/service/user2/_userID/_JobID"
+	ctrl_controller_75a5be23 "github.com/go-generalize/api_gen/v2/samples/standard/server/mock/controller"
+	ctrl_service_77205547 "github.com/go-generalize/api_gen/v2/samples/standard/server/mock/controller/service"
+	ctrl_static_page_69195252 "github.com/go-generalize/api_gen/v2/samples/standard/server/mock/controller/service/static_page"
+	ctrl_user_004a9e5e "github.com/go-generalize/api_gen/v2/samples/standard/server/mock/controller/service/user"
+	ctrl_user2_bf3dbdb7 "github.com/go-generalize/api_gen/v2/samples/standard/server/mock/controller/service/user2"
+	ctrl__userID_55ce4131 "github.com/go-generalize/api_gen/v2/samples/standard/server/mock/controller/service/user2/_userID"
+	ctrl__JobID_49d2c4cd "github.com/go-generalize/api_gen/v2/samples/standard/server/mock/controller/service/user2/_userID/_JobID"
+	apierror "github.com/go-generalize/api_gen/v2/samples/standard/server/pkg/apierror"
+	props "github.com/go-generalize/api_gen/v2/samples/standard/server/props"
 	echo "github.com/labstack/echo/v4"
 	xerrors "golang.org/x/xerrors"
 )
@@ -51,10 +51,10 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 	}
 
 	{
-		ctrl := ctrl_controller_12c43f8d.NewGetController(p)
+		ctrl := ctrl_controller_75a5be23.NewGetController(p)
 
 		add("GET", "/", func(c echo.Context) (interface{}, error) {
-			req := new(types_api_0b9a5e6c.GetRequest)
+			req := new(types_api_e3c6fe7f.GetRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/): %+v", err)
 				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -81,10 +81,10 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 	}
 
 	{
-		ctrl := ctrl_controller_12c43f8d.NewPostCreateTableController(p)
+		ctrl := ctrl_controller_75a5be23.NewPostCreateTableController(p)
 
 		add("POST", "/create_table", func(c echo.Context) (interface{}, error) {
-			req := new(types_api_0b9a5e6c.PostCreateTableRequest)
+			req := new(types_api_e3c6fe7f.PostCreateTableRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/create_table): %+v", err)
 				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -111,10 +111,10 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 	}
 
 	{
-		ctrl := ctrl_controller_12c43f8d.NewPostCreateUserController(p)
+		ctrl := ctrl_controller_75a5be23.NewPostCreateUserController(p)
 
 		add("POST", "/create_user", func(c echo.Context) (interface{}, error) {
-			req := new(types_api_0b9a5e6c.PostCreateUserRequest)
+			req := new(types_api_e3c6fe7f.PostCreateUserRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/create_user): %+v", err)
 				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -141,10 +141,10 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 	}
 
 	{
-		ctrl := ctrl_service_61e5de06.NewGetArticleController(p)
+		ctrl := ctrl_service_77205547.NewGetArticleController(p)
 
 		add("GET", "/service/article", func(c echo.Context) (interface{}, error) {
-			req := new(types_service_9e7a8e17.GetArticleRequest)
+			req := new(types_service_004a0f6b.GetArticleRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/article): %+v", err)
 				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -171,10 +171,10 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 	}
 
 	{
-		ctrl := ctrl_static_page_87ad62fe.NewGetStaticPageController(p)
+		ctrl := ctrl_static_page_69195252.NewGetStaticPageController(p)
 
 		add("GET", "/service/static_page/static_page", func(c echo.Context) (interface{}, error) {
-			req := new(types_static_page_de0aba5f.GetStaticPageRequest)
+			req := new(types_static_page_88819fa5.GetStaticPageRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/static_page/static_page): %+v", err)
 				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -201,10 +201,10 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 	}
 
 	{
-		ctrl := ctrl_user_e4c8f2cf.NewGetController(p)
+		ctrl := ctrl_user_004a9e5e.NewGetController(p)
 
 		add("GET", "/service/user/", func(c echo.Context) (interface{}, error) {
-			req := new(types_user_256eedda.GetRequest)
+			req := new(types_user_b2fb2440.GetRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user/): %+v", err)
 				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -231,10 +231,10 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 	}
 
 	{
-		ctrl := ctrl_user_e4c8f2cf.NewPostUpdateUserNameController(p)
+		ctrl := ctrl_user_004a9e5e.NewPostUpdateUserNameController(p)
 
 		add("POST", "/service/user/update_user_name", func(c echo.Context) (interface{}, error) {
-			req := new(types_user_256eedda.PostUpdateUserNameRequest)
+			req := new(types_user_b2fb2440.PostUpdateUserNameRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user/update_user_name): %+v", err)
 				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -261,10 +261,10 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 	}
 
 	{
-		ctrl := ctrl_user_e4c8f2cf.NewPostUpdateUserPasswordController(p)
+		ctrl := ctrl_user_004a9e5e.NewPostUpdateUserPasswordController(p)
 
 		add("POST", "/service/user/update_user_password", func(c echo.Context) (interface{}, error) {
-			req := new(types_user_256eedda.PostUpdateUserPasswordRequest)
+			req := new(types_user_b2fb2440.PostUpdateUserPasswordRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user/update_user_password): %+v", err)
 				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -291,10 +291,10 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 	}
 
 	{
-		ctrl := ctrl_user2_2348a599.NewDeleteUserController(p)
+		ctrl := ctrl_user2_bf3dbdb7.NewDeleteUserController(p)
 
 		add("DELETE", "/service/user2/:user_id", func(c echo.Context) (interface{}, error) {
-			req := new(types_user2_058d5a8a.DeleteUserRequest)
+			req := new(types_user2_fc0fa272.DeleteUserRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user2/:user_id): %+v", err)
 				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -321,10 +321,10 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 	}
 
 	{
-		ctrl := ctrl_user2_2348a599.NewGetUserController(p)
+		ctrl := ctrl_user2_bf3dbdb7.NewGetUserController(p)
 
 		add("GET", "/service/user2/:user_id", func(c echo.Context) (interface{}, error) {
-			req := new(types_user2_058d5a8a.GetUserRequest)
+			req := new(types_user2_fc0fa272.GetUserRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user2/:user_id): %+v", err)
 				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -351,10 +351,10 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 	}
 
 	{
-		ctrl := ctrl_user2_2348a599.NewPostUpdateUserNameController(p)
+		ctrl := ctrl_user2_bf3dbdb7.NewPostUpdateUserNameController(p)
 
 		add("POST", "/service/user2/update_user_name", func(c echo.Context) (interface{}, error) {
-			req := new(types_user2_058d5a8a.PostUpdateUserNameRequest)
+			req := new(types_user2_fc0fa272.PostUpdateUserNameRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user2/update_user_name): %+v", err)
 				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -381,10 +381,10 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 	}
 
 	{
-		ctrl := ctrl_user2_2348a599.NewPostUpdateUserPasswordController(p)
+		ctrl := ctrl_user2_bf3dbdb7.NewPostUpdateUserPasswordController(p)
 
 		add("POST", "/service/user2/update_user_password", func(c echo.Context) (interface{}, error) {
-			req := new(types_user2_058d5a8a.PostUpdateUserPasswordRequest)
+			req := new(types_user2_fc0fa272.PostUpdateUserPasswordRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user2/update_user_password): %+v", err)
 				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -411,10 +411,10 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 	}
 
 	{
-		ctrl := ctrl__userID_145a08ca.NewGetUserJobGetController(p)
+		ctrl := ctrl__userID_55ce4131.NewGetUserJobGetController(p)
 
 		add("GET", "/service/user2/:userID/user_job_get", func(c echo.Context) (interface{}, error) {
-			req := new(types__userID_c13e838d.GetUserJobGetRequest)
+			req := new(types__userID_341bfdbf.GetUserJobGetRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user2/:userID/user_job_get): %+v", err)
 				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -441,10 +441,10 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 	}
 
 	{
-		ctrl := ctrl__JobID_59b29e1f.NewPutJobController(p)
+		ctrl := ctrl__JobID_49d2c4cd.NewPutJobController(p)
 
 		add("PUT", "/service/user2/:userID/:JobID/job", func(c echo.Context) (interface{}, error) {
-			req := new(types__JobID_3469130f.PutJobRequest)
+			req := new(types__JobID_550441cf.PutJobRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/service/user2/:userID/:JobID/job): %+v", err)
 				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{

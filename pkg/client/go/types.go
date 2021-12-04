@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/go-generalize/api_gen/pkg/common"
-	"github.com/go-generalize/api_gen/pkg/parser"
+	"github.com/go-generalize/api_gen/v2/pkg/common"
+	"github.com/go-generalize/api_gen/v2/pkg/parser"
 	"github.com/go-generalize/go2go"
 	go2tsparser "github.com/go-generalize/go2ts/pkg/parser"
 	"golang.org/x/xerrors"

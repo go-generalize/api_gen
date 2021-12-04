@@ -5,10 +5,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/go-generalize/api_gen/common"
-	"github.com/go-generalize/api_gen/pkg/agerrors"
-	clientts "github.com/go-generalize/api_gen/pkg/client/typescript"
-	"github.com/go-generalize/api_gen/pkg/parser"
+	"github.com/go-generalize/api_gen/v2/common"
+	"github.com/go-generalize/api_gen/v2/pkg/agerrors"
+	clientts "github.com/go-generalize/api_gen/v2/pkg/client/typescript"
+	"github.com/go-generalize/api_gen/v2/pkg/parser"
 	"github.com/spf13/cobra"
 	"golang.org/x/xerrors"
 )

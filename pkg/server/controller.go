@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/go-generalize/api_gen/pkg/parser"
+	"github.com/go-generalize/api_gen/v2/pkg/parser"
 	"github.com/iancoleman/strcase"
 	"golang.org/x/xerrors"
 )

@@ -11,7 +11,7 @@ import (
 	"golang.org/x/xerrors"
 )
 
-const repoURL = "https://api.github.com/repos/go-generalize/api_gen/releases/latest"
+const repoURL = "https://api.github.com/repos/go-generalize/api_gen/v2/releases/latest"
 
 var unexpectedError = xerrors.New("unexpected error")
 

@@ -2,10 +2,10 @@
 package main
 
 import (
-	"github.com/go-generalize/api_gen/common"
-	"github.com/go-generalize/api_gen/pkg/agerrors"
-	"github.com/go-generalize/api_gen/pkg/parser"
-	"github.com/go-generalize/api_gen/pkg/server"
+	"github.com/go-generalize/api_gen/v2/common"
+	"github.com/go-generalize/api_gen/v2/pkg/agerrors"
+	"github.com/go-generalize/api_gen/v2/pkg/parser"
+	"github.com/go-generalize/api_gen/v2/pkg/server"
 	"github.com/spf13/cobra"
 	"golang.org/x/xerrors"
 )

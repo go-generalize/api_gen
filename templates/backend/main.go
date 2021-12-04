@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/go-generalize/api_gen/templates/backend/props"
+	"github.com/go-generalize/api_gen/v2/templates/backend/props"
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 	echoMiddleware "github.com/labstack/echo/v4/middleware"

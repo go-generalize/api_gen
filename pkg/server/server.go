@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/go-generalize/api_gen/pkg/parser"
+	"github.com/go-generalize/api_gen/v2/pkg/parser"
 	"github.com/go-utils/gopackages"
 	"golang.org/x/sync/singleflight"
 	"golang.org/x/xerrors"

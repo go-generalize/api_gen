@@ -8,10 +8,10 @@ package controller
 import (
 	"net/http"
 
-	types_bar_8619c483 "github.com/go-generalize/api_gen/samples/empty_root/api/foo/bar"
-	ctrl_bar_ab9de98c "github.com/go-generalize/api_gen/samples/empty_root/server/controller/foo/bar"
-	apierror "github.com/go-generalize/api_gen/samples/empty_root/server/pkg/apierror"
-	props "github.com/go-generalize/api_gen/samples/empty_root/server/props"
+	types_bar_91c83618 "github.com/go-generalize/api_gen/v2/samples/empty_root/api/foo/bar"
+	ctrl_bar_e38fd4a6 "github.com/go-generalize/api_gen/v2/samples/empty_root/server/controller/foo/bar"
+	apierror "github.com/go-generalize/api_gen/v2/samples/empty_root/server/pkg/apierror"
+	props "github.com/go-generalize/api_gen/v2/samples/empty_root/server/props"
 	echo "github.com/labstack/echo/v4"
 	xerrors "golang.org/x/xerrors"
 )
@@ -39,10 +39,10 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 	}
 
 	{
-		ctrl := ctrl_bar_ab9de98c.NewPostUserController(p)
+		ctrl := ctrl_bar_e38fd4a6.NewPostUserController(p)
 
 		add("POST", "/foo/bar/user", func(c echo.Context) (interface{}, error) {
-			req := new(types_bar_8619c483.PostUserRequest)
+			req := new(types_bar_91c83618.PostUserRequest)
 			if err := c.Bind(req); err != nil {
 				c.Logger().Errorf("failed to bind a request for (/foo/bar/user): %+v", err)
 				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
