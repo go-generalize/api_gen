@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	controller "github.com/go-generalize/api_gen/samples/empty_root/server"
+	controller "github.com/go-generalize/api_gen/v2/samples/empty_root/server"
 	"github.com/labstack/echo/v4"
 )
 

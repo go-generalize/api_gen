@@ -1,4 +1,4 @@
-module github.com/go-generalize/api_gen/templates/backend
+module github.com/go-generalize/api_gen/v2/templates/backend
 
 go 1.16
 

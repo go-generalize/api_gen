@@ -11,9 +11,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/go-generalize/api_gen/pkg/agerrors"
-	"github.com/go-generalize/api_gen/pkg/common"
-	"github.com/go-generalize/api_gen/pkg/util"
+	"github.com/go-generalize/api_gen/v2/pkg/agerrors"
+	"github.com/go-generalize/api_gen/v2/pkg/common"
+	"github.com/go-generalize/api_gen/v2/pkg/util"
 	go2tsparser "github.com/go-generalize/go2ts/pkg/parser"
 	go2tstypes "github.com/go-generalize/go2ts/pkg/types"
 	"github.com/go-utils/gopackages"

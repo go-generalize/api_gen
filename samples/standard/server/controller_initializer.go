@@ -8,8 +8,8 @@ import (
 	"runtime/debug"
 	"strings"
 
-	apierror "github.com/go-generalize/api_gen/samples/standard/server/pkg/apierror"
-	props "github.com/go-generalize/api_gen/samples/standard/server/props"
+	apierror "github.com/go-generalize/api_gen/v2/samples/standard/server/pkg/apierror"
+	props "github.com/go-generalize/api_gen/v2/samples/standard/server/props"
 	"github.com/labstack/echo/v4"
 )
 

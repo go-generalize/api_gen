@@ -10,8 +10,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	go2json "github.com/go-generalize/api_gen/pkg/go2json"
-	"github.com/go-generalize/api_gen/pkg/parser"
+	go2json "github.com/go-generalize/api_gen/v2/pkg/go2json"
+	"github.com/go-generalize/api_gen/v2/pkg/parser"
 	go2tsp "github.com/go-generalize/go2ts/pkg/parser"
 	"github.com/go-generalize/go2ts/pkg/types"
 	"github.com/iancoleman/strcase"

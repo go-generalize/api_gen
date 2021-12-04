@@ -1,4 +1,4 @@
-module github.com/go-generalize/api_gen
+module github.com/go-generalize/api_gen/v2
 
 go 1.17
 

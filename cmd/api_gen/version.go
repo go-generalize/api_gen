@@ -4,7 +4,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/go-generalize/api_gen/common"
+	"github.com/go-generalize/api_gen/v2/common"
 	"github.com/spf13/cobra"
 )
 

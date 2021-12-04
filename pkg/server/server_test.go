@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/go-generalize/api_gen/pkg/parser"
+	"github.com/go-generalize/api_gen/v2/pkg/parser"
 )
 
 func TestGenerate(t *testing.T) {

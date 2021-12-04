@@ -4,8 +4,8 @@
 package controller
 
 import (
-	types "github.com/go-generalize/api_gen/samples/standard/api/service/static_page"
-	props "github.com/go-generalize/api_gen/samples/standard/server/props"
+	types "github.com/go-generalize/api_gen/v2/samples/standard/api/service/static_page"
+	props "github.com/go-generalize/api_gen/v2/samples/standard/server/props"
 	"github.com/labstack/echo/v4"
 )
 

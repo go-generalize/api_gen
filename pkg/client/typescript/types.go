@@ -4,7 +4,7 @@ package clientts
 import (
 	"embed"
 
-	"github.com/go-generalize/api_gen/pkg/parser"
+	"github.com/go-generalize/api_gen/v2/pkg/parser"
 )
 
 //go:embed templates/*.tmpl

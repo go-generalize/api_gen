@@ -8,10 +8,10 @@ package controller
 import (
 	"net/http"
 
-	types_bar_8619c483 "github.com/go-generalize/api_gen/samples/empty_root/api/foo/bar"
-	ctrl_bar_ab9de98c "github.com/go-generalize/api_gen/samples/empty_root/server/controller/foo/bar"
-	apierror "github.com/go-generalize/api_gen/samples/empty_root/server/pkg/apierror"
-	props "github.com/go-generalize/api_gen/samples/empty_root/server/props"
+	types_bar_8619c483 "github.com/go-generalize/api_gen/v2/samples/empty_root/api/foo/bar"
+	ctrl_bar_ab9de98c "github.com/go-generalize/api_gen/v2/samples/empty_root/server/controller/foo/bar"
+	apierror "github.com/go-generalize/api_gen/v2/samples/empty_root/server/pkg/apierror"
+	props "github.com/go-generalize/api_gen/v2/samples/empty_root/server/props"
 	echo "github.com/labstack/echo/v4"
 	xerrors "golang.org/x/xerrors"
 )

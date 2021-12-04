@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"net/url"
 
-	_foo_bar "github.com/go-generalize/api_gen/samples/empty_root/clients/go/classes/foo/bar"
+	_foo_bar "github.com/go-generalize/api_gen/v2/samples/empty_root/clients/go/classes/foo/bar"
 )
 
 type Group_foo_bar struct {

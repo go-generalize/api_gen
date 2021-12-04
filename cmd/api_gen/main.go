@@ -13,7 +13,7 @@ var (
 		Use:   "api_gen",
 		Short: "Generates client/server API library from definitions in Go",
 		Long: `api_gen generates client/server API library from definitions in Go.
-GitHub: https://github.com/go-generalize/api_gen`,
+GitHub: https://github.com/go-generalize/api_gen/v2`,
 		SilenceUsage:  true,
 		SilenceErrors: true,
 	}

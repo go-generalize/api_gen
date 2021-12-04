@@ -8,7 +8,7 @@ builds:
     binary: api_gen
     ldflags:
       - -s -w
-      - -X github.com/go-generalize/api_gen/common.AppVersion={{.Version}}
+      - -X github.com/go-generalize/api_gen/v2/common.AppVersion={{.Version}}
     env:
       - CGO_ENABLED=0
     goos:

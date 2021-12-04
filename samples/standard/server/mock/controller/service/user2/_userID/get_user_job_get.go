@@ -14,8 +14,8 @@ import (
 	"strings"
 	"time"
 
-	types "github.com/go-generalize/api_gen/samples/standard/api/service/user2/_userID"
-	mock "github.com/go-generalize/api_gen/samples/standard/server/mock"
+	types "github.com/go-generalize/api_gen/v2/samples/standard/api/service/user2/_userID"
+	mock "github.com/go-generalize/api_gen/v2/samples/standard/server/mock"
 	"github.com/labstack/echo/v4"
 )
 
