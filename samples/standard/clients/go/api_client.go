@@ -1,6 +1,6 @@
 // THIS FILE IS A GENERATED CODE.
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
-// api_gen version: devel
+// api_gen version: (devel)
 package client
 
 import (
