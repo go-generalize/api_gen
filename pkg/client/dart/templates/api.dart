@@ -26,7 +26,7 @@ class {{ $elem.Name }} {
 {{- 	range $index, $elem := .Children }}
     this.{{ $elem.Name }} = {{ $elem.ClassName }}(
 			this.baseURL,
-      this.headers,
+			this.headers,
 			this.client,
 		);
 {{- 	end }}
@@ -130,9 +130,9 @@ class APIClient {
     this.headers['Content-Type'] = 'application/json';
 {{- 	range $index, $elem := .Children }}
 
-		this.{{ $elem.Name }} = new {{ $elem.ClassName }}(
+		this.{{ $elem.Name }} = {{ $elem.ClassName }}(
 			this.baseURL,
-      this.headers,
+			this.headers,
 			this.client,
 		);
 {{- 	end }}
