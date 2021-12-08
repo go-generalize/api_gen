@@ -40,10 +40,6 @@ type clientType struct {
 	Children []childrenType
 }
 
-type importPair struct {
-	Name, NameAs string
-}
-
 type importType struct {
 	Path  string
 	Alias string
