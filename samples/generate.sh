@@ -9,7 +9,7 @@ SWAG=${PWD}/../bin/swag
 
 export PATH=$WORKDIR/../bin:$PATH
 
-clients=(ts go)
+clients=(ts go dart)
 targets=(empty_root standard)
 
 for t in ${targets[@]}; do

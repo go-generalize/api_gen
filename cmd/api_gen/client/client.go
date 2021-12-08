@@ -8,5 +8,6 @@ func Initialize() []*cobra.Command {
 	return []*cobra.Command{
 		goCommand,
 		tsCommand,
+		dartCommand,
 	}
 }
