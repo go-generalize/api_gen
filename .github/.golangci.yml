@@ -62,6 +62,10 @@ issues:
   - declaration of "(err|ctx)" shadows declaration at
   exclude-use-default: false
   exclude-rules:
+    - path: cmd/api_gen/client/.*\.go
+      linters:
+        - dupl
+
     - path: _test\.go
       linters:
         - gomnd
