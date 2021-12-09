@@ -105,22 +105,22 @@ class GetUserJobGetRequestConverter implements JsonConverter<GetUserJobGetReques
 }
 
 class GetUserJobGetRequest {
-  String UserID;
+  String userID;
 
 
   GetUserJobGetRequest({
-    this.UserID = '',
+    this.userID = '',
   });
 
   factory GetUserJobGetRequest.fromJson(Map<String, dynamic> json) {
     return GetUserJobGetRequest(
-      UserID: DoNothingConverter<String>().fromJson(json['UserID']),
+      userID: DoNothingConverter<String>().fromJson(json['UserID']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'UserID': DoNothingConverter<String>().toJson(UserID),
+      'UserID': DoNothingConverter<String>().toJson(userID),
     };
   }
 }
@@ -140,26 +140,26 @@ class GetUserJobGetResponseConverter implements JsonConverter<GetUserJobGetRespo
 }
 
 class GetUserJobGetResponse {
-  String JobName;
-  DateTime? RequestTime;
+  String jobName;
+  DateTime? requestTime;
 
 
   GetUserJobGetResponse({
-    this.JobName = '',
-    this.RequestTime,
+    this.jobName = '',
+    this.requestTime,
   });
 
   factory GetUserJobGetResponse.fromJson(Map<String, dynamic> json) {
     return GetUserJobGetResponse(
-      JobName: DoNothingConverter<String>().fromJson(json['JobName']),
-      RequestTime: DateTimeConverter().fromJson(json['RequestTime']),
+      jobName: DoNothingConverter<String>().fromJson(json['JobName']),
+      requestTime: DateTimeConverter().fromJson(json['RequestTime']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'JobName': DoNothingConverter<String>().toJson(JobName),
-      'RequestTime': DateTimeConverter().toJson(RequestTime),
+      'JobName': DoNothingConverter<String>().toJson(jobName),
+      'RequestTime': DateTimeConverter().toJson(requestTime),
     };
   }
 }

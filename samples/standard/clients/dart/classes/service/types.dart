@@ -105,22 +105,22 @@ class GetArticleRequestConverter implements JsonConverter<GetArticleRequest, Map
 }
 
 class GetArticleRequest {
-  int ID;
+  int id;
 
 
   GetArticleRequest({
-    this.ID = 0,
+    this.id = 0,
   });
 
   factory GetArticleRequest.fromJson(Map<String, dynamic> json) {
     return GetArticleRequest(
-      ID: DoNothingConverter<int>().fromJson(json['ID']),
+      id: DoNothingConverter<int>().fromJson(json['ID']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'ID': DoNothingConverter<int>().toJson(ID),
+      'ID': DoNothingConverter<int>().toJson(id),
     };
   }
 }
@@ -140,34 +140,34 @@ class GetArticleResponseConverter implements JsonConverter<GetArticleResponse, M
 }
 
 class GetArticleResponse {
-  String Body;
-  List<String>? Group;
-  int ID;
-  DateTime? RequestTime;
+  String body;
+  List<String>? group;
+  int id;
+  DateTime? requestTime;
 
 
   GetArticleResponse({
-    this.Body = '',
-    this.Group,
-    this.ID = 0,
-    this.RequestTime,
+    this.body = '',
+    this.group,
+    this.id = 0,
+    this.requestTime,
   });
 
   factory GetArticleResponse.fromJson(Map<String, dynamic> json) {
     return GetArticleResponse(
-      Body: DoNothingConverter<String>().fromJson(json['Body']),
-      Group: NullableConverter<List<String>, List<String>>(ListConverter<String, String>(DoNothingConverter<String>())).fromJson(json['Group']),
-      ID: DoNothingConverter<int>().fromJson(json['ID']),
-      RequestTime: DateTimeConverter().fromJson(json['RequestTime']),
+      body: DoNothingConverter<String>().fromJson(json['Body']),
+      group: NullableConverter<List<String>, List<String>>(ListConverter<String, String>(DoNothingConverter<String>())).fromJson(json['Group']),
+      id: DoNothingConverter<int>().fromJson(json['ID']),
+      requestTime: DateTimeConverter().fromJson(json['RequestTime']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Body': DoNothingConverter<String>().toJson(Body),
-      'Group': NullableConverter<List<String>, List<String>>(ListConverter<String, String>(DoNothingConverter<String>())).toJson(Group),
-      'ID': DoNothingConverter<int>().toJson(ID),
-      'RequestTime': DateTimeConverter().toJson(RequestTime),
+      'Body': DoNothingConverter<String>().toJson(body),
+      'Group': NullableConverter<List<String>, List<String>>(ListConverter<String, String>(DoNothingConverter<String>())).toJson(group),
+      'ID': DoNothingConverter<int>().toJson(id),
+      'RequestTime': DateTimeConverter().toJson(requestTime),
     };
   }
 }

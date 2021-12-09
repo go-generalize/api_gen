@@ -123,9 +123,7 @@ class APIClient {
       this.headers['Authorization'] = 'Bearer ' + token;
     }
 
-    if (client != null) {
-      this.client = client;
-    }
+    this.client = client ?? http.Client();
 
     this.headers['Content-Type'] = 'application/json';
 {{- 	range $index, $elem := .Children }}

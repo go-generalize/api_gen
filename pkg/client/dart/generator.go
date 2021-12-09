@@ -11,6 +11,7 @@ import (
 
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
 	"github.com/go-generalize/api_gen/v2/pkg/util"
+	go2dartgenerator "github.com/go-generalize/go2dart"
 	"github.com/iancoleman/strcase"
 )
 
@@ -55,23 +56,10 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint, packageAlias string) *
 	endpoint.Endpoint = ep.GetFullPath("/", func(rawPath, path, placeholder string) string {
 		if placeholder != "" {
 			field := util.FindStructField(ep.RequestGo2tsPayload, parser.QueryParamTag, placeholder)
-			jsonKey := field
-
-			for _, f := range ep.RequestGo2tsPayload.Entries {
-				if f.RawName == field {
-					j, ok := reflect.
-						StructTag(f.RawTag).
-						Lookup(parser.JSONParamTag)
-
-					if ok {
-						jsonKey = j
-					}
-				}
-			}
 
 			return fmt.Sprintf(
 				`${Uri.encodeComponent(param.%s.toString())}`,
-				jsonKey,
+				go2dartgenerator.ReplaceFieldName(field),
 			)
 		}
 

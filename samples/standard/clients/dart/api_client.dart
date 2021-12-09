@@ -340,7 +340,7 @@ class ServiceUser2UserIDClient {
       headers['Api-Gen-Option'] = jsonEncode(mockOption);
 		}
     headers.remove('Content-Type');
-		final url = baseURL + '/service/user2/${Uri.encodeComponent(param.UserID.toString())}/user_job_get' + Uri(queryParameters: getRequestObject(param.toJson(), excludeParams)).toString();
+		final url = baseURL + '/service/user2/${Uri.encodeComponent(param.userID.toString())}/user_job_get' + Uri(queryParameters: getRequestObject(param.toJson(), excludeParams)).toString();
     final resp = await client.get(
       Uri.parse(url),
       headers: headers,
@@ -393,7 +393,7 @@ class ServiceUser2UserIDJobIDClient {
     if (mockOption != null) {
       headers['Api-Gen-Option'] = jsonEncode(mockOption);
 		}
-		final url = baseURL + '/service/user2/${Uri.encodeComponent(param.UserID.toString())}/${Uri.encodeComponent(param.JobID.toString())}/job';
+		final url = baseURL + '/service/user2/${Uri.encodeComponent(param.userID.toString())}/${Uri.encodeComponent(param.jobID.toString())}/job';
 
     final resp = await client.put(
       Uri.parse(url),
@@ -554,9 +554,7 @@ class APIClient {
       this.headers['Authorization'] = 'Bearer ' + token;
     }
 
-    if (client != null) {
-      this.client = client;
-    }
+    this.client = client ?? http.Client();
 
     this.headers['Content-Type'] = 'application/json';
 

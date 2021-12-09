@@ -187,30 +187,30 @@ class GetRequestConverter implements JsonConverter<GetRequest, Map<String, dynam
 }
 
 class GetRequest {
-  Enum Enum;
-  String Param;
-  DateTime? Time;
+  Enum enum_;
+  String param;
+  DateTime? time;
 
 
   GetRequest({
-    this.Enum = Enum.EnumA,
-    this.Param = '',
-    this.Time,
+    this.enum_ = Enum.EnumA,
+    this.param = '',
+    this.time,
   });
 
   factory GetRequest.fromJson(Map<String, dynamic> json) {
     return GetRequest(
-      Enum: EnumConverter().fromJson(json['Enum']),
-      Param: DoNothingConverter<String>().fromJson(json['Param']),
-      Time: DateTimeConverter().fromJson(json['Time']),
+      enum_: EnumConverter().fromJson(json['Enum']),
+      param: DoNothingConverter<String>().fromJson(json['Param']),
+      time: DateTimeConverter().fromJson(json['Time']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Enum': EnumConverter().toJson(Enum),
-      'Param': DoNothingConverter<String>().toJson(Param),
-      'Time': DateTimeConverter().toJson(Time),
+      'Enum': EnumConverter().toJson(enum_),
+      'Param': DoNothingConverter<String>().toJson(param),
+      'Time': DateTimeConverter().toJson(time),
     };
   }
 }
@@ -230,22 +230,22 @@ class GetResponseConverter implements JsonConverter<GetResponse, Map<String, dyn
 }
 
 class GetResponse {
-  String Data;
+  String data;
 
 
   GetResponse({
-    this.Data = '',
+    this.data = '',
   });
 
   factory GetResponse.fromJson(Map<String, dynamic> json) {
     return GetResponse(
-      Data: DoNothingConverter<String>().fromJson(json['Data']),
+      data: DoNothingConverter<String>().fromJson(json['Data']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Data': DoNothingConverter<String>().toJson(Data),
+      'Data': DoNothingConverter<String>().toJson(data),
     };
   }
 }
@@ -265,34 +265,34 @@ class PostCreateTableRequestConverter implements JsonConverter<PostCreateTableRe
 }
 
 class PostCreateTableRequest {
-  int Flag;
-  String ID;
+  int flag;
+  String id;
   Map<int, int> map;
-  String Text;
+  String text;
 
 
   PostCreateTableRequest({
-    this.Flag = 0,
-    this.ID = '',
+    this.flag = 0,
+    this.id = '',
     this.map = const {},
-    this.Text = '',
+    this.text = '',
   });
 
   factory PostCreateTableRequest.fromJson(Map<String, dynamic> json) {
     return PostCreateTableRequest(
-      Flag: DoNothingConverter<int>().fromJson(json['Flag']),
-      ID: DoNothingConverter<String>().fromJson(json['ID']),
+      flag: DoNothingConverter<int>().fromJson(json['Flag']),
+      id: DoNothingConverter<String>().fromJson(json['ID']),
       map: MapConverter<int, int, int>(DoNothingConverter<int>()).fromJson(json['map']),
-      Text: DoNothingConverter<String>().fromJson(json['Text']),
+      text: DoNothingConverter<String>().fromJson(json['Text']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Flag': DoNothingConverter<int>().toJson(Flag),
-      'ID': DoNothingConverter<String>().toJson(ID),
+      'Flag': DoNothingConverter<int>().toJson(flag),
+      'ID': DoNothingConverter<String>().toJson(id),
       'map': MapConverter<int, int, int>(DoNothingConverter<int>()).toJson(map),
-      'Text': DoNothingConverter<String>().toJson(Text),
+      'Text': DoNothingConverter<String>().toJson(text),
     };
   }
 }
@@ -312,26 +312,26 @@ class PostCreateTableResponseConverter implements JsonConverter<PostCreateTableR
 }
 
 class PostCreateTableResponse {
-  String ID;
-  DateTime? RequestTime;
+  String id;
+  DateTime? requestTime;
 
 
   PostCreateTableResponse({
-    this.ID = '',
-    this.RequestTime,
+    this.id = '',
+    this.requestTime,
   });
 
   factory PostCreateTableResponse.fromJson(Map<String, dynamic> json) {
     return PostCreateTableResponse(
-      ID: DoNothingConverter<String>().fromJson(json['ID']),
-      RequestTime: DateTimeConverter().fromJson(json['RequestTime']),
+      id: DoNothingConverter<String>().fromJson(json['ID']),
+      requestTime: DateTimeConverter().fromJson(json['RequestTime']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'ID': DoNothingConverter<String>().toJson(ID),
-      'RequestTime': DateTimeConverter().toJson(RequestTime),
+      'ID': DoNothingConverter<String>().toJson(id),
+      'RequestTime': DateTimeConverter().toJson(requestTime),
     };
   }
 }
@@ -351,38 +351,38 @@ class PostCreateUserRequestConverter implements JsonConverter<PostCreateUserRequ
 }
 
 class PostCreateUserRequest {
-  DateTime? Birthday;
-  int Gender;
-  String ID;
-  String Password;
-  List<Role?>? Roles;
+  DateTime? birthday;
+  int gender;
+  String id;
+  String password;
+  List<Role?>? roles;
 
 
   PostCreateUserRequest({
-    this.Birthday,
-    this.Gender = 0,
-    this.ID = '',
-    this.Password = '',
-    this.Roles,
+    this.birthday,
+    this.gender = 0,
+    this.id = '',
+    this.password = '',
+    this.roles,
   });
 
   factory PostCreateUserRequest.fromJson(Map<String, dynamic> json) {
     return PostCreateUserRequest(
-      Birthday: DateTimeConverter().fromJson(json['Birthday']),
-      Gender: DoNothingConverter<int>().fromJson(json['Gender']),
-      ID: DoNothingConverter<String>().fromJson(json['ID']),
-      Password: DoNothingConverter<String>().fromJson(json['Password']),
-      Roles: NullableConverter<List<Role?>, List<Map<String, dynamic>?>>(ListConverter<Role?, Map<String, dynamic>?>(NullableConverter<Role, Map<String, dynamic>>(RoleConverter()))).fromJson(json['Roles']),
+      birthday: DateTimeConverter().fromJson(json['Birthday']),
+      gender: DoNothingConverter<int>().fromJson(json['Gender']),
+      id: DoNothingConverter<String>().fromJson(json['ID']),
+      password: DoNothingConverter<String>().fromJson(json['Password']),
+      roles: NullableConverter<List<Role?>, List<Map<String, dynamic>?>>(ListConverter<Role?, Map<String, dynamic>?>(NullableConverter<Role, Map<String, dynamic>>(RoleConverter()))).fromJson(json['Roles']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Birthday': DateTimeConverter().toJson(Birthday),
-      'Gender': DoNothingConverter<int>().toJson(Gender),
-      'ID': DoNothingConverter<String>().toJson(ID),
-      'Password': DoNothingConverter<String>().toJson(Password),
-      'Roles': NullableConverter<List<Role?>, List<Map<String, dynamic>?>>(ListConverter<Role?, Map<String, dynamic>?>(NullableConverter<Role, Map<String, dynamic>>(RoleConverter()))).toJson(Roles),
+      'Birthday': DateTimeConverter().toJson(birthday),
+      'Gender': DoNothingConverter<int>().toJson(gender),
+      'ID': DoNothingConverter<String>().toJson(id),
+      'Password': DoNothingConverter<String>().toJson(password),
+      'Roles': NullableConverter<List<Role?>, List<Map<String, dynamic>?>>(ListConverter<Role?, Map<String, dynamic>?>(NullableConverter<Role, Map<String, dynamic>>(RoleConverter()))).toJson(roles),
     };
   }
 }
@@ -402,34 +402,34 @@ class PostCreateUserResponseConverter implements JsonConverter<PostCreateUserRes
 }
 
 class PostCreateUserResponse {
-  CreatedType CreatedType;
-  String Message;
-  DateTime? RequestedAt;
-  bool Status;
+  CreatedType createdType;
+  String message;
+  DateTime? requestedAt;
+  bool status;
 
 
   PostCreateUserResponse({
-    this.CreatedType = CreatedType.CreatedTypeGuest,
-    this.Message = '',
-    this.RequestedAt,
-    this.Status = false,
+    this.createdType = CreatedType.CreatedTypeGuest,
+    this.message = '',
+    this.requestedAt,
+    this.status = false,
   });
 
   factory PostCreateUserResponse.fromJson(Map<String, dynamic> json) {
     return PostCreateUserResponse(
-      CreatedType: CreatedTypeConverter().fromJson(json['CreatedType']),
-      Message: DoNothingConverter<String>().fromJson(json['Message']),
-      RequestedAt: DateTimeConverter().fromJson(json['RequestedAt']),
-      Status: DoNothingConverter<bool>().fromJson(json['Status']),
+      createdType: CreatedTypeConverter().fromJson(json['CreatedType']),
+      message: DoNothingConverter<String>().fromJson(json['Message']),
+      requestedAt: DateTimeConverter().fromJson(json['RequestedAt']),
+      status: DoNothingConverter<bool>().fromJson(json['Status']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'CreatedType': CreatedTypeConverter().toJson(CreatedType),
-      'Message': DoNothingConverter<String>().toJson(Message),
-      'RequestedAt': DateTimeConverter().toJson(RequestedAt),
-      'Status': DoNothingConverter<bool>().toJson(Status),
+      'CreatedType': CreatedTypeConverter().toJson(createdType),
+      'Message': DoNothingConverter<String>().toJson(message),
+      'RequestedAt': DateTimeConverter().toJson(requestedAt),
+      'Status': DoNothingConverter<bool>().toJson(status),
     };
   }
 }
@@ -449,30 +449,30 @@ class RoleConverter implements JsonConverter<Role, Map<String, dynamic>> {
 }
 
 class Role {
-  int ID;
-  String Name;
-  List<Role>? RecursionRoles;
+  int id;
+  String name;
+  List<Role>? recursionRoles;
 
 
   Role({
-    this.ID = 0,
-    this.Name = '',
-    this.RecursionRoles,
+    this.id = 0,
+    this.name = '',
+    this.recursionRoles,
   });
 
   factory Role.fromJson(Map<String, dynamic> json) {
     return Role(
-      ID: DoNothingConverter<int>().fromJson(json['ID']),
-      Name: DoNothingConverter<String>().fromJson(json['Name']),
-      RecursionRoles: NullableConverter<List<Role>, List<Map<String, dynamic>>>(ListConverter<Role, Map<String, dynamic>>(RoleConverter())).fromJson(json['RecursionRoles']),
+      id: DoNothingConverter<int>().fromJson(json['ID']),
+      name: DoNothingConverter<String>().fromJson(json['Name']),
+      recursionRoles: NullableConverter<List<Role>, List<Map<String, dynamic>>>(ListConverter<Role, Map<String, dynamic>>(RoleConverter())).fromJson(json['RecursionRoles']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'ID': DoNothingConverter<int>().toJson(ID),
-      'Name': DoNothingConverter<String>().toJson(Name),
-      'RecursionRoles': NullableConverter<List<Role>, List<Map<String, dynamic>>>(ListConverter<Role, Map<String, dynamic>>(RoleConverter())).toJson(RecursionRoles),
+      'ID': DoNothingConverter<int>().toJson(id),
+      'Name': DoNothingConverter<String>().toJson(name),
+      'RecursionRoles': NullableConverter<List<Role>, List<Map<String, dynamic>>>(ListConverter<Role, Map<String, dynamic>>(RoleConverter())).toJson(recursionRoles),
     };
   }
 }

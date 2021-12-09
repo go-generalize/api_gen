@@ -165,22 +165,22 @@ class PostUpdateUserNameRequestConverter implements JsonConverter<PostUpdateUser
 }
 
 class PostUpdateUserNameRequest {
-  String Name;
+  String name;
 
 
   PostUpdateUserNameRequest({
-    this.Name = '',
+    this.name = '',
   });
 
   factory PostUpdateUserNameRequest.fromJson(Map<String, dynamic> json) {
     return PostUpdateUserNameRequest(
-      Name: DoNothingConverter<String>().fromJson(json['Name']),
+      name: DoNothingConverter<String>().fromJson(json['Name']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Name': DoNothingConverter<String>().toJson(Name),
+      'Name': DoNothingConverter<String>().toJson(name),
     };
   }
 }
@@ -200,30 +200,30 @@ class PostUpdateUserNameResponseConverter implements JsonConverter<PostUpdateUse
 }
 
 class PostUpdateUserNameResponse {
-  String Message;
-  DateTime? RequestTime;
-  bool Status;
+  String message;
+  DateTime? requestTime;
+  bool status;
 
 
   PostUpdateUserNameResponse({
-    this.Message = '',
-    this.RequestTime,
-    this.Status = false,
+    this.message = '',
+    this.requestTime,
+    this.status = false,
   });
 
   factory PostUpdateUserNameResponse.fromJson(Map<String, dynamic> json) {
     return PostUpdateUserNameResponse(
-      Message: DoNothingConverter<String>().fromJson(json['Message']),
-      RequestTime: DateTimeConverter().fromJson(json['RequestTime']),
-      Status: DoNothingConverter<bool>().fromJson(json['Status']),
+      message: DoNothingConverter<String>().fromJson(json['Message']),
+      requestTime: DateTimeConverter().fromJson(json['RequestTime']),
+      status: DoNothingConverter<bool>().fromJson(json['Status']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Message': DoNothingConverter<String>().toJson(Message),
-      'RequestTime': DateTimeConverter().toJson(RequestTime),
-      'Status': DoNothingConverter<bool>().toJson(Status),
+      'Message': DoNothingConverter<String>().toJson(message),
+      'RequestTime': DateTimeConverter().toJson(requestTime),
+      'Status': DoNothingConverter<bool>().toJson(status),
     };
   }
 }
@@ -243,26 +243,26 @@ class PostUpdateUserPasswordRequestConverter implements JsonConverter<PostUpdate
 }
 
 class PostUpdateUserPasswordRequest {
-  String Password;
-  String PasswordConfirm;
+  String password;
+  String passwordConfirm;
 
 
   PostUpdateUserPasswordRequest({
-    this.Password = '',
-    this.PasswordConfirm = '',
+    this.password = '',
+    this.passwordConfirm = '',
   });
 
   factory PostUpdateUserPasswordRequest.fromJson(Map<String, dynamic> json) {
     return PostUpdateUserPasswordRequest(
-      Password: DoNothingConverter<String>().fromJson(json['Password']),
-      PasswordConfirm: DoNothingConverter<String>().fromJson(json['PasswordConfirm']),
+      password: DoNothingConverter<String>().fromJson(json['Password']),
+      passwordConfirm: DoNothingConverter<String>().fromJson(json['PasswordConfirm']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Password': DoNothingConverter<String>().toJson(Password),
-      'PasswordConfirm': DoNothingConverter<String>().toJson(PasswordConfirm),
+      'Password': DoNothingConverter<String>().toJson(password),
+      'PasswordConfirm': DoNothingConverter<String>().toJson(passwordConfirm),
     };
   }
 }
@@ -282,30 +282,30 @@ class PostUpdateUserPasswordResponseConverter implements JsonConverter<PostUpdat
 }
 
 class PostUpdateUserPasswordResponse {
-  String Message;
-  DateTime? RequestTime;
-  bool Status;
+  String message;
+  DateTime? requestTime;
+  bool status;
 
 
   PostUpdateUserPasswordResponse({
-    this.Message = '',
-    this.RequestTime,
-    this.Status = false,
+    this.message = '',
+    this.requestTime,
+    this.status = false,
   });
 
   factory PostUpdateUserPasswordResponse.fromJson(Map<String, dynamic> json) {
     return PostUpdateUserPasswordResponse(
-      Message: DoNothingConverter<String>().fromJson(json['Message']),
-      RequestTime: DateTimeConverter().fromJson(json['RequestTime']),
-      Status: DoNothingConverter<bool>().fromJson(json['Status']),
+      message: DoNothingConverter<String>().fromJson(json['Message']),
+      requestTime: DateTimeConverter().fromJson(json['RequestTime']),
+      status: DoNothingConverter<bool>().fromJson(json['Status']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Message': DoNothingConverter<String>().toJson(Message),
-      'RequestTime': DateTimeConverter().toJson(RequestTime),
-      'Status': DoNothingConverter<bool>().toJson(Status),
+      'Message': DoNothingConverter<String>().toJson(message),
+      'RequestTime': DateTimeConverter().toJson(requestTime),
+      'Status': DoNothingConverter<bool>().toJson(status),
     };
   }
 }

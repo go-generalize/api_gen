@@ -105,26 +105,26 @@ class PutJobRequestConverter implements JsonConverter<PutJobRequest, Map<String,
 }
 
 class PutJobRequest {
-  String JobID;
-  String UserID;
+  String jobID;
+  String userID;
 
 
   PutJobRequest({
-    this.JobID = '',
-    this.UserID = '',
+    this.jobID = '',
+    this.userID = '',
   });
 
   factory PutJobRequest.fromJson(Map<String, dynamic> json) {
     return PutJobRequest(
-      JobID: DoNothingConverter<String>().fromJson(json['JobID']),
-      UserID: DoNothingConverter<String>().fromJson(json['UserID']),
+      jobID: DoNothingConverter<String>().fromJson(json['JobID']),
+      userID: DoNothingConverter<String>().fromJson(json['UserID']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'JobID': DoNothingConverter<String>().toJson(JobID),
-      'UserID': DoNothingConverter<String>().toJson(UserID),
+      'JobID': DoNothingConverter<String>().toJson(jobID),
+      'UserID': DoNothingConverter<String>().toJson(userID),
     };
   }
 }
@@ -144,30 +144,30 @@ class PutJobResponseConverter implements JsonConverter<PutJobResponse, Map<Strin
 }
 
 class PutJobResponse {
-  String JobID;
-  DateTime? RequestTime;
-  String UserID;
+  String jobID;
+  DateTime? requestTime;
+  String userID;
 
 
   PutJobResponse({
-    this.JobID = '',
-    this.RequestTime,
-    this.UserID = '',
+    this.jobID = '',
+    this.requestTime,
+    this.userID = '',
   });
 
   factory PutJobResponse.fromJson(Map<String, dynamic> json) {
     return PutJobResponse(
-      JobID: DoNothingConverter<String>().fromJson(json['JobID']),
-      RequestTime: DateTimeConverter().fromJson(json['RequestTime']),
-      UserID: DoNothingConverter<String>().fromJson(json['UserID']),
+      jobID: DoNothingConverter<String>().fromJson(json['JobID']),
+      requestTime: DateTimeConverter().fromJson(json['RequestTime']),
+      userID: DoNothingConverter<String>().fromJson(json['UserID']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'JobID': DoNothingConverter<String>().toJson(JobID),
-      'RequestTime': DateTimeConverter().toJson(RequestTime),
-      'UserID': DoNothingConverter<String>().toJson(UserID),
+      'JobID': DoNothingConverter<String>().toJson(jobID),
+      'RequestTime': DateTimeConverter().toJson(requestTime),
+      'UserID': DoNothingConverter<String>().toJson(userID),
     };
   }
 }
