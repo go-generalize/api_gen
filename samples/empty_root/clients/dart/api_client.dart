@@ -75,7 +75,7 @@ class FooClient {
   ) {
     this.bar = FooBarClient(
 			this.baseURL,
-      this.headers,
+			this.headers,
 			this.client,
 		);
   }
@@ -119,9 +119,9 @@ class APIClient {
 
     this.headers['Content-Type'] = 'application/json';
 
-		this.foo = new FooClient(
+		this.foo = FooClient(
 			this.baseURL,
-      this.headers,
+			this.headers,
 			this.client,
 		);
 	}

@@ -26,17 +26,17 @@ class ServiceClient {
   ) {
     this.static_page = ServiceStaticPageClient(
 			this.baseURL,
-      this.headers,
+			this.headers,
 			this.client,
 		);
     this.user = ServiceUserClient(
 			this.baseURL,
-      this.headers,
+			this.headers,
 			this.client,
 		);
     this.user2 = ServiceUser2Client(
 			this.baseURL,
-      this.headers,
+			this.headers,
 			this.client,
 		);
   }
@@ -150,7 +150,7 @@ class ServiceUser2Client {
   ) {
     this._userID = ServiceUser2UserIDClient(
 			this.baseURL,
-      this.headers,
+			this.headers,
 			this.client,
 		);
   }
@@ -309,7 +309,7 @@ class ServiceUser2UserIDClient {
   ) {
     this._JobID = ServiceUser2UserIDJobIDClient(
 			this.baseURL,
-      this.headers,
+			this.headers,
 			this.client,
 		);
   }
@@ -560,9 +560,9 @@ class APIClient {
 
     this.headers['Content-Type'] = 'application/json';
 
-		this.service = new ServiceClient(
+		this.service = ServiceClient(
 			this.baseURL,
-      this.headers,
+			this.headers,
 			this.client,
 		);
 	}
