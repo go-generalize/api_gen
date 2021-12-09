@@ -141,14 +141,14 @@ class ServiceUser2Client {
 	Map<String, String> headers = {};
   String baseURL;
   http.Client client;
-	late ServiceUser2UserIDClient _userID;
+	late ServiceUser2UserIDClient userID;
 
   ServiceUser2Client(
     this.baseURL,
     this.headers,
     this.client,
   ) {
-    this._userID = ServiceUser2UserIDClient(
+    this.userID = ServiceUser2UserIDClient(
 			this.baseURL,
 			this.headers,
 			this.client,
@@ -300,14 +300,14 @@ class ServiceUser2UserIDClient {
 	Map<String, String> headers = {};
   String baseURL;
   http.Client client;
-	late ServiceUser2UserIDJobIDClient _JobID;
+	late ServiceUser2UserIDJobIDClient JobID;
 
   ServiceUser2UserIDClient(
     this.baseURL,
     this.headers,
     this.client,
   ) {
-    this._JobID = ServiceUser2UserIDJobIDClient(
+    this.JobID = ServiceUser2UserIDJobIDClient(
 			this.baseURL,
 			this.headers,
 			this.client,

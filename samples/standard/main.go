@@ -10,4 +10,6 @@ func main() {
 	controller.NewControllers(nil, e)
 
 	// Start echo server
+
+	panic(e.Start(":8080"))
 }

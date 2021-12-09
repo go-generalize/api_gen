@@ -152,7 +152,7 @@ func (g *generator) generateGroup(gr *parser.Group) childrenType {
 	}
 
 	return childrenType{
-		Name:      gr.RawPath,
+		Name:      strings.TrimPrefix(gr.RawPath, "_"),
 		ClassName: className,
 	}
 }
