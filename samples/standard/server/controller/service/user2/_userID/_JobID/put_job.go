@@ -26,7 +26,7 @@ func NewPutJobController(cp *props.ControllerProps) PutJobController {
 }
 
 // PutJob - PUT job
-func (ctrl *putJobController) PutdJob(
+func (ctrl *putJobController) PutJob(
 	c echo.Context, req *types.PutJobRequest,
 ) (res *types.PutJobResponse, err error) {
 	// return nil, apierror.NewAPIError(http.StatusBadRequest)
