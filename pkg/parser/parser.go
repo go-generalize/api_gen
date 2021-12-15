@@ -222,27 +222,13 @@ func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.
 	return eps, nil
 }
 
-func (p *parser) parseGo2tsDir(dir string) (map[string]go2tstypes.Type, error) {
-	psr, err := go2tsparser.NewParser(dir, func(fo *go2tsparser.FilterOpt) bool {
-		if !fo.BasePackage {
-			return false
-		}
-
-		return common.ParserFilter(fo)
-	})
-
-	if err != nil {
-		return nil, xerrors.Errorf("failed to parse %s: %w", dir, err)
-	}
-
-	parsed, err := psr.Parse()
-
-	if err != nil {
-		return nil, xerrors.Errorf("failed to parse %s: %w", dir, err)
-	}
-
+func (p *parser) extractReqRespTypes(parsed map[string]go2tstypes.Type, basePackage string) map[string]go2tstypes.Type {
 	results := make(map[string]go2tstypes.Type)
 	for key, pkg := range parsed {
+		if !strings.HasPrefix(key, basePackage+".") {
+			continue
+		}
+
 		if !(strings.HasSuffix(key, "Request") || strings.HasSuffix(key, "Response")) {
 			continue
 		}
@@ -257,7 +243,7 @@ func (p *parser) parseGo2tsDir(dir string) (map[string]go2tstypes.Type, error) {
 		results[name] = pkg
 	}
 
-	return results, nil
+	return results
 }
 
 func (p *parser) parsePackage(dir string) (*Group, error) {
@@ -298,9 +284,9 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 			return nil, xerrors.Errorf("failed to parse package for %s: %w", fifo.Name(), err)
 		}
 
-		if len(child.Endpoints) == 0 && len(child.Children) == 0 {
-			continue
-		}
+		// if len(child.Endpoints) == 0 && len(child.Children) == 0 {
+		// 	continue
+		// }
 		child.parentGroup = gr
 
 		gr.Children = append(gr.Children, child)
@@ -322,11 +308,21 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 		return gr, nil
 	}
 
-	go2tsTypes, err := p.parseGo2tsDir(dir)
+	psr, err := go2tsparser.NewParser(dir, common.ParserFilter)
 
 	if err != nil {
-		return nil, xerrors.Errorf("failed to parse dir with go2ts parser: %w", err)
+		return nil, xerrors.Errorf("failed to initialize %s: %w", dir, err)
 	}
+
+	parsed, err := psr.Parse()
+
+	if err != nil {
+		return nil, xerrors.Errorf("failed to parse %s: %w", dir, err)
+	}
+
+	gr.ParsedTypes = parsed
+
+	go2tsTypes := p.extractReqRespTypes(parsed, psr.GetBasePackage())
 
 	pkgs, err := goparser.ParseDir(fset, dir, nil, goparser.AllErrors|goparser.ParseComments)
 
@@ -353,6 +349,7 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 			}
 
 			for k, v := range eps {
+				v.parentGroup = gr
 				endpoints[k] = v
 			}
 		}
@@ -360,54 +357,14 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 		gr.Endpoints = make([]*Endpoint, 0, len(endpoints))
 
 		for _, v := range endpoints {
-			v := v
-			if v.RequestPayload == nil ||
-				v.ResponsePayload == nil {
+			err = p.updateEndpoint(v, go2tsTypes)
+
+			if err == errNilReqRespPayload {
 				continue
 			}
-			v.parentGroup = gr
-
-			req, ok := go2tsTypes[v.RequestPayloadName]
-			if !ok {
-				return nil, xerrors.Errorf("request type is not found from types parsed by go2ts: %s", v.RequestPayloadName)
-			}
-			reqObj, ok := req.(*go2tstypes.Object)
-			if !ok {
-				return nil, xerrors.Errorf("request type is not object: %s", v.RequestPayloadName)
-			}
-			v.RequestGo2tsPayload = reqObj
-
-			res, ok := go2tsTypes[v.ResponsePayloadName]
-			if !ok {
-				return nil, xerrors.Errorf("response type is not found from types parsed by go2ts: %s", v.ResponsePayloadName)
-			}
-			resObj, ok := res.(*go2tstypes.Object)
-			if !ok {
-				return nil, xerrors.Errorf("response type is not object: %s", v.ResponsePayloadName)
-			}
-			v.ResponseGo2tsPayload = resObj
-
-			var err error
-			v.GetFullPath("", func(rawPath, path, placeholder string) string {
-				if placeholder != "" {
-					queryParamField := util.FindStructField(v.RequestGo2tsPayload, QueryParamTag, placeholder)
-					if queryParamField == "" {
-						err = agerrors.NewParserError(
-							v.File,
-							v.RequestLine,
-							fmt.Sprintf(
-								"'%s' is missing in %s as field name or param tag",
-								placeholder, v.RequestPayloadName,
-							),
-						)
-					}
-				}
-
-				return ""
-			})
 
 			if err != nil {
-				return nil, xerrors.Errorf("invalid endpoint: %w", err)
+				return nil, xerrors.Errorf("failed to verity endpoint %s: %w", v.RawPath, err)
 			}
 
 			gr.Endpoints = append(gr.Endpoints, v)
@@ -419,4 +376,60 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 	}
 
 	return gr, nil
+}
+
+var (
+	errNilReqRespPayload = fmt.Errorf("request or response payload is nil")
+)
+
+func (p *parser) updateEndpoint(v *Endpoint, reqRespTypes map[string]go2tstypes.Type) error {
+	if v.RequestPayload == nil ||
+		v.ResponsePayload == nil {
+		return nil
+	}
+
+	req, ok := reqRespTypes[v.RequestPayloadName]
+	if !ok {
+		return xerrors.Errorf("request type is not found from types parsed by go2ts: %s", v.RequestPayloadName)
+	}
+	reqObj, ok := req.(*go2tstypes.Object)
+	if !ok {
+		return xerrors.Errorf("request type is not object: %s", v.RequestPayloadName)
+	}
+	v.RequestGo2tsPayload = reqObj
+
+	res, ok := reqRespTypes[v.ResponsePayloadName]
+	if !ok {
+		return xerrors.Errorf("response type is not found from types parsed by go2ts: %s", v.ResponsePayloadName)
+	}
+	resObj, ok := res.(*go2tstypes.Object)
+	if !ok {
+		return xerrors.Errorf("response type is not object: %s", v.ResponsePayloadName)
+	}
+	v.ResponseGo2tsPayload = resObj
+
+	var err error
+	v.GetFullPath("", func(rawPath, path, placeholder string) string {
+		if placeholder != "" {
+			queryParamField := util.FindStructField(v.RequestGo2tsPayload, QueryParamTag, placeholder)
+			if queryParamField == "" {
+				err = agerrors.NewParserError(
+					v.File,
+					v.RequestLine,
+					fmt.Sprintf(
+						"'%s' is missing in %s as field name or param tag",
+						placeholder, v.RequestPayloadName,
+					),
+				)
+			}
+		}
+
+		return ""
+	})
+
+	if err != nil {
+		return xerrors.Errorf("invalid endpoint: %w", err)
+	}
+
+	return nil
 }

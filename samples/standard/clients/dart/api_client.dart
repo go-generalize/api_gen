@@ -4,6 +4,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import './classes/service/static_page/types.dart' as types__service_static_page;
+import './classes/service/table/types.dart' as types__service_table;
 import './classes/service/types.dart' as types__service;
 import './classes/service/user/types.dart' as types__service_user;
 import './classes/service/user2/_userID/_JobID/types.dart' as types__service_user_2__user_id__job_id;
@@ -16,6 +17,7 @@ class ServiceClient {
   String baseURL;
   http.Client client;
 	late ServiceStaticPageClient static_page;
+	late ServiceTableClient table;
 	late ServiceUserClient user;
 	late ServiceUser2Client user2;
 
@@ -25,6 +27,11 @@ class ServiceClient {
     this.client,
   ) {
     this.static_page = ServiceStaticPageClient(
+			this.baseURL,
+			this.headers,
+			this.client,
+		);
+    this.table = ServiceTableClient(
 			this.baseURL,
 			this.headers,
 			this.client,
@@ -134,6 +141,28 @@ class ServiceStaticPageClient {
 
 		return res;
 	}
+
+}
+
+class ServiceTableClient {
+	Map<String, String> headers = {};
+  String baseURL;
+  http.Client client;
+
+  ServiceTableClient(
+    this.baseURL,
+    this.headers,
+    this.client,
+  ) {
+  }
+
+  Map<String, dynamic> getRequestObject(Map<String, dynamic> obj, List<String> routingPath) {
+    final copied = {...obj};
+    
+    copied.removeWhere((key, value) => routingPath.contains(key));
+
+    return copied;
+  }
 
 }
 

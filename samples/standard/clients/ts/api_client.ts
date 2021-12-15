@@ -78,6 +78,7 @@ class ServiceClient {
 	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
 	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
 	public static_page: ServiceStaticPageClient;
+	public table: ServiceTableClient;
 	public user: ServiceUserClient;
 	public user2: ServiceUser2Client;
 	constructor(
@@ -93,6 +94,12 @@ class ServiceClient {
 			afterMiddleware: this.afterMiddleware
 		};
 		this.static_page = new ServiceStaticPageClient(
+			headers,
+			options,
+			baseURL,
+			childMiddlewareSet
+		);
+		this.table = new ServiceTableClient(
 			headers,
 			options,
 			baseURL,
@@ -346,6 +353,53 @@ class ServiceStaticPageClient {
 		context.response = res;
 		await this.callMiddleware(this.afterMiddleware, context);
 		return res;
+	}
+}
+
+class ServiceTableClient {
+	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
+	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
+	constructor(
+		private headers: {[key: string]: string},
+		private options: {[key: string]: any},
+		private baseURL: string,
+		middleware: middlewareSet
+	) {
+		this.beforeMiddleware = middleware.beforeMiddleware!;
+		this.afterMiddleware = middleware.afterMiddleware!;
+	}
+
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+		let res: { [key: string]: any } = {};
+		Object.keys(obj).forEach((key) => {
+			if (routingPath.indexOf(key) === -1) {
+				res[key] = obj[key];
+			}
+		});
+		return res;
+	}
+
+	async callMiddleware(
+		middlewares: ApiClientMiddlewareFunc[],
+		context: MiddlewareContext
+	) {
+		for (const m of middlewares) {
+			const func: ApiClientMiddlewareFunc = m;
+			const mr = await func(context);
+			if (typeof mr === 'boolean') {
+				if (!mr) {
+					break;
+				}
+			} else {
+				if (mr === MiddlewareResult.CONTINUE) {
+					continue;
+				} else if (mr === MiddlewareResult.MIDDLEWARE_STOP) {
+					break;
+				} else if (mr === MiddlewareResult.STOP) {
+					throw new ApiMiddlewareStop();
+				}
+			}
+		}
 	}
 }
 
