@@ -55,6 +55,16 @@ func (g *Group_service_static_page) GetStaticPage(reqPayload *_service_static_pa
 	return respPayload, nil
 }
 
+type Group_service_table struct {
+	apiClient *APIClient
+}
+
+func newGroup_service_table(client *APIClient) *Group_service_table {
+	return &Group_service_table{
+		apiClient: client,
+	}
+}
+
 type Group_service_user struct {
 	apiClient *APIClient
 }
@@ -347,6 +357,7 @@ func (g *Group_service_user2) PostUpdateUserPassword(reqPayload *_service_user2.
 
 type Group_service struct {
 	StaticPage *Group_service_static_page
+	Table      *Group_service_table
 	User       *Group_service_user
 	User2      *Group_service_user2
 	apiClient  *APIClient
@@ -356,6 +367,7 @@ func newGroup_service(client *APIClient) *Group_service {
 	return &Group_service{
 		apiClient:  client,
 		StaticPage: newGroup_service_static_page(client),
+		Table:      newGroup_service_table(client),
 		User:       newGroup_service_user(client),
 		User2:      newGroup_service_user2(client),
 	}

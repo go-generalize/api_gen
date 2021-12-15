@@ -94,6 +94,7 @@ type Group struct {
 	RawPath, Path string
 	Dir           string
 	Placeholder   string
+	ParsedTypes   map[string]go2tstypes.Type
 
 	Children  []*Group
 	Endpoints []*Endpoint
