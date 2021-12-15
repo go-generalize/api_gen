@@ -62,6 +62,16 @@ func (g *Group_api_service_static_page) GetStaticPage(reqPayload *_api_service_s
 	return respPayload, nil
 }
 
+type Group_api_service_table struct {
+	apiClient *APIClient
+}
+
+func newGroup_api_service_table(client *APIClient) *Group_api_service_table {
+	return &Group_api_service_table{
+		apiClient: client,
+	}
+}
+
 type Group_api_service_user struct {
 	apiClient *APIClient
 }
@@ -354,6 +364,7 @@ func (g *Group_api_service_user2) PostUpdateUserPassword(reqPayload *_api_servic
 
 type Group_api_service struct {
 	StaticPage *Group_api_service_static_page
+	Table      *Group_api_service_table
 	User       *Group_api_service_user
 	User2      *Group_api_service_user2
 	apiClient  *APIClient
@@ -363,6 +374,7 @@ func newGroup_api_service(client *APIClient) *Group_api_service {
 	return &Group_api_service{
 		apiClient:  client,
 		StaticPage: newGroup_api_service_static_page(client),
+		Table:      newGroup_api_service_table(client),
 		User:       newGroup_api_service_user(client),
 		User2:      newGroup_api_service_user2(client),
 	}
@@ -486,6 +498,112 @@ func (g *Group_api) PostCreateUser(reqPayload *_api.PostCreateUserRequest) (resp
 	}
 
 	return respPayload, nil
+}
+
+type Group_clients_dart_classes_service_static_page struct {
+	apiClient *APIClient
+}
+
+func newGroup_clients_dart_classes_service_static_page(client *APIClient) *Group_clients_dart_classes_service_static_page {
+	return &Group_clients_dart_classes_service_static_page{
+		apiClient: client,
+	}
+}
+
+type Group_clients_dart_classes_service_table struct {
+	apiClient *APIClient
+}
+
+func newGroup_clients_dart_classes_service_table(client *APIClient) *Group_clients_dart_classes_service_table {
+	return &Group_clients_dart_classes_service_table{
+		apiClient: client,
+	}
+}
+
+type Group_clients_dart_classes_service_user struct {
+	apiClient *APIClient
+}
+
+func newGroup_clients_dart_classes_service_user(client *APIClient) *Group_clients_dart_classes_service_user {
+	return &Group_clients_dart_classes_service_user{
+		apiClient: client,
+	}
+}
+
+type Group_clients_dart_classes_service_user2__userID__JobID struct {
+	apiClient *APIClient
+}
+
+func newGroup_clients_dart_classes_service_user2__userID__JobID(client *APIClient) *Group_clients_dart_classes_service_user2__userID__JobID {
+	return &Group_clients_dart_classes_service_user2__userID__JobID{
+		apiClient: client,
+	}
+}
+
+type Group_clients_dart_classes_service_user2__userID struct {
+	JobID     *Group_clients_dart_classes_service_user2__userID__JobID
+	apiClient *APIClient
+}
+
+func newGroup_clients_dart_classes_service_user2__userID(client *APIClient) *Group_clients_dart_classes_service_user2__userID {
+	return &Group_clients_dart_classes_service_user2__userID{
+		apiClient: client,
+		JobID:     newGroup_clients_dart_classes_service_user2__userID__JobID(client),
+	}
+}
+
+type Group_clients_dart_classes_service_user2 struct {
+	UserID    *Group_clients_dart_classes_service_user2__userID
+	apiClient *APIClient
+}
+
+func newGroup_clients_dart_classes_service_user2(client *APIClient) *Group_clients_dart_classes_service_user2 {
+	return &Group_clients_dart_classes_service_user2{
+		apiClient: client,
+		UserID:    newGroup_clients_dart_classes_service_user2__userID(client),
+	}
+}
+
+type Group_clients_dart_classes_service struct {
+	StaticPage *Group_clients_dart_classes_service_static_page
+	Table      *Group_clients_dart_classes_service_table
+	User       *Group_clients_dart_classes_service_user
+	User2      *Group_clients_dart_classes_service_user2
+	apiClient  *APIClient
+}
+
+func newGroup_clients_dart_classes_service(client *APIClient) *Group_clients_dart_classes_service {
+	return &Group_clients_dart_classes_service{
+		apiClient:  client,
+		StaticPage: newGroup_clients_dart_classes_service_static_page(client),
+		Table:      newGroup_clients_dart_classes_service_table(client),
+		User:       newGroup_clients_dart_classes_service_user(client),
+		User2:      newGroup_clients_dart_classes_service_user2(client),
+	}
+}
+
+type Group_clients_dart_classes struct {
+	Service   *Group_clients_dart_classes_service
+	apiClient *APIClient
+}
+
+func newGroup_clients_dart_classes(client *APIClient) *Group_clients_dart_classes {
+	return &Group_clients_dart_classes{
+		apiClient: client,
+		Service:   newGroup_clients_dart_classes_service(client),
+	}
+}
+
+type Group_clients_dart struct {
+	Classes   *Group_clients_dart_classes
+	apiClient *APIClient
+}
+
+func newGroup_clients_dart(client *APIClient) *Group_clients_dart {
+	return &Group_clients_dart{
+		apiClient: client,
+		Classes:   newGroup_clients_dart_classes(client),
+	}
 }
 
 type Group_clients_go_classes_service_static_page struct {
@@ -962,21 +1080,609 @@ func newGroup_clients_go(client *APIClient) *Group_clients_go {
 	}
 }
 
+type Group_clients_ts_classes_service_static_page struct {
+	apiClient *APIClient
+}
+
+func newGroup_clients_ts_classes_service_static_page(client *APIClient) *Group_clients_ts_classes_service_static_page {
+	return &Group_clients_ts_classes_service_static_page{
+		apiClient: client,
+	}
+}
+
+type Group_clients_ts_classes_service_user struct {
+	apiClient *APIClient
+}
+
+func newGroup_clients_ts_classes_service_user(client *APIClient) *Group_clients_ts_classes_service_user {
+	return &Group_clients_ts_classes_service_user{
+		apiClient: client,
+	}
+}
+
+type Group_clients_ts_classes_service_user2__userID__JobID struct {
+	apiClient *APIClient
+}
+
+func newGroup_clients_ts_classes_service_user2__userID__JobID(client *APIClient) *Group_clients_ts_classes_service_user2__userID__JobID {
+	return &Group_clients_ts_classes_service_user2__userID__JobID{
+		apiClient: client,
+	}
+}
+
+type Group_clients_ts_classes_service_user2__userID struct {
+	JobID     *Group_clients_ts_classes_service_user2__userID__JobID
+	apiClient *APIClient
+}
+
+func newGroup_clients_ts_classes_service_user2__userID(client *APIClient) *Group_clients_ts_classes_service_user2__userID {
+	return &Group_clients_ts_classes_service_user2__userID{
+		apiClient: client,
+		JobID:     newGroup_clients_ts_classes_service_user2__userID__JobID(client),
+	}
+}
+
+type Group_clients_ts_classes_service_user2 struct {
+	UserID    *Group_clients_ts_classes_service_user2__userID
+	apiClient *APIClient
+}
+
+func newGroup_clients_ts_classes_service_user2(client *APIClient) *Group_clients_ts_classes_service_user2 {
+	return &Group_clients_ts_classes_service_user2{
+		apiClient: client,
+		UserID:    newGroup_clients_ts_classes_service_user2__userID(client),
+	}
+}
+
+type Group_clients_ts_classes_service struct {
+	StaticPage *Group_clients_ts_classes_service_static_page
+	User       *Group_clients_ts_classes_service_user
+	User2      *Group_clients_ts_classes_service_user2
+	apiClient  *APIClient
+}
+
+func newGroup_clients_ts_classes_service(client *APIClient) *Group_clients_ts_classes_service {
+	return &Group_clients_ts_classes_service{
+		apiClient:  client,
+		StaticPage: newGroup_clients_ts_classes_service_static_page(client),
+		User:       newGroup_clients_ts_classes_service_user(client),
+		User2:      newGroup_clients_ts_classes_service_user2(client),
+	}
+}
+
+type Group_clients_ts_classes struct {
+	Service   *Group_clients_ts_classes_service
+	apiClient *APIClient
+}
+
+func newGroup_clients_ts_classes(client *APIClient) *Group_clients_ts_classes {
+	return &Group_clients_ts_classes{
+		apiClient: client,
+		Service:   newGroup_clients_ts_classes_service(client),
+	}
+}
+
+type Group_clients_ts struct {
+	Classes   *Group_clients_ts_classes
+	apiClient *APIClient
+}
+
+func newGroup_clients_ts(client *APIClient) *Group_clients_ts {
+	return &Group_clients_ts{
+		apiClient: client,
+		Classes:   newGroup_clients_ts_classes(client),
+	}
+}
+
 type Group_clients struct {
+	Dart      *Group_clients_dart
 	Go        *Group_clients_go
+	Ts        *Group_clients_ts
 	apiClient *APIClient
 }
 
 func newGroup_clients(client *APIClient) *Group_clients {
 	return &Group_clients{
 		apiClient: client,
+		Dart:      newGroup_clients_dart(client),
 		Go:        newGroup_clients_go(client),
+		Ts:        newGroup_clients_ts(client),
+	}
+}
+
+type Group_docs struct {
+	apiClient *APIClient
+}
+
+func newGroup_docs(client *APIClient) *Group_docs {
+	return &Group_docs{
+		apiClient: client,
+	}
+}
+
+type Group_server_controller_service_static_page struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_controller_service_static_page(client *APIClient) *Group_server_controller_service_static_page {
+	return &Group_server_controller_service_static_page{
+		apiClient: client,
+	}
+}
+
+type Group_server_controller_service_user struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_controller_service_user(client *APIClient) *Group_server_controller_service_user {
+	return &Group_server_controller_service_user{
+		apiClient: client,
+	}
+}
+
+type Group_server_controller_service_user2__userID__JobID struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_controller_service_user2__userID__JobID(client *APIClient) *Group_server_controller_service_user2__userID__JobID {
+	return &Group_server_controller_service_user2__userID__JobID{
+		apiClient: client,
+	}
+}
+
+type Group_server_controller_service_user2__userID struct {
+	JobID     *Group_server_controller_service_user2__userID__JobID
+	apiClient *APIClient
+}
+
+func newGroup_server_controller_service_user2__userID(client *APIClient) *Group_server_controller_service_user2__userID {
+	return &Group_server_controller_service_user2__userID{
+		apiClient: client,
+		JobID:     newGroup_server_controller_service_user2__userID__JobID(client),
+	}
+}
+
+type Group_server_controller_service_user2 struct {
+	UserID    *Group_server_controller_service_user2__userID
+	apiClient *APIClient
+}
+
+func newGroup_server_controller_service_user2(client *APIClient) *Group_server_controller_service_user2 {
+	return &Group_server_controller_service_user2{
+		apiClient: client,
+		UserID:    newGroup_server_controller_service_user2__userID(client),
+	}
+}
+
+type Group_server_controller_service struct {
+	StaticPage *Group_server_controller_service_static_page
+	User       *Group_server_controller_service_user
+	User2      *Group_server_controller_service_user2
+	apiClient  *APIClient
+}
+
+func newGroup_server_controller_service(client *APIClient) *Group_server_controller_service {
+	return &Group_server_controller_service{
+		apiClient:  client,
+		StaticPage: newGroup_server_controller_service_static_page(client),
+		User:       newGroup_server_controller_service_user(client),
+		User2:      newGroup_server_controller_service_user2(client),
+	}
+}
+
+type Group_server_controller struct {
+	Service   *Group_server_controller_service
+	apiClient *APIClient
+}
+
+func newGroup_server_controller(client *APIClient) *Group_server_controller {
+	return &Group_server_controller{
+		apiClient: client,
+		Service:   newGroup_server_controller_service(client),
+	}
+}
+
+type Group_server_mock_controller_service_static_page struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_controller_service_static_page(client *APIClient) *Group_server_mock_controller_service_static_page {
+	return &Group_server_mock_controller_service_static_page{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_controller_service_user struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_controller_service_user(client *APIClient) *Group_server_mock_controller_service_user {
+	return &Group_server_mock_controller_service_user{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_controller_service_user2__userID__JobID struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_controller_service_user2__userID__JobID(client *APIClient) *Group_server_mock_controller_service_user2__userID__JobID {
+	return &Group_server_mock_controller_service_user2__userID__JobID{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_controller_service_user2__userID struct {
+	JobID     *Group_server_mock_controller_service_user2__userID__JobID
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_controller_service_user2__userID(client *APIClient) *Group_server_mock_controller_service_user2__userID {
+	return &Group_server_mock_controller_service_user2__userID{
+		apiClient: client,
+		JobID:     newGroup_server_mock_controller_service_user2__userID__JobID(client),
+	}
+}
+
+type Group_server_mock_controller_service_user2 struct {
+	UserID    *Group_server_mock_controller_service_user2__userID
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_controller_service_user2(client *APIClient) *Group_server_mock_controller_service_user2 {
+	return &Group_server_mock_controller_service_user2{
+		apiClient: client,
+		UserID:    newGroup_server_mock_controller_service_user2__userID(client),
+	}
+}
+
+type Group_server_mock_controller_service struct {
+	StaticPage *Group_server_mock_controller_service_static_page
+	User       *Group_server_mock_controller_service_user
+	User2      *Group_server_mock_controller_service_user2
+	apiClient  *APIClient
+}
+
+func newGroup_server_mock_controller_service(client *APIClient) *Group_server_mock_controller_service {
+	return &Group_server_mock_controller_service{
+		apiClient:  client,
+		StaticPage: newGroup_server_mock_controller_service_static_page(client),
+		User:       newGroup_server_mock_controller_service_user(client),
+		User2:      newGroup_server_mock_controller_service_user2(client),
+	}
+}
+
+type Group_server_mock_controller struct {
+	Service   *Group_server_mock_controller_service
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_controller(client *APIClient) *Group_server_mock_controller {
+	return &Group_server_mock_controller{
+		apiClient: client,
+		Service:   newGroup_server_mock_controller_service(client),
+	}
+}
+
+type Group_server_mock_json_get_ struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_get_(client *APIClient) *Group_server_mock_json_get_ {
+	return &Group_server_mock_json_get_{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_json_post_create_table struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_post_create_table(client *APIClient) *Group_server_mock_json_post_create_table {
+	return &Group_server_mock_json_post_create_table{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_json_post_create_user struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_post_create_user(client *APIClient) *Group_server_mock_json_post_create_user {
+	return &Group_server_mock_json_post_create_user{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_json_service_get_article struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_service_get_article(client *APIClient) *Group_server_mock_json_service_get_article {
+	return &Group_server_mock_json_service_get_article{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_json_service_static_page_get_static_page struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_service_static_page_get_static_page(client *APIClient) *Group_server_mock_json_service_static_page_get_static_page {
+	return &Group_server_mock_json_service_static_page_get_static_page{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_json_service_static_page struct {
+	GetStaticPage *Group_server_mock_json_service_static_page_get_static_page
+	apiClient     *APIClient
+}
+
+func newGroup_server_mock_json_service_static_page(client *APIClient) *Group_server_mock_json_service_static_page {
+	return &Group_server_mock_json_service_static_page{
+		apiClient:     client,
+		GetStaticPage: newGroup_server_mock_json_service_static_page_get_static_page(client),
+	}
+}
+
+type Group_server_mock_json_service_user_get_ struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_service_user_get_(client *APIClient) *Group_server_mock_json_service_user_get_ {
+	return &Group_server_mock_json_service_user_get_{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_json_service_user_post_update_user_name struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_service_user_post_update_user_name(client *APIClient) *Group_server_mock_json_service_user_post_update_user_name {
+	return &Group_server_mock_json_service_user_post_update_user_name{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_json_service_user_post_update_user_password struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_service_user_post_update_user_password(client *APIClient) *Group_server_mock_json_service_user_post_update_user_password {
+	return &Group_server_mock_json_service_user_post_update_user_password{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_json_service_user struct {
+	Get                    *Group_server_mock_json_service_user_get_
+	PostUpdateUserName     *Group_server_mock_json_service_user_post_update_user_name
+	PostUpdateUserPassword *Group_server_mock_json_service_user_post_update_user_password
+	apiClient              *APIClient
+}
+
+func newGroup_server_mock_json_service_user(client *APIClient) *Group_server_mock_json_service_user {
+	return &Group_server_mock_json_service_user{
+		apiClient:              client,
+		Get:                    newGroup_server_mock_json_service_user_get_(client),
+		PostUpdateUserName:     newGroup_server_mock_json_service_user_post_update_user_name(client),
+		PostUpdateUserPassword: newGroup_server_mock_json_service_user_post_update_user_password(client),
+	}
+}
+
+type Group_server_mock_json_service_user2__userID__JobID_put_job struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_service_user2__userID__JobID_put_job(client *APIClient) *Group_server_mock_json_service_user2__userID__JobID_put_job {
+	return &Group_server_mock_json_service_user2__userID__JobID_put_job{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_json_service_user2__userID__JobID struct {
+	PutJob    *Group_server_mock_json_service_user2__userID__JobID_put_job
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_service_user2__userID__JobID(client *APIClient) *Group_server_mock_json_service_user2__userID__JobID {
+	return &Group_server_mock_json_service_user2__userID__JobID{
+		apiClient: client,
+		PutJob:    newGroup_server_mock_json_service_user2__userID__JobID_put_job(client),
+	}
+}
+
+type Group_server_mock_json_service_user2__userID_get_user_job_get struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_service_user2__userID_get_user_job_get(client *APIClient) *Group_server_mock_json_service_user2__userID_get_user_job_get {
+	return &Group_server_mock_json_service_user2__userID_get_user_job_get{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_json_service_user2__userID struct {
+	JobID         *Group_server_mock_json_service_user2__userID__JobID
+	GetUserJobGet *Group_server_mock_json_service_user2__userID_get_user_job_get
+	apiClient     *APIClient
+}
+
+func newGroup_server_mock_json_service_user2__userID(client *APIClient) *Group_server_mock_json_service_user2__userID {
+	return &Group_server_mock_json_service_user2__userID{
+		apiClient:     client,
+		JobID:         newGroup_server_mock_json_service_user2__userID__JobID(client),
+		GetUserJobGet: newGroup_server_mock_json_service_user2__userID_get_user_job_get(client),
+	}
+}
+
+type Group_server_mock_json_service_user2_delete_user struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_service_user2_delete_user(client *APIClient) *Group_server_mock_json_service_user2_delete_user {
+	return &Group_server_mock_json_service_user2_delete_user{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_json_service_user2_get_user struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_service_user2_get_user(client *APIClient) *Group_server_mock_json_service_user2_get_user {
+	return &Group_server_mock_json_service_user2_get_user{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_json_service_user2_post_update_user_name struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_service_user2_post_update_user_name(client *APIClient) *Group_server_mock_json_service_user2_post_update_user_name {
+	return &Group_server_mock_json_service_user2_post_update_user_name{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_json_service_user2_post_update_user_password struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_service_user2_post_update_user_password(client *APIClient) *Group_server_mock_json_service_user2_post_update_user_password {
+	return &Group_server_mock_json_service_user2_post_update_user_password{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_json_service_user2 struct {
+	UserID                 *Group_server_mock_json_service_user2__userID
+	DeleteUser             *Group_server_mock_json_service_user2_delete_user
+	GetUser                *Group_server_mock_json_service_user2_get_user
+	PostUpdateUserName     *Group_server_mock_json_service_user2_post_update_user_name
+	PostUpdateUserPassword *Group_server_mock_json_service_user2_post_update_user_password
+	apiClient              *APIClient
+}
+
+func newGroup_server_mock_json_service_user2(client *APIClient) *Group_server_mock_json_service_user2 {
+	return &Group_server_mock_json_service_user2{
+		apiClient:              client,
+		UserID:                 newGroup_server_mock_json_service_user2__userID(client),
+		DeleteUser:             newGroup_server_mock_json_service_user2_delete_user(client),
+		GetUser:                newGroup_server_mock_json_service_user2_get_user(client),
+		PostUpdateUserName:     newGroup_server_mock_json_service_user2_post_update_user_name(client),
+		PostUpdateUserPassword: newGroup_server_mock_json_service_user2_post_update_user_password(client),
+	}
+}
+
+type Group_server_mock_json_service struct {
+	GetArticle *Group_server_mock_json_service_get_article
+	StaticPage *Group_server_mock_json_service_static_page
+	User       *Group_server_mock_json_service_user
+	User2      *Group_server_mock_json_service_user2
+	apiClient  *APIClient
+}
+
+func newGroup_server_mock_json_service(client *APIClient) *Group_server_mock_json_service {
+	return &Group_server_mock_json_service{
+		apiClient:  client,
+		GetArticle: newGroup_server_mock_json_service_get_article(client),
+		StaticPage: newGroup_server_mock_json_service_static_page(client),
+		User:       newGroup_server_mock_json_service_user(client),
+		User2:      newGroup_server_mock_json_service_user2(client),
+	}
+}
+
+type Group_server_mock_json struct {
+	Get             *Group_server_mock_json_get_
+	PostCreateTable *Group_server_mock_json_post_create_table
+	PostCreateUser  *Group_server_mock_json_post_create_user
+	Service         *Group_server_mock_json_service
+	apiClient       *APIClient
+}
+
+func newGroup_server_mock_json(client *APIClient) *Group_server_mock_json {
+	return &Group_server_mock_json{
+		apiClient:       client,
+		Get:             newGroup_server_mock_json_get_(client),
+		PostCreateTable: newGroup_server_mock_json_post_create_table(client),
+		PostCreateUser:  newGroup_server_mock_json_post_create_user(client),
+		Service:         newGroup_server_mock_json_service(client),
+	}
+}
+
+type Group_server_mock struct {
+	Controller *Group_server_mock_controller
+	Json       *Group_server_mock_json
+	apiClient  *APIClient
+}
+
+func newGroup_server_mock(client *APIClient) *Group_server_mock {
+	return &Group_server_mock{
+		apiClient:  client,
+		Controller: newGroup_server_mock_controller(client),
+		Json:       newGroup_server_mock_json(client),
+	}
+}
+
+type Group_server_pkg_apierror struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_pkg_apierror(client *APIClient) *Group_server_pkg_apierror {
+	return &Group_server_pkg_apierror{
+		apiClient: client,
+	}
+}
+
+type Group_server_pkg struct {
+	Apierror  *Group_server_pkg_apierror
+	apiClient *APIClient
+}
+
+func newGroup_server_pkg(client *APIClient) *Group_server_pkg {
+	return &Group_server_pkg{
+		apiClient: client,
+		Apierror:  newGroup_server_pkg_apierror(client),
+	}
+}
+
+type Group_server_props struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_props(client *APIClient) *Group_server_props {
+	return &Group_server_props{
+		apiClient: client,
+	}
+}
+
+type Group_server struct {
+	Controller *Group_server_controller
+	Mock       *Group_server_mock
+	Pkg        *Group_server_pkg
+	Props      *Group_server_props
+	apiClient  *APIClient
+}
+
+func newGroup_server(client *APIClient) *Group_server {
+	return &Group_server{
+		apiClient:  client,
+		Controller: newGroup_server_controller(client),
+		Mock:       newGroup_server_mock(client),
+		Pkg:        newGroup_server_pkg(client),
+		Props:      newGroup_server_props(client),
 	}
 }
 
 type Group struct {
 	Api       *Group_api
 	Clients   *Group_clients
+	Docs      *Group_docs
+	Server    *Group_server
 	apiClient *APIClient
 }
 
@@ -985,6 +1691,8 @@ func newGroup(client *APIClient) *Group {
 		apiClient: client,
 		Api:       newGroup_api(client),
 		Clients:   newGroup_clients(client),
+		Docs:      newGroup_docs(client),
+		Server:    newGroup_server(client),
 	}
 }
 
