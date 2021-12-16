@@ -21,7 +21,7 @@ require (
 )
 
 require (
-	github.com/go-generalize/go2dart v0.2.1
+	github.com/go-generalize/go2dart v0.4.1
 	github.com/swaggo/swag v1.7.6
 )
 
