@@ -21,6 +21,7 @@ require (
 )
 
 require (
+	github.com/go-generalize/go-easyparser v0.2.0
 	github.com/go-generalize/go2dart v0.3.0
 	github.com/swaggo/swag v1.7.6
 )
@@ -29,7 +30,6 @@ require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
-	github.com/go-generalize/go-easyparser v0.2.0 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/jsonreference v0.19.5 // indirect
 	github.com/go-openapi/spec v0.20.3 // indirect
