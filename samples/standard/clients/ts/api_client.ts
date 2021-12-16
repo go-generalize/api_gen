@@ -3,6 +3,11 @@
 // generated version: (devel)
 
 import {
+	GetGroupsRequest as ServiceGroupsGetGroupsRequest,
+	GetGroupsResponse as ServiceGroupsGetGroupsResponse,
+} from './classes/service/groups/types';
+
+import {
 	GetStaticPageRequest as ServiceStaticPageGetStaticPageRequest,
 	GetStaticPageResponse as ServiceStaticPageGetStaticPageResponse,
 } from './classes/service/static_page/types';
@@ -77,6 +82,7 @@ export interface middlewareSet {
 class ServiceClient {
 	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
 	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
+	public groups: ServiceGroupsClient;
 	public static_page: ServiceStaticPageClient;
 	public table: ServiceTableClient;
 	public user: ServiceUserClient;
@@ -93,6 +99,12 @@ class ServiceClient {
 			beforeMiddleware: this.beforeMiddleware,
 			afterMiddleware: this.afterMiddleware
 		};
+		this.groups = new ServiceGroupsClient(
+			headers,
+			options,
+			baseURL,
+			childMiddlewareSet
+		);
 		this.static_page = new ServiceStaticPageClient(
 			headers,
 			options,
@@ -228,6 +240,189 @@ class ServiceClient {
 		context.response = res;
 		await this.callMiddleware(this.afterMiddleware, context);
 		return res;
+	}
+}
+
+class ServiceGroupsClient {
+	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
+	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
+	public common: ServiceGroupsCommonClient;
+	constructor(
+		private headers: {[key: string]: string},
+		private options: {[key: string]: any},
+		private baseURL: string,
+		middleware: middlewareSet
+	) {
+		this.beforeMiddleware = middleware.beforeMiddleware!;
+		this.afterMiddleware = middleware.afterMiddleware!;
+		const childMiddlewareSet: middlewareSet = {
+			beforeMiddleware: this.beforeMiddleware,
+			afterMiddleware: this.afterMiddleware
+		};
+		this.common = new ServiceGroupsCommonClient(
+			headers,
+			options,
+			baseURL,
+			childMiddlewareSet
+		);
+	}
+
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+		let res: { [key: string]: any } = {};
+		Object.keys(obj).forEach((key) => {
+			if (routingPath.indexOf(key) === -1) {
+				res[key] = obj[key];
+			}
+		});
+		return res;
+	}
+
+	async callMiddleware(
+		middlewares: ApiClientMiddlewareFunc[],
+		context: MiddlewareContext
+	) {
+		for (const m of middlewares) {
+			const func: ApiClientMiddlewareFunc = m;
+			const mr = await func(context);
+			if (typeof mr === 'boolean') {
+				if (!mr) {
+					break;
+				}
+			} else {
+				if (mr === MiddlewareResult.CONTINUE) {
+					continue;
+				} else if (mr === MiddlewareResult.MIDDLEWARE_STOP) {
+					break;
+				} else if (mr === MiddlewareResult.STOP) {
+					throw new ApiMiddlewareStop();
+				}
+			}
+		}
+	}
+
+	/** @deprecated */
+	async getGroups(
+		param: ServiceGroupsGetGroupsRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
+	): Promise<ServiceGroupsGetGroupsResponse>;
+	async getGroups(
+		param: ServiceGroupsGetGroupsRequest,
+		options?: {
+			headers?: {[key: string]: string},
+			options?: {[key: string]: any}
+		}
+	): Promise<ServiceGroupsGetGroupsResponse>;
+
+	async getGroups(
+		param: ServiceGroupsGetGroupsRequest,
+		arg1?: any,
+		arg2?: any
+	): Promise<ServiceGroupsGetGroupsResponse> {
+		let headers: {[key: string]: string} | undefined;
+		let options: {[key: string]: any} | undefined;
+
+		if (
+			arg2 !== undefined || arg1 === undefined ||
+			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
+		) {
+			headers = arg1;
+			options = arg2;
+		} else {
+			headers = arg1.headers;
+			options = arg1.options;
+		}
+
+	    const excludeParams: string[] = [];
+	    let mockHeaders: {[key: string]: string} = {};
+	    if (options && options['mock_option']) {
+			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
+			delete options['mock_option'];
+		}
+
+		const reqHeader = {
+			...this.headers,
+			...headers,
+			...mockHeaders,
+		};
+		const reqOption = {
+			...this.options,
+			...options,
+		};
+		const context: MiddlewareContext = {
+			httpMethod: 'GET',
+			endpoint: `${this.baseURL}/service/groups/groups`,
+			request: param,
+			baseURL: this.baseURL,
+			headers: reqHeader,
+			options: reqOption,
+		};
+		await this.callMiddleware(this.beforeMiddleware, context);
+		const url = `${this.baseURL}/service/groups/groups?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
+		const resp = await fetch(
+			url,
+			{
+				method: "GET",
+				headers: reqHeader,
+				...reqOption,
+			}
+		);
+
+		if (Math.floor(resp.status / 100) !== 2) {
+			const responseText = await resp.text();
+			throw new ApiError(resp, responseText);
+		}
+		const res = (await resp.json()) as ServiceGroupsGetGroupsResponse;
+		context.response = res;
+		await this.callMiddleware(this.afterMiddleware, context);
+		return res;
+	}
+}
+
+class ServiceGroupsCommonClient {
+	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
+	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
+	constructor(
+		private headers: {[key: string]: string},
+		private options: {[key: string]: any},
+		private baseURL: string,
+		middleware: middlewareSet
+	) {
+		this.beforeMiddleware = middleware.beforeMiddleware!;
+		this.afterMiddleware = middleware.afterMiddleware!;
+	}
+
+	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+		let res: { [key: string]: any } = {};
+		Object.keys(obj).forEach((key) => {
+			if (routingPath.indexOf(key) === -1) {
+				res[key] = obj[key];
+			}
+		});
+		return res;
+	}
+
+	async callMiddleware(
+		middlewares: ApiClientMiddlewareFunc[],
+		context: MiddlewareContext
+	) {
+		for (const m of middlewares) {
+			const func: ApiClientMiddlewareFunc = m;
+			const mr = await func(context);
+			if (typeof mr === 'boolean') {
+				if (!mr) {
+					break;
+				}
+			} else {
+				if (mr === MiddlewareResult.CONTINUE) {
+					continue;
+				} else if (mr === MiddlewareResult.MIDDLEWARE_STOP) {
+					break;
+				} else if (mr === MiddlewareResult.STOP) {
+					throw new ApiMiddlewareStop();
+				}
+			}
+		}
 	}
 }
 

@@ -1,0 +1,60 @@
+{
+    "meta": {
+        "status": 200,
+        "match_request": {}
+    },
+    "payload": {
+        "Companies": [
+            {
+                "Metadata": {
+                    "CreatedAt": "2006-01-02T15:04:05+09:00",
+                    "ID": "string",
+                    "Name": "string",
+                    "UpdatedAt": "2006-01-02T15:04:05+09:00"
+                }
+            },
+            {
+                "Metadata": {
+                    "CreatedAt": "2006-01-02T15:04:05+09:00",
+                    "ID": "string",
+                    "Name": "string",
+                    "UpdatedAt": "2006-01-02T15:04:05+09:00"
+                }
+            },
+            {
+                "Metadata": {
+                    "CreatedAt": "2006-01-02T15:04:05+09:00",
+                    "ID": "string",
+                    "Name": "string",
+                    "UpdatedAt": "2006-01-02T15:04:05+09:00"
+                }
+            }
+        ],
+        "Departments": [
+            {
+                "Metadata": {
+                    "CreatedAt": "2006-01-02T15:04:05+09:00",
+                    "ID": "string",
+                    "Name": "string",
+                    "UpdatedAt": "2006-01-02T15:04:05+09:00"
+                }
+            },
+            {
+                "Metadata": {
+                    "CreatedAt": "2006-01-02T15:04:05+09:00",
+                    "ID": "string",
+                    "Name": "string",
+                    "UpdatedAt": "2006-01-02T15:04:05+09:00"
+                }
+            },
+            {
+                "Metadata": {
+                    "CreatedAt": "2006-01-02T15:04:05+09:00",
+                    "ID": "string",
+                    "Name": "string",
+                    "UpdatedAt": "2006-01-02T15:04:05+09:00"
+                }
+            }
+        ]
+    }
+}

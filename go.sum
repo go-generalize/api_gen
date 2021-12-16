@@ -91,6 +91,8 @@ github.com/go-generalize/go2dart v0.2.0 h1:/yVZGFPqck3smEV4xnaRMls9dLaL1FRi6EYLJ
 github.com/go-generalize/go2dart v0.2.0/go.mod h1:NdZbqPucqF4HKrRRUZrzIJlFESAHPJYbQbWAtJYjeTg=
 github.com/go-generalize/go2dart v0.2.1 h1:mDErtvfVT8KXpbI8BpIA37hH2vJWXueE4BSEt+P5AKY=
 github.com/go-generalize/go2dart v0.2.1/go.mod h1:NdZbqPucqF4HKrRRUZrzIJlFESAHPJYbQbWAtJYjeTg=
+github.com/go-generalize/go2dart v0.3.0 h1:xQvyYdzYYTDonrNKa/qXaMLvwtYPWfZyAx107qOxZpc=
+github.com/go-generalize/go2dart v0.3.0/go.mod h1:NdZbqPucqF4HKrRRUZrzIJlFESAHPJYbQbWAtJYjeTg=
 github.com/go-generalize/go2go v0.0.0-20210311170338-9701de42e3ad h1:9oYY/ZcAf3VVRhxaxolqoTVprrx9A7N8INWAfWCRwBc=
 github.com/go-generalize/go2go v0.0.0-20210311170338-9701de42e3ad/go.mod h1:YCmZm0ss4r71rT/Q6AgK4vre4tSFfJ1W/eDHWsmnLCc=
 github.com/go-generalize/go2ts v1.0.5-0.20210311100632-95c274e947f1/go.mod h1:075q+zcpc6IjwYy9WpJpY+M9ssbEA6uccjzWwr59t3M=

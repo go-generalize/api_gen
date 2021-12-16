@@ -29,6 +29,12 @@ func Parse(dir string) (*Group, error) {
 		return nil, xerrors.Errorf("failed to initialize parser: %w", err)
 	}
 
+	dir, err = filepath.Abs(dir)
+
+	if err != nil {
+		return nil, xerrors.Errorf("failed to get absolute path for %s: %w", dir, err)
+	}
+
 	gr, err := parser.parsePackage(dir)
 
 	if err != nil {

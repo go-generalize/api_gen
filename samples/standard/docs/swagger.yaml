@@ -22,6 +22,38 @@ definitions:
       requestTime:
         type: string
     type: object
+  common.Metadata:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  groups.Company:
+    properties:
+      metadata:
+        $ref: '#/definitions/common.Metadata'
+    type: object
+  groups.Department:
+    properties:
+      metadata:
+        $ref: '#/definitions/common.Metadata'
+    type: object
+  groups.GetGroupsResponse:
+    properties:
+      companies:
+        items:
+          $ref: '#/definitions/groups.Company'
+        type: array
+      departments:
+        items:
+          $ref: '#/definitions/groups.Department'
+        type: array
+    type: object
   sample.GetResponse:
     properties:
       data:
@@ -270,6 +302,17 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/service.GetArticleResponse'
+  /service/groups/groups:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/groups.GetGroupsResponse'
   /service/static_page/static_page:
     get:
       consumes:

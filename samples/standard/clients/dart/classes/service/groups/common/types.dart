@@ -90,76 +90,49 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
 }
 
 
-class PosConverter implements JsonConverter<Pos, Map<String, dynamic>> {
-  const PosConverter();
+class MetadataConverter implements JsonConverter<Metadata, Map<String, dynamic>> {
+  const MetadataConverter();
 
   @override 
-  Pos fromJson(dynamic s) {
-    return Pos.fromJson(Map<String, dynamic>.from(s));
+  Metadata fromJson(dynamic s) {
+    return Metadata.fromJson(Map<String, dynamic>.from(s));
   }
 
   @override
-  Map<String, dynamic> toJson(Pos s) {
+  Map<String, dynamic> toJson(Metadata s) {
     return s.toJson();
   }
 }
 
-class Pos {
-  int x;
-  int y;
+class Metadata {
+  DateTime? createdAt;
+  String id;
+  String name;
+  DateTime? updatedAt;
 
 
-  Pos({
-    this.x = 0,
-    this.y = 0,
+  Metadata({
+    this.createdAt,
+    this.id = '',
+    this.name = '',
+    this.updatedAt,
   });
 
-  factory Pos.fromJson(Map<String, dynamic> json) {
-    return Pos(
-      x: DoNothingConverter<int>().fromJson(json['X']),
-      y: DoNothingConverter<int>().fromJson(json['Y']),
+  factory Metadata.fromJson(Map<String, dynamic> json) {
+    return Metadata(
+      createdAt: DateTimeConverter().fromJson(json['CreatedAt']),
+      id: DoNothingConverter<String>().fromJson(json['ID']),
+      name: DoNothingConverter<String>().fromJson(json['Name']),
+      updatedAt: DateTimeConverter().fromJson(json['UpdatedAt']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'X': DoNothingConverter<int>().toJson(x),
-      'Y': DoNothingConverter<int>().toJson(y),
-    };
-  }
-}
-
-class TableConverter implements JsonConverter<Table, Map<String, dynamic>> {
-  const TableConverter();
-
-  @override 
-  Table fromJson(dynamic s) {
-    return Table.fromJson(Map<String, dynamic>.from(s));
-  }
-
-  @override
-  Map<String, dynamic> toJson(Table s) {
-    return s.toJson();
-  }
-}
-
-class Table {
-  Pos pos;
-
-
-  Table({
-    required this.pos,
-  });
-
-  factory Table.fromJson(Map<String, dynamic> json) {
-    return Table(
-      pos: PosConverter().fromJson(json['Pos']),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'Pos': PosConverter().toJson(pos),
+      'CreatedAt': DateTimeConverter().toJson(createdAt),
+      'ID': DoNothingConverter<String>().toJson(id),
+      'Name': DoNothingConverter<String>().toJson(name),
+      'UpdatedAt': DateTimeConverter().toJson(updatedAt),
     };
   }
 }

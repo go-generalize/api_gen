@@ -155,6 +155,24 @@ var doc = `{
                 }
             }
         },
+        "/service/groups/groups": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/groups.GetGroupsResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/service/static_page/static_page": {
             "get": {
                 "consumes": [
@@ -489,6 +507,56 @@ var doc = `{
                 },
                 "requestTime": {
                     "type": "string"
+                }
+            }
+        },
+        "common.Metadata": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "groups.Company": {
+            "type": "object",
+            "properties": {
+                "metadata": {
+                    "$ref": "#/definitions/common.Metadata"
+                }
+            }
+        },
+        "groups.Department": {
+            "type": "object",
+            "properties": {
+                "metadata": {
+                    "$ref": "#/definitions/common.Metadata"
+                }
+            }
+        },
+        "groups.GetGroupsResponse": {
+            "type": "object",
+            "properties": {
+                "companies": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/groups.Company"
+                    }
+                },
+                "departments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/groups.Department"
+                    }
                 }
             }
         },

@@ -4,8 +4,11 @@ package clientdart
 import (
 	"fmt"
 	"path/filepath"
+	"strings"
 
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
+	types "github.com/go-generalize/go-easyparser/types"
+	util "github.com/go-generalize/go-easyparser/util"
 	go2dartgenerator "github.com/go-generalize/go2dart"
 	"golang.org/x/xerrors"
 )
@@ -28,7 +31,38 @@ func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string
 		}
 	}
 
-	code, err := go2dartgenerator.NewGenerator(gr.ParsedTypes, nil).Generate()
+	gen := go2dartgenerator.NewGenerator(gr.ParsedTypes, nil)
+
+	gen.ExternalImporter = func(o *types.Object) *go2dartgenerator.ExternalImporter {
+		rel, err := filepath.Rel(g.root.Dir, o.Position.Filename)
+
+		if err != nil {
+			return nil
+		}
+
+		if strings.HasPrefix(rel, "../") {
+			return nil
+		}
+
+		rel, err = filepath.Rel(gr.Dir, filepath.Dir(o.Position.Filename))
+
+		if err != nil {
+			return nil
+		}
+
+		if rel == "." {
+			return nil
+		}
+
+		_, structName := util.SplitPackegeStruct(o.Name)
+
+		return &go2dartgenerator.ExternalImporter{
+			Path: filepath.Join(rel, "types.dart"),
+			Name: structName,
+		}
+	}
+
+	code, err := gen.Generate()
 
 	if err != nil {
 		return xerrors.Errorf("failed to generate: %w", err)

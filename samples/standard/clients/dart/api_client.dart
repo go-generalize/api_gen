@@ -3,6 +3,8 @@
 // generated version: (devel)
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import './classes/service/groups/common/types.dart' as types__service_groups_common;
+import './classes/service/groups/types.dart' as types__service_groups;
 import './classes/service/static_page/types.dart' as types__service_static_page;
 import './classes/service/table/types.dart' as types__service_table;
 import './classes/service/types.dart' as types__service;
@@ -16,6 +18,7 @@ class ServiceClient {
 	Map<String, String> headers = {};
   String baseURL;
   http.Client client;
+	late ServiceGroupsClient groups;
 	late ServiceStaticPageClient static_page;
 	late ServiceTableClient table;
 	late ServiceUserClient user;
@@ -26,6 +29,11 @@ class ServiceClient {
     this.headers,
     this.client,
   ) {
+    this.groups = ServiceGroupsClient(
+			this.baseURL,
+			this.headers,
+			this.client,
+		);
     this.static_page = ServiceStaticPageClient(
 			this.baseURL,
 			this.headers,
@@ -87,6 +95,88 @@ class ServiceClient {
 
 		return res;
 	}
+
+}
+
+class ServiceGroupsClient {
+	Map<String, String> headers = {};
+  String baseURL;
+  http.Client client;
+	late ServiceGroupsCommonClient common;
+
+  ServiceGroupsClient(
+    this.baseURL,
+    this.headers,
+    this.client,
+  ) {
+    this.common = ServiceGroupsCommonClient(
+			this.baseURL,
+			this.headers,
+			this.client,
+		);
+  }
+
+  Map<String, dynamic> getRequestObject(Map<String, dynamic> obj, List<String> routingPath) {
+    final copied = {...obj};
+    
+    copied.removeWhere((key, value) => routingPath.contains(key));
+
+    return copied;
+  }
+
+	Future<types__service_groups.GetGroupsResponse> getGroups(
+		types__service_groups.GetGroupsRequest param,
+    {
+      Map<String, String>? headers,
+      http.Client? client,
+      Object? mockOption
+    }
+  ) async {
+    client = client ?? this.client;
+
+    List<String> excludeParams = [];
+
+    headers = {...this.headers, ...headers ?? {}};
+
+    if (mockOption != null) {
+      headers['Api-Gen-Option'] = jsonEncode(mockOption);
+		}
+    headers.remove('Content-Type');
+		final url = baseURL + '/service/groups/groups' + Uri(queryParameters: getRequestObject(param.toJson(), excludeParams)).toString();
+    final resp = await client.get(
+      Uri.parse(url),
+      headers: headers,
+    );
+
+		if (resp.statusCode ~/ 100 != 2) {
+			throw ApiError(resp);
+		}
+		final res = types__service_groups.GetGroupsResponse.fromJson(jsonDecode(resp.body));
+
+		return res;
+	}
+
+}
+
+class ServiceGroupsCommonClient {
+	Map<String, String> headers = {};
+  String baseURL;
+  http.Client client;
+
+  ServiceGroupsCommonClient(
+    this.baseURL,
+    this.headers,
+    this.client,
+  ) {
+  }
+
+  Map<String, dynamic> getRequestObject(Map<String, dynamic> obj, List<String> routingPath) {
+    final copied = {...obj};
+    
+    copied.removeWhere((key, value) => routingPath.contains(key));
+
+    return copied;
+  }
 
 }
 
