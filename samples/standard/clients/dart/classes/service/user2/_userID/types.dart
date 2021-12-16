@@ -107,7 +107,6 @@ class GetUserJobGetRequestConverter implements JsonConverter<GetUserJobGetReques
 class GetUserJobGetRequest {
   String userID;
 
-
   GetUserJobGetRequest({
     this.userID = '',
   });
@@ -143,7 +142,6 @@ class GetUserJobGetResponse {
   String jobName;
   DateTime? requestTime;
 
-
   GetUserJobGetResponse({
     this.jobName = '',
     this.requestTime,
@@ -163,4 +161,3 @@ class GetUserJobGetResponse {
     };
   }
 }
-

@@ -107,7 +107,6 @@ class GetArticleRequestConverter implements JsonConverter<GetArticleRequest, Map
 class GetArticleRequest {
   int id;
 
-
   GetArticleRequest({
     this.id = 0,
   });
@@ -145,7 +144,6 @@ class GetArticleResponse {
   int id;
   DateTime? requestTime;
 
-
   GetArticleResponse({
     this.body = '',
     this.group,
@@ -171,4 +169,3 @@ class GetArticleResponse {
     };
   }
 }
-

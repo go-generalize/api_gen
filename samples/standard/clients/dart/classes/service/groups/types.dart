@@ -108,7 +108,6 @@ class CompanyConverter implements JsonConverter<Company, Map<String, dynamic>> {
 class Company {
   external_ff6726e.Metadata metadata;
 
-
   Company({
     required this.metadata,
   });
@@ -143,7 +142,6 @@ class DepartmentConverter implements JsonConverter<Department, Map<String, dynam
 class Department {
   external_ff6726e.Metadata metadata;
 
-
   Department({
     required this.metadata,
   });
@@ -177,7 +175,6 @@ class GetGroupsRequestConverter implements JsonConverter<GetGroupsRequest, Map<S
 
 class GetGroupsRequest {
 
-
   GetGroupsRequest();
 
   factory GetGroupsRequest.fromJson(Map<String, dynamic> json) {
@@ -209,7 +206,6 @@ class GetGroupsResponse {
   List<Company>? companies;
   List<Department>? departments;
 
-
   GetGroupsResponse({
     this.companies,
     this.departments,
@@ -229,4 +225,3 @@ class GetGroupsResponse {
     };
   }
 }
-

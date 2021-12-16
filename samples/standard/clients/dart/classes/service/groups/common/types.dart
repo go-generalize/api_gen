@@ -110,7 +110,6 @@ class Metadata {
   String name;
   DateTime? updatedAt;
 
-
   Metadata({
     this.createdAt,
     this.id = '',
@@ -136,4 +135,3 @@ class Metadata {
     };
   }
 }
-

@@ -107,7 +107,6 @@ class DeleteUserRequestConverter implements JsonConverter<DeleteUserRequest, Map
 class DeleteUserRequest {
   String id;
 
-
   DeleteUserRequest({
     this.id = '',
   });
@@ -141,7 +140,6 @@ class DeleteUserResponseConverter implements JsonConverter<DeleteUserResponse, M
 
 class DeleteUserResponse {
 
-
   DeleteUserResponse();
 
   factory DeleteUserResponse.fromJson(Map<String, dynamic> json) {
@@ -171,7 +169,6 @@ class EmbeddingConverter implements JsonConverter<Embedding, Map<String, dynamic
 
 class Embedding {
   String page;
-
 
   Embedding({
     this.page = '',
@@ -208,7 +205,6 @@ class GetUserRequest {
   String id;
   String page;
   String searchRequest;
-
 
   GetUserRequest({
     this.id = '',
@@ -252,7 +248,6 @@ class GetUserResponse {
   DateTime? requestTime;
   String searchRequest;
 
-
   GetUserResponse({
     this.id = '',
     this.requestTime,
@@ -293,7 +288,6 @@ class PostUpdateUserNameRequestConverter implements JsonConverter<PostUpdateUser
 class PostUpdateUserNameRequest {
   String name;
 
-
   PostUpdateUserNameRequest({
     this.name = '',
   });
@@ -329,7 +323,6 @@ class PostUpdateUserNameResponse {
   String message;
   DateTime? requestTime;
   bool status;
-
 
   PostUpdateUserNameResponse({
     this.message = '',
@@ -372,7 +365,6 @@ class PostUpdateUserPasswordRequest {
   String password;
   String passwordConfirm;
 
-
   PostUpdateUserPasswordRequest({
     this.password = '',
     this.passwordConfirm = '',
@@ -412,7 +404,6 @@ class PostUpdateUserPasswordResponse {
   DateTime? requestTime;
   bool status;
 
-
   PostUpdateUserPasswordResponse({
     this.message = '',
     this.requestTime,
@@ -435,4 +426,3 @@ class PostUpdateUserPasswordResponse {
     };
   }
 }
-

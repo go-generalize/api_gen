@@ -108,7 +108,6 @@ class PutJobRequest {
   String jobID;
   String userID;
 
-
   PutJobRequest({
     this.jobID = '',
     this.userID = '',
@@ -148,7 +147,6 @@ class PutJobResponse {
   DateTime? requestTime;
   String userID;
 
-
   PutJobResponse({
     this.jobID = '',
     this.requestTime,
@@ -171,4 +169,3 @@ class PutJobResponse {
     };
   }
 }
-

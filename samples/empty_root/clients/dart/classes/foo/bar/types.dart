@@ -106,7 +106,6 @@ class PostUserRequestConverter implements JsonConverter<PostUserRequest, Map<Str
 
 class PostUserRequest {
 
-
   PostUserRequest();
 
   factory PostUserRequest.fromJson(Map<String, dynamic> json) {
@@ -136,7 +135,6 @@ class PostUserResponseConverter implements JsonConverter<PostUserResponse, Map<S
 
 class PostUserResponse {
 
-
   PostUserResponse();
 
   factory PostUserResponse.fromJson(Map<String, dynamic> json) {
@@ -149,4 +147,3 @@ class PostUserResponse {
     };
   }
 }
-

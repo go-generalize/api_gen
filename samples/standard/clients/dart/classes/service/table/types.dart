@@ -108,7 +108,6 @@ class Pos {
   int x;
   int y;
 
-
   Pos({
     this.x = 0,
     this.y = 0,
@@ -146,7 +145,6 @@ class TableConverter implements JsonConverter<Table, Map<String, dynamic>> {
 class Table {
   Pos pos;
 
-
   Table({
     required this.pos,
   });
@@ -163,4 +161,3 @@ class Table {
     };
   }
 }
-

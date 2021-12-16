@@ -89,4 +89,3 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
   }
 }
 
-

@@ -191,7 +191,6 @@ class GetRequest {
   String param;
   DateTime? time;
 
-
   GetRequest({
     this.enum_ = Enum.EnumA,
     this.param = '',
@@ -232,7 +231,6 @@ class GetResponseConverter implements JsonConverter<GetResponse, Map<String, dyn
 class GetResponse {
   String data;
 
-
   GetResponse({
     this.data = '',
   });
@@ -269,7 +267,6 @@ class PostCreateTableRequest {
   String id;
   Map<int, int> map;
   String text;
-
 
   PostCreateTableRequest({
     this.flag = 0,
@@ -315,7 +312,6 @@ class PostCreateTableResponse {
   String id;
   DateTime? requestTime;
 
-
   PostCreateTableResponse({
     this.id = '',
     this.requestTime,
@@ -356,7 +352,6 @@ class PostCreateUserRequest {
   String id;
   String password;
   List<Role?>? roles;
-
 
   PostCreateUserRequest({
     this.birthday,
@@ -407,7 +402,6 @@ class PostCreateUserResponse {
   DateTime? requestedAt;
   bool status;
 
-
   PostCreateUserResponse({
     this.createdType = CreatedType.CreatedTypeGuest,
     this.message = '',
@@ -453,7 +447,6 @@ class Role {
   String name;
   List<Role>? recursionRoles;
 
-
   Role({
     this.id = 0,
     this.name = '',
@@ -476,4 +469,3 @@ class Role {
     };
   }
 }
-

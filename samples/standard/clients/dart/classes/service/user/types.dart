@@ -106,7 +106,6 @@ class GetRequestConverter implements JsonConverter<GetRequest, Map<String, dynam
 
 class GetRequest {
 
-
   GetRequest();
 
   factory GetRequest.fromJson(Map<String, dynamic> json) {
@@ -135,7 +134,6 @@ class GetResponseConverter implements JsonConverter<GetResponse, Map<String, dyn
 }
 
 class GetResponse {
-
 
   GetResponse();
 
@@ -166,7 +164,6 @@ class PostUpdateUserNameRequestConverter implements JsonConverter<PostUpdateUser
 
 class PostUpdateUserNameRequest {
   String name;
-
 
   PostUpdateUserNameRequest({
     this.name = '',
@@ -203,7 +200,6 @@ class PostUpdateUserNameResponse {
   String message;
   DateTime? requestTime;
   bool status;
-
 
   PostUpdateUserNameResponse({
     this.message = '',
@@ -246,7 +242,6 @@ class PostUpdateUserPasswordRequest {
   String password;
   String passwordConfirm;
 
-
   PostUpdateUserPasswordRequest({
     this.password = '',
     this.passwordConfirm = '',
@@ -286,7 +281,6 @@ class PostUpdateUserPasswordResponse {
   DateTime? requestTime;
   bool status;
 
-
   PostUpdateUserPasswordResponse({
     this.message = '',
     this.requestTime,
@@ -309,4 +303,3 @@ class PostUpdateUserPasswordResponse {
     };
   }
 }
-
