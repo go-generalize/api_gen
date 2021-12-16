@@ -12,6 +12,7 @@ import (
 
 	_api "root/api"
 	_api_service "root/api/service"
+	_api_service_groups "root/api/service/groups"
 	_api_service_static_page "root/api/service/static_page"
 	_api_service_user "root/api/service/user"
 	_api_service_user2 "root/api/service/user2"
@@ -19,12 +20,61 @@ import (
 	_api_service_user2__userID__JobID "root/api/service/user2/_userID/_JobID"
 	_clients_go_classes "root/clients/go/classes"
 	_clients_go_classes_service "root/clients/go/classes/service"
+	_clients_go_classes_service_groups "root/clients/go/classes/service/groups"
 	_clients_go_classes_service_static_page "root/clients/go/classes/service/static_page"
 	_clients_go_classes_service_user "root/clients/go/classes/service/user"
 	_clients_go_classes_service_user2 "root/clients/go/classes/service/user2"
 	_clients_go_classes_service_user2__userID "root/clients/go/classes/service/user2/_userID"
 	_clients_go_classes_service_user2__userID__JobID "root/clients/go/classes/service/user2/_userID/_JobID"
 )
+
+type Group_api_service_groups_common struct {
+	apiClient *APIClient
+}
+
+func newGroup_api_service_groups_common(client *APIClient) *Group_api_service_groups_common {
+	return &Group_api_service_groups_common{
+		apiClient: client,
+	}
+}
+
+type Group_api_service_groups struct {
+	Common    *Group_api_service_groups_common
+	apiClient *APIClient
+}
+
+func newGroup_api_service_groups(client *APIClient) *Group_api_service_groups {
+	return &Group_api_service_groups{
+		apiClient: client,
+		Common:    newGroup_api_service_groups_common(client),
+	}
+}
+
+func (g *Group_api_service_groups) GetGroups(reqPayload *_api_service_groups.GetGroupsRequest) (respPayload *_api_service_groups.GetGroupsResponse, err error) {
+	query, err := encodeQuery(reqPayload)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", g.apiClient.base+"/api/service/groups/groups"+"?"+query, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := g.apiClient.client.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	respPayload = &_api_service_groups.GetGroupsResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
+		return nil, err
+	}
+
+	return respPayload, nil
+}
 
 type Group_api_service_static_page struct {
 	apiClient *APIClient
@@ -363,6 +413,7 @@ func (g *Group_api_service_user2) PostUpdateUserPassword(reqPayload *_api_servic
 }
 
 type Group_api_service struct {
+	Groups     *Group_api_service_groups
 	StaticPage *Group_api_service_static_page
 	Table      *Group_api_service_table
 	User       *Group_api_service_user
@@ -373,6 +424,7 @@ type Group_api_service struct {
 func newGroup_api_service(client *APIClient) *Group_api_service {
 	return &Group_api_service{
 		apiClient:  client,
+		Groups:     newGroup_api_service_groups(client),
 		StaticPage: newGroup_api_service_static_page(client),
 		Table:      newGroup_api_service_table(client),
 		User:       newGroup_api_service_user(client),
@@ -500,6 +552,28 @@ func (g *Group_api) PostCreateUser(reqPayload *_api.PostCreateUserRequest) (resp
 	return respPayload, nil
 }
 
+type Group_clients_dart_classes_service_groups_common struct {
+	apiClient *APIClient
+}
+
+func newGroup_clients_dart_classes_service_groups_common(client *APIClient) *Group_clients_dart_classes_service_groups_common {
+	return &Group_clients_dart_classes_service_groups_common{
+		apiClient: client,
+	}
+}
+
+type Group_clients_dart_classes_service_groups struct {
+	Common    *Group_clients_dart_classes_service_groups_common
+	apiClient *APIClient
+}
+
+func newGroup_clients_dart_classes_service_groups(client *APIClient) *Group_clients_dart_classes_service_groups {
+	return &Group_clients_dart_classes_service_groups{
+		apiClient: client,
+		Common:    newGroup_clients_dart_classes_service_groups_common(client),
+	}
+}
+
 type Group_clients_dart_classes_service_static_page struct {
 	apiClient *APIClient
 }
@@ -565,6 +639,7 @@ func newGroup_clients_dart_classes_service_user2(client *APIClient) *Group_clien
 }
 
 type Group_clients_dart_classes_service struct {
+	Groups     *Group_clients_dart_classes_service_groups
 	StaticPage *Group_clients_dart_classes_service_static_page
 	Table      *Group_clients_dart_classes_service_table
 	User       *Group_clients_dart_classes_service_user
@@ -575,6 +650,7 @@ type Group_clients_dart_classes_service struct {
 func newGroup_clients_dart_classes_service(client *APIClient) *Group_clients_dart_classes_service {
 	return &Group_clients_dart_classes_service{
 		apiClient:  client,
+		Groups:     newGroup_clients_dart_classes_service_groups(client),
 		StaticPage: newGroup_clients_dart_classes_service_static_page(client),
 		Table:      newGroup_clients_dart_classes_service_table(client),
 		User:       newGroup_clients_dart_classes_service_user(client),
@@ -604,6 +680,42 @@ func newGroup_clients_dart(client *APIClient) *Group_clients_dart {
 		apiClient: client,
 		Classes:   newGroup_clients_dart_classes(client),
 	}
+}
+
+type Group_clients_go_classes_service_groups struct {
+	apiClient *APIClient
+}
+
+func newGroup_clients_go_classes_service_groups(client *APIClient) *Group_clients_go_classes_service_groups {
+	return &Group_clients_go_classes_service_groups{
+		apiClient: client,
+	}
+}
+
+func (g *Group_clients_go_classes_service_groups) GetGroups(reqPayload *_clients_go_classes_service_groups.GetGroupsRequest) (respPayload *_clients_go_classes_service_groups.GetGroupsResponse, err error) {
+	query, err := encodeQuery(reqPayload)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", g.apiClient.base+"/clients/go/classes/service/groups/groups"+"?"+query, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := g.apiClient.client.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	respPayload = &_clients_go_classes_service_groups.GetGroupsResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
+		return nil, err
+	}
+
+	return respPayload, nil
 }
 
 type Group_clients_go_classes_service_static_page struct {
@@ -933,6 +1045,7 @@ func (g *Group_clients_go_classes_service_user2) PostUpdateUserPassword(reqPaylo
 }
 
 type Group_clients_go_classes_service struct {
+	Groups     *Group_clients_go_classes_service_groups
 	StaticPage *Group_clients_go_classes_service_static_page
 	User       *Group_clients_go_classes_service_user
 	User2      *Group_clients_go_classes_service_user2
@@ -942,6 +1055,7 @@ type Group_clients_go_classes_service struct {
 func newGroup_clients_go_classes_service(client *APIClient) *Group_clients_go_classes_service {
 	return &Group_clients_go_classes_service{
 		apiClient:  client,
+		Groups:     newGroup_clients_go_classes_service_groups(client),
 		StaticPage: newGroup_clients_go_classes_service_static_page(client),
 		User:       newGroup_clients_go_classes_service_user(client),
 		User2:      newGroup_clients_go_classes_service_user2(client),
@@ -1080,6 +1194,16 @@ func newGroup_clients_go(client *APIClient) *Group_clients_go {
 	}
 }
 
+type Group_clients_ts_classes_service_groups struct {
+	apiClient *APIClient
+}
+
+func newGroup_clients_ts_classes_service_groups(client *APIClient) *Group_clients_ts_classes_service_groups {
+	return &Group_clients_ts_classes_service_groups{
+		apiClient: client,
+	}
+}
+
 type Group_clients_ts_classes_service_static_page struct {
 	apiClient *APIClient
 }
@@ -1135,6 +1259,7 @@ func newGroup_clients_ts_classes_service_user2(client *APIClient) *Group_clients
 }
 
 type Group_clients_ts_classes_service struct {
+	Groups     *Group_clients_ts_classes_service_groups
 	StaticPage *Group_clients_ts_classes_service_static_page
 	User       *Group_clients_ts_classes_service_user
 	User2      *Group_clients_ts_classes_service_user2
@@ -1144,6 +1269,7 @@ type Group_clients_ts_classes_service struct {
 func newGroup_clients_ts_classes_service(client *APIClient) *Group_clients_ts_classes_service {
 	return &Group_clients_ts_classes_service{
 		apiClient:  client,
+		Groups:     newGroup_clients_ts_classes_service_groups(client),
 		StaticPage: newGroup_clients_ts_classes_service_static_page(client),
 		User:       newGroup_clients_ts_classes_service_user(client),
 		User2:      newGroup_clients_ts_classes_service_user2(client),
@@ -1196,6 +1322,16 @@ type Group_docs struct {
 
 func newGroup_docs(client *APIClient) *Group_docs {
 	return &Group_docs{
+		apiClient: client,
+	}
+}
+
+type Group_server_controller_service_groups struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_controller_service_groups(client *APIClient) *Group_server_controller_service_groups {
+	return &Group_server_controller_service_groups{
 		apiClient: client,
 	}
 }
@@ -1255,6 +1391,7 @@ func newGroup_server_controller_service_user2(client *APIClient) *Group_server_c
 }
 
 type Group_server_controller_service struct {
+	Groups     *Group_server_controller_service_groups
 	StaticPage *Group_server_controller_service_static_page
 	User       *Group_server_controller_service_user
 	User2      *Group_server_controller_service_user2
@@ -1264,6 +1401,7 @@ type Group_server_controller_service struct {
 func newGroup_server_controller_service(client *APIClient) *Group_server_controller_service {
 	return &Group_server_controller_service{
 		apiClient:  client,
+		Groups:     newGroup_server_controller_service_groups(client),
 		StaticPage: newGroup_server_controller_service_static_page(client),
 		User:       newGroup_server_controller_service_user(client),
 		User2:      newGroup_server_controller_service_user2(client),
@@ -1279,6 +1417,16 @@ func newGroup_server_controller(client *APIClient) *Group_server_controller {
 	return &Group_server_controller{
 		apiClient: client,
 		Service:   newGroup_server_controller_service(client),
+	}
+}
+
+type Group_server_mock_controller_service_groups struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_controller_service_groups(client *APIClient) *Group_server_mock_controller_service_groups {
+	return &Group_server_mock_controller_service_groups{
+		apiClient: client,
 	}
 }
 
@@ -1337,6 +1485,7 @@ func newGroup_server_mock_controller_service_user2(client *APIClient) *Group_ser
 }
 
 type Group_server_mock_controller_service struct {
+	Groups     *Group_server_mock_controller_service_groups
 	StaticPage *Group_server_mock_controller_service_static_page
 	User       *Group_server_mock_controller_service_user
 	User2      *Group_server_mock_controller_service_user2
@@ -1346,6 +1495,7 @@ type Group_server_mock_controller_service struct {
 func newGroup_server_mock_controller_service(client *APIClient) *Group_server_mock_controller_service {
 	return &Group_server_mock_controller_service{
 		apiClient:  client,
+		Groups:     newGroup_server_mock_controller_service_groups(client),
 		StaticPage: newGroup_server_mock_controller_service_static_page(client),
 		User:       newGroup_server_mock_controller_service_user(client),
 		User2:      newGroup_server_mock_controller_service_user2(client),
@@ -1401,6 +1551,28 @@ type Group_server_mock_json_service_get_article struct {
 func newGroup_server_mock_json_service_get_article(client *APIClient) *Group_server_mock_json_service_get_article {
 	return &Group_server_mock_json_service_get_article{
 		apiClient: client,
+	}
+}
+
+type Group_server_mock_json_service_groups_get_groups struct {
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_service_groups_get_groups(client *APIClient) *Group_server_mock_json_service_groups_get_groups {
+	return &Group_server_mock_json_service_groups_get_groups{
+		apiClient: client,
+	}
+}
+
+type Group_server_mock_json_service_groups struct {
+	GetGroups *Group_server_mock_json_service_groups_get_groups
+	apiClient *APIClient
+}
+
+func newGroup_server_mock_json_service_groups(client *APIClient) *Group_server_mock_json_service_groups {
+	return &Group_server_mock_json_service_groups{
+		apiClient: client,
+		GetGroups: newGroup_server_mock_json_service_groups_get_groups(client),
 	}
 }
 
@@ -1580,6 +1752,7 @@ func newGroup_server_mock_json_service_user2(client *APIClient) *Group_server_mo
 
 type Group_server_mock_json_service struct {
 	GetArticle *Group_server_mock_json_service_get_article
+	Groups     *Group_server_mock_json_service_groups
 	StaticPage *Group_server_mock_json_service_static_page
 	User       *Group_server_mock_json_service_user
 	User2      *Group_server_mock_json_service_user2
@@ -1590,6 +1763,7 @@ func newGroup_server_mock_json_service(client *APIClient) *Group_server_mock_jso
 	return &Group_server_mock_json_service{
 		apiClient:  client,
 		GetArticle: newGroup_server_mock_json_service_get_article(client),
+		Groups:     newGroup_server_mock_json_service_groups(client),
 		StaticPage: newGroup_server_mock_json_service_static_page(client),
 		User:       newGroup_server_mock_json_service_user(client),
 		User2:      newGroup_server_mock_json_service_user2(client),
