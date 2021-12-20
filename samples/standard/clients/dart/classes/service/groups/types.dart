@@ -90,7 +90,6 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
   }
 }
 
-
 class CompanyConverter implements JsonConverter<Company, Map<String, dynamic>> {
   const CompanyConverter();
 

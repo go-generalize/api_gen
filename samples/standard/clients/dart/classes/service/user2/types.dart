@@ -89,7 +89,6 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
   }
 }
 
-
 class DeleteUserRequestConverter implements JsonConverter<DeleteUserRequest, Map<String, dynamic>> {
   const DeleteUserRequestConverter();
 

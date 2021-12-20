@@ -89,7 +89,6 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
   }
 }
 
-
 enum CreatedType {
     CreatedTypeGuest,
     CreatedTypeMember,

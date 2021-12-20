@@ -89,7 +89,6 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
   }
 }
 
-
 class MetadataConverter implements JsonConverter<Metadata, Map<String, dynamic>> {
   const MetadataConverter();
 

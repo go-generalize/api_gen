@@ -89,7 +89,6 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
   }
 }
 
-
 class PostUserRequestConverter implements JsonConverter<PostUserRequest, Map<String, dynamic>> {
   const PostUserRequestConverter();
 

@@ -89,7 +89,6 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
   }
 }
 
-
 class GetStaticPageRequestConverter implements JsonConverter<GetStaticPageRequest, Map<String, dynamic>> {
   const GetStaticPageRequestConverter();
 

@@ -89,7 +89,6 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
   }
 }
 
-
 class PutJobRequestConverter implements JsonConverter<PutJobRequest, Map<String, dynamic>> {
   const PutJobRequestConverter();
 

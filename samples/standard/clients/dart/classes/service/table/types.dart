@@ -89,7 +89,6 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
   }
 }
 
-
 class PosConverter implements JsonConverter<Pos, Map<String, dynamic>> {
   const PosConverter();
 
