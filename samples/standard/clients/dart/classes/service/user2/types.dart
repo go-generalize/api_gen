@@ -139,7 +139,6 @@ class DeleteUserResponseConverter implements JsonConverter<DeleteUserResponse, M
 }
 
 class DeleteUserResponse {
-
   DeleteUserResponse();
 
   factory DeleteUserResponse.fromJson(Map<String, dynamic> json) {
