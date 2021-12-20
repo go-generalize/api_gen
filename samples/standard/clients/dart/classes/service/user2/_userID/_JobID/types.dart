@@ -89,7 +89,6 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
   }
 }
 
-
 class PutJobRequestConverter implements JsonConverter<PutJobRequest, Map<String, dynamic>> {
   const PutJobRequestConverter();
 
@@ -107,7 +106,6 @@ class PutJobRequestConverter implements JsonConverter<PutJobRequest, Map<String,
 class PutJobRequest {
   String jobID;
   String userID;
-
 
   PutJobRequest({
     this.jobID = '',
@@ -148,7 +146,6 @@ class PutJobResponse {
   DateTime? requestTime;
   String userID;
 
-
   PutJobResponse({
     this.jobID = '',
     this.requestTime,
@@ -171,4 +168,3 @@ class PutJobResponse {
     };
   }
 }
-

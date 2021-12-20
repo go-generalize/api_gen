@@ -10,6 +10,7 @@ import (
 
 	types_api_e3c6fe7f "github.com/go-generalize/api_gen/v2/samples/standard/api"
 	types_service_004a0f6b "github.com/go-generalize/api_gen/v2/samples/standard/api/service"
+	types_groups_3384feb9 "github.com/go-generalize/api_gen/v2/samples/standard/api/service/groups"
 	types_static_page_88819fa5 "github.com/go-generalize/api_gen/v2/samples/standard/api/service/static_page"
 	types_user_b2fb2440 "github.com/go-generalize/api_gen/v2/samples/standard/api/service/user"
 	types_user2_fc0fa272 "github.com/go-generalize/api_gen/v2/samples/standard/api/service/user2"
@@ -17,6 +18,7 @@ import (
 	types__JobID_550441cf "github.com/go-generalize/api_gen/v2/samples/standard/api/service/user2/_userID/_JobID"
 	ctrl_controller_dcb773a3 "github.com/go-generalize/api_gen/v2/samples/standard/server/controller"
 	ctrl_service_348fab3e "github.com/go-generalize/api_gen/v2/samples/standard/server/controller/service"
+	ctrl_groups_82ababd5 "github.com/go-generalize/api_gen/v2/samples/standard/server/controller/service/groups"
 	ctrl_static_page_918c2446 "github.com/go-generalize/api_gen/v2/samples/standard/server/controller/service/static_page"
 	ctrl_user_471e7c77 "github.com/go-generalize/api_gen/v2/samples/standard/server/controller/service/user"
 	ctrl_user2_390d1774 "github.com/go-generalize/api_gen/v2/samples/standard/server/controller/service/user2"
@@ -160,6 +162,36 @@ func addRoutes(e *echo.Echo, p *props.ControllerProps, opt *options) {
 
 			if err != nil {
 				return nil, xerrors.Errorf("the handler(GetArticle) returned an error: %w", err)
+			}
+
+			if res == nil {
+				return nil, nil
+			}
+
+			return res, nil
+		})
+	}
+
+	{
+		ctrl := ctrl_groups_82ababd5.NewGetGroupsController(p)
+
+		add("GET", "/service/groups/groups", func(c echo.Context) (interface{}, error) {
+			req := new(types_groups_3384feb9.GetGroupsRequest)
+			if err := c.Bind(req); err != nil {
+				c.Logger().Errorf("failed to bind a request for (/service/groups/groups): %+v", err)
+				return nil, c.JSON(http.StatusBadRequest, map[string]interface{}{
+					"code":    http.StatusBadRequest,
+					"message": "invalid request.",
+				})
+			}
+			if err := c.Validate(req); err != nil && err != echo.ErrValidatorNotRegistered {
+				return nil, xerrors.Errorf("the validator returned an error: %w", err)
+			}
+
+			res, err := ctrl.GetGroups(c, req)
+
+			if err != nil {
+				return nil, xerrors.Errorf("the handler(GetGroups) returned an error: %w", err)
 			}
 
 			if res == nil {

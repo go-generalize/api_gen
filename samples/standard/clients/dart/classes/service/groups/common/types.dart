@@ -89,58 +89,48 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
   }
 }
 
-class PostUserRequestConverter implements JsonConverter<PostUserRequest, Map<String, dynamic>> {
-  const PostUserRequestConverter();
+class MetadataConverter implements JsonConverter<Metadata, Map<String, dynamic>> {
+  const MetadataConverter();
 
   @override 
-  PostUserRequest fromJson(dynamic s) {
-    return PostUserRequest.fromJson(Map<String, dynamic>.from(s));
+  Metadata fromJson(dynamic s) {
+    return Metadata.fromJson(Map<String, dynamic>.from(s));
   }
 
   @override
-  Map<String, dynamic> toJson(PostUserRequest s) {
+  Map<String, dynamic> toJson(Metadata s) {
     return s.toJson();
   }
 }
 
-class PostUserRequest {
-  PostUserRequest();
+class Metadata {
+  DateTime? createdAt;
+  String id;
+  String name;
+  DateTime? updatedAt;
 
-  factory PostUserRequest.fromJson(Map<String, dynamic> json) {
-    return PostUserRequest(
+  Metadata({
+    this.createdAt,
+    this.id = '',
+    this.name = '',
+    this.updatedAt,
+  });
+
+  factory Metadata.fromJson(Map<String, dynamic> json) {
+    return Metadata(
+      createdAt: DateTimeConverter().fromJson(json['CreatedAt']),
+      id: DoNothingConverter<String>().fromJson(json['ID']),
+      name: DoNothingConverter<String>().fromJson(json['Name']),
+      updatedAt: DateTimeConverter().fromJson(json['UpdatedAt']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-    };
-  }
-}
-
-class PostUserResponseConverter implements JsonConverter<PostUserResponse, Map<String, dynamic>> {
-  const PostUserResponseConverter();
-
-  @override 
-  PostUserResponse fromJson(dynamic s) {
-    return PostUserResponse.fromJson(Map<String, dynamic>.from(s));
-  }
-
-  @override
-  Map<String, dynamic> toJson(PostUserResponse s) {
-    return s.toJson();
-  }
-}
-
-class PostUserResponse {
-  PostUserResponse();
-
-  factory PostUserResponse.fromJson(Map<String, dynamic> json) {
-    return PostUserResponse(
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
+      'CreatedAt': DateTimeConverter().toJson(createdAt),
+      'ID': DoNothingConverter<String>().toJson(id),
+      'Name': DoNothingConverter<String>().toJson(name),
+      'UpdatedAt': DateTimeConverter().toJson(updatedAt),
     };
   }
 }

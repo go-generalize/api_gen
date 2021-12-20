@@ -1,8 +1,6 @@
 package common
 
 import (
-	"strings"
-
 	go2tsparser "github.com/go-generalize/go2ts/pkg/parser"
 )
 
@@ -18,5 +16,5 @@ func ParserFilter(opt *go2tsparser.FilterOpt) bool {
 		return false
 	}
 
-	return strings.HasSuffix(opt.Name, "Request") || strings.HasSuffix(opt.Name, "Response")
+	return true
 }

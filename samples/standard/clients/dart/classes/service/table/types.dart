@@ -89,4 +89,74 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
   }
 }
 
+class PosConverter implements JsonConverter<Pos, Map<String, dynamic>> {
+  const PosConverter();
 
+  @override 
+  Pos fromJson(dynamic s) {
+    return Pos.fromJson(Map<String, dynamic>.from(s));
+  }
+
+  @override
+  Map<String, dynamic> toJson(Pos s) {
+    return s.toJson();
+  }
+}
+
+class Pos {
+  int x;
+  int y;
+
+  Pos({
+    this.x = 0,
+    this.y = 0,
+  });
+
+  factory Pos.fromJson(Map<String, dynamic> json) {
+    return Pos(
+      x: DoNothingConverter<int>().fromJson(json['X']),
+      y: DoNothingConverter<int>().fromJson(json['Y']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'X': DoNothingConverter<int>().toJson(x),
+      'Y': DoNothingConverter<int>().toJson(y),
+    };
+  }
+}
+
+class TableConverter implements JsonConverter<Table, Map<String, dynamic>> {
+  const TableConverter();
+
+  @override 
+  Table fromJson(dynamic s) {
+    return Table.fromJson(Map<String, dynamic>.from(s));
+  }
+
+  @override
+  Map<String, dynamic> toJson(Table s) {
+    return s.toJson();
+  }
+}
+
+class Table {
+  Pos pos;
+
+  Table({
+    required this.pos,
+  });
+
+  factory Table.fromJson(Map<String, dynamic> json) {
+    return Table(
+      pos: PosConverter().fromJson(json['Pos']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'Pos': PosConverter().toJson(pos),
+    };
+  }
+}

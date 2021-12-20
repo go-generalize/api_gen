@@ -12,12 +12,61 @@ import (
 
 	root "github.com/go-generalize/api_gen/v2/samples/standard/clients/go/classes"
 	_service "github.com/go-generalize/api_gen/v2/samples/standard/clients/go/classes/service"
+	_service_groups "github.com/go-generalize/api_gen/v2/samples/standard/clients/go/classes/service/groups"
 	_service_static_page "github.com/go-generalize/api_gen/v2/samples/standard/clients/go/classes/service/static_page"
 	_service_user "github.com/go-generalize/api_gen/v2/samples/standard/clients/go/classes/service/user"
 	_service_user2 "github.com/go-generalize/api_gen/v2/samples/standard/clients/go/classes/service/user2"
 	_service_user2__userID "github.com/go-generalize/api_gen/v2/samples/standard/clients/go/classes/service/user2/_userID"
 	_service_user2__userID__JobID "github.com/go-generalize/api_gen/v2/samples/standard/clients/go/classes/service/user2/_userID/_JobID"
 )
+
+type Group_service_groups_common struct {
+	apiClient *APIClient
+}
+
+func newGroup_service_groups_common(client *APIClient) *Group_service_groups_common {
+	return &Group_service_groups_common{
+		apiClient: client,
+	}
+}
+
+type Group_service_groups struct {
+	Common    *Group_service_groups_common
+	apiClient *APIClient
+}
+
+func newGroup_service_groups(client *APIClient) *Group_service_groups {
+	return &Group_service_groups{
+		apiClient: client,
+		Common:    newGroup_service_groups_common(client),
+	}
+}
+
+func (g *Group_service_groups) GetGroups(reqPayload *_service_groups.GetGroupsRequest) (respPayload *_service_groups.GetGroupsResponse, err error) {
+	query, err := encodeQuery(reqPayload)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", g.apiClient.base+"/service/groups/groups"+"?"+query, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := g.apiClient.client.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	respPayload = &_service_groups.GetGroupsResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
+		return nil, err
+	}
+
+	return respPayload, nil
+}
 
 type Group_service_static_page struct {
 	apiClient *APIClient
@@ -356,6 +405,7 @@ func (g *Group_service_user2) PostUpdateUserPassword(reqPayload *_service_user2.
 }
 
 type Group_service struct {
+	Groups     *Group_service_groups
 	StaticPage *Group_service_static_page
 	Table      *Group_service_table
 	User       *Group_service_user
@@ -366,6 +416,7 @@ type Group_service struct {
 func newGroup_service(client *APIClient) *Group_service {
 	return &Group_service{
 		apiClient:  client,
+		Groups:     newGroup_service_groups(client),
 		StaticPage: newGroup_service_static_page(client),
 		Table:      newGroup_service_table(client),
 		User:       newGroup_service_user(client),

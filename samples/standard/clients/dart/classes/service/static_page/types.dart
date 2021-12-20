@@ -89,7 +89,6 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
   }
 }
 
-
 class GetStaticPageRequestConverter implements JsonConverter<GetStaticPageRequest, Map<String, dynamic>> {
   const GetStaticPageRequestConverter();
 
@@ -105,8 +104,6 @@ class GetStaticPageRequestConverter implements JsonConverter<GetStaticPageReques
 }
 
 class GetStaticPageRequest {
-
-
   GetStaticPageRequest();
 
   factory GetStaticPageRequest.fromJson(Map<String, dynamic> json) {
@@ -138,7 +135,6 @@ class GetStaticPageResponse {
   String body;
   String title;
 
-
   GetStaticPageResponse({
     this.body = '',
     this.title = '',
@@ -158,4 +154,3 @@ class GetStaticPageResponse {
     };
   }
 }
-
