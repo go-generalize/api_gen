@@ -174,7 +174,6 @@ class GetGroupsRequestConverter implements JsonConverter<GetGroupsRequest, Map<S
 }
 
 class GetGroupsRequest {
-
   GetGroupsRequest();
 
   factory GetGroupsRequest.fromJson(Map<String, dynamic> json) {

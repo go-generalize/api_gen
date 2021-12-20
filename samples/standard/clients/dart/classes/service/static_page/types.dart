@@ -105,7 +105,6 @@ class GetStaticPageRequestConverter implements JsonConverter<GetStaticPageReques
 }
 
 class GetStaticPageRequest {
-
   GetStaticPageRequest();
 
   factory GetStaticPageRequest.fromJson(Map<String, dynamic> json) {
