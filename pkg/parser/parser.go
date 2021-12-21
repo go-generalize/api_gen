@@ -79,16 +79,16 @@ func newParser(dir string) (*parser, error) {
 		moduleDir: moduleDir,
 		rootDir:   dir,
 	}
-	psr.SetParallelism(runtime.NumCPU())
+	psr.SetParallelism(runtime.GOMAXPROCS(0))
 
 	return psr, nil
 }
 
 // SetParallelism limits the max number of threads
-// Default: runtime.NumCPU()
+// Default: runtime.GOMAXPROCS()
 func (p *parser) SetParallelism(num int) {
-	threadLock := make(chan struct{}, runtime.NumCPU())
-	for i := 0; i < runtime.NumCPU(); i++ {
+	threadLock := make(chan struct{}, num)
+	for i := 0; i < num; i++ {
 		threadLock <- struct{}{}
 	}
 
