@@ -5,10 +5,8 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/go-generalize/api_gen/v2/pkg/common"
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
 	"github.com/go-generalize/go2go"
-	go2tsparser "github.com/go-generalize/go2ts/pkg/parser"
 	"golang.org/x/xerrors"
 )
 
@@ -40,25 +38,13 @@ func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string
 		return nil
 	}
 
-	psr, err := go2tsparser.NewParser(gr.Dir, common.ParserFilter)
-
-	if err != nil {
-		return xerrors.Errorf("failed to parse %s: %w", gr.Dir, err)
-	}
-
-	parsed, err := psr.Parse()
-
-	if err != nil {
-		return xerrors.Errorf("failed to parse %s: %w", gr.Dir, err)
-	}
-
 	endpointStructs := make([]string, 0, 20)
 	for _, ep := range gr.Endpoints {
 		endpointStructs = append(endpointStructs, gr.ImportPath+"."+ep.RequestPayloadName)
 		endpointStructs = append(endpointStructs, gr.ImportPath+"."+ep.ResponsePayloadName)
 	}
 
-	code, err := go2go.NewGenerator(parsed, endpointStructs).Generate()
+	code, err := go2go.NewGenerator(gr.ParsedTypes, endpointStructs).Generate()
 
 	if err != nil {
 		return xerrors.Errorf("failed to initialize new go2go generator: %w", err)
