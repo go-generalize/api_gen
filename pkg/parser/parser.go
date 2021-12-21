@@ -8,6 +8,7 @@ import (
 	"go/token"
 	"os"
 	"path/filepath"
+	"runtime"
 	"sort"
 	"strings"
 
@@ -18,6 +19,7 @@ import (
 	go2tstypes "github.com/go-generalize/go2ts/pkg/types"
 	"github.com/go-utils/gopackages"
 	"github.com/iancoleman/strcase"
+	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
 )
 
@@ -53,6 +55,8 @@ type parser struct {
 	module    string
 	moduleDir string
 	rootDir   string
+
+	threadLock chan struct{}
 }
 
 func newParser(dir string) (*parser, error) {
@@ -70,11 +74,25 @@ func newParser(dir string) (*parser, error) {
 		return nil, xerrors.Errorf("failed to parse go.mod: %w", err)
 	}
 
-	return &parser{
+	psr := &parser{
 		module:    module,
 		moduleDir: moduleDir,
 		rootDir:   dir,
-	}, nil
+	}
+	psr.SetParallelism(runtime.GOMAXPROCS(0))
+
+	return psr, nil
+}
+
+// SetParallelism limits the max number of threads
+// Default: runtime.GOMAXPROCS()
+func (p *parser) SetParallelism(num int) {
+	threadLock := make(chan struct{}, num)
+	for i := 0; i < num; i++ {
+		threadLock <- struct{}{}
+	}
+
+	p.threadLock = threadLock
 }
 
 func (p *parser) relativePathFromRoot(dir string) (string, error) {
@@ -279,24 +297,37 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 		return nil, xerrors.Errorf("failed to list all child files/directories: %w", err)
 	}
 
+	eg := errgroup.Group{}
+
 	for _, fifo := range fifos {
 		if !fifo.IsDir() {
 			continue
 		}
+		fifo := fifo
+		idx := len(gr.Children)
+		gr.Children = append(gr.Children, nil)
 
-		child, err := p.parsePackage(filepath.Join(dir, fifo.Name()))
+		eg.Go(func() error {
+			child, err := p.parsePackage(filepath.Join(dir, fifo.Name()))
 
-		if err != nil {
-			return nil, xerrors.Errorf("failed to parse package for %s: %w", fifo.Name(), err)
-		}
+			if err != nil {
+				return xerrors.Errorf("failed to parse package for %s: %w", fifo.Name(), err)
+			}
 
-		// if len(child.Endpoints) == 0 && len(child.Children) == 0 {
-		// 	continue
-		// }
-		child.parentGroup = gr
-
-		gr.Children = append(gr.Children, child)
+			child.parentGroup = gr
+			gr.Children[idx] = child
+			return nil
+		})
 	}
+
+	if err := eg.Wait(); err != nil {
+		return nil, xerrors.Errorf("failed to parse children of %s: %w", dir, err)
+	}
+
+	<-p.threadLock
+	go func() {
+		p.threadLock <- struct{}{}
+	}()
 
 	sort.Slice(gr.Children, func(i, j int) bool {
 		return gr.Children[i].RawPath < gr.Children[j].RawPath
