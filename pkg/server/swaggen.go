@@ -14,13 +14,9 @@ import (
 	"github.com/go-generalize/go2ts/pkg/types"
 )
 
-func (g *Generator) generateSwagComment(ep *parser.Endpoint, tstypes map[string]types.Type) string {
-	t := tstypes[ep.GetParent().ImportPath+"."+ep.RequestPayloadName]
-	obj, ok := t.(*types.Object)
+func (g *Generator) generateSwagComment(ep *parser.Endpoint) string {
+	obj := ep.RequestGo2tsPayload
 
-	if !ok {
-		return ""
-	}
 	placeholders := map[string]struct{}{}
 
 	path := ep.GetFullPath("/", func(rawPath, path, placeholder string) string {
