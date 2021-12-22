@@ -12,7 +12,7 @@ import (
 
 	go2json "github.com/go-generalize/api_gen/v2/pkg/go2json"
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
-	go2tsp "github.com/go-generalize/go2ts/pkg/parser"
+	go2tstypes "github.com/go-generalize/go2ts/pkg/types"
 	"github.com/iancoleman/strcase"
 	"golang.org/x/xerrors"
 )
@@ -37,7 +37,7 @@ func (g *Generator) generateMock(apierrorPackage, propsPackage string) error {
 	}
 
 	// mock/json/**/*.json
-	if err := g.generateMockJSON(g.group.Dir, mockJSONPath); err != nil {
+	if err := g.generateMockJSON(g.group, mockJSONPath); err != nil {
 		return xerrors.Errorf("failed to generate mock JSONs: %w", err)
 	}
 
@@ -68,45 +68,24 @@ func (g *Generator) generateMock(apierrorPackage, propsPackage string) error {
 	return nil
 }
 
-func (g *Generator) generateMockJSON(base, generatedIn string) error {
-	dirs, err := os.ReadDir(base)
-
-	if err != nil {
-		return xerrors.Errorf("failed to list entries in %s: %w", base, err)
-	}
-
-	for _, d := range dirs {
-		if !d.IsDir() {
-			continue
-		}
-
-		if err := g.generateMockJSON(filepath.Join(base, d.Name()), filepath.Join(generatedIn, d.Name())); err != nil {
+func (g *Generator) generateMockJSON(gr *parser.Group, generatedIn string) error {
+	for _, ch := range gr.Children {
+		if err := g.generateMockJSON(ch, filepath.Join(generatedIn, ch.RawPath)); err != nil {
 			return xerrors.Errorf("failed to generate mock: %w", err)
 		}
 	}
 
-	psr, err := go2tsp.NewParser(base, func(opt *go2tsp.FilterOpt) bool {
-		if opt.Dependency {
-			return true
-		}
-		if !opt.BasePackage {
-			return false
-		}
-		if !opt.Exported {
-			return false
+	types := map[string]go2tstypes.Type{}
+	for k, v := range gr.ParsedTypes {
+		if !strings.HasPrefix(k, gr.ImportPath+".") {
+			continue
 		}
 
-		return strings.HasSuffix(opt.Name, "Request") || strings.HasSuffix(opt.Name, "Response")
-	})
+		if !(strings.HasSuffix(k, "Request") || strings.HasSuffix(k, "Response")) {
+			continue
+		}
 
-	if err != nil {
-		return nil
-	}
-
-	types, err := psr.Parse()
-
-	if err != nil {
-		return xerrors.Errorf("failed to parse %s: %w", base)
+		types[k] = v
 	}
 
 	if err := go2json.NewGenerator(types).Generate(generatedIn); err != nil {
