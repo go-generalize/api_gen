@@ -13,7 +13,6 @@ import (
 	go2json "github.com/go-generalize/api_gen/v2/pkg/go2json"
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
 	go2tsp "github.com/go-generalize/go2ts/pkg/parser"
-	"github.com/go-generalize/go2ts/pkg/types"
 	"github.com/iancoleman/strcase"
 	"golang.org/x/xerrors"
 )
@@ -154,27 +153,6 @@ func (g *Generator) generateMockController(root, mockPackage string, ep *parser.
 		HandlerName:       handler,
 	}
 
-	v, err, _ := g.sfGroup.Do(ep.GetParent().Dir, func() (interface{}, error) {
-		dir := ep.GetParent().Dir
-		psr, err := go2tsp.NewParser(dir, go2tsp.Default)
-
-		if err != nil {
-			return nil, xerrors.Errorf("failed to parse %s by go2ts parser: %w", dir, err)
-		}
-
-		m, err := psr.Parse()
-
-		if err != nil {
-			return nil, xerrors.Errorf("failed to parse %s by go2ts parser: %w", dir, err)
-		}
-
-		return m, nil
-	})
-
-	if err != nil {
-		return nil, xerrors.Errorf("failed to parse for mock: %w", err)
-	}
-
 	path := filepath.Join(root, rel, filename)
 
 	fp, err := os.Create(path)
@@ -215,7 +193,7 @@ func (g *Generator) generateMockController(root, mockPackage string, ep *parser.
 		JSONDir: ep.GetParent().GetFullPath("/", func(rawPath, path, placeholder string) string {
 			return path
 		}) + "/" + strings.ToLower(string(ep.Method)) + "_" + ep.Path,
-		SwagGo: g.generateSwagComment(ep, v.(map[string]types.Type)),
+		SwagGo: g.generateSwagComment(ep),
 	}); err != nil {
 		return nil, xerrors.Errorf("failed to generate controller: %w", err)
 	}
