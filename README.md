@@ -77,7 +77,7 @@ import { APIClient } from 'path/to/api_client.ts';
 
 const client = new APIClient('very_secure_token', {}, 'https://example.com');
 
-client.foo.bar.postUpdateUser({ID: 'id'})
+client.foo.bar.postUpdateUser({id: 'id'})
     .then(res => console.log(res));
 ```
 
