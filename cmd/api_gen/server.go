@@ -2,6 +2,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/go-generalize/api_gen/v2/common"
 	"github.com/go-generalize/api_gen/v2/pkg/agerrors"
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
@@ -23,6 +25,10 @@ func init() {
 
 			if err != nil {
 				return xerrors.Errorf("failed to parse the package(%s): %w", args[0], err)
+			}
+
+			if err := os.MkdirAll(dir, 0775); err != nil {
+				return xerrors.Errorf("failed to generate a directory %s: %w", dir, err)
 			}
 
 			generator, err := server.NewGenerator(group, dir, basePackage, common.AppVersion)

@@ -37,6 +37,10 @@ Pass the directory to parse as the 1st argument.`,
 				return xerrors.Errorf("failed to generate source code: %w", err)
 			}
 
+			if err := os.MkdirAll(dir, 0775); err != nil {
+				return xerrors.Errorf("failed to generate a directory %s: %w", dir, err)
+			}
+
 			path := filepath.Join(dir, "api_client.dart")
 			if err := os.WriteFile(path, []byte(code), 0664); err != nil {
 				return xerrors.Errorf("failed to save in %s: %w", path, err)
