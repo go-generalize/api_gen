@@ -37,7 +37,7 @@ Pass the directory to parse as the 1st argument.`,
 				return xerrors.Errorf("failed to generate source code: %w", err)
 			}
 
-			if err := os.MkdirAll(dir, 0664); err != nil {
+			if err := os.MkdirAll(dir, 0775); err != nil {
 				return xerrors.Errorf("failed to generate a directory %s: %w", dir, err)
 			}
 

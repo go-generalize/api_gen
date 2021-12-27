@@ -27,7 +27,7 @@ func init() {
 				return xerrors.Errorf("failed to parse the package(%s): %w", args[0], err)
 			}
 
-			if err := os.MkdirAll(dir, 0664); err != nil {
+			if err := os.MkdirAll(dir, 0775); err != nil {
 				return xerrors.Errorf("failed to generate a directory %s: %w", dir, err)
 			}
 
