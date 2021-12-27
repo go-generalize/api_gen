@@ -32,7 +32,7 @@ Responses are encoded in JSON.
 package package_name_that_you_want
 
 type PostUpdateUserRequest struct {
-    ID string
+    ID string `json:"id"`
 }
 
 type PostUpdateUserResponse struct {
