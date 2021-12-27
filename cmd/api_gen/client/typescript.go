@@ -30,6 +30,10 @@ Pass the directory to parse as the 1st argument.`,
 				return xerrors.Errorf("failed to parse the package(%s): %w", args[0], err)
 			}
 
+			if err := os.MkdirAll(dir, 0664); err != nil {
+				return xerrors.Errorf("failed to generate a directory %s: %w", dir, err)
+			}
+
 			generator := clientts.NewGenerator(group, common.AppVersion)
 
 			code, err := generator.GenerateClient()
