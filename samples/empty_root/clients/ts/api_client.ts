@@ -225,13 +225,36 @@ export class APIClient {
 
 	public foo: FooClient;
 
+	constructor(opt: {
+		token?: string,
+		commonHeaders?: {[key: string]: string},
+		baseURL?: string,
+		commonOptions?: {[key: string]: any},
+		middleware?: middlewareSet
+	});
 	constructor(
 		token?: string,
 		commonHeaders?: {[key: string]: string},
 		baseURL?: string,
-		commonOptions: {[key: string]: any} = {},
+		commonOptions?: {[key: string]: any},
+		middleware?: middlewareSet
+	);
+
+	constructor(
+		token?: any,
+		commonHeaders?: {[key: string]: string},
+		baseURL?: string,
+		commonOptions?: {[key: string]: any},
 		middleware?: middlewareSet
 	) {
+		if (token !== null && (typeof token === 'object')) {
+			commonHeaders = token.commonHeaders;
+			baseURL = token.baseURL;
+			commonOptions = token.commonOptions;
+			middleware = token.middleware;
+			token = token.token;
+		}
+
 		const headers: {[key: string]: string} =  {
 			'Content-Type': 'application/json',
 			...commonHeaders,
@@ -242,7 +265,7 @@ export class APIClient {
 		}
 
 		this.baseURL =  (baseURL === undefined) ? "" : baseURL;
-		this.options = commonOptions;
+		this.options = commonOptions ?? {};
 		this.headers = headers;
 
 		if (middleware) {
