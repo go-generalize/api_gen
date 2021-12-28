@@ -16,7 +16,7 @@ Download binaries from [Releases](https://github.com/go-generalize/api_gen/relea
 ### go install
 Go 1.17 or newer is required.
 ```console
-$ go install github.com/go-generalize/api_gen/cmd/api_gen@latest # latest or vX.Y.Z
+$ go install github.com/go-generalize/api_gen/v2/cmd/api_gen@latest # latest or vX.Y.Z
 ```
 
 ## Basic Usage
