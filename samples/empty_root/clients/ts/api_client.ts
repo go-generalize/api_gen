@@ -76,18 +76,18 @@ class FooBarClient {
 		}
 	}
 
-	/** @deprecated */
-	async postUser(
-		param: FooBarPostUserRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<FooBarPostUserResponse>;
 	async postUser(
 		param: FooBarPostUserRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<FooBarPostUserResponse>;
+	/** @deprecated */
+	async postUser(
+		param: FooBarPostUserRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<FooBarPostUserResponse>;
 
 	async postUser(

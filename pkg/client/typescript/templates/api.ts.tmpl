@@ -99,18 +99,18 @@ class {{ $elem.Name }} {
 	}
 {{- 	range $index, $method := $elem.Methods }}
 
-	/** @deprecated */
-	async {{ $method.Name }}(
-		param: {{ $method.RequestType }},
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<{{ $method.ResponseType }}>;
 	async {{ $method.Name }}(
 		param: {{ $method.RequestType }},
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<{{ $method.ResponseType }}>;
+	/** @deprecated */
+	async {{ $method.Name }}(
+		param: {{ $method.RequestType }},
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<{{ $method.ResponseType }}>;
 
 	async {{ $method.Name }}(
@@ -301,18 +301,18 @@ export class APIClient {
 	}
 {{- range $index, $method := .Methods }}
 
-	/** @deprecated */
-	async {{ $method.Name }}(
-		param: {{ $method.RequestType }},
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<{{ $method.ResponseType }}>;
 	async {{ $method.Name }}(
 		param: {{ $method.RequestType }},
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<{{ $method.ResponseType }}>;
+	/** @deprecated */
+	async {{ $method.Name }}(
+		param: {{ $method.RequestType }},
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<{{ $method.ResponseType }}>;
 
 	async {{ $method.Name }}(
