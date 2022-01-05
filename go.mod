@@ -22,7 +22,7 @@ require (
 
 require (
 	github.com/go-generalize/go-easyparser v0.2.0
-	github.com/go-generalize/go2dart v0.4.4
+	github.com/go-generalize/go2dart v0.4.5
 	github.com/swaggo/swag v1.7.8
 )
 
