@@ -8,6 +8,7 @@ import (
 	"github.com/go-generalize/api_gen/v2/pkg/agerrors"
 	clientdart "github.com/go-generalize/api_gen/v2/pkg/client/dart"
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
+	"github.com/go-generalize/go-dartfmt"
 	"github.com/spf13/cobra"
 	"golang.org/x/xerrors"
 )
@@ -41,6 +42,12 @@ Pass the directory to parse as the 1st argument.`,
 				return xerrors.Errorf("failed to generate a directory %s: %w", dir, err)
 			}
 
+			code, err = dartfmt.FormatDart(code)
+
+			if err != nil {
+				return xerrors.Errorf("failed to format api_client.dart: %w", err)
+			}
+
 			path := filepath.Join(dir, "api_client.dart")
 			if err := os.WriteFile(path, []byte(code), 0664); err != nil {
 				return xerrors.Errorf("failed to save in %s: %w", path, err)
@@ -52,6 +59,11 @@ Pass the directory to parse as the 1st argument.`,
 
 				if err := os.MkdirAll(d, 0774); err != nil {
 					return xerrors.Errorf("failed to mkdir %s recursively: %w", d, err)
+				}
+
+				code, err = dartfmt.FormatDart(code)
+				if err != nil {
+					return xerrors.Errorf("failed to format %s: %w", path, err)
 				}
 
 				if err := os.WriteFile(path, []byte(code), 0664); err != nil {

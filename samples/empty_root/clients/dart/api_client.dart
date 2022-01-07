@@ -8,7 +8,7 @@ import './classes/foo/types.dart' as types__foo;
 import './classes/types.dart' as types_;
 
 class FooBarClient {
-	Map<String, String> headers = {};
+  Map<String, String> headers = {};
   String baseURL;
   http.Client client;
 
@@ -16,25 +16,22 @@ class FooBarClient {
     this.baseURL,
     this.headers,
     this.client,
-  ) {
-  }
+  ) {}
 
-  Map<String, dynamic> getRequestObject(Map<String, dynamic> obj, List<String> routingPath) {
+  Map<String, dynamic> getRequestObject(
+      Map<String, dynamic> obj, List<String> routingPath) {
     final copied = {...obj};
-    
+
     copied.removeWhere((key, value) => routingPath.contains(key));
 
     return copied;
   }
 
-	Future<types__foo_bar.PostUserResponse> postUser(
-		types__foo_bar.PostUserRequest param,
-    {
-      Map<String, String>? headers,
+  Future<types__foo_bar.PostUserResponse> postUser(
+      types__foo_bar.PostUserRequest param,
+      {Map<String, String>? headers,
       http.Client? client,
-      Object? mockOption
-    }
-  ) async {
+      Object? mockOption}) async {
     client = client ?? this.client;
 
     List<String> excludeParams = [];
@@ -43,8 +40,8 @@ class FooBarClient {
 
     if (mockOption != null) {
       headers['Api-Gen-Option'] = jsonEncode(mockOption);
-		}
-		final url = baseURL + '/foo/bar/user';
+    }
+    final url = baseURL + '/foo/bar/user';
 
     final resp = await client.post(
       Uri.parse(url),
@@ -52,21 +49,20 @@ class FooBarClient {
       body: jsonEncode(getRequestObject(param.toJson(), excludeParams)),
     );
 
-		if (resp.statusCode ~/ 100 != 2) {
-			throw ApiError(resp);
-		}
-		final res = types__foo_bar.PostUserResponse();
+    if (resp.statusCode ~/ 100 != 2) {
+      throw ApiError(resp);
+    }
+    final res = types__foo_bar.PostUserResponse();
 
-		return res;
-	}
-
+    return res;
+  }
 }
 
 class FooClient {
-	Map<String, String> headers = {};
+  Map<String, String> headers = {};
   String baseURL;
   http.Client client;
-	late FooBarClient bar;
+  late FooBarClient bar;
 
   FooClient(
     this.baseURL,
@@ -74,37 +70,35 @@ class FooClient {
     this.client,
   ) {
     this.bar = FooBarClient(
-			this.baseURL,
-			this.headers,
-			this.client,
-		);
+      this.baseURL,
+      this.headers,
+      this.client,
+    );
   }
 
-  Map<String, dynamic> getRequestObject(Map<String, dynamic> obj, List<String> routingPath) {
+  Map<String, dynamic> getRequestObject(
+      Map<String, dynamic> obj, List<String> routingPath) {
     final copied = {...obj};
-    
+
     copied.removeWhere((key, value) => routingPath.contains(key));
 
     return copied;
   }
-
 }
 
 class APIClient {
-	Map<String, String> headers = {};
-	String baseURL;
+  Map<String, String> headers = {};
+  String baseURL;
   late http.Client client;
 
-	late FooClient foo;
+  late FooClient foo;
 
-	APIClient(
-    this.baseURL,
-    {
-      String? token,
-      Map<String, String>? headers,
-      http.Client? client,
-    }
-	) {
+  APIClient(
+    this.baseURL, {
+    String? token,
+    Map<String, String>? headers,
+    http.Client? client,
+  }) {
     if (headers != null) {
       this.headers = {...headers};
     }
@@ -117,16 +111,17 @@ class APIClient {
 
     this.headers['Content-Type'] = 'application/json';
 
-		this.foo = FooClient(
-			this.baseURL,
-			this.headers,
-			this.client,
-		);
-	}
+    this.foo = FooClient(
+      this.baseURL,
+      this.headers,
+      this.client,
+    );
+  }
 
-	Map<String, dynamic> getRequestObject(Map<String, dynamic> obj, List<String> routingPath) {
+  Map<String, dynamic> getRequestObject(
+      Map<String, dynamic> obj, List<String> routingPath) {
     final copied = {...obj};
-    
+
     copied.removeWhere((key, value) => routingPath.contains(key));
 
     return copied;
@@ -134,10 +129,10 @@ class APIClient {
 }
 
 class ApiError extends Error {
-	final http.Response response;
+  final http.Response response;
 
-	ApiError(this.response);
+  ApiError(this.response);
 
-	int get statusCode => response.statusCode;
+  int get statusCode => response.statusCode;
   String? get reasonPhrase => response.reasonPhrase;
 }
