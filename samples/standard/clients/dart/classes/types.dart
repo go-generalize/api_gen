@@ -2,10 +2,6 @@
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
 // generated version: (devel)
 
-import 'dart:convert';
-
-import 'package:intl/intl.dart';
-
 abstract class JsonConverter<T, S> {
   const JsonConverter();
 
@@ -18,9 +14,11 @@ class ListConverter<T, Base> implements JsonConverter<List<T>, List<Base>> {
 
   final JsonConverter<T, Base> internalConverter;
 
-  @override 
+  @override
   List<T> fromJson(dynamic arr) {
-    return List<dynamic>.from(arr).map((e) => internalConverter.fromJson(e)).toList();
+    return List<dynamic>.from(arr)
+        .map((e) => internalConverter.fromJson(e))
+        .toList();
   }
 
   @override
@@ -29,33 +27,38 @@ class ListConverter<T, Base> implements JsonConverter<List<T>, List<Base>> {
   }
 }
 
-class MapConverter<K, T, Base> implements JsonConverter<Map<K, T>, Map<K, Base>> {
+class MapConverter<K, T, Base>
+    implements JsonConverter<Map<K, T>, Map<K, Base>> {
   const MapConverter(this.internalConverter);
 
   final JsonConverter<T, Base> internalConverter;
 
-  @override 
+  @override
   Map<K, T> fromJson(dynamic m) {
-    return Map<K, dynamic>.from(m).map((key, value) => MapEntry<K, T>(key, internalConverter.fromJson(value)));
+    return Map<K, dynamic>.from(m).map(
+        (key, value) => MapEntry<K, T>(key, internalConverter.fromJson(value)));
   }
 
   @override
   Map<K, Base> toJson(Map<K, T> m) {
-    return m.map((key, value) => MapEntry<K, Base>(key, internalConverter.toJson(value)));
+    return m.map((key, value) =>
+        MapEntry<K, Base>(key, internalConverter.toJson(value)));
   }
 }
 
 class DateTimeConverter implements JsonConverter<DateTime, String> {
   const DateTimeConverter();
 
-  @override 
+  @override
   DateTime fromJson(dynamic s) {
     return DateTime.parse(s as String);
   }
 
   @override
   String toJson(DateTime? dt) {
-    return (dt ?? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true)).toUtc().toIso8601String();
+    return (dt ?? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true))
+        .toUtc()
+        .toIso8601String();
   }
 }
 
@@ -64,7 +67,7 @@ class NullableConverter<T, Base> implements JsonConverter<T?, Base?> {
 
   final JsonConverter<T, Base> internalConverter;
 
-  @override 
+  @override
   T? fromJson(dynamic s) {
     return s == null ? null : internalConverter.fromJson(s);
   }
@@ -78,7 +81,7 @@ class NullableConverter<T, Base> implements JsonConverter<T?, Base?> {
 class DoNothingConverter<T> implements JsonConverter<T, T> {
   const DoNothingConverter();
 
-  @override 
+  @override
   T fromJson(dynamic s) {
     return s as T;
   }
@@ -90,15 +93,15 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
 }
 
 enum CreatedType {
-    CreatedTypeGuest,
-    CreatedTypeMember,
-    CreatedTypeOwner,
+  CreatedTypeGuest,
+  CreatedTypeMember,
+  CreatedTypeOwner,
 }
 
 class CreatedTypeConverter implements JsonConverter<CreatedType, int> {
   const CreatedTypeConverter();
 
-  @override 
+  @override
   CreatedType fromJson(dynamic s) {
     return CreatedTypeExtension.fromJson(s as int);
   }
@@ -131,15 +134,15 @@ extension CreatedTypeExtension on CreatedType {
 }
 
 enum Enum {
-    EnumA,
-    EnumB,
-    EnumC,
+  EnumA,
+  EnumB,
+  EnumC,
 }
 
 class EnumConverter implements JsonConverter<Enum, String> {
   const EnumConverter();
 
-  @override 
+  @override
   Enum fromJson(dynamic s) {
     return EnumExtension.fromJson(s as String);
   }
@@ -171,10 +174,11 @@ extension EnumExtension on Enum {
   }
 }
 
-class GetRequestConverter implements JsonConverter<GetRequest, Map<String, dynamic>> {
+class GetRequestConverter
+    implements JsonConverter<GetRequest, Map<String, dynamic>> {
   const GetRequestConverter();
 
-  @override 
+  @override
   GetRequest fromJson(dynamic s) {
     return GetRequest.fromJson(Map<String, dynamic>.from(s));
   }
@@ -213,10 +217,11 @@ class GetRequest {
   }
 }
 
-class GetResponseConverter implements JsonConverter<GetResponse, Map<String, dynamic>> {
+class GetResponseConverter
+    implements JsonConverter<GetResponse, Map<String, dynamic>> {
   const GetResponseConverter();
 
-  @override 
+  @override
   GetResponse fromJson(dynamic s) {
     return GetResponse.fromJson(Map<String, dynamic>.from(s));
   }
@@ -247,10 +252,11 @@ class GetResponse {
   }
 }
 
-class PostCreateTableRequestConverter implements JsonConverter<PostCreateTableRequest, Map<String, dynamic>> {
+class PostCreateTableRequestConverter
+    implements JsonConverter<PostCreateTableRequest, Map<String, dynamic>> {
   const PostCreateTableRequestConverter();
 
-  @override 
+  @override
   PostCreateTableRequest fromJson(dynamic s) {
     return PostCreateTableRequest.fromJson(Map<String, dynamic>.from(s));
   }
@@ -278,7 +284,8 @@ class PostCreateTableRequest {
     return PostCreateTableRequest(
       flag: DoNothingConverter<int>().fromJson(json['Flag']),
       id: DoNothingConverter<String>().fromJson(json['ID']),
-      map: MapConverter<int, int, int>(DoNothingConverter<int>()).fromJson(json['map']),
+      map: MapConverter<int, int, int>(DoNothingConverter<int>())
+          .fromJson(json['map']),
       text: DoNothingConverter<String>().fromJson(json['Text']),
     );
   }
@@ -293,10 +300,11 @@ class PostCreateTableRequest {
   }
 }
 
-class PostCreateTableResponseConverter implements JsonConverter<PostCreateTableResponse, Map<String, dynamic>> {
+class PostCreateTableResponseConverter
+    implements JsonConverter<PostCreateTableResponse, Map<String, dynamic>> {
   const PostCreateTableResponseConverter();
 
-  @override 
+  @override
   PostCreateTableResponse fromJson(dynamic s) {
     return PostCreateTableResponse.fromJson(Map<String, dynamic>.from(s));
   }
@@ -331,10 +339,11 @@ class PostCreateTableResponse {
   }
 }
 
-class PostCreateUserRequestConverter implements JsonConverter<PostCreateUserRequest, Map<String, dynamic>> {
+class PostCreateUserRequestConverter
+    implements JsonConverter<PostCreateUserRequest, Map<String, dynamic>> {
   const PostCreateUserRequestConverter();
 
-  @override 
+  @override
   PostCreateUserRequest fromJson(dynamic s) {
     return PostCreateUserRequest.fromJson(Map<String, dynamic>.from(s));
   }
@@ -366,7 +375,11 @@ class PostCreateUserRequest {
       gender: DoNothingConverter<int>().fromJson(json['Gender']),
       id: DoNothingConverter<String>().fromJson(json['ID']),
       password: DoNothingConverter<String>().fromJson(json['Password']),
-      roles: NullableConverter<List<Role?>, List<Map<String, dynamic>?>>(ListConverter<Role?, Map<String, dynamic>?>(NullableConverter<Role, Map<String, dynamic>>(RoleConverter()))).fromJson(json['Roles']),
+      roles: NullableConverter<List<Role?>, List<Map<String, dynamic>?>>(
+              ListConverter<Role?, Map<String, dynamic>?>(
+                  NullableConverter<Role, Map<String, dynamic>>(
+                      RoleConverter())))
+          .fromJson(json['Roles']),
     );
   }
 
@@ -376,15 +389,20 @@ class PostCreateUserRequest {
       'Gender': DoNothingConverter<int>().toJson(gender),
       'ID': DoNothingConverter<String>().toJson(id),
       'Password': DoNothingConverter<String>().toJson(password),
-      'Roles': NullableConverter<List<Role?>, List<Map<String, dynamic>?>>(ListConverter<Role?, Map<String, dynamic>?>(NullableConverter<Role, Map<String, dynamic>>(RoleConverter()))).toJson(roles),
+      'Roles': NullableConverter<List<Role?>, List<Map<String, dynamic>?>>(
+              ListConverter<Role?, Map<String, dynamic>?>(
+                  NullableConverter<Role, Map<String, dynamic>>(
+                      RoleConverter())))
+          .toJson(roles),
     };
   }
 }
 
-class PostCreateUserResponseConverter implements JsonConverter<PostCreateUserResponse, Map<String, dynamic>> {
+class PostCreateUserResponseConverter
+    implements JsonConverter<PostCreateUserResponse, Map<String, dynamic>> {
   const PostCreateUserResponseConverter();
 
-  @override 
+  @override
   PostCreateUserResponse fromJson(dynamic s) {
     return PostCreateUserResponse.fromJson(Map<String, dynamic>.from(s));
   }
@@ -430,7 +448,7 @@ class PostCreateUserResponse {
 class RoleConverter implements JsonConverter<Role, Map<String, dynamic>> {
   const RoleConverter();
 
-  @override 
+  @override
   Role fromJson(dynamic s) {
     return Role.fromJson(Map<String, dynamic>.from(s));
   }
@@ -456,7 +474,9 @@ class Role {
     return Role(
       id: DoNothingConverter<int>().fromJson(json['ID']),
       name: DoNothingConverter<String>().fromJson(json['Name']),
-      recursionRoles: NullableConverter<List<Role>, List<Map<String, dynamic>>>(ListConverter<Role, Map<String, dynamic>>(RoleConverter())).fromJson(json['RecursionRoles']),
+      recursionRoles: NullableConverter<List<Role>, List<Map<String, dynamic>>>(
+              ListConverter<Role, Map<String, dynamic>>(RoleConverter()))
+          .fromJson(json['RecursionRoles']),
     );
   }
 
@@ -464,7 +484,10 @@ class Role {
     return <String, dynamic>{
       'ID': DoNothingConverter<int>().toJson(id),
       'Name': DoNothingConverter<String>().toJson(name),
-      'RecursionRoles': NullableConverter<List<Role>, List<Map<String, dynamic>>>(ListConverter<Role, Map<String, dynamic>>(RoleConverter())).toJson(recursionRoles),
+      'RecursionRoles':
+          NullableConverter<List<Role>, List<Map<String, dynamic>>>(
+                  ListConverter<Role, Map<String, dynamic>>(RoleConverter()))
+              .toJson(recursionRoles),
     };
   }
 }

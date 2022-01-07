@@ -22,7 +22,7 @@ require (
 
 require (
 	github.com/go-generalize/go-easyparser v0.2.0
-	github.com/go-generalize/go2dart v0.4.5
+	github.com/go-generalize/go2dart v0.4.6
 	github.com/swaggo/swag v1.7.8
 )
 
@@ -30,10 +30,14 @@ require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
+	github.com/dlclark/regexp2 v1.4.1-0.20201116162257-a2a8dda75c91 // indirect
+	github.com/dop251/goja v0.0.0-20220104154337-b93494d0c5d9 // indirect
+	github.com/go-generalize/go-dartfmt v0.0.0-20220107102326-9bd233e600eb // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
 	github.com/go-openapi/spec v0.20.4 // indirect
 	github.com/go-openapi/swag v0.19.15 // indirect
+	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/labstack/gommon v0.3.0 // indirect
