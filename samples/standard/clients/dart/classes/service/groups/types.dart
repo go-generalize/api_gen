@@ -2,9 +2,6 @@
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
 // generated version: (devel)
 
-import 'dart:convert';
-
-import 'package:intl/intl.dart';
 import 'common/types.dart' as external_ff6726e;
 
 abstract class JsonConverter<T, S> {

@@ -2,10 +2,6 @@
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
 // generated version: (devel)
 
-import 'dart:convert';
-
-import 'package:intl/intl.dart';
-
 abstract class JsonConverter<T, S> {
   const JsonConverter();
 
