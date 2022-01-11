@@ -9,7 +9,7 @@ require (
 	github.com/go-utils/gopackages v0.0.0-20210218102646-e7d1f0008968
 	github.com/google/go-cmp v0.5.6
 	github.com/iancoleman/strcase v0.2.0
-	github.com/labstack/echo/v4 v4.6.2
+	github.com/labstack/echo/v4 v4.6.3
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/spf13/cobra v1.3.0
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
