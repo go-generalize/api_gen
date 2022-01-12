@@ -25,7 +25,7 @@ class ListConverter<T, Base> implements JsonConverter<List<T>, List<Base>> {
 
   @override
   List<Base> toJson(List<T> arr) {
-    return arr.map((e) => internalConverter.toJson(e) as Base).toList();
+    return arr.map((e) => internalConverter.toJson(e)).toList();
   }
 }
 
@@ -117,13 +117,14 @@ class Company {
 
   factory Company.fromJson(Map<String, dynamic> json) {
     return Company(
-      metadata: external_ff6726e.MetadataConverter().fromJson(json['Metadata']),
+      metadata:
+          const external_ff6726e.MetadataConverter().fromJson(json['Metadata']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Metadata': external_ff6726e.MetadataConverter().toJson(metadata),
+      'Metadata': const external_ff6726e.MetadataConverter().toJson(metadata),
     };
   }
 }
@@ -152,13 +153,14 @@ class Department {
 
   factory Department.fromJson(Map<String, dynamic> json) {
     return Department(
-      metadata: external_ff6726e.MetadataConverter().fromJson(json['Metadata']),
+      metadata:
+          const external_ff6726e.MetadataConverter().fromJson(json['Metadata']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Metadata': external_ff6726e.MetadataConverter().toJson(metadata),
+      'Metadata': const external_ff6726e.MetadataConverter().toJson(metadata),
     };
   }
 }
@@ -216,11 +218,13 @@ class GetGroupsResponse {
 
   factory GetGroupsResponse.fromJson(Map<String, dynamic> json) {
     return GetGroupsResponse(
-      companies: NullableConverter<List<Company>, List<Map<String, dynamic>>>(
-              ListConverter<Company, Map<String, dynamic>>(CompanyConverter()))
-          .fromJson(json['Companies']),
+      companies:
+          const NullableConverter<List<Company>, List<Map<String, dynamic>>>(
+                  ListConverter<Company, Map<String, dynamic>>(
+                      CompanyConverter()))
+              .fromJson(json['Companies']),
       departments:
-          NullableConverter<List<Department>, List<Map<String, dynamic>>>(
+          const NullableConverter<List<Department>, List<Map<String, dynamic>>>(
                   ListConverter<Department, Map<String, dynamic>>(
                       DepartmentConverter()))
               .fromJson(json['Departments']),
@@ -229,11 +233,13 @@ class GetGroupsResponse {
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Companies': NullableConverter<List<Company>, List<Map<String, dynamic>>>(
-              ListConverter<Company, Map<String, dynamic>>(CompanyConverter()))
-          .toJson(companies),
+      'Companies':
+          const NullableConverter<List<Company>, List<Map<String, dynamic>>>(
+                  ListConverter<Company, Map<String, dynamic>>(
+                      CompanyConverter()))
+              .toJson(companies),
       'Departments':
-          NullableConverter<List<Department>, List<Map<String, dynamic>>>(
+          const NullableConverter<List<Department>, List<Map<String, dynamic>>>(
                   ListConverter<Department, Map<String, dynamic>>(
                       DepartmentConverter()))
               .toJson(departments),

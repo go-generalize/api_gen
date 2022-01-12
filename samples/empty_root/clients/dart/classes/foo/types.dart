@@ -23,7 +23,7 @@ class ListConverter<T, Base> implements JsonConverter<List<T>, List<Base>> {
 
   @override
   List<Base> toJson(List<T> arr) {
-    return arr.map((e) => internalConverter.toJson(e) as Base).toList();
+    return arr.map((e) => internalConverter.toJson(e)).toList();
   }
 }
 

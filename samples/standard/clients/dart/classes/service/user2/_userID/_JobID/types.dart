@@ -23,7 +23,7 @@ class ListConverter<T, Base> implements JsonConverter<List<T>, List<Base>> {
 
   @override
   List<Base> toJson(List<T> arr) {
-    return arr.map((e) => internalConverter.toJson(e) as Base).toList();
+    return arr.map((e) => internalConverter.toJson(e)).toList();
   }
 }
 
@@ -118,15 +118,15 @@ class PutJobRequest {
 
   factory PutJobRequest.fromJson(Map<String, dynamic> json) {
     return PutJobRequest(
-      jobID: DoNothingConverter<String>().fromJson(json['JobID']),
-      userID: DoNothingConverter<String>().fromJson(json['UserID']),
+      jobID: const DoNothingConverter<String>().fromJson(json['JobID']),
+      userID: const DoNothingConverter<String>().fromJson(json['UserID']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'JobID': DoNothingConverter<String>().toJson(jobID),
-      'UserID': DoNothingConverter<String>().toJson(userID),
+      'JobID': const DoNothingConverter<String>().toJson(jobID),
+      'UserID': const DoNothingConverter<String>().toJson(userID),
     };
   }
 }
@@ -159,17 +159,17 @@ class PutJobResponse {
 
   factory PutJobResponse.fromJson(Map<String, dynamic> json) {
     return PutJobResponse(
-      jobID: DoNothingConverter<String>().fromJson(json['JobID']),
-      requestTime: DateTimeConverter().fromJson(json['RequestTime']),
-      userID: DoNothingConverter<String>().fromJson(json['UserID']),
+      jobID: const DoNothingConverter<String>().fromJson(json['JobID']),
+      requestTime: const DateTimeConverter().fromJson(json['RequestTime']),
+      userID: const DoNothingConverter<String>().fromJson(json['UserID']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'JobID': DoNothingConverter<String>().toJson(jobID),
-      'RequestTime': DateTimeConverter().toJson(requestTime),
-      'UserID': DoNothingConverter<String>().toJson(userID),
+      'JobID': const DoNothingConverter<String>().toJson(jobID),
+      'RequestTime': const DateTimeConverter().toJson(requestTime),
+      'UserID': const DoNothingConverter<String>().toJson(userID),
     };
   }
 }

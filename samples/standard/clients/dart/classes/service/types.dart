@@ -23,7 +23,7 @@ class ListConverter<T, Base> implements JsonConverter<List<T>, List<Base>> {
 
   @override
   List<Base> toJson(List<T> arr) {
-    return arr.map((e) => internalConverter.toJson(e) as Base).toList();
+    return arr.map((e) => internalConverter.toJson(e)).toList();
   }
 }
 
@@ -116,13 +116,13 @@ class GetArticleRequest {
 
   factory GetArticleRequest.fromJson(Map<String, dynamic> json) {
     return GetArticleRequest(
-      id: DoNothingConverter<int>().fromJson(json['ID']),
+      id: const DoNothingConverter<int>().fromJson(json['ID']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'ID': DoNothingConverter<int>().toJson(id),
+      'ID': const DoNothingConverter<int>().toJson(id),
     };
   }
 }
@@ -157,23 +157,23 @@ class GetArticleResponse {
 
   factory GetArticleResponse.fromJson(Map<String, dynamic> json) {
     return GetArticleResponse(
-      body: DoNothingConverter<String>().fromJson(json['Body']),
-      group: NullableConverter<List<String>, List<String>>(
+      body: const DoNothingConverter<String>().fromJson(json['Body']),
+      group: const NullableConverter<List<String>, List<String>>(
               ListConverter<String, String>(DoNothingConverter<String>()))
           .fromJson(json['Group']),
-      id: DoNothingConverter<int>().fromJson(json['ID']),
-      requestTime: DateTimeConverter().fromJson(json['RequestTime']),
+      id: const DoNothingConverter<int>().fromJson(json['ID']),
+      requestTime: const DateTimeConverter().fromJson(json['RequestTime']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Body': DoNothingConverter<String>().toJson(body),
-      'Group': NullableConverter<List<String>, List<String>>(
+      'Body': const DoNothingConverter<String>().toJson(body),
+      'Group': const NullableConverter<List<String>, List<String>>(
               ListConverter<String, String>(DoNothingConverter<String>()))
           .toJson(group),
-      'ID': DoNothingConverter<int>().toJson(id),
-      'RequestTime': DateTimeConverter().toJson(requestTime),
+      'ID': const DoNothingConverter<int>().toJson(id),
+      'RequestTime': const DateTimeConverter().toJson(requestTime),
     };
   }
 }

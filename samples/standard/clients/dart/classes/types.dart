@@ -23,7 +23,7 @@ class ListConverter<T, Base> implements JsonConverter<List<T>, List<Base>> {
 
   @override
   List<Base> toJson(List<T> arr) {
-    return arr.map((e) => internalConverter.toJson(e) as Base).toList();
+    return arr.map((e) => internalConverter.toJson(e)).toList();
   }
 }
 
@@ -93,9 +93,9 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
 }
 
 enum CreatedType {
-  CreatedTypeGuest,
-  CreatedTypeMember,
-  CreatedTypeOwner,
+  createdTypeGuest,
+  createdTypeMember,
+  createdTypeOwner,
 }
 
 class CreatedTypeConverter implements JsonConverter<CreatedType, int> {
@@ -114,14 +114,14 @@ class CreatedTypeConverter implements JsonConverter<CreatedType, int> {
 
 extension CreatedTypeExtension on CreatedType {
   static final enumToValue = {
-    CreatedType.CreatedTypeGuest: 2,
-    CreatedType.CreatedTypeMember: 1,
-    CreatedType.CreatedTypeOwner: 0,
+    CreatedType.createdTypeGuest: 2,
+    CreatedType.createdTypeMember: 1,
+    CreatedType.createdTypeOwner: 0,
   };
   static final valueToEnum = {
-    2: CreatedType.CreatedTypeGuest,
-    1: CreatedType.CreatedTypeMember,
-    0: CreatedType.CreatedTypeOwner,
+    2: CreatedType.createdTypeGuest,
+    1: CreatedType.createdTypeMember,
+    0: CreatedType.createdTypeOwner,
   };
 
   static CreatedType fromJson(dynamic d) {
@@ -134,9 +134,9 @@ extension CreatedTypeExtension on CreatedType {
 }
 
 enum Enum {
-  EnumA,
-  EnumB,
-  EnumC,
+  enumA,
+  enumB,
+  enumC,
 }
 
 class EnumConverter implements JsonConverter<Enum, String> {
@@ -155,14 +155,14 @@ class EnumConverter implements JsonConverter<Enum, String> {
 
 extension EnumExtension on Enum {
   static final enumToValue = {
-    Enum.EnumA: 'A',
-    Enum.EnumB: 'B',
-    Enum.EnumC: 'C',
+    Enum.enumA: 'A',
+    Enum.enumB: 'B',
+    Enum.enumC: 'C',
   };
   static final valueToEnum = {
-    'A': Enum.EnumA,
-    'B': Enum.EnumB,
-    'C': Enum.EnumC,
+    'A': Enum.enumA,
+    'B': Enum.enumB,
+    'C': Enum.enumC,
   };
 
   static Enum fromJson(dynamic d) {
@@ -195,24 +195,24 @@ class GetRequest {
   DateTime? time;
 
   GetRequest({
-    this.enum_ = Enum.EnumA,
+    this.enum_ = Enum.enumA,
     this.param = '',
     this.time,
   });
 
   factory GetRequest.fromJson(Map<String, dynamic> json) {
     return GetRequest(
-      enum_: EnumConverter().fromJson(json['Enum']),
-      param: DoNothingConverter<String>().fromJson(json['Param']),
-      time: DateTimeConverter().fromJson(json['Time']),
+      enum_: const EnumConverter().fromJson(json['Enum']),
+      param: const DoNothingConverter<String>().fromJson(json['Param']),
+      time: const DateTimeConverter().fromJson(json['Time']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Enum': EnumConverter().toJson(enum_),
-      'Param': DoNothingConverter<String>().toJson(param),
-      'Time': DateTimeConverter().toJson(time),
+      'Enum': const EnumConverter().toJson(enum_),
+      'Param': const DoNothingConverter<String>().toJson(param),
+      'Time': const DateTimeConverter().toJson(time),
     };
   }
 }
@@ -241,13 +241,13 @@ class GetResponse {
 
   factory GetResponse.fromJson(Map<String, dynamic> json) {
     return GetResponse(
-      data: DoNothingConverter<String>().fromJson(json['Data']),
+      data: const DoNothingConverter<String>().fromJson(json['Data']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Data': DoNothingConverter<String>().toJson(data),
+      'Data': const DoNothingConverter<String>().toJson(data),
     };
   }
 }
@@ -282,20 +282,21 @@ class PostCreateTableRequest {
 
   factory PostCreateTableRequest.fromJson(Map<String, dynamic> json) {
     return PostCreateTableRequest(
-      flag: DoNothingConverter<int>().fromJson(json['Flag']),
-      id: DoNothingConverter<String>().fromJson(json['ID']),
-      map: MapConverter<int, int, int>(DoNothingConverter<int>())
+      flag: const DoNothingConverter<int>().fromJson(json['Flag']),
+      id: const DoNothingConverter<String>().fromJson(json['ID']),
+      map: const MapConverter<int, int, int>(DoNothingConverter<int>())
           .fromJson(json['map']),
-      text: DoNothingConverter<String>().fromJson(json['Text']),
+      text: const DoNothingConverter<String>().fromJson(json['Text']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Flag': DoNothingConverter<int>().toJson(flag),
-      'ID': DoNothingConverter<String>().toJson(id),
-      'map': MapConverter<int, int, int>(DoNothingConverter<int>()).toJson(map),
-      'Text': DoNothingConverter<String>().toJson(text),
+      'Flag': const DoNothingConverter<int>().toJson(flag),
+      'ID': const DoNothingConverter<String>().toJson(id),
+      'map': const MapConverter<int, int, int>(DoNothingConverter<int>())
+          .toJson(map),
+      'Text': const DoNothingConverter<String>().toJson(text),
     };
   }
 }
@@ -326,15 +327,15 @@ class PostCreateTableResponse {
 
   factory PostCreateTableResponse.fromJson(Map<String, dynamic> json) {
     return PostCreateTableResponse(
-      id: DoNothingConverter<String>().fromJson(json['ID']),
-      requestTime: DateTimeConverter().fromJson(json['RequestTime']),
+      id: const DoNothingConverter<String>().fromJson(json['ID']),
+      requestTime: const DateTimeConverter().fromJson(json['RequestTime']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'ID': DoNothingConverter<String>().toJson(id),
-      'RequestTime': DateTimeConverter().toJson(requestTime),
+      'ID': const DoNothingConverter<String>().toJson(id),
+      'RequestTime': const DateTimeConverter().toJson(requestTime),
     };
   }
 }
@@ -371,11 +372,11 @@ class PostCreateUserRequest {
 
   factory PostCreateUserRequest.fromJson(Map<String, dynamic> json) {
     return PostCreateUserRequest(
-      birthday: DateTimeConverter().fromJson(json['Birthday']),
-      gender: DoNothingConverter<int>().fromJson(json['Gender']),
-      id: DoNothingConverter<String>().fromJson(json['ID']),
-      password: DoNothingConverter<String>().fromJson(json['Password']),
-      roles: NullableConverter<List<Role?>, List<Map<String, dynamic>?>>(
+      birthday: const DateTimeConverter().fromJson(json['Birthday']),
+      gender: const DoNothingConverter<int>().fromJson(json['Gender']),
+      id: const DoNothingConverter<String>().fromJson(json['ID']),
+      password: const DoNothingConverter<String>().fromJson(json['Password']),
+      roles: const NullableConverter<List<Role?>, List<Map<String, dynamic>?>>(
               ListConverter<Role?, Map<String, dynamic>?>(
                   NullableConverter<Role, Map<String, dynamic>>(
                       RoleConverter())))
@@ -385,15 +386,16 @@ class PostCreateUserRequest {
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Birthday': DateTimeConverter().toJson(birthday),
-      'Gender': DoNothingConverter<int>().toJson(gender),
-      'ID': DoNothingConverter<String>().toJson(id),
-      'Password': DoNothingConverter<String>().toJson(password),
-      'Roles': NullableConverter<List<Role?>, List<Map<String, dynamic>?>>(
-              ListConverter<Role?, Map<String, dynamic>?>(
-                  NullableConverter<Role, Map<String, dynamic>>(
-                      RoleConverter())))
-          .toJson(roles),
+      'Birthday': const DateTimeConverter().toJson(birthday),
+      'Gender': const DoNothingConverter<int>().toJson(gender),
+      'ID': const DoNothingConverter<String>().toJson(id),
+      'Password': const DoNothingConverter<String>().toJson(password),
+      'Roles':
+          const NullableConverter<List<Role?>, List<Map<String, dynamic>?>>(
+                  ListConverter<Role?, Map<String, dynamic>?>(
+                      NullableConverter<Role, Map<String, dynamic>>(
+                          RoleConverter())))
+              .toJson(roles),
     };
   }
 }
@@ -420,7 +422,7 @@ class PostCreateUserResponse {
   bool status;
 
   PostCreateUserResponse({
-    this.createdType = CreatedType.CreatedTypeGuest,
+    this.createdType = CreatedType.createdTypeGuest,
     this.message = '',
     this.requestedAt,
     this.status = false,
@@ -428,19 +430,19 @@ class PostCreateUserResponse {
 
   factory PostCreateUserResponse.fromJson(Map<String, dynamic> json) {
     return PostCreateUserResponse(
-      createdType: CreatedTypeConverter().fromJson(json['CreatedType']),
-      message: DoNothingConverter<String>().fromJson(json['Message']),
-      requestedAt: DateTimeConverter().fromJson(json['RequestedAt']),
-      status: DoNothingConverter<bool>().fromJson(json['Status']),
+      createdType: const CreatedTypeConverter().fromJson(json['CreatedType']),
+      message: const DoNothingConverter<String>().fromJson(json['Message']),
+      requestedAt: const DateTimeConverter().fromJson(json['RequestedAt']),
+      status: const DoNothingConverter<bool>().fromJson(json['Status']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'CreatedType': CreatedTypeConverter().toJson(createdType),
-      'Message': DoNothingConverter<String>().toJson(message),
-      'RequestedAt': DateTimeConverter().toJson(requestedAt),
-      'Status': DoNothingConverter<bool>().toJson(status),
+      'CreatedType': const CreatedTypeConverter().toJson(createdType),
+      'Message': const DoNothingConverter<String>().toJson(message),
+      'RequestedAt': const DateTimeConverter().toJson(requestedAt),
+      'Status': const DoNothingConverter<bool>().toJson(status),
     };
   }
 }
@@ -472,20 +474,21 @@ class Role {
 
   factory Role.fromJson(Map<String, dynamic> json) {
     return Role(
-      id: DoNothingConverter<int>().fromJson(json['ID']),
-      name: DoNothingConverter<String>().fromJson(json['Name']),
-      recursionRoles: NullableConverter<List<Role>, List<Map<String, dynamic>>>(
-              ListConverter<Role, Map<String, dynamic>>(RoleConverter()))
-          .fromJson(json['RecursionRoles']),
+      id: const DoNothingConverter<int>().fromJson(json['ID']),
+      name: const DoNothingConverter<String>().fromJson(json['Name']),
+      recursionRoles:
+          const NullableConverter<List<Role>, List<Map<String, dynamic>>>(
+                  ListConverter<Role, Map<String, dynamic>>(RoleConverter()))
+              .fromJson(json['RecursionRoles']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'ID': DoNothingConverter<int>().toJson(id),
-      'Name': DoNothingConverter<String>().toJson(name),
+      'ID': const DoNothingConverter<int>().toJson(id),
+      'Name': const DoNothingConverter<String>().toJson(name),
       'RecursionRoles':
-          NullableConverter<List<Role>, List<Map<String, dynamic>>>(
+          const NullableConverter<List<Role>, List<Map<String, dynamic>>>(
                   ListConverter<Role, Map<String, dynamic>>(RoleConverter()))
               .toJson(recursionRoles),
     };

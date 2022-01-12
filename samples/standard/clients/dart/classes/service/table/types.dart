@@ -23,7 +23,7 @@ class ListConverter<T, Base> implements JsonConverter<List<T>, List<Base>> {
 
   @override
   List<Base> toJson(List<T> arr) {
-    return arr.map((e) => internalConverter.toJson(e) as Base).toList();
+    return arr.map((e) => internalConverter.toJson(e)).toList();
   }
 }
 
@@ -117,15 +117,15 @@ class Pos {
 
   factory Pos.fromJson(Map<String, dynamic> json) {
     return Pos(
-      x: DoNothingConverter<int>().fromJson(json['X']),
-      y: DoNothingConverter<int>().fromJson(json['Y']),
+      x: const DoNothingConverter<int>().fromJson(json['X']),
+      y: const DoNothingConverter<int>().fromJson(json['Y']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'X': DoNothingConverter<int>().toJson(x),
-      'Y': DoNothingConverter<int>().toJson(y),
+      'X': const DoNothingConverter<int>().toJson(x),
+      'Y': const DoNothingConverter<int>().toJson(y),
     };
   }
 }
@@ -153,13 +153,13 @@ class Table {
 
   factory Table.fromJson(Map<String, dynamic> json) {
     return Table(
-      pos: PosConverter().fromJson(json['Pos']),
+      pos: const PosConverter().fromJson(json['Pos']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Pos': PosConverter().toJson(pos),
+      'Pos': const PosConverter().toJson(pos),
     };
   }
 }

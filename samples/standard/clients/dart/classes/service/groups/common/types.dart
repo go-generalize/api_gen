@@ -23,7 +23,7 @@ class ListConverter<T, Base> implements JsonConverter<List<T>, List<Base>> {
 
   @override
   List<Base> toJson(List<T> arr) {
-    return arr.map((e) => internalConverter.toJson(e) as Base).toList();
+    return arr.map((e) => internalConverter.toJson(e)).toList();
   }
 }
 
@@ -122,19 +122,19 @@ class Metadata {
 
   factory Metadata.fromJson(Map<String, dynamic> json) {
     return Metadata(
-      createdAt: DateTimeConverter().fromJson(json['CreatedAt']),
-      id: DoNothingConverter<String>().fromJson(json['ID']),
-      name: DoNothingConverter<String>().fromJson(json['Name']),
-      updatedAt: DateTimeConverter().fromJson(json['UpdatedAt']),
+      createdAt: const DateTimeConverter().fromJson(json['CreatedAt']),
+      id: const DoNothingConverter<String>().fromJson(json['ID']),
+      name: const DoNothingConverter<String>().fromJson(json['Name']),
+      updatedAt: const DateTimeConverter().fromJson(json['UpdatedAt']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'CreatedAt': DateTimeConverter().toJson(createdAt),
-      'ID': DoNothingConverter<String>().toJson(id),
-      'Name': DoNothingConverter<String>().toJson(name),
-      'UpdatedAt': DateTimeConverter().toJson(updatedAt),
+      'CreatedAt': const DateTimeConverter().toJson(createdAt),
+      'ID': const DoNothingConverter<String>().toJson(id),
+      'Name': const DoNothingConverter<String>().toJson(name),
+      'UpdatedAt': const DateTimeConverter().toJson(updatedAt),
     };
   }
 }
