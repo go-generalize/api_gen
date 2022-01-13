@@ -23,7 +23,7 @@ class ListConverter<T, Base> implements JsonConverter<List<T>, List<Base>> {
 
   @override
   List<Base> toJson(List<T> arr) {
-    return arr.map((e) => internalConverter.toJson(e) as Base).toList();
+    return arr.map((e) => internalConverter.toJson(e)).toList();
   }
 }
 
@@ -145,15 +145,15 @@ class GetStaticPageResponse {
 
   factory GetStaticPageResponse.fromJson(Map<String, dynamic> json) {
     return GetStaticPageResponse(
-      body: DoNothingConverter<String>().fromJson(json['body']),
-      title: DoNothingConverter<String>().fromJson(json['title']),
+      body: const DoNothingConverter<String>().fromJson(json['body']),
+      title: const DoNothingConverter<String>().fromJson(json['title']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'body': DoNothingConverter<String>().toJson(body),
-      'title': DoNothingConverter<String>().toJson(title),
+      'body': const DoNothingConverter<String>().toJson(body),
+      'title': const DoNothingConverter<String>().toJson(title),
     };
   }
 }

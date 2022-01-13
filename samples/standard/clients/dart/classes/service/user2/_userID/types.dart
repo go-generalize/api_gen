@@ -23,7 +23,7 @@ class ListConverter<T, Base> implements JsonConverter<List<T>, List<Base>> {
 
   @override
   List<Base> toJson(List<T> arr) {
-    return arr.map((e) => internalConverter.toJson(e) as Base).toList();
+    return arr.map((e) => internalConverter.toJson(e)).toList();
   }
 }
 
@@ -116,13 +116,13 @@ class GetUserJobGetRequest {
 
   factory GetUserJobGetRequest.fromJson(Map<String, dynamic> json) {
     return GetUserJobGetRequest(
-      userID: DoNothingConverter<String>().fromJson(json['UserID']),
+      userID: const DoNothingConverter<String>().fromJson(json['UserID']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'UserID': DoNothingConverter<String>().toJson(userID),
+      'UserID': const DoNothingConverter<String>().toJson(userID),
     };
   }
 }
@@ -153,15 +153,15 @@ class GetUserJobGetResponse {
 
   factory GetUserJobGetResponse.fromJson(Map<String, dynamic> json) {
     return GetUserJobGetResponse(
-      jobName: DoNothingConverter<String>().fromJson(json['JobName']),
-      requestTime: DateTimeConverter().fromJson(json['RequestTime']),
+      jobName: const DoNothingConverter<String>().fromJson(json['JobName']),
+      requestTime: const DateTimeConverter().fromJson(json['RequestTime']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'JobName': DoNothingConverter<String>().toJson(jobName),
-      'RequestTime': DateTimeConverter().toJson(requestTime),
+      'JobName': const DoNothingConverter<String>().toJson(jobName),
+      'RequestTime': const DateTimeConverter().toJson(requestTime),
     };
   }
 }

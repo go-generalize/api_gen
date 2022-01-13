@@ -4,8 +4,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import './classes/foo/bar/types.dart' as types__foo_bar;
-import './classes/foo/types.dart' as types__foo;
-import './classes/types.dart' as types_;
 
 class FooBarClient {
   Map<String, String> headers = {};
@@ -16,7 +14,7 @@ class FooBarClient {
     this.baseURL,
     this.headers,
     this.client,
-  ) {}
+  );
 
   Map<String, dynamic> getRequestObject(
       Map<String, dynamic> obj, List<String> routingPath) {
@@ -34,7 +32,7 @@ class FooBarClient {
       Object? mockOption}) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [];
+    final excludeParams = <String>[];
 
     headers = {...this.headers, ...headers ?? {}};
 
@@ -69,10 +67,10 @@ class FooClient {
     this.headers,
     this.client,
   ) {
-    this.bar = FooBarClient(
-      this.baseURL,
-      this.headers,
-      this.client,
+    bar = FooBarClient(
+      baseURL,
+      headers,
+      client,
     );
   }
 
@@ -111,8 +109,8 @@ class APIClient {
 
     this.headers['Content-Type'] = 'application/json';
 
-    this.foo = FooClient(
-      this.baseURL,
+    foo = FooClient(
+      baseURL,
       this.headers,
       this.client,
     );

@@ -3,11 +3,8 @@
 // generated version: (devel)
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import './classes/service/groups/common/types.dart'
-    as types__service_groups_common;
 import './classes/service/groups/types.dart' as types__service_groups;
 import './classes/service/static_page/types.dart' as types__service_static_page;
-import './classes/service/table/types.dart' as types__service_table;
 import './classes/service/types.dart' as types__service;
 import './classes/service/user/types.dart' as types__service_user;
 import './classes/service/user2/_userID/_JobID/types.dart'
@@ -32,30 +29,30 @@ class ServiceClient {
     this.headers,
     this.client,
   ) {
-    this.groups = ServiceGroupsClient(
-      this.baseURL,
-      this.headers,
-      this.client,
+    groups = ServiceGroupsClient(
+      baseURL,
+      headers,
+      client,
     );
-    this.static_page = ServiceStaticPageClient(
-      this.baseURL,
-      this.headers,
-      this.client,
+    static_page = ServiceStaticPageClient(
+      baseURL,
+      headers,
+      client,
     );
-    this.table = ServiceTableClient(
-      this.baseURL,
-      this.headers,
-      this.client,
+    table = ServiceTableClient(
+      baseURL,
+      headers,
+      client,
     );
-    this.user = ServiceUserClient(
-      this.baseURL,
-      this.headers,
-      this.client,
+    user = ServiceUserClient(
+      baseURL,
+      headers,
+      client,
     );
-    this.user2 = ServiceUser2Client(
-      this.baseURL,
-      this.headers,
-      this.client,
+    user2 = ServiceUser2Client(
+      baseURL,
+      headers,
+      client,
     );
   }
 
@@ -75,7 +72,7 @@ class ServiceClient {
       Object? mockOption}) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [];
+    final excludeParams = <String>[];
 
     headers = {...this.headers, ...headers ?? {}};
 
@@ -113,10 +110,10 @@ class ServiceGroupsClient {
     this.headers,
     this.client,
   ) {
-    this.common = ServiceGroupsCommonClient(
-      this.baseURL,
-      this.headers,
-      this.client,
+    common = ServiceGroupsCommonClient(
+      baseURL,
+      headers,
+      client,
     );
   }
 
@@ -136,7 +133,7 @@ class ServiceGroupsClient {
       Object? mockOption}) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [];
+    final excludeParams = <String>[];
 
     headers = {...this.headers, ...headers ?? {}};
 
@@ -172,7 +169,7 @@ class ServiceGroupsCommonClient {
     this.baseURL,
     this.headers,
     this.client,
-  ) {}
+  );
 
   Map<String, dynamic> getRequestObject(
       Map<String, dynamic> obj, List<String> routingPath) {
@@ -193,7 +190,7 @@ class ServiceStaticPageClient {
     this.baseURL,
     this.headers,
     this.client,
-  ) {}
+  );
 
   Map<String, dynamic> getRequestObject(
       Map<String, dynamic> obj, List<String> routingPath) {
@@ -211,7 +208,7 @@ class ServiceStaticPageClient {
       Object? mockOption}) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [];
+    final excludeParams = <String>[];
 
     headers = {...this.headers, ...headers ?? {}};
 
@@ -247,7 +244,7 @@ class ServiceTableClient {
     this.baseURL,
     this.headers,
     this.client,
-  ) {}
+  );
 
   Map<String, dynamic> getRequestObject(
       Map<String, dynamic> obj, List<String> routingPath) {
@@ -270,10 +267,10 @@ class ServiceUser2Client {
     this.headers,
     this.client,
   ) {
-    this.userID = ServiceUser2UserIDClient(
-      this.baseURL,
-      this.headers,
-      this.client,
+    userID = ServiceUser2UserIDClient(
+      baseURL,
+      headers,
+      client,
     );
   }
 
@@ -293,7 +290,7 @@ class ServiceUser2Client {
       Object? mockOption}) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [
+    final excludeParams = <String>[
       'id',
     ];
 
@@ -326,7 +323,7 @@ class ServiceUser2Client {
       Object? mockOption}) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [
+    final excludeParams = <String>[
       'id',
     ];
 
@@ -361,7 +358,7 @@ class ServiceUser2Client {
       Object? mockOption}) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [];
+    final excludeParams = <String>[];
 
     headers = {...this.headers, ...headers ?? {}};
 
@@ -393,7 +390,7 @@ class ServiceUser2Client {
           Object? mockOption}) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [];
+    final excludeParams = <String>[];
 
     headers = {...this.headers, ...headers ?? {}};
 
@@ -429,10 +426,10 @@ class ServiceUser2UserIDClient {
     this.headers,
     this.client,
   ) {
-    this.JobID = ServiceUser2UserIDJobIDClient(
-      this.baseURL,
-      this.headers,
-      this.client,
+    JobID = ServiceUser2UserIDJobIDClient(
+      baseURL,
+      headers,
+      client,
     );
   }
 
@@ -452,7 +449,7 @@ class ServiceUser2UserIDClient {
       Object? mockOption}) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [
+    final excludeParams = <String>[
       'UserID',
     ];
 
@@ -490,7 +487,7 @@ class ServiceUser2UserIDJobIDClient {
     this.baseURL,
     this.headers,
     this.client,
-  ) {}
+  );
 
   Map<String, dynamic> getRequestObject(
       Map<String, dynamic> obj, List<String> routingPath) {
@@ -508,7 +505,7 @@ class ServiceUser2UserIDJobIDClient {
       Object? mockOption}) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [
+    final excludeParams = <String>[
       'JobID',
       'UserID',
     ];
@@ -546,7 +543,7 @@ class ServiceUserClient {
     this.baseURL,
     this.headers,
     this.client,
-  ) {}
+  );
 
   Map<String, dynamic> getRequestObject(
       Map<String, dynamic> obj, List<String> routingPath) {
@@ -564,7 +561,7 @@ class ServiceUserClient {
       Object? mockOption}) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [];
+    final excludeParams = <String>[];
 
     headers = {...this.headers, ...headers ?? {}};
 
@@ -596,7 +593,7 @@ class ServiceUserClient {
       Object? mockOption}) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [];
+    final excludeParams = <String>[];
 
     headers = {...this.headers, ...headers ?? {}};
 
@@ -628,7 +625,7 @@ class ServiceUserClient {
           Object? mockOption}) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [];
+    final excludeParams = <String>[];
 
     headers = {...this.headers, ...headers ?? {}};
 
@@ -678,8 +675,8 @@ class APIClient {
 
     this.headers['Content-Type'] = 'application/json';
 
-    this.service = ServiceClient(
-      this.baseURL,
+    service = ServiceClient(
+      baseURL,
       this.headers,
       this.client,
     );
@@ -700,7 +697,7 @@ class APIClient {
       Object? mockOption}) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [];
+    final excludeParams = <String>[];
 
     headers = {...this.headers, ...headers ?? {}};
 
@@ -732,7 +729,7 @@ class APIClient {
       Object? mockOption}) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [];
+    final excludeParams = <String>[];
 
     headers = {...this.headers, ...headers ?? {}};
 
@@ -762,7 +759,7 @@ class APIClient {
       Object? mockOption}) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [];
+    final excludeParams = <String>[];
 
     headers = {...this.headers, ...headers ?? {}};
 

@@ -23,7 +23,7 @@ class ListConverter<T, Base> implements JsonConverter<List<T>, List<Base>> {
 
   @override
   List<Base> toJson(List<T> arr) {
-    return arr.map((e) => internalConverter.toJson(e) as Base).toList();
+    return arr.map((e) => internalConverter.toJson(e)).toList();
   }
 }
 
@@ -116,13 +116,13 @@ class DeleteUserRequest {
 
   factory DeleteUserRequest.fromJson(Map<String, dynamic> json) {
     return DeleteUserRequest(
-      id: DoNothingConverter<String>().fromJson(json['id']),
+      id: const DoNothingConverter<String>().fromJson(json['id']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'id': DoNothingConverter<String>().toJson(id),
+      'id': const DoNothingConverter<String>().toJson(id),
     };
   }
 }
@@ -178,13 +178,13 @@ class Embedding {
 
   factory Embedding.fromJson(Map<String, dynamic> json) {
     return Embedding(
-      page: DoNothingConverter<String>().fromJson(json['page']),
+      page: const DoNothingConverter<String>().fromJson(json['page']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'page': DoNothingConverter<String>().toJson(page),
+      'page': const DoNothingConverter<String>().toJson(page),
     };
   }
 }
@@ -217,18 +217,19 @@ class GetUserRequest {
 
   factory GetUserRequest.fromJson(Map<String, dynamic> json) {
     return GetUserRequest(
-      id: DoNothingConverter<String>().fromJson(json['id']),
-      page: DoNothingConverter<String>().fromJson(json['page']),
+      id: const DoNothingConverter<String>().fromJson(json['id']),
+      page: const DoNothingConverter<String>().fromJson(json['page']),
       searchRequest:
-          DoNothingConverter<String>().fromJson(json['search_request']),
+          const DoNothingConverter<String>().fromJson(json['search_request']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'id': DoNothingConverter<String>().toJson(id),
-      'page': DoNothingConverter<String>().toJson(page),
-      'search_request': DoNothingConverter<String>().toJson(searchRequest),
+      'id': const DoNothingConverter<String>().toJson(id),
+      'page': const DoNothingConverter<String>().toJson(page),
+      'search_request':
+          const DoNothingConverter<String>().toJson(searchRequest),
     };
   }
 }
@@ -261,18 +262,18 @@ class GetUserResponse {
 
   factory GetUserResponse.fromJson(Map<String, dynamic> json) {
     return GetUserResponse(
-      id: DoNothingConverter<String>().fromJson(json['ID']),
-      requestTime: DateTimeConverter().fromJson(json['RequestTime']),
+      id: const DoNothingConverter<String>().fromJson(json['ID']),
+      requestTime: const DateTimeConverter().fromJson(json['RequestTime']),
       searchRequest:
-          DoNothingConverter<String>().fromJson(json['SearchRequest']),
+          const DoNothingConverter<String>().fromJson(json['SearchRequest']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'ID': DoNothingConverter<String>().toJson(id),
-      'RequestTime': DateTimeConverter().toJson(requestTime),
-      'SearchRequest': DoNothingConverter<String>().toJson(searchRequest),
+      'ID': const DoNothingConverter<String>().toJson(id),
+      'RequestTime': const DateTimeConverter().toJson(requestTime),
+      'SearchRequest': const DoNothingConverter<String>().toJson(searchRequest),
     };
   }
 }
@@ -301,13 +302,13 @@ class PostUpdateUserNameRequest {
 
   factory PostUpdateUserNameRequest.fromJson(Map<String, dynamic> json) {
     return PostUpdateUserNameRequest(
-      name: DoNothingConverter<String>().fromJson(json['Name']),
+      name: const DoNothingConverter<String>().fromJson(json['Name']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Name': DoNothingConverter<String>().toJson(name),
+      'Name': const DoNothingConverter<String>().toJson(name),
     };
   }
 }
@@ -340,17 +341,17 @@ class PostUpdateUserNameResponse {
 
   factory PostUpdateUserNameResponse.fromJson(Map<String, dynamic> json) {
     return PostUpdateUserNameResponse(
-      message: DoNothingConverter<String>().fromJson(json['Message']),
-      requestTime: DateTimeConverter().fromJson(json['RequestTime']),
-      status: DoNothingConverter<bool>().fromJson(json['Status']),
+      message: const DoNothingConverter<String>().fromJson(json['Message']),
+      requestTime: const DateTimeConverter().fromJson(json['RequestTime']),
+      status: const DoNothingConverter<bool>().fromJson(json['Status']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Message': DoNothingConverter<String>().toJson(message),
-      'RequestTime': DateTimeConverter().toJson(requestTime),
-      'Status': DoNothingConverter<bool>().toJson(status),
+      'Message': const DoNothingConverter<String>().toJson(message),
+      'RequestTime': const DateTimeConverter().toJson(requestTime),
+      'Status': const DoNothingConverter<bool>().toJson(status),
     };
   }
 }
@@ -382,16 +383,17 @@ class PostUpdateUserPasswordRequest {
 
   factory PostUpdateUserPasswordRequest.fromJson(Map<String, dynamic> json) {
     return PostUpdateUserPasswordRequest(
-      password: DoNothingConverter<String>().fromJson(json['Password']),
+      password: const DoNothingConverter<String>().fromJson(json['Password']),
       passwordConfirm:
-          DoNothingConverter<String>().fromJson(json['PasswordConfirm']),
+          const DoNothingConverter<String>().fromJson(json['PasswordConfirm']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Password': DoNothingConverter<String>().toJson(password),
-      'PasswordConfirm': DoNothingConverter<String>().toJson(passwordConfirm),
+      'Password': const DoNothingConverter<String>().toJson(password),
+      'PasswordConfirm':
+          const DoNothingConverter<String>().toJson(passwordConfirm),
     };
   }
 }
@@ -426,17 +428,17 @@ class PostUpdateUserPasswordResponse {
 
   factory PostUpdateUserPasswordResponse.fromJson(Map<String, dynamic> json) {
     return PostUpdateUserPasswordResponse(
-      message: DoNothingConverter<String>().fromJson(json['Message']),
-      requestTime: DateTimeConverter().fromJson(json['RequestTime']),
-      status: DoNothingConverter<bool>().fromJson(json['Status']),
+      message: const DoNothingConverter<String>().fromJson(json['Message']),
+      requestTime: const DateTimeConverter().fromJson(json['RequestTime']),
+      status: const DoNothingConverter<bool>().fromJson(json['Status']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Message': DoNothingConverter<String>().toJson(message),
-      'RequestTime': DateTimeConverter().toJson(requestTime),
-      'Status': DoNothingConverter<bool>().toJson(status),
+      'Message': const DoNothingConverter<String>().toJson(message),
+      'RequestTime': const DateTimeConverter().toJson(requestTime),
+      'Status': const DoNothingConverter<bool>().toJson(status),
     };
   }
 }

@@ -142,8 +142,10 @@ func (g *generator) generateGroup(gr *parser.Group) childrenType {
 		client.Children = append(client.Children, g.generateGroup(child))
 	}
 
-	// Update global variables
-	g.Imports = append(g.Imports, it)
+	if len(client.Methods) != 0 {
+		// Update global variables
+		g.Imports = append(g.Imports, it)
+	}
 
 	if gr.GetParent() == nil {
 		g.clientType = client
