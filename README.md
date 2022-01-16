@@ -1,9 +1,9 @@
 # api_gen
 ## What's api_gen?
-api_gen accelerates the development of API servers.
+api_gen accelerates the development of API servers.  
 It generates a boilerplate for your API server in Go and clients in Go, TypeScript and so on.
 
-Server: Go
+Server: Go  
 Client: Go, TypeScript, Dart
 
 ## Prerequisite
@@ -20,11 +20,15 @@ $ go install github.com/go-generalize/api_gen/v2/cmd/api_gen@latest # latest or 
 ```
 
 ## Basic Usage
-Prepare API definitions in Go. The path of directories are mapped to the path of URLs.
+Prepare API definitions in Go.  
+The path of directories are mapped to the path of URLs.
 
-Define types for both of requests and responses. All types must consist of three parts: method, endpoint name, request or response. The below example is types for `POST /foo/bar/update_user`.
+Define types for both of requests and responses.  
+All types must consist of three parts: method, endpoint name, request or response.  
+The below example is types for `POST /foo/bar/update_user`.
 
-Requests are bound with the Binder in [echo](https://echo.labstack.com). Please refer to [Binding](https://echo.labstack.com/guide/binding/).
+Requests are bound with the Binder in [echo](https://echo.labstack.com).  
+Please refer to [Binding](https://echo.labstack.com/guide/binding/). 
 Responses are encoded in JSON.
 
 ```go
