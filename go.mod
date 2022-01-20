@@ -7,7 +7,7 @@ require (
 	github.com/go-generalize/go2ts v1.5.2
 	github.com/go-utils/count v0.0.1
 	github.com/go-utils/gopackages v0.0.0-20210218102646-e7d1f0008968
-	github.com/google/go-cmp v0.5.6
+	github.com/google/go-cmp v0.5.7
 	github.com/iancoleman/strcase v0.2.0
 	github.com/labstack/echo/v4 v4.6.3
 	github.com/mattn/go-isatty v0.0.14 // indirect
