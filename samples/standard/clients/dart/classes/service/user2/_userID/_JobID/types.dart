@@ -55,10 +55,8 @@ class DateTimeConverter implements JsonConverter<DateTime, String> {
   }
 
   @override
-  String toJson(DateTime? dt) {
-    return (dt ?? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true))
-        .toUtc()
-        .toIso8601String();
+  String toJson(DateTime dt) {
+    return dt.toUtc().toIso8601String();
   }
 }
 
@@ -148,12 +146,12 @@ class PutJobResponseConverter
 
 class PutJobResponse {
   String jobID;
-  DateTime? requestTime;
+  DateTime requestTime;
   String userID;
 
   PutJobResponse({
     this.jobID = '',
-    this.requestTime,
+    required this.requestTime,
     this.userID = '',
   });
 

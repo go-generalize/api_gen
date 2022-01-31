@@ -55,10 +55,8 @@ class DateTimeConverter implements JsonConverter<DateTime, String> {
   }
 
   @override
-  String toJson(DateTime? dt) {
-    return (dt ?? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true))
-        .toUtc()
-        .toIso8601String();
+  String toJson(DateTime dt) {
+    return dt.toUtc().toIso8601String();
   }
 }
 
@@ -108,16 +106,16 @@ class MetadataConverter
 }
 
 class Metadata {
-  DateTime? createdAt;
+  DateTime createdAt;
   String id;
   String name;
-  DateTime? updatedAt;
+  DateTime updatedAt;
 
   Metadata({
-    this.createdAt,
+    required this.createdAt,
     this.id = '',
     this.name = '',
-    this.updatedAt,
+    required this.updatedAt,
   });
 
   factory Metadata.fromJson(Map<String, dynamic> json) {
