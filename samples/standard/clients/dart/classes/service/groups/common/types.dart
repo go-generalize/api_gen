@@ -55,10 +55,8 @@ class DateTimeConverter implements JsonConverter<DateTime, String> {
   }
 
   @override
-  String toJson(DateTime? dt) {
-    return (dt ?? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true))
-        .toUtc()
-        .toIso8601String();
+  String toJson(DateTime dt) {
+    return dt.toUtc().toIso8601String();
   }
 }
 
@@ -108,21 +106,25 @@ class MetadataConverter
 }
 
 class Metadata {
-  DateTime? createdAt;
+  DateTime createdAt;
+  DateTime? deletedAt;
   String id;
   String name;
-  DateTime? updatedAt;
+  DateTime updatedAt;
 
   Metadata({
-    this.createdAt,
+    required this.createdAt,
+    this.deletedAt,
     this.id = '',
     this.name = '',
-    this.updatedAt,
+    required this.updatedAt,
   });
 
   factory Metadata.fromJson(Map<String, dynamic> json) {
     return Metadata(
       createdAt: const DateTimeConverter().fromJson(json['CreatedAt']),
+      deletedAt: const NullableConverter<DateTime, String>(DateTimeConverter())
+          .fromJson(json['DeletedAt']),
       id: const DoNothingConverter<String>().fromJson(json['ID']),
       name: const DoNothingConverter<String>().fromJson(json['Name']),
       updatedAt: const DateTimeConverter().fromJson(json['UpdatedAt']),
@@ -132,6 +134,9 @@ class Metadata {
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'CreatedAt': const DateTimeConverter().toJson(createdAt),
+      'DeletedAt':
+          const NullableConverter<DateTime, String>(DateTimeConverter())
+              .toJson(deletedAt),
       'ID': const DoNothingConverter<String>().toJson(id),
       'Name': const DoNothingConverter<String>().toJson(name),
       'UpdatedAt': const DateTimeConverter().toJson(updatedAt),

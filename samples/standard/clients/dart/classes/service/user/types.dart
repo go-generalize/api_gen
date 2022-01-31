@@ -55,10 +55,8 @@ class DateTimeConverter implements JsonConverter<DateTime, String> {
   }
 
   @override
-  String toJson(DateTime? dt) {
-    return (dt ?? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true))
-        .toUtc()
-        .toIso8601String();
+  String toJson(DateTime dt) {
+    return dt.toUtc().toIso8601String();
   }
 }
 
@@ -198,12 +196,12 @@ class PostUpdateUserNameResponseConverter
 
 class PostUpdateUserNameResponse {
   String message;
-  DateTime? requestTime;
+  DateTime requestTime;
   bool status;
 
   PostUpdateUserNameResponse({
     this.message = '',
-    this.requestTime,
+    required this.requestTime,
     this.status = false,
   });
 
@@ -285,12 +283,12 @@ class PostUpdateUserPasswordResponseConverter
 
 class PostUpdateUserPasswordResponse {
   String message;
-  DateTime? requestTime;
+  DateTime requestTime;
   bool status;
 
   PostUpdateUserPasswordResponse({
     this.message = '',
-    this.requestTime,
+    required this.requestTime,
     this.status = false,
   });
 

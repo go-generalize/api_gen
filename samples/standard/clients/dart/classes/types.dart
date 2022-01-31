@@ -55,10 +55,8 @@ class DateTimeConverter implements JsonConverter<DateTime, String> {
   }
 
   @override
-  String toJson(DateTime? dt) {
-    return (dt ?? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true))
-        .toUtc()
-        .toIso8601String();
+  String toJson(DateTime dt) {
+    return dt.toUtc().toIso8601String();
   }
 }
 
@@ -192,12 +190,12 @@ class GetRequestConverter
 class GetRequest {
   Enum enum_;
   String param;
-  DateTime? time;
+  DateTime time;
 
   GetRequest({
     this.enum_ = Enum.enumA,
     this.param = '',
-    this.time,
+    required this.time,
   });
 
   factory GetRequest.fromJson(Map<String, dynamic> json) {
@@ -318,11 +316,11 @@ class PostCreateTableResponseConverter
 
 class PostCreateTableResponse {
   String id;
-  DateTime? requestTime;
+  DateTime requestTime;
 
   PostCreateTableResponse({
     this.id = '',
-    this.requestTime,
+    required this.requestTime,
   });
 
   factory PostCreateTableResponse.fromJson(Map<String, dynamic> json) {
@@ -356,14 +354,14 @@ class PostCreateUserRequestConverter
 }
 
 class PostCreateUserRequest {
-  DateTime? birthday;
+  DateTime birthday;
   int gender;
   String id;
   String password;
   List<Role?>? roles;
 
   PostCreateUserRequest({
-    this.birthday,
+    required this.birthday,
     this.gender = 0,
     this.id = '',
     this.password = '',
@@ -418,13 +416,13 @@ class PostCreateUserResponseConverter
 class PostCreateUserResponse {
   CreatedType createdType;
   String message;
-  DateTime? requestedAt;
+  DateTime requestedAt;
   bool status;
 
   PostCreateUserResponse({
     this.createdType = CreatedType.createdTypeGuest,
     this.message = '',
-    this.requestedAt,
+    required this.requestedAt,
     this.status = false,
   });
 

@@ -55,10 +55,8 @@ class DateTimeConverter implements JsonConverter<DateTime, String> {
   }
 
   @override
-  String toJson(DateTime? dt) {
-    return (dt ?? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true))
-        .toUtc()
-        .toIso8601String();
+  String toJson(DateTime dt) {
+    return dt.toUtc().toIso8601String();
   }
 }
 
@@ -144,11 +142,11 @@ class GetUserJobGetResponseConverter
 
 class GetUserJobGetResponse {
   String jobName;
-  DateTime? requestTime;
+  DateTime requestTime;
 
   GetUserJobGetResponse({
     this.jobName = '',
-    this.requestTime,
+    required this.requestTime,
   });
 
   factory GetUserJobGetResponse.fromJson(Map<String, dynamic> json) {

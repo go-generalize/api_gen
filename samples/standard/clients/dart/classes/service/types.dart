@@ -55,10 +55,8 @@ class DateTimeConverter implements JsonConverter<DateTime, String> {
   }
 
   @override
-  String toJson(DateTime? dt) {
-    return (dt ?? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true))
-        .toUtc()
-        .toIso8601String();
+  String toJson(DateTime dt) {
+    return dt.toUtc().toIso8601String();
   }
 }
 
@@ -146,13 +144,13 @@ class GetArticleResponse {
   String body;
   List<String>? group;
   int id;
-  DateTime? requestTime;
+  DateTime requestTime;
 
   GetArticleResponse({
     this.body = '',
     this.group,
     this.id = 0,
-    this.requestTime,
+    required this.requestTime,
   });
 
   factory GetArticleResponse.fromJson(Map<String, dynamic> json) {
