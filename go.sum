@@ -128,6 +128,8 @@ github.com/go-generalize/go-easyparser v0.2.0 h1:BAkuf9qkgIX1rm2nMVT3HiXO787Tnja
 github.com/go-generalize/go-easyparser v0.2.0/go.mod h1:I+Ifnjzw7UNzxkENknQQY9yB2gsz9RekzAbKLYq/Dzw=
 github.com/go-generalize/go2dart v0.4.8 h1:nZe5bZK9TbN33XW8VTULaBFzmIGbjtI2JVUrLwNgaKE=
 github.com/go-generalize/go2dart v0.4.8/go.mod h1:peqHvoBnlWmpJPoYaIyGBditWFaNZ6jR0ywbIRNdY8o=
+github.com/go-generalize/go2dart v0.4.9 h1:R++eSeNs/P81BZL90DIOJ6E7Hup9UU8WM6A0X8u5rlQ=
+github.com/go-generalize/go2dart v0.4.9/go.mod h1:peqHvoBnlWmpJPoYaIyGBditWFaNZ6jR0ywbIRNdY8o=
 github.com/go-generalize/go2go v0.0.0-20210311170338-9701de42e3ad h1:9oYY/ZcAf3VVRhxaxolqoTVprrx9A7N8INWAfWCRwBc=
 github.com/go-generalize/go2go v0.0.0-20210311170338-9701de42e3ad/go.mod h1:YCmZm0ss4r71rT/Q6AgK4vre4tSFfJ1W/eDHWsmnLCc=
 github.com/go-generalize/go2ts v1.0.5-0.20210311100632-95c274e947f1/go.mod h1:075q+zcpc6IjwYy9WpJpY+M9ssbEA6uccjzWwr59t3M=
