@@ -516,6 +516,9 @@ var doc = `{
                 "createdAt": {
                     "type": "string"
                 },
+                "deletedAt": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },

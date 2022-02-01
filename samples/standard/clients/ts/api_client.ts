@@ -164,18 +164,18 @@ class ServiceClient {
 		}
 	}
 
-	/** @deprecated */
-	async getArticle(
-		param: ServiceGetArticleRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<ServiceGetArticleResponse>;
 	async getArticle(
 		param: ServiceGetArticleRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<ServiceGetArticleResponse>;
+	/** @deprecated */
+	async getArticle(
+		param: ServiceGetArticleRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<ServiceGetArticleResponse>;
 
 	async getArticle(
@@ -300,18 +300,18 @@ class ServiceGroupsClient {
 		}
 	}
 
-	/** @deprecated */
-	async getGroups(
-		param: ServiceGroupsGetGroupsRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<ServiceGroupsGetGroupsResponse>;
 	async getGroups(
 		param: ServiceGroupsGetGroupsRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<ServiceGroupsGetGroupsResponse>;
+	/** @deprecated */
+	async getGroups(
+		param: ServiceGroupsGetGroupsRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<ServiceGroupsGetGroupsResponse>;
 
 	async getGroups(
@@ -472,18 +472,18 @@ class ServiceStaticPageClient {
 		}
 	}
 
-	/** @deprecated */
-	async getStaticPage(
-		param: ServiceStaticPageGetStaticPageRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<ServiceStaticPageGetStaticPageResponse>;
 	async getStaticPage(
 		param: ServiceStaticPageGetStaticPageRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<ServiceStaticPageGetStaticPageResponse>;
+	/** @deprecated */
+	async getStaticPage(
+		param: ServiceStaticPageGetStaticPageRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<ServiceStaticPageGetStaticPageResponse>;
 
 	async getStaticPage(
@@ -655,18 +655,18 @@ class ServiceUser2Client {
 		}
 	}
 
-	/** @deprecated */
-	async deleteUser(
-		param: ServiceUser2DeleteUserRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<ServiceUser2DeleteUserResponse>;
 	async deleteUser(
 		param: ServiceUser2DeleteUserRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<ServiceUser2DeleteUserResponse>;
+	/** @deprecated */
+	async deleteUser(
+		param: ServiceUser2DeleteUserRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<ServiceUser2DeleteUserResponse>;
 
 	async deleteUser(
@@ -735,18 +735,18 @@ class ServiceUser2Client {
 		return res;
 	}
 
-	/** @deprecated */
-	async getUser(
-		param: ServiceUser2GetUserRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<ServiceUser2GetUserResponse>;
 	async getUser(
 		param: ServiceUser2GetUserRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<ServiceUser2GetUserResponse>;
+	/** @deprecated */
+	async getUser(
+		param: ServiceUser2GetUserRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<ServiceUser2GetUserResponse>;
 
 	async getUser(
@@ -813,18 +813,18 @@ class ServiceUser2Client {
 		return res;
 	}
 
-	/** @deprecated */
-	async postUpdateUserName(
-		param: ServiceUser2PostUpdateUserNameRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<ServiceUser2PostUpdateUserNameResponse>;
 	async postUpdateUserName(
 		param: ServiceUser2PostUpdateUserNameRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<ServiceUser2PostUpdateUserNameResponse>;
+	/** @deprecated */
+	async postUpdateUserName(
+		param: ServiceUser2PostUpdateUserNameRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<ServiceUser2PostUpdateUserNameResponse>;
 
 	async postUpdateUserName(
@@ -892,18 +892,18 @@ class ServiceUser2Client {
 		return res;
 	}
 
-	/** @deprecated */
-	async postUpdateUserPassword(
-		param: ServiceUser2PostUpdateUserPasswordRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<ServiceUser2PostUpdateUserPasswordResponse>;
 	async postUpdateUserPassword(
 		param: ServiceUser2PostUpdateUserPasswordRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<ServiceUser2PostUpdateUserPasswordResponse>;
+	/** @deprecated */
+	async postUpdateUserPassword(
+		param: ServiceUser2PostUpdateUserPasswordRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<ServiceUser2PostUpdateUserPasswordResponse>;
 
 	async postUpdateUserPassword(
@@ -1029,18 +1029,18 @@ class ServiceUser2UserIDClient {
 		}
 	}
 
-	/** @deprecated */
-	async getUserJobGet(
-		param: ServiceUser2UserIDGetUserJobGetRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<ServiceUser2UserIDGetUserJobGetResponse>;
 	async getUserJobGet(
 		param: ServiceUser2UserIDGetUserJobGetRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<ServiceUser2UserIDGetUserJobGetResponse>;
+	/** @deprecated */
+	async getUserJobGet(
+		param: ServiceUser2UserIDGetUserJobGetRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<ServiceUser2UserIDGetUserJobGetResponse>;
 
 	async getUserJobGet(
@@ -1154,18 +1154,18 @@ class ServiceUser2UserIDJobIDClient {
 		}
 	}
 
-	/** @deprecated */
-	async putJob(
-		param: ServiceUser2UserIDJobIDPutJobRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<ServiceUser2UserIDJobIDPutJobResponse>;
 	async putJob(
 		param: ServiceUser2UserIDJobIDPutJobRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<ServiceUser2UserIDJobIDPutJobResponse>;
+	/** @deprecated */
+	async putJob(
+		param: ServiceUser2UserIDJobIDPutJobRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<ServiceUser2UserIDJobIDPutJobResponse>;
 
 	async putJob(
@@ -1280,18 +1280,18 @@ class ServiceUserClient {
 		}
 	}
 
-	/** @deprecated */
-	async get(
-		param: ServiceUserGetRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<ServiceUserGetResponse>;
 	async get(
 		param: ServiceUserGetRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<ServiceUserGetResponse>;
+	/** @deprecated */
+	async get(
+		param: ServiceUserGetRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<ServiceUserGetResponse>;
 
 	async get(
@@ -1359,18 +1359,18 @@ class ServiceUserClient {
 		return res;
 	}
 
-	/** @deprecated */
-	async postUpdateUserName(
-		param: ServiceUserPostUpdateUserNameRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<ServiceUserPostUpdateUserNameResponse>;
 	async postUpdateUserName(
 		param: ServiceUserPostUpdateUserNameRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<ServiceUserPostUpdateUserNameResponse>;
+	/** @deprecated */
+	async postUpdateUserName(
+		param: ServiceUserPostUpdateUserNameRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<ServiceUserPostUpdateUserNameResponse>;
 
 	async postUpdateUserName(
@@ -1438,18 +1438,18 @@ class ServiceUserClient {
 		return res;
 	}
 
-	/** @deprecated */
-	async postUpdateUserPassword(
-		param: ServiceUserPostUpdateUserPasswordRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<ServiceUserPostUpdateUserPasswordResponse>;
 	async postUpdateUserPassword(
 		param: ServiceUserPostUpdateUserPasswordRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<ServiceUserPostUpdateUserPasswordResponse>;
+	/** @deprecated */
+	async postUpdateUserPassword(
+		param: ServiceUserPostUpdateUserPasswordRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<ServiceUserPostUpdateUserPasswordResponse>;
 
 	async postUpdateUserPassword(
@@ -1528,13 +1528,36 @@ export class APIClient {
 
 	public service: ServiceClient;
 
+	constructor(opt: {
+		token?: string,
+		commonHeaders?: {[key: string]: string},
+		baseURL?: string,
+		commonOptions?: {[key: string]: any},
+		middleware?: middlewareSet
+	});
 	constructor(
 		token?: string,
 		commonHeaders?: {[key: string]: string},
 		baseURL?: string,
-		commonOptions: {[key: string]: any} = {},
+		commonOptions?: {[key: string]: any},
+		middleware?: middlewareSet
+	);
+
+	constructor(
+		token?: any,
+		commonHeaders?: {[key: string]: string},
+		baseURL?: string,
+		commonOptions?: {[key: string]: any},
 		middleware?: middlewareSet
 	) {
+		if (token !== null && (typeof token === 'object')) {
+			commonHeaders = token.commonHeaders;
+			baseURL = token.baseURL;
+			commonOptions = token.commonOptions;
+			middleware = token.middleware;
+			token = token.token;
+		}
+
 		const headers: {[key: string]: string} =  {
 			'Content-Type': 'application/json',
 			...commonHeaders,
@@ -1545,7 +1568,7 @@ export class APIClient {
 		}
 
 		this.baseURL =  (baseURL === undefined) ? "" : baseURL;
-		this.options = commonOptions;
+		this.options = commonOptions ?? {};
 		this.headers = headers;
 
 		if (middleware) {
@@ -1598,18 +1621,18 @@ export class APIClient {
 		}
 	}
 
-	/** @deprecated */
-	async get(
-		param: GetRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<GetResponse>;
 	async get(
 		param: GetRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<GetResponse>;
+	/** @deprecated */
+	async get(
+		param: GetRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<GetResponse>;
 
 	async get(
@@ -1681,18 +1704,18 @@ export class APIClient {
 		return res;
 	}
 
-	/** @deprecated */
-	async postCreateTable(
-		param: PostCreateTableRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<PostCreateTableResponse>;
 	async postCreateTable(
 		param: PostCreateTableRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<PostCreateTableResponse>;
+	/** @deprecated */
+	async postCreateTable(
+		param: PostCreateTableRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<PostCreateTableResponse>;
 
 	async postCreateTable(
@@ -1766,18 +1789,18 @@ export class APIClient {
 		return res;
 	}
 
-	/** @deprecated */
-	async postCreateUser(
-		param: PostCreateUserRequest,
-		headers?: {[key: string]: string},
-		options?: {[key: string]: any}
-	): Promise<PostCreateUserResponse>;
 	async postCreateUser(
 		param: PostCreateUserRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
 		}
+	): Promise<PostCreateUserResponse>;
+	/** @deprecated */
+	async postCreateUser(
+		param: PostCreateUserRequest,
+		headers?: {[key: string]: string},
+		options?: {[key: string]: any}
 	): Promise<PostCreateUserResponse>;
 
 	async postCreateUser(

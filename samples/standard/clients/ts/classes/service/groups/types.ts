@@ -15,6 +15,7 @@ export type GetGroupsResponse = {
 }
 export type Metadata = {
 	CreatedAt: string;
+	DeletedAt: string | null;
 	ID: string;
 	Name: string;
 	UpdatedAt: string;

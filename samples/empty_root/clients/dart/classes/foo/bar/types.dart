@@ -2,10 +2,6 @@
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
 // generated version: (devel)
 
-import 'dart:convert';
-
-import 'package:intl/intl.dart';
-
 abstract class JsonConverter<T, S> {
   const JsonConverter();
 
@@ -18,44 +14,49 @@ class ListConverter<T, Base> implements JsonConverter<List<T>, List<Base>> {
 
   final JsonConverter<T, Base> internalConverter;
 
-  @override 
+  @override
   List<T> fromJson(dynamic arr) {
-    return List<dynamic>.from(arr).map((e) => internalConverter.fromJson(e)).toList();
+    return List<dynamic>.from(arr)
+        .map((e) => internalConverter.fromJson(e))
+        .toList();
   }
 
   @override
   List<Base> toJson(List<T> arr) {
-    return arr.map((e) => internalConverter.toJson(e) as Base).toList();
+    return arr.map((e) => internalConverter.toJson(e)).toList();
   }
 }
 
-class MapConverter<K, T, Base> implements JsonConverter<Map<K, T>, Map<K, Base>> {
+class MapConverter<K, T, Base>
+    implements JsonConverter<Map<K, T>, Map<K, Base>> {
   const MapConverter(this.internalConverter);
 
   final JsonConverter<T, Base> internalConverter;
 
-  @override 
+  @override
   Map<K, T> fromJson(dynamic m) {
-    return Map<K, dynamic>.from(m).map((key, value) => MapEntry<K, T>(key, internalConverter.fromJson(value)));
+    return Map<K, dynamic>.from(m).map(
+        (key, value) => MapEntry<K, T>(key, internalConverter.fromJson(value)));
   }
 
   @override
   Map<K, Base> toJson(Map<K, T> m) {
-    return m.map((key, value) => MapEntry<K, Base>(key, internalConverter.toJson(value)));
+    return m.map((key, value) =>
+        MapEntry<K, Base>(key, internalConverter.toJson(value)));
   }
 }
 
 class DateTimeConverter implements JsonConverter<DateTime, String> {
   const DateTimeConverter();
 
-  @override 
+  @override
   DateTime fromJson(dynamic s) {
     return DateTime.parse(s as String);
   }
 
   @override
-  String toJson(DateTime? dt) {
-    return (dt ?? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true)).toUtc().toIso8601String();
+  String toJson(DateTime dt) {
+    return dt.toUtc().toIso8601String();
   }
 }
 
@@ -64,7 +65,7 @@ class NullableConverter<T, Base> implements JsonConverter<T?, Base?> {
 
   final JsonConverter<T, Base> internalConverter;
 
-  @override 
+  @override
   T? fromJson(dynamic s) {
     return s == null ? null : internalConverter.fromJson(s);
   }
@@ -78,7 +79,7 @@ class NullableConverter<T, Base> implements JsonConverter<T?, Base?> {
 class DoNothingConverter<T> implements JsonConverter<T, T> {
   const DoNothingConverter();
 
-  @override 
+  @override
   T fromJson(dynamic s) {
     return s as T;
   }
@@ -89,10 +90,11 @@ class DoNothingConverter<T> implements JsonConverter<T, T> {
   }
 }
 
-class PostUserRequestConverter implements JsonConverter<PostUserRequest, Map<String, dynamic>> {
+class PostUserRequestConverter
+    implements JsonConverter<PostUserRequest, Map<String, dynamic>> {
   const PostUserRequestConverter();
 
-  @override 
+  @override
   PostUserRequest fromJson(dynamic s) {
     return PostUserRequest.fromJson(Map<String, dynamic>.from(s));
   }
@@ -107,20 +109,19 @@ class PostUserRequest {
   PostUserRequest();
 
   factory PostUserRequest.fromJson(Map<String, dynamic> json) {
-    return PostUserRequest(
-    );
+    return PostUserRequest();
   }
 
   Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-    };
+    return <String, dynamic>{};
   }
 }
 
-class PostUserResponseConverter implements JsonConverter<PostUserResponse, Map<String, dynamic>> {
+class PostUserResponseConverter
+    implements JsonConverter<PostUserResponse, Map<String, dynamic>> {
   const PostUserResponseConverter();
 
-  @override 
+  @override
   PostUserResponse fromJson(dynamic s) {
     return PostUserResponse.fromJson(Map<String, dynamic>.from(s));
   }
@@ -135,12 +136,10 @@ class PostUserResponse {
   PostUserResponse();
 
   factory PostUserResponse.fromJson(Map<String, dynamic> json) {
-    return PostUserResponse(
-    );
+    return PostUserResponse();
   }
 
   Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-    };
+    return <String, dynamic>{};
   }
 }

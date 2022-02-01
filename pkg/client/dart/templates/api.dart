@@ -22,15 +22,15 @@ class {{ $elem.Name }} {
     this.baseURL,
     this.headers,
     this.client,
-  ) {
+  ){{ if .Children }} {
 {{- 	range $index, $elem := .Children }}
-    this.{{ $elem.Name }} = {{ $elem.ClassName }}(
-			this.baseURL,
-			this.headers,
-			this.client,
+    {{ $elem.Name }} = {{ $elem.ClassName }}(
+			baseURL,
+			headers,
+			client,
 		);
 {{- 	end }}
-  }
+  }{{ else }};{{ end }}
 
   Map<String, dynamic> getRequestObject(Map<String, dynamic> obj, List<String> routingPath) {
     final copied = {...obj};
@@ -52,7 +52,7 @@ class {{ $elem.Name }} {
   ) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [{{ range $param := $method.URLParams }}'{{ $param }}', {{ end }}];
+    final excludeParams = <String>[{{ range $param := $method.URLParams }}'{{ $param }}', {{ end }}];
 
     headers = {...this.headers, ...headers ?? {}};
 
@@ -128,8 +128,8 @@ class APIClient {
     this.headers['Content-Type'] = 'application/json';
 {{- 	range $index, $elem := .Children }}
 
-		this.{{ $elem.Name }} = {{ $elem.ClassName }}(
-			this.baseURL,
+		{{ $elem.Name }} = {{ $elem.ClassName }}(
+			baseURL,
 			this.headers,
 			this.client,
 		);
@@ -160,7 +160,7 @@ class APIClient {
   ) async {
     client = client ?? this.client;
 
-    List<String> excludeParams = [{{ range $param := $method.URLParams }}'{{ $param }}', {{ end }}];
+    final excludeParams = <String>[{{ range $param := $method.URLParams }}'{{ $param }}', {{ end }}];
 
     headers = {...this.headers, ...headers ?? {}};
 
