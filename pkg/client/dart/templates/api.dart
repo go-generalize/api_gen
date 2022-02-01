@@ -141,6 +141,10 @@ class APIClient {
     
     copied.removeWhere((key, value) => routingPath.contains(key));
 
+    copied.forEach((key, value) {
+      copied[key] = value.toString();
+    });
+
     return copied;
   }
 
