@@ -120,7 +120,12 @@ class APIClient {
       Map<String, dynamic> obj, List<String> routingPath) {
     final copied = {...obj};
 
-    copied.removeWhere((key, value) => routingPath.contains(key));
+    copied.forEach((key, value) {
+      if (routingPath.contains(key))
+        copied.remove(key);
+      else
+        copied[key] = value.toString();
+    });
 
     return copied;
   }
