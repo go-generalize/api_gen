@@ -17,10 +17,14 @@ class FooBarClient {
   );
 
   Map<String, dynamic> getRequestObject(
-      Map<String, dynamic> obj, List<String> routingPath) {
+      Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
     final copied = {...obj};
 
-    copied.removeWhere((key, value) => routingPath.contains(key));
+    copied.forEach((key, value) {
+      if (routingPath.contains(key))
+        copied.remove(key);
+      else if (isGET) copied[key] = value.toString();
+    });
 
     return copied;
   }
@@ -44,7 +48,7 @@ class FooBarClient {
     final resp = await client.post(
       Uri.parse(url),
       headers: headers,
-      body: jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+      body: jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
     );
 
     if (resp.statusCode ~/ 100 != 2) {
@@ -75,10 +79,14 @@ class FooClient {
   }
 
   Map<String, dynamic> getRequestObject(
-      Map<String, dynamic> obj, List<String> routingPath) {
+      Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
     final copied = {...obj};
 
-    copied.removeWhere((key, value) => routingPath.contains(key));
+    copied.forEach((key, value) {
+      if (routingPath.contains(key))
+        copied.remove(key);
+      else if (isGET) copied[key] = value.toString();
+    });
 
     return copied;
   }
@@ -117,14 +125,13 @@ class APIClient {
   }
 
   Map<String, dynamic> getRequestObject(
-      Map<String, dynamic> obj, List<String> routingPath) {
+      Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
     final copied = {...obj};
 
     copied.forEach((key, value) {
       if (routingPath.contains(key))
         copied.remove(key);
-      else
-        copied[key] = value.toString();
+      else if (isGET) copied[key] = value.toString();
     });
 
     return copied;

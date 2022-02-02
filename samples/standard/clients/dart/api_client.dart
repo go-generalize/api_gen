@@ -57,10 +57,14 @@ class ServiceClient {
   }
 
   Map<String, dynamic> getRequestObject(
-      Map<String, dynamic> obj, List<String> routingPath) {
+      Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
     final copied = {...obj};
 
-    copied.removeWhere((key, value) => routingPath.contains(key));
+    copied.forEach((key, value) {
+      if (routingPath.contains(key))
+        copied.remove(key);
+      else if (isGET) copied[key] = value.toString();
+    });
 
     return copied;
   }
@@ -82,7 +86,9 @@ class ServiceClient {
     headers.remove('Content-Type');
     final url = baseURL +
         '/service/article' +
-        Uri(queryParameters: getRequestObject(param.toJson(), excludeParams))
+        Uri(
+                queryParameters:
+                    getRequestObject(param.toJson(), excludeParams, true))
             .toString();
     final resp = await client.get(
       Uri.parse(url),
@@ -118,10 +124,14 @@ class ServiceGroupsClient {
   }
 
   Map<String, dynamic> getRequestObject(
-      Map<String, dynamic> obj, List<String> routingPath) {
+      Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
     final copied = {...obj};
 
-    copied.removeWhere((key, value) => routingPath.contains(key));
+    copied.forEach((key, value) {
+      if (routingPath.contains(key))
+        copied.remove(key);
+      else if (isGET) copied[key] = value.toString();
+    });
 
     return copied;
   }
@@ -143,7 +153,9 @@ class ServiceGroupsClient {
     headers.remove('Content-Type');
     final url = baseURL +
         '/service/groups/groups' +
-        Uri(queryParameters: getRequestObject(param.toJson(), excludeParams))
+        Uri(
+                queryParameters:
+                    getRequestObject(param.toJson(), excludeParams, true))
             .toString();
     final resp = await client.get(
       Uri.parse(url),
@@ -172,10 +184,14 @@ class ServiceGroupsCommonClient {
   );
 
   Map<String, dynamic> getRequestObject(
-      Map<String, dynamic> obj, List<String> routingPath) {
+      Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
     final copied = {...obj};
 
-    copied.removeWhere((key, value) => routingPath.contains(key));
+    copied.forEach((key, value) {
+      if (routingPath.contains(key))
+        copied.remove(key);
+      else if (isGET) copied[key] = value.toString();
+    });
 
     return copied;
   }
@@ -193,10 +209,14 @@ class ServiceStaticPageClient {
   );
 
   Map<String, dynamic> getRequestObject(
-      Map<String, dynamic> obj, List<String> routingPath) {
+      Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
     final copied = {...obj};
 
-    copied.removeWhere((key, value) => routingPath.contains(key));
+    copied.forEach((key, value) {
+      if (routingPath.contains(key))
+        copied.remove(key);
+      else if (isGET) copied[key] = value.toString();
+    });
 
     return copied;
   }
@@ -218,7 +238,9 @@ class ServiceStaticPageClient {
     headers.remove('Content-Type');
     final url = baseURL +
         '/service/static_page/static_page' +
-        Uri(queryParameters: getRequestObject(param.toJson(), excludeParams))
+        Uri(
+                queryParameters:
+                    getRequestObject(param.toJson(), excludeParams, true))
             .toString();
     final resp = await client.get(
       Uri.parse(url),
@@ -247,10 +269,14 @@ class ServiceTableClient {
   );
 
   Map<String, dynamic> getRequestObject(
-      Map<String, dynamic> obj, List<String> routingPath) {
+      Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
     final copied = {...obj};
 
-    copied.removeWhere((key, value) => routingPath.contains(key));
+    copied.forEach((key, value) {
+      if (routingPath.contains(key))
+        copied.remove(key);
+      else if (isGET) copied[key] = value.toString();
+    });
 
     return copied;
   }
@@ -275,10 +301,14 @@ class ServiceUser2Client {
   }
 
   Map<String, dynamic> getRequestObject(
-      Map<String, dynamic> obj, List<String> routingPath) {
+      Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
     final copied = {...obj};
 
-    copied.removeWhere((key, value) => routingPath.contains(key));
+    copied.forEach((key, value) {
+      if (routingPath.contains(key))
+        copied.remove(key);
+      else if (isGET) copied[key] = value.toString();
+    });
 
     return copied;
   }
@@ -305,7 +335,7 @@ class ServiceUser2Client {
     final resp = await client.delete(
       Uri.parse(url),
       headers: headers,
-      body: jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+      body: jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
     );
 
     if (resp.statusCode ~/ 100 != 2) {
@@ -335,7 +365,9 @@ class ServiceUser2Client {
     headers.remove('Content-Type');
     final url = baseURL +
         '/service/user2/${Uri.encodeComponent(param.id.toString())}' +
-        Uri(queryParameters: getRequestObject(param.toJson(), excludeParams))
+        Uri(
+                queryParameters:
+                    getRequestObject(param.toJson(), excludeParams, true))
             .toString();
     final resp = await client.get(
       Uri.parse(url),
@@ -370,7 +402,7 @@ class ServiceUser2Client {
     final resp = await client.post(
       Uri.parse(url),
       headers: headers,
-      body: jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+      body: jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
     );
 
     if (resp.statusCode ~/ 100 != 2) {
@@ -402,7 +434,7 @@ class ServiceUser2Client {
     final resp = await client.post(
       Uri.parse(url),
       headers: headers,
-      body: jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+      body: jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
     );
 
     if (resp.statusCode ~/ 100 != 2) {
@@ -434,10 +466,14 @@ class ServiceUser2UserIDClient {
   }
 
   Map<String, dynamic> getRequestObject(
-      Map<String, dynamic> obj, List<String> routingPath) {
+      Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
     final copied = {...obj};
 
-    copied.removeWhere((key, value) => routingPath.contains(key));
+    copied.forEach((key, value) {
+      if (routingPath.contains(key))
+        copied.remove(key);
+      else if (isGET) copied[key] = value.toString();
+    });
 
     return copied;
   }
@@ -461,7 +497,9 @@ class ServiceUser2UserIDClient {
     headers.remove('Content-Type');
     final url = baseURL +
         '/service/user2/${Uri.encodeComponent(param.userID.toString())}/user_job_get' +
-        Uri(queryParameters: getRequestObject(param.toJson(), excludeParams))
+        Uri(
+                queryParameters:
+                    getRequestObject(param.toJson(), excludeParams, true))
             .toString();
     final resp = await client.get(
       Uri.parse(url),
@@ -490,10 +528,14 @@ class ServiceUser2UserIDJobIDClient {
   );
 
   Map<String, dynamic> getRequestObject(
-      Map<String, dynamic> obj, List<String> routingPath) {
+      Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
     final copied = {...obj};
 
-    copied.removeWhere((key, value) => routingPath.contains(key));
+    copied.forEach((key, value) {
+      if (routingPath.contains(key))
+        copied.remove(key);
+      else if (isGET) copied[key] = value.toString();
+    });
 
     return copied;
   }
@@ -521,7 +563,7 @@ class ServiceUser2UserIDJobIDClient {
     final resp = await client.put(
       Uri.parse(url),
       headers: headers,
-      body: jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+      body: jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
     );
 
     if (resp.statusCode ~/ 100 != 2) {
@@ -546,10 +588,14 @@ class ServiceUserClient {
   );
 
   Map<String, dynamic> getRequestObject(
-      Map<String, dynamic> obj, List<String> routingPath) {
+      Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
     final copied = {...obj};
 
-    copied.removeWhere((key, value) => routingPath.contains(key));
+    copied.forEach((key, value) {
+      if (routingPath.contains(key))
+        copied.remove(key);
+      else if (isGET) copied[key] = value.toString();
+    });
 
     return copied;
   }
@@ -571,7 +617,9 @@ class ServiceUserClient {
     headers.remove('Content-Type');
     final url = baseURL +
         '/service/user/' +
-        Uri(queryParameters: getRequestObject(param.toJson(), excludeParams))
+        Uri(
+                queryParameters:
+                    getRequestObject(param.toJson(), excludeParams, true))
             .toString();
     final resp = await client.get(
       Uri.parse(url),
@@ -605,7 +653,7 @@ class ServiceUserClient {
     final resp = await client.post(
       Uri.parse(url),
       headers: headers,
-      body: jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+      body: jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
     );
 
     if (resp.statusCode ~/ 100 != 2) {
@@ -637,7 +685,7 @@ class ServiceUserClient {
     final resp = await client.post(
       Uri.parse(url),
       headers: headers,
-      body: jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+      body: jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
     );
 
     if (resp.statusCode ~/ 100 != 2) {
@@ -683,14 +731,13 @@ class APIClient {
   }
 
   Map<String, dynamic> getRequestObject(
-      Map<String, dynamic> obj, List<String> routingPath) {
+      Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
     final copied = {...obj};
 
     copied.forEach((key, value) {
       if (routingPath.contains(key))
         copied.remove(key);
-      else
-        copied[key] = value.toString();
+      else if (isGET) copied[key] = value.toString();
     });
 
     return copied;
@@ -712,7 +759,9 @@ class APIClient {
     headers.remove('Content-Type');
     final url = baseURL +
         '/' +
-        Uri(queryParameters: getRequestObject(param.toJson(), excludeParams))
+        Uri(
+                queryParameters:
+                    getRequestObject(param.toJson(), excludeParams, true))
             .toString();
     final resp = await client.get(
       Uri.parse(url),
@@ -746,7 +795,7 @@ class APIClient {
     final resp = await client.post(
       Uri.parse(url),
       headers: headers,
-      body: jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+      body: jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
     );
 
     if (resp.statusCode ~/ 100 != 2) {
@@ -776,7 +825,7 @@ class APIClient {
     final resp = await client.post(
       Uri.parse(url),
       headers: headers,
-      body: jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+      body: jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
     );
 
     if (resp.statusCode ~/ 100 != 2) {
