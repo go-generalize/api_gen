@@ -32,10 +32,14 @@ class {{ $elem.Name }} {
 {{- 	end }}
   }{{ else }};{{ end }}
 
-  Map<String, dynamic> getRequestObject(Map<String, dynamic> obj, List<String> routingPath) {
+  Map<String, dynamic> getRequestObject(Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
     final copied = {...obj};
-    
-    copied.removeWhere((key, value) => routingPath.contains(key));
+
+    copied.forEach((key, value) {
+      if (routingPath.contains(key))
+        copied.remove(key);
+      else if (isGET) copied[key] = value.toString();
+    });
 
     return copied;
   }
@@ -62,7 +66,7 @@ class {{ $elem.Name }} {
 
 {{- 	if eq $method.Method "GET" }}
     headers.remove('Content-Type');
-		final url = baseURL + '{{ $method.Endpoint }}' + Uri(queryParameters: getRequestObject(param.toJson(), excludeParams)).toString();
+		final url = baseURL + '{{ $method.Endpoint }}' + Uri(queryParameters: getRequestObject(param.toJson(), excludeParams, true)).toString();
 {{- 	else }}
 		final url = baseURL + '{{ $method.Endpoint }}';
 {{      end }}
@@ -76,7 +80,7 @@ class {{ $elem.Name }} {
     final resp = await client.{{ toLower $method.Method }}(
       Uri.parse(url),
       headers: headers,
-      body: jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+      body: jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
     );
 {{- end }}
 
@@ -136,14 +140,13 @@ class APIClient {
 {{- 	end }}
 	}
 
-	Map<String, dynamic> getRequestObject(Map<String, dynamic> obj, List<String> routingPath) {
+	Map<String, dynamic> getRequestObject(Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
     final copied = {...obj};
 
     copied.forEach((key, value) {
       if (routingPath.contains(key))
         copied.remove(key);
-      else
-        copied[key] = value.toString();
+      else if (isGET) copied[key] = value.toString();
     });
 
     return copied;
@@ -171,7 +174,7 @@ class APIClient {
 
 {{- 	if eq $method.Method "GET" }}
     headers.remove('Content-Type');
-		final url = baseURL + '{{ $method.Endpoint }}' + Uri(queryParameters: getRequestObject(param.toJson(), excludeParams)).toString();
+		final url = baseURL + '{{ $method.Endpoint }}' + Uri(queryParameters: getRequestObject(param.toJson(), excludeParams, true)).toString();
 {{- 	else }}
 		final url = baseURL + '{{ $method.Endpoint }}';
 {{      end }}
@@ -185,7 +188,7 @@ class APIClient {
     final resp = await client.{{ toLower $method.Method }}(
       Uri.parse(url),
       headers: headers,
-      body: jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+      body: jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
     );
 {{- end }}
 
