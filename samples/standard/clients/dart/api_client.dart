@@ -63,7 +63,13 @@ class ServiceClient {
     copied.forEach((key, value) {
       if (routingPath.contains(key))
         copied.remove(key);
-      else if (isGET) copied[key] = value.toString();
+      else if (isGET) {
+        if (value == null) {
+          copied.remove(key);
+          return;
+        }
+        copied[key] = value.toString();
+      }
     });
 
     return copied;
@@ -130,7 +136,13 @@ class ServiceGroupsClient {
     copied.forEach((key, value) {
       if (routingPath.contains(key))
         copied.remove(key);
-      else if (isGET) copied[key] = value.toString();
+      else if (isGET) {
+        if (value == null) {
+          copied.remove(key);
+          return;
+        }
+        copied[key] = value.toString();
+      }
     });
 
     return copied;
@@ -190,7 +202,13 @@ class ServiceGroupsCommonClient {
     copied.forEach((key, value) {
       if (routingPath.contains(key))
         copied.remove(key);
-      else if (isGET) copied[key] = value.toString();
+      else if (isGET) {
+        if (value == null) {
+          copied.remove(key);
+          return;
+        }
+        copied[key] = value.toString();
+      }
     });
 
     return copied;
@@ -215,7 +233,13 @@ class ServiceStaticPageClient {
     copied.forEach((key, value) {
       if (routingPath.contains(key))
         copied.remove(key);
-      else if (isGET) copied[key] = value.toString();
+      else if (isGET) {
+        if (value == null) {
+          copied.remove(key);
+          return;
+        }
+        copied[key] = value.toString();
+      }
     });
 
     return copied;
@@ -275,7 +299,13 @@ class ServiceTableClient {
     copied.forEach((key, value) {
       if (routingPath.contains(key))
         copied.remove(key);
-      else if (isGET) copied[key] = value.toString();
+      else if (isGET) {
+        if (value == null) {
+          copied.remove(key);
+          return;
+        }
+        copied[key] = value.toString();
+      }
     });
 
     return copied;
@@ -307,7 +337,13 @@ class ServiceUser2Client {
     copied.forEach((key, value) {
       if (routingPath.contains(key))
         copied.remove(key);
-      else if (isGET) copied[key] = value.toString();
+      else if (isGET) {
+        if (value == null) {
+          copied.remove(key);
+          return;
+        }
+        copied[key] = value.toString();
+      }
     });
 
     return copied;
@@ -472,7 +508,13 @@ class ServiceUser2UserIDClient {
     copied.forEach((key, value) {
       if (routingPath.contains(key))
         copied.remove(key);
-      else if (isGET) copied[key] = value.toString();
+      else if (isGET) {
+        if (value == null) {
+          copied.remove(key);
+          return;
+        }
+        copied[key] = value.toString();
+      }
     });
 
     return copied;
@@ -534,7 +576,13 @@ class ServiceUser2UserIDJobIDClient {
     copied.forEach((key, value) {
       if (routingPath.contains(key))
         copied.remove(key);
-      else if (isGET) copied[key] = value.toString();
+      else if (isGET) {
+        if (value == null) {
+          copied.remove(key);
+          return;
+        }
+        copied[key] = value.toString();
+      }
     });
 
     return copied;
@@ -594,7 +642,13 @@ class ServiceUserClient {
     copied.forEach((key, value) {
       if (routingPath.contains(key))
         copied.remove(key);
-      else if (isGET) copied[key] = value.toString();
+      else if (isGET) {
+        if (value == null) {
+          copied.remove(key);
+          return;
+        }
+        copied[key] = value.toString();
+      }
     });
 
     return copied;
@@ -737,7 +791,13 @@ class APIClient {
     copied.forEach((key, value) {
       if (routingPath.contains(key))
         copied.remove(key);
-      else if (isGET) copied[key] = value.toString();
+      else if (isGET) {
+        if (value == null) {
+          copied.remove(key);
+          return;
+        }
+        copied[key] = value.toString();
+      }
     });
 
     return copied;
