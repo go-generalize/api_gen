@@ -122,12 +122,10 @@ github.com/fatih/color v1.9.0/go.mod h1:eQcE1qtQxscV5RaZvpXrrb8Drkc3/DdQ+uUYCNjL
 github.com/fatih/color v1.13.0/go.mod h1:kLAiJbzzSOZDVNGyDpeOxJ47H46qBXwg5ILebYFFOfk=
 github.com/fsnotify/fsnotify v1.5.1/go.mod h1:T3375wBYaZdLLcVNkcVbzGHY7f1l/uK5T5Ai1i3InKU=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
-github.com/go-generalize/go-dartfmt v0.1.0 h1:NBqckiza6O7zatNglm5Ry8P26mIxiHB26cGAIVUGdjI=
-github.com/go-generalize/go-dartfmt v0.1.0/go.mod h1:xbPNNnCJpX/CtvxIy1grvi9X2A57jC6fsvoYVDXpAWQ=
+github.com/go-generalize/go-dartfmt v0.1.1 h1:2W+CD7qGCNE/0JLtm394RJBBi/jhtXUcJ+G0v0Bcx88=
+github.com/go-generalize/go-dartfmt v0.1.1/go.mod h1:xbPNNnCJpX/CtvxIy1grvi9X2A57jC6fsvoYVDXpAWQ=
 github.com/go-generalize/go-easyparser v0.2.0 h1:BAkuf9qkgIX1rm2nMVT3HiXO787Tnja2ZTtuNbuxvPk=
 github.com/go-generalize/go-easyparser v0.2.0/go.mod h1:I+Ifnjzw7UNzxkENknQQY9yB2gsz9RekzAbKLYq/Dzw=
-github.com/go-generalize/go2dart v0.4.8 h1:nZe5bZK9TbN33XW8VTULaBFzmIGbjtI2JVUrLwNgaKE=
-github.com/go-generalize/go2dart v0.4.8/go.mod h1:peqHvoBnlWmpJPoYaIyGBditWFaNZ6jR0ywbIRNdY8o=
 github.com/go-generalize/go2dart v0.4.9 h1:R++eSeNs/P81BZL90DIOJ6E7Hup9UU8WM6A0X8u5rlQ=
 github.com/go-generalize/go2dart v0.4.9/go.mod h1:peqHvoBnlWmpJPoYaIyGBditWFaNZ6jR0ywbIRNdY8o=
 github.com/go-generalize/go2go v0.0.0-20210311170338-9701de42e3ad h1:9oYY/ZcAf3VVRhxaxolqoTVprrx9A7N8INWAfWCRwBc=
