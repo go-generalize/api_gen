@@ -131,11 +131,18 @@ class ServiceClient {
 		);
 	}
 
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+	getRequestObject(obj: any, routingPath: string[], isGET: boolean): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
+			if (isGET && obj[key] == null) {
+				return;
+			}
 			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
+				let val = obj[key];
+				if (isGET) {
+					val = val.toString();
+				}
+				res[key] = val;
 			}
 		});
 		return res;
@@ -222,7 +229,7 @@ class ServiceClient {
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/service/article?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
+		const url = `${this.baseURL}/service/article?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
 		const resp = await fetch(
 			url,
 			{
@@ -267,11 +274,18 @@ class ServiceGroupsClient {
 		);
 	}
 
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+	getRequestObject(obj: any, routingPath: string[], isGET: boolean): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
+			if (isGET && obj[key] == null) {
+				return;
+			}
 			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
+				let val = obj[key];
+				if (isGET) {
+					val = val.toString();
+				}
+				res[key] = val;
 			}
 		});
 		return res;
@@ -358,7 +372,7 @@ class ServiceGroupsClient {
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/service/groups/groups?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
+		const url = `${this.baseURL}/service/groups/groups?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
 		const resp = await fetch(
 			url,
 			{
@@ -392,11 +406,18 @@ class ServiceGroupsCommonClient {
 		this.afterMiddleware = middleware.afterMiddleware!;
 	}
 
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+	getRequestObject(obj: any, routingPath: string[], isGET: boolean): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
+			if (isGET && obj[key] == null) {
+				return;
+			}
 			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
+				let val = obj[key];
+				if (isGET) {
+					val = val.toString();
+				}
+				res[key] = val;
 			}
 		});
 		return res;
@@ -439,11 +460,18 @@ class ServiceStaticPageClient {
 		this.afterMiddleware = middleware.afterMiddleware!;
 	}
 
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+	getRequestObject(obj: any, routingPath: string[], isGET: boolean): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
+			if (isGET && obj[key] == null) {
+				return;
+			}
 			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
+				let val = obj[key];
+				if (isGET) {
+					val = val.toString();
+				}
+				res[key] = val;
 			}
 		});
 		return res;
@@ -530,7 +558,7 @@ class ServiceStaticPageClient {
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/service/static_page/static_page?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
+		const url = `${this.baseURL}/service/static_page/static_page?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
 		const resp = await fetch(
 			url,
 			{
@@ -564,11 +592,18 @@ class ServiceTableClient {
 		this.afterMiddleware = middleware.afterMiddleware!;
 	}
 
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+	getRequestObject(obj: any, routingPath: string[], isGET: boolean): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
+			if (isGET && obj[key] == null) {
+				return;
+			}
 			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
+				let val = obj[key];
+				if (isGET) {
+					val = val.toString();
+				}
+				res[key] = val;
 			}
 		});
 		return res;
@@ -622,11 +657,18 @@ class ServiceUser2Client {
 		);
 	}
 
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+	getRequestObject(obj: any, routingPath: string[], isGET: boolean): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
+			if (isGET && obj[key] == null) {
+				return;
+			}
 			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
+				let val = obj[key];
+				if (isGET) {
+					val = val.toString();
+				}
+				res[key] = val;
 			}
 		});
 		return res;
@@ -718,7 +760,7 @@ class ServiceUser2Client {
 			url,
 			{
 				method: "DELETE",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
 				headers: reqHeader,
 				...reqOption,
 			}
@@ -793,7 +835,7 @@ class ServiceUser2Client {
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/service/user2/${encodeURI(param.id.toString())}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
+		const url = `${this.baseURL}/service/user2/${encodeURI(param.id.toString())}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
 		const resp = await fetch(
 			url,
 			{
@@ -876,7 +918,7 @@ class ServiceUser2Client {
 			url,
 			{
 				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
 				headers: reqHeader,
 				...reqOption,
 			}
@@ -955,7 +997,7 @@ class ServiceUser2Client {
 			url,
 			{
 				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
 				headers: reqHeader,
 				...reqOption,
 			}
@@ -996,11 +1038,18 @@ class ServiceUser2UserIDClient {
 		);
 	}
 
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+	getRequestObject(obj: any, routingPath: string[], isGET: boolean): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
+			if (isGET && obj[key] == null) {
+				return;
+			}
 			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
+				let val = obj[key];
+				if (isGET) {
+					val = val.toString();
+				}
+				res[key] = val;
 			}
 		});
 		return res;
@@ -1087,7 +1136,7 @@ class ServiceUser2UserIDClient {
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/user_job_get?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
+		const url = `${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/user_job_get?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
 		const resp = await fetch(
 			url,
 			{
@@ -1121,11 +1170,18 @@ class ServiceUser2UserIDJobIDClient {
 		this.afterMiddleware = middleware.afterMiddleware!;
 	}
 
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+	getRequestObject(obj: any, routingPath: string[], isGET: boolean): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
+			if (isGET && obj[key] == null) {
+				return;
+			}
 			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
+				let val = obj[key];
+				if (isGET) {
+					val = val.toString();
+				}
+				res[key] = val;
 			}
 		});
 		return res;
@@ -1217,7 +1273,7 @@ class ServiceUser2UserIDJobIDClient {
 			url,
 			{
 				method: "PUT",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
 				headers: reqHeader,
 				...reqOption,
 			}
@@ -1247,11 +1303,18 @@ class ServiceUserClient {
 		this.afterMiddleware = middleware.afterMiddleware!;
 	}
 
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+	getRequestObject(obj: any, routingPath: string[], isGET: boolean): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
+			if (isGET && obj[key] == null) {
+				return;
+			}
 			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
+				let val = obj[key];
+				if (isGET) {
+					val = val.toString();
+				}
+				res[key] = val;
 			}
 		});
 		return res;
@@ -1338,7 +1401,7 @@ class ServiceUserClient {
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/service/user/?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
+		const url = `${this.baseURL}/service/user/?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
 		const resp = await fetch(
 			url,
 			{
@@ -1422,7 +1485,7 @@ class ServiceUserClient {
 			url,
 			{
 				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
 				headers: reqHeader,
 				...reqOption,
 			}
@@ -1501,7 +1564,7 @@ class ServiceUserClient {
 			url,
 			{
 				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
 				headers: reqHeader,
 				...reqOption,
 			}
@@ -1588,11 +1651,18 @@ export class APIClient {
 		);
 	}
 
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+	getRequestObject(obj: any, routingPath: string[], isGET: boolean): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
+			if (isGET && obj[key] == null) {
+				return;
+			}
 			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
+				let val = obj[key];
+				if (isGET) {
+					val = val.toString();
+				}
+				res[key] = val;
 			}
 		});
 		return res;
@@ -1679,7 +1749,7 @@ export class APIClient {
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
+		const url = `${this.baseURL}/?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
 		const resp = await fetch(
 			url,
 			{
@@ -1768,7 +1838,7 @@ export class APIClient {
 			url,
 			{
 				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
 				headers: {
 					...this.headers,
 					...headers,
@@ -1853,7 +1923,7 @@ export class APIClient {
 			url,
 			{
 				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
 				headers: {
 					...this.headers,
 					...headers,
