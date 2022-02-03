@@ -738,16 +738,22 @@ class APIClient {
     }
     final url = baseURL + '/create_table';
 
-    final resp = await client.post(
-      Uri.parse(url),
-      headers: headers,
-      body: jsonEncode(getRequestObject(param.toJson(), excludeParams)),
-    );
+    final request = http.MultipartRequest('$method.Method', Uri.parse(url))
+      ..headers = headers
+      ..files.add(http.MultipartFile.fromString(
+          'x-multipart-json-binder-request-json',
+          jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+          filename: 'x-multipart-json-binder-request-json',
+          contentType: contentType))
+      ..files.add(param.file)
+      ..files.add(param.files);
+    final resp = await client.send(request);
 
     if (resp.statusCode ~/ 100 != 2) {
       throw ApiError(resp);
     }
-    final res = types_.PostCreateTableResponse.fromJson(jsonDecode(resp.body));
+    final res = types_.PostCreateTableResponse.fromJson(
+        jsonDecode(resp.stream.byteToString()));
 
     return res;
   }

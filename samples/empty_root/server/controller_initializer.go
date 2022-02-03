@@ -10,6 +10,7 @@ import (
 
 	apierror "github.com/go-generalize/api_gen/v2/samples/empty_root/server/pkg/apierror"
 	props "github.com/go-generalize/api_gen/v2/samples/empty_root/server/props"
+	"github.com/go-utils/echo-multipart-binder/mpbinder"
 	"github.com/labstack/echo/v4"
 )
 

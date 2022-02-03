@@ -51,6 +51,7 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint, packageAlias string) *
 		Method:    strings.ToUpper(string(ep.Method)),
 		HasFields: len(ep.ResponsePayload.Fields.List) != 0,
 		Name:      strings.ToLower(string(ep.Method)) + strcase.ToCamel(ep.Path),
+		Multipart: ep.UseMultipartUpload,
 	}
 
 	endpoint.Endpoint = ep.GetFullPath("/", func(rawPath, path, placeholder string) string {
@@ -65,6 +66,15 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint, packageAlias string) *
 
 		return path
 	})
+
+	res, _ := parser.GetFileFields(ep.RequestGo2tsPayload)
+	fileFieldNames := make([]string, 0, len(res))
+
+	for _, v := range res {
+		fileFieldNames = append(fileFieldNames, go2dartgenerator.ReplaceFieldName(v.RawName))
+	}
+	sort.Strings(fileFieldNames)
+	endpoint.FileFieldNames = fileFieldNames
 
 	urlParams := make(map[string]string)
 	for key, field := range ep.RequestGo2tsPayload.Entries {

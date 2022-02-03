@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/fatih/structtag"
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
 	types "github.com/go-generalize/go-easyparser/types"
 	util "github.com/go-generalize/go-easyparser/util"
@@ -24,6 +25,8 @@ func (g *generator) GenerateTypes(fn func(relPath, code string) error) error {
 	return nil
 }
 
+const fileHeaderName = "mime/multipart.FileHeader"
+
 func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string) error) error {
 	for _, child := range gr.Children {
 		if err := g.generateTypes(child, fn); err != nil {
@@ -31,9 +34,18 @@ func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string
 		}
 	}
 
+	replaceFileHeaderAll(gr.ParsedTypes)
+
 	gen := go2dartgenerator.NewGenerator(gr.ParsedTypes, nil)
 
 	gen.ExternalImporter = func(o *types.Object) *go2dartgenerator.ExternalImporter {
+		if o.Name == fileHeaderName {
+			return &go2dartgenerator.ExternalImporter{
+				Path: "http",
+				Name: "MultipartFile",
+			}
+		}
+
 		rel, err := filepath.Rel(g.root.Dir, o.Position.Filename)
 
 		if err != nil {
@@ -80,4 +92,64 @@ func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string
 	}
 
 	return nil
+}
+
+func replaceFileHeaderAll(t map[string]types.Type) {
+	for _, v := range t {
+		v, ok := v.(*types.Object)
+
+		if !ok {
+			continue
+		}
+
+		replaceFileHeader(v)
+	}
+}
+
+func replaceFileHeader(obj *types.Object) {
+	for k, v := range obj.Entries {
+		if obj, ok := v.Type.(*types.Object); ok {
+			replaceFileHeader(obj)
+
+			continue
+		}
+
+		tags, err := structtag.Parse(v.RawTag)
+
+		if err != nil {
+			continue
+		}
+
+		jsonTag, err := tags.Get("json")
+
+		if err != nil {
+			jsonTag = &structtag.Tag{
+				Key:  "json",
+				Name: "-",
+			}
+		}
+		tags.Set(jsonTag)
+
+		t, err := parser.GetMultipartUploadType(v.Type, v.RawTag)
+
+		if err != nil || t == parser.UploadNone {
+			continue
+		}
+
+		if t == parser.UploadSingleFile {
+			v.Type = &types.Object{
+				Name: fileHeaderName,
+			}
+		} else {
+			v.Type = &types.Array{
+				Inner: &types.Object{
+					Name: fileHeaderName,
+				},
+			}
+		}
+
+		v.RawTag = tags.String()
+
+		obj.Entries[k] = v
+	}
 }

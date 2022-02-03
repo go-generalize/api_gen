@@ -72,6 +72,23 @@ class {{ $elem.Name }} {
       Uri.parse(url),
       headers: headers,
     );
+{{- else if $method.Multipart }}
+    final request = http.MultipartRequest('$method.Method', Uri.parse(url))
+      ..headers = headers
+      ..files.add(http.MultipartFile.fromString(
+        'x-multipart-json-binder-request-json', jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+        filename: 'x-multipart-json-binder-request-json', contentType: contentType
+      )
+{{- range $index, $field := $method.FileFieldNames }}
+      ..files.add(param.$field)
+{{- end }};
+    var response = await client.send(request);
+
+    final resp = await client.{{ toLower $method.Method }}(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+    );
 {{- else }}
     final resp = await client.{{ toLower $method.Method }}(
       Uri.parse(url),
@@ -85,7 +102,7 @@ class {{ $elem.Name }} {
 		}
 
 {{- if eq .HasFields true }}
-		final res = {{ $method.ResponseType }}.fromJson(jsonDecode(resp.body));
+		final res = {{ $method.ResponseType }}.fromJson(jsonDecode({{if .Multipart}}resp.stream.byteToString(){{else}}resp.body{{end}}));
 {{- else }}
 		final res = {{ $method.ResponseType }}();
 {{- end }}
@@ -176,6 +193,17 @@ class APIClient {
       Uri.parse(url),
       headers: headers,
     );
+{{- else if $method.Multipart }}
+    final request = http.MultipartRequest('$method.Method', Uri.parse(url))
+      ..headers = headers
+      ..files.add(http.MultipartFile.fromString(
+        'x-multipart-json-binder-request-json', jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+        filename: 'x-multipart-json-binder-request-json', contentType: contentType
+      ))
+{{- range $index, $field := $method.FileFieldNames }}
+      ..files.add(param.{{ $field }})
+{{- end }};
+    final resp = await client.send(request);
 {{- else }}
     final resp = await client.{{ toLower $method.Method }}(
       Uri.parse(url),
@@ -189,7 +217,7 @@ class APIClient {
 		}
 
 {{- if eq .HasFields true }}
-		final res = {{ $method.ResponseType }}.fromJson(jsonDecode(resp.body));
+		final res = {{ $method.ResponseType }}.fromJson(jsonDecode({{if .Multipart}}resp.stream.byteToString(){{else}}resp.body{{end}}));
 {{- else }}
 		final res = {{ $method.ResponseType }}();
 {{- end }}

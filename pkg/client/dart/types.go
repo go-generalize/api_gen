@@ -28,6 +28,8 @@ type endpointType struct {
 	Method, Endpoint          string
 	URLParams                 []string
 	HasFields                 bool
+	Multipart                 bool
+	FileFieldNames            []string
 }
 
 type childrenType struct {

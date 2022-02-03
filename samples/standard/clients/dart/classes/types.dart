@@ -2,6 +2,8 @@
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
 // generated version: (devel)
 
+import 'http' as external_e0603c4;
+
 abstract class JsonConverter<T, S> {
   const JsonConverter();
 
@@ -268,12 +270,16 @@ class PostCreateTableRequestConverter
 }
 
 class PostCreateTableRequest {
+  external_e0603c4.MultipartFile file;
+  external_e0603c4.List<MultipartFile> files;
   int flag;
   String id;
   Map<int, int> map;
   String text;
 
   PostCreateTableRequest({
+    required this.file,
+    required this.files,
     this.flag = 0,
     this.id = '',
     this.map = const {},
