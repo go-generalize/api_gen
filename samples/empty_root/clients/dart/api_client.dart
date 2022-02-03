@@ -23,7 +23,13 @@ class FooBarClient {
     copied.forEach((key, value) {
       if (routingPath.contains(key))
         copied.remove(key);
-      else if (isGET) copied[key] = value.toString();
+      else if (isGET) {
+        if (value == null) {
+          copied.remove(key);
+          return;
+        }
+        copied[key] = value.toString();
+      }
     });
 
     return copied;
@@ -85,7 +91,13 @@ class FooClient {
     copied.forEach((key, value) {
       if (routingPath.contains(key))
         copied.remove(key);
-      else if (isGET) copied[key] = value.toString();
+      else if (isGET) {
+        if (value == null) {
+          copied.remove(key);
+          return;
+        }
+        copied[key] = value.toString();
+      }
     });
 
     return copied;
@@ -131,7 +143,13 @@ class APIClient {
     copied.forEach((key, value) {
       if (routingPath.contains(key))
         copied.remove(key);
-      else if (isGET) copied[key] = value.toString();
+      else if (isGET) {
+        if (value == null) {
+          copied.remove(key);
+          return;
+        }
+        copied[key] = value.toString();
+      }
     });
 
     return copied;
