@@ -58,18 +58,17 @@ class ServiceClient {
 
   Map<String, dynamic> getRequestObject(
       Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
-    final copied = {...obj};
+    final Map<String, dynamic> copied = {};
 
-    copied.forEach((key, value) {
+    obj.forEach((key, value) {
       if (routingPath.contains(key))
-        copied.remove(key);
+        return;
       else if (isGET) {
-        if (value == null) {
-          copied.remove(key);
-          return;
-        }
+        if (value == null) return;
         copied[key] = value.toString();
+        return;
       }
+      copied[key] = value;
     });
 
     return copied;
@@ -131,18 +130,17 @@ class ServiceGroupsClient {
 
   Map<String, dynamic> getRequestObject(
       Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
-    final copied = {...obj};
+    final Map<String, dynamic> copied = {};
 
-    copied.forEach((key, value) {
+    obj.forEach((key, value) {
       if (routingPath.contains(key))
-        copied.remove(key);
+        return;
       else if (isGET) {
-        if (value == null) {
-          copied.remove(key);
-          return;
-        }
+        if (value == null) return;
         copied[key] = value.toString();
+        return;
       }
+      copied[key] = value;
     });
 
     return copied;
@@ -197,18 +195,17 @@ class ServiceGroupsCommonClient {
 
   Map<String, dynamic> getRequestObject(
       Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
-    final copied = {...obj};
+    final Map<String, dynamic> copied = {};
 
-    copied.forEach((key, value) {
+    obj.forEach((key, value) {
       if (routingPath.contains(key))
-        copied.remove(key);
+        return;
       else if (isGET) {
-        if (value == null) {
-          copied.remove(key);
-          return;
-        }
+        if (value == null) return;
         copied[key] = value.toString();
+        return;
       }
+      copied[key] = value;
     });
 
     return copied;
@@ -228,18 +225,17 @@ class ServiceStaticPageClient {
 
   Map<String, dynamic> getRequestObject(
       Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
-    final copied = {...obj};
+    final Map<String, dynamic> copied = {};
 
-    copied.forEach((key, value) {
+    obj.forEach((key, value) {
       if (routingPath.contains(key))
-        copied.remove(key);
+        return;
       else if (isGET) {
-        if (value == null) {
-          copied.remove(key);
-          return;
-        }
+        if (value == null) return;
         copied[key] = value.toString();
+        return;
       }
+      copied[key] = value;
     });
 
     return copied;
@@ -294,18 +290,17 @@ class ServiceTableClient {
 
   Map<String, dynamic> getRequestObject(
       Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
-    final copied = {...obj};
+    final Map<String, dynamic> copied = {};
 
-    copied.forEach((key, value) {
+    obj.forEach((key, value) {
       if (routingPath.contains(key))
-        copied.remove(key);
+        return;
       else if (isGET) {
-        if (value == null) {
-          copied.remove(key);
-          return;
-        }
+        if (value == null) return;
         copied[key] = value.toString();
+        return;
       }
+      copied[key] = value;
     });
 
     return copied;
@@ -332,18 +327,17 @@ class ServiceUser2Client {
 
   Map<String, dynamic> getRequestObject(
       Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
-    final copied = {...obj};
+    final Map<String, dynamic> copied = {};
 
-    copied.forEach((key, value) {
+    obj.forEach((key, value) {
       if (routingPath.contains(key))
-        copied.remove(key);
+        return;
       else if (isGET) {
-        if (value == null) {
-          copied.remove(key);
-          return;
-        }
+        if (value == null) return;
         copied[key] = value.toString();
+        return;
       }
+      copied[key] = value;
     });
 
     return copied;
@@ -503,18 +497,17 @@ class ServiceUser2UserIDClient {
 
   Map<String, dynamic> getRequestObject(
       Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
-    final copied = {...obj};
+    final Map<String, dynamic> copied = {};
 
-    copied.forEach((key, value) {
+    obj.forEach((key, value) {
       if (routingPath.contains(key))
-        copied.remove(key);
+        return;
       else if (isGET) {
-        if (value == null) {
-          copied.remove(key);
-          return;
-        }
+        if (value == null) return;
         copied[key] = value.toString();
+        return;
       }
+      copied[key] = value;
     });
 
     return copied;
@@ -571,18 +564,17 @@ class ServiceUser2UserIDJobIDClient {
 
   Map<String, dynamic> getRequestObject(
       Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
-    final copied = {...obj};
+    final Map<String, dynamic> copied = {};
 
-    copied.forEach((key, value) {
+    obj.forEach((key, value) {
       if (routingPath.contains(key))
-        copied.remove(key);
+        return;
       else if (isGET) {
-        if (value == null) {
-          copied.remove(key);
-          return;
-        }
+        if (value == null) return;
         copied[key] = value.toString();
+        return;
       }
+      copied[key] = value;
     });
 
     return copied;
@@ -637,18 +629,17 @@ class ServiceUserClient {
 
   Map<String, dynamic> getRequestObject(
       Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
-    final copied = {...obj};
+    final Map<String, dynamic> copied = {};
 
-    copied.forEach((key, value) {
+    obj.forEach((key, value) {
       if (routingPath.contains(key))
-        copied.remove(key);
+        return;
       else if (isGET) {
-        if (value == null) {
-          copied.remove(key);
-          return;
-        }
+        if (value == null) return;
         copied[key] = value.toString();
+        return;
       }
+      copied[key] = value;
     });
 
     return copied;
@@ -786,18 +777,17 @@ class APIClient {
 
   Map<String, dynamic> getRequestObject(
       Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
-    final copied = {...obj};
+    final Map<String, dynamic> copied = {};
 
-    copied.forEach((key, value) {
+    obj.forEach((key, value) {
       if (routingPath.contains(key))
-        copied.remove(key);
+        return;
       else if (isGET) {
-        if (value == null) {
-          copied.remove(key);
-          return;
-        }
+        if (value == null) return;
         copied[key] = value.toString();
+        return;
       }
+      copied[key] = value;
     });
 
     return copied;
