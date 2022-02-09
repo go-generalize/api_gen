@@ -3,10 +3,14 @@ package parser
 import (
 	"go/types"
 	"reflect"
+	"sort"
 
 	go2tstypes "github.com/go-generalize/go2ts/pkg/types"
 	"golang.org/x/xerrors"
 )
+
+// FormTagKey is a tag key for fields uploaded in multipart
+const FormTagKey = "form"
 
 //MultipartHeader is mime/multipart.FileHeader
 type MultipartHeader struct {
@@ -25,9 +29,17 @@ func (uf *MultipartHeader) String() string {
 	return "mime/multipart.FileHeader"
 }
 
+// FileField is a result type for GetFileFields
+type FileField struct {
+	Key     string
+	Value   go2tstypes.ObjectEntry
+	FormTag string
+	Type    MultipartUploadType
+}
+
 // GetFileFields returns fields for files
-func GetFileFields(obj *go2tstypes.Object) (res map[string]go2tstypes.ObjectEntry, err error) {
-	res = make(map[string]go2tstypes.ObjectEntry)
+func GetFileFields(obj *go2tstypes.Object) (res []FileField, err error) {
+	res = make([]FileField, 0)
 
 	for k, v := range obj.Entries {
 		t, err := GetMultipartUploadType(v.Type, v.RawTag)
@@ -40,8 +52,17 @@ func GetFileFields(obj *go2tstypes.Object) (res map[string]go2tstypes.ObjectEntr
 			continue
 		}
 
-		res[k] = v
+		res = append(res, FileField{
+			Key:     k,
+			Value:   v,
+			FormTag: reflect.StructTag(v.RawTag).Get(FormTagKey),
+			Type:    t,
+		})
 	}
+
+	sort.Slice(res, func(i, j int) bool {
+		return res[i].Key < res[j].Key
+	})
 
 	return
 }
@@ -114,8 +135,8 @@ func GetMultipartUploadType(t go2tstypes.Type, tag string) (MultipartUploadType,
 
 		return UploadNone, nil
 	case *MultipartHeader:
-		if reflect.StructTag(tag).Get("form") == "" {
-			return UploadNone, xerrors.Errorf("'form' tag for MultipartHeader is not set")
+		if reflect.StructTag(tag).Get(FormTagKey) == "" {
+			return UploadNone, xerrors.Errorf("'%s' tag for MultipartHeader is not set", FormTagKey)
 		}
 
 		return UploadSingleFile, nil

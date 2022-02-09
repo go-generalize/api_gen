@@ -3,6 +3,7 @@
 // generated version: (devel)
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart' as http_parser;
 import './classes/service/groups/types.dart' as types__service_groups;
 import './classes/service/static_page/types.dart' as types__service_static_page;
 import './classes/service/types.dart' as types__service;
@@ -738,22 +739,35 @@ class APIClient {
     }
     final url = baseURL + '/create_table';
 
-    final request = http.MultipartRequest('$method.Method', Uri.parse(url))
-      ..headers = headers
+    final request = http.MultipartRequest('POST', Uri.parse(url))
+      ..headers.addAll(headers)
       ..files.add(http.MultipartFile.fromString(
           'x-multipart-json-binder-request-json',
           jsonEncode(getRequestObject(param.toJson(), excludeParams)),
           filename: 'x-multipart-json-binder-request-json',
-          contentType: contentType))
-      ..files.add(param.file)
-      ..files.add(param.files);
+          contentType: http_parser.MediaType.parse('application/json')));
+
+    if (param.file != null) {
+      final file = param.file!;
+      request.files.add(http.MultipartFile('file', file.finalize(), file.length,
+          filename: file.filename, contentType: file.contentType));
+    }
+
+    if (param.files != null) {
+      param.files!.forEach((http.MultipartFile file) {
+        request.files.add(http.MultipartFile(
+            'files', file.finalize(), file.length,
+            filename: file.filename, contentType: file.contentType));
+      });
+    }
+
     final resp = await client.send(request);
 
     if (resp.statusCode ~/ 100 != 2) {
       throw ApiError(resp);
     }
     final res = types_.PostCreateTableResponse.fromJson(
-        jsonDecode(resp.stream.byteToString()));
+        jsonDecode(await resp.stream.bytesToString()));
 
     return res;
   }
@@ -790,7 +804,7 @@ class APIClient {
 }
 
 class ApiError extends Error {
-  final http.Response response;
+  final http.BaseResponse response;
 
   ApiError(this.response);
 

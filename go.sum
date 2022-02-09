@@ -134,6 +134,8 @@ github.com/go-generalize/go2dart v0.4.7 h1:vBSSVrQRzHWs5KFzw6LwWDT5p/ZRzLumz+S40
 github.com/go-generalize/go2dart v0.4.7/go.mod h1:qCKIC028FFZnNDSjs3brBSuC6VoiRACdpO2erlYVg0k=
 github.com/go-generalize/go2dart v0.4.8 h1:nZe5bZK9TbN33XW8VTULaBFzmIGbjtI2JVUrLwNgaKE=
 github.com/go-generalize/go2dart v0.4.8/go.mod h1:peqHvoBnlWmpJPoYaIyGBditWFaNZ6jR0ywbIRNdY8o=
+github.com/go-generalize/go2dart v0.5.0 h1:o0axiDk6cQK1irTgp6fE6CHOatLq+psF2cBXhdKh4k4=
+github.com/go-generalize/go2dart v0.5.0/go.mod h1:peqHvoBnlWmpJPoYaIyGBditWFaNZ6jR0ywbIRNdY8o=
 github.com/go-generalize/go2go v0.0.0-20210311170338-9701de42e3ad h1:9oYY/ZcAf3VVRhxaxolqoTVprrx9A7N8INWAfWCRwBc=
 github.com/go-generalize/go2go v0.0.0-20210311170338-9701de42e3ad/go.mod h1:YCmZm0ss4r71rT/Q6AgK4vre4tSFfJ1W/eDHWsmnLCc=
 github.com/go-generalize/go2ts v1.0.5-0.20210311100632-95c274e947f1/go.mod h1:075q+zcpc6IjwYy9WpJpY+M9ssbEA6uccjzWwr59t3M=
@@ -485,6 +487,7 @@ golang.org/x/mod v0.4.1/go.mod h1:s0Qsj1ACt9ePp/hMypM3fl4fZqREWJwdYDEqhRiZZUA=
 golang.org/x/mod v0.4.2/go.mod h1:s0Qsj1ACt9ePp/hMypM3fl4fZqREWJwdYDEqhRiZZUA=
 golang.org/x/mod v0.5.0 h1:UG21uOlmZabA4fW5i7ZX6bjw1xELEGg/ZLgZq9auk/Q=
 golang.org/x/mod v0.5.0/go.mod h1:5OXOZSfqPIIbmVBIIKWRFfZjPR0E5r58TLhUjH0a2Ro=
+golang.org/x/mod v0.5.1/go.mod h1:5OXOZSfqPIIbmVBIIKWRFfZjPR0E5r58TLhUjH0a2Ro=
 golang.org/x/net v0.0.0-20180724234803-3673e40ba225/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/net v0.0.0-20180826012351-8a410e7b638d/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/net v0.0.0-20181023162649-9b4f9f5ad519/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=

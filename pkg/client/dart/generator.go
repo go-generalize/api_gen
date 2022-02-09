@@ -68,13 +68,22 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint, packageAlias string) *
 	})
 
 	res, _ := parser.GetFileFields(ep.RequestGo2tsPayload)
-	fileFieldNames := make([]string, 0, len(res))
+	fileFields := make([]fileField, 0, len(res))
 
 	for _, v := range res {
-		fileFieldNames = append(fileFieldNames, go2dartgenerator.ReplaceFieldName(v.RawName))
+		isArray := v.Type == parser.UploadMultipleFiles
+		fileFields = append(fileFields, fileField{
+			MultipartField: v.FormTag,
+			StructField:    go2dartgenerator.ReplaceFieldName(v.Value.RawName),
+			IsArray:        isArray,
+		})
+
+		if isArray {
+			g.ImportHTTPParser = true
+		}
 	}
-	sort.Strings(fileFieldNames)
-	endpoint.FileFieldNames = fileFieldNames
+
+	endpoint.FileFields = fileFields
 
 	urlParams := make(map[string]string)
 	for key, field := range ep.RequestGo2tsPayload.Entries {

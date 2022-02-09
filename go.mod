@@ -24,7 +24,7 @@ require (
 	github.com/fatih/structtag v1.2.0
 	github.com/go-generalize/go-dartfmt v0.1.1
 	github.com/go-generalize/go-easyparser v0.2.0
-	github.com/go-generalize/go2dart v0.4.8
+	github.com/go-generalize/go2dart v0.5.0
 	github.com/go-utils/echo-multipart-binder v0.0.0-20220124071423-447cb3183214
 	github.com/swaggo/swag v1.7.8
 )
@@ -48,7 +48,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
-	golang.org/x/mod v0.5.0 // indirect
+	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

@@ -16,7 +16,17 @@ import (
 
 // GenerateTypes generates request/response types in Dart
 func (g *generator) GenerateTypes(fn func(relPath, code string) error) error {
-	err := g.generateTypes(g.root, fn)
+	code, err := go2dartgenerator.NewGenerator(nil, nil).Generate()
+
+	if err != nil {
+		return xerrors.Errorf("failed to generate common JsonConverter: %w", err)
+	}
+
+	if err := fn("common.dart", code); err != nil {
+		return xerrors.Errorf("failed to save common.dart: %w", err)
+	}
+
+	err = g.generateTypes(g.root, fn)
 
 	if err != nil {
 		return xerrors.Errorf("failed to generate request/response types: %w", err)
@@ -41,7 +51,7 @@ func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string
 	gen.ExternalImporter = func(o *types.Object) *go2dartgenerator.ExternalImporter {
 		if o.Name == fileHeaderName {
 			return &go2dartgenerator.ExternalImporter{
-				Path: "http",
+				Path: "package:http/http.dart",
 				Name: "MultipartFile",
 			}
 		}
@@ -74,15 +84,23 @@ func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string
 		}
 	}
 
+	relative := gr.GetFullPath(string(filepath.Separator), func(rawPath, path, placeholder string) string {
+		return rawPath
+	})
+
+	reversedRelative, err := filepath.Rel(filepath.Join(".", relative), ".")
+
+	if err != nil {
+		return xerrors.Errorf("failed to get reversed relative path: %w", err)
+	}
+
+	gen.ExternalCommonConverterPath = filepath.Join(reversedRelative, "../common.dart")
+
 	code, err := gen.Generate()
 
 	if err != nil {
 		return xerrors.Errorf("failed to generate: %w", err)
 	}
-
-	relative := gr.GetFullPath(string(filepath.Separator), func(rawPath, path, placeholder string) string {
-		return rawPath
-	})
 
 	code = fmt.Sprintf(headerComment, g.AppVersion) + code
 
@@ -137,13 +155,17 @@ func replaceFileHeader(obj *types.Object) {
 		}
 
 		if t == parser.UploadSingleFile {
-			v.Type = &types.Object{
-				Name: fileHeaderName,
-			}
-		} else {
-			v.Type = &types.Array{
+			v.Type = &types.Nullable{
 				Inner: &types.Object{
 					Name: fileHeaderName,
+				},
+			}
+		} else {
+			v.Type = &types.Nullable{
+				Inner: &types.Array{
+					Inner: &types.Object{
+						Name: fileHeaderName,
+					},
 				},
 			}
 		}
