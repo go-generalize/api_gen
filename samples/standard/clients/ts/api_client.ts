@@ -1737,7 +1737,7 @@ export class APIClient {
 			options = arg1.options;
 		}
 
-	    const excludeParams: string[] = [];
+	    const excludeParams: string[] = ['File', 'Files', ];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
@@ -1768,7 +1768,12 @@ export class APIClient {
 			url,
 			{
 				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				body: (() => {
+					const body = new FormData();
+					body.append('file', param.File);
+					param.Files.forEach(f => body.append('files', f));
+					return body;
+				})(),
 				headers: {
 					...this.headers,
 					...headers,

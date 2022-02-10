@@ -132,7 +132,7 @@ class {{ $elem.Name }} {
 			options = arg1.options;
 		}
 
-	    const excludeParams: string[] = [{{ range $param := $method.URLParams }}'{{ $param }}', {{ end }}];
+	    const excludeParams: string[] = [{{ range $param := $method.ExcludedParams }}'{{ $param }}', {{ end }}];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
@@ -167,8 +167,23 @@ class {{ $elem.Name }} {
 			{
 				method: "{{ $method.Method }}",
 {{- 	if ne $method.Method "GET" }}
+{{-     	if $method.Multipart }}
+				body: (() => {
+					const body = new FormData();
+
+{{- range $index, $field := $method.FileFields }}
+{{ if $field.IsArray }}
+					param.{{ $field.StructField }}.forEach(f => body.append('{{ $field.MultipartField }}', f));
+{{- else}}
+					body.append('{{ $field.MultipartField }}', param.{{ $field.StructField }});
+{{- end }}
+{{- end }}
+					return body;
+				})(),
+{{-			else }}
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
-{{-       end }}
+{{- 		end }}
+{{-     end }}
 				headers: reqHeader,
 				...reqOption,
 			}
@@ -334,7 +349,7 @@ export class APIClient {
 			options = arg1.options;
 		}
 
-	    const excludeParams: string[] = [{{ range $param := $method.URLParams }}'{{ $param }}', {{ end }}];
+	    const excludeParams: string[] = [{{ range $param := $method.ExcludedParams }}'{{ $param }}', {{ end }}];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
@@ -369,7 +384,22 @@ export class APIClient {
 			{
 				method: "{{ $method.Method }}",
 {{- 	if ne $method.Method "GET" }}
+{{-     	if $method.Multipart }}
+				body: (() => {
+					const body = new FormData();
+
+{{- range $index, $field := $method.FileFields }}
+{{- if $field.IsArray }}
+					param.{{ $field.StructField }}.forEach(f => body.append('{{ $field.MultipartField }}', f));
+{{- else}}
+					body.append('{{ $field.MultipartField }}', param.{{ $field.StructField }});
+{{- end }}
+{{- end }}
+					return body;
+				})(),
+{{-			else }}
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+{{- 		end }}
 {{-       end }}
 				headers: {
 					...this.headers,

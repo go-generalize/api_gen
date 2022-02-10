@@ -72,20 +72,6 @@ func GetFileFields(obj *go2tstypes.Object) (res []FileField, err error) {
 func hasMultipartUpload(t *go2tstypes.Object) (bool, error) {
 	found := false
 	for _, v := range t.Entries {
-		if obj, ok := v.Type.(*go2tstypes.Object); ok {
-			has, err := hasMultipartUpload(obj)
-
-			if err != nil {
-				return false, xerrors.Errorf("in %s: %w", v.RawName, err)
-			}
-
-			if has {
-				return true, nil
-			}
-
-			continue
-		}
-
 		res, err := GetMultipartUploadType(v.Type, v.RawTag)
 
 		if err != nil {

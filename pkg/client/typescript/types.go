@@ -22,12 +22,19 @@ type Generator interface {
 	GenerateTypes(fn func(relPath, code string) error) error
 }
 
+type fileField struct {
+	MultipartField, StructField string
+	IsArray                     bool
+}
+
 type endpointType struct {
 	Name                      string
 	RequestType, ResponseType string
 	Method, Endpoint          string
-	URLParams                 []string
+	ExcludedParams            []string
 	HasFields                 bool
+	Multipart                 bool
+	FileFields                []fileField
 }
 
 type childrenType struct {
@@ -37,7 +44,7 @@ type childrenType struct {
 type clientType struct {
 	Name     string
 	Methods  []*endpointType
-	Children []childrenType
+	Children []*childrenType
 }
 
 type importPair struct {
