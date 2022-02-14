@@ -1770,6 +1770,12 @@ export class APIClient {
 				method: "POST",
 				body: (() => {
 					const body = new FormData();
+
+					body.append(
+						'x-multipart-json-binder-request-json',
+						new Blob([JSON.stringify(this.getRequestObject(param, excludeParams))], {type: 'application/json'}),
+						'x-multipart-json-binder-request-json'
+					);
 					body.append('file', param.File);
 					param.Files.forEach(f => body.append('files', f));
 					return body;

@@ -171,6 +171,11 @@ class {{ $elem.Name }} {
 				body: (() => {
 					const body = new FormData();
 
+					body.append(
+						'x-multipart-json-binder-request-json',
+						new Blob(JSON.stringify(this.getRequestObject(param, excludeParams)), {type: 'application/json'}),
+						'x-multipart-json-binder-request-json'
+					);
 {{- range $index, $field := $method.FileFields }}
 {{ if $field.IsArray }}
 					param.{{ $field.StructField }}.forEach(f => body.append('{{ $field.MultipartField }}', f));
@@ -388,6 +393,11 @@ export class APIClient {
 				body: (() => {
 					const body = new FormData();
 
+					body.append(
+						'x-multipart-json-binder-request-json',
+						new Blob([JSON.stringify(this.getRequestObject(param, excludeParams))], {type: 'application/json'}),
+						'x-multipart-json-binder-request-json'
+					);
 {{- range $index, $field := $method.FileFields }}
 {{- if $field.IsArray }}
 					param.{{ $field.StructField }}.forEach(f => body.append('{{ $field.MultipartField }}', f));
