@@ -4,6 +4,8 @@
 package controller
 
 import (
+	"fmt"
+
 	types "github.com/go-generalize/api_gen/v2/samples/standard/api"
 	props "github.com/go-generalize/api_gen/v2/samples/standard/server/props"
 	"github.com/labstack/echo/v4"
@@ -29,6 +31,20 @@ func NewPostCreateTableController(cp *props.ControllerProps) PostCreateTableCont
 func (ctrl *postCreateTableController) PostCreateTable(
 	c echo.Context, req *types.PostCreateTableRequest,
 ) (res *types.PostCreateTableResponse, err error) {
+	if req.File != nil {
+		fmt.Println("file", req.File.Filename, req.File.Size)
+	}
+	if req.Files != nil {
+		for _, f := range req.Files {
+			fmt.Println("files", f.Filename, f.Size)
+		}
+	}
+	fmt.Println(*req)
+
+	return &types.PostCreateTableResponse{
+		ID: "id",
+	}, nil
+
 	// return nil, apierror.NewAPIError(http.StatusBadRequest)
 	//
 	// return nil, apierror.NewAPIError(http.StatusBadRequest).SetError(err)
@@ -43,5 +59,5 @@ func (ctrl *postCreateTableController) PostCreateTable(
 
 // AutoBind - use echo.Bind
 func (ctrl *postCreateTableController) AutoBind() bool {
-	return true
+	return false
 }

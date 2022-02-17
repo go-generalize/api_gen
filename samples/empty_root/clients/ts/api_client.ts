@@ -117,6 +117,7 @@ class FooBarClient {
 		}
 
 		const reqHeader = {
+			'Content-Type': 'application/json',
 			...this.headers,
 			...headers,
 			...mockHeaders,
@@ -256,7 +257,6 @@ export class APIClient {
 		}
 
 		const headers: {[key: string]: string} =  {
-			'Content-Type': 'application/json',
 			...commonHeaders,
 		};
 

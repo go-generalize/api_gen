@@ -750,14 +750,16 @@ class APIClient {
     if (param.file != null) {
       final file = param.file!;
       request.files.add(http.MultipartFile('file', file.finalize(), file.length,
-          filename: file.filename, contentType: file.contentType));
+          filename: file.filename ?? 'untitled',
+          contentType: file.contentType));
     }
 
     if (param.files != null) {
       param.files!.forEach((http.MultipartFile file) {
         request.files.add(http.MultipartFile(
             'files', file.finalize(), file.length,
-            filename: file.filename, contentType: file.contentType));
+            filename: file.filename ?? 'untitled',
+            contentType: file.contentType));
       });
     }
 

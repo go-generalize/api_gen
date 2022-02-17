@@ -17,9 +17,9 @@ for t in ${targets[@]}; do
     pushd ${t}
 
     mkdir -p server clients
-    # cd server && api_gen s ../api
-    # cd ../clients
-    cd clients
+    cd server && api_gen s ../api
+    cd ../clients
+    # cd clients
     for c in ${clients[@]}; do
         mkdir -p ${c}
         pushd ${c}

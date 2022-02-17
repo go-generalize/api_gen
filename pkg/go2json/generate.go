@@ -29,7 +29,8 @@ type Generator struct {
 	types   map[string]tstypes.Type
 	altPkgs map[string]string
 
-	BasePackage string
+	BasePackage     string
+	CustomGenerator func(t tstypes.Type, packageStack []string, exitRecursion bool) (bool, interface{})
 }
 
 // NewGenerator Generator constructor
@@ -189,6 +190,14 @@ func (g *Generator) Generate(dir string) error {
 func (g *Generator) generateType(t tstypes.Type, packageStack []string, exitRecursion bool) interface{} {
 	if t == nil {
 		return nil
+	}
+
+	if g.CustomGenerator != nil {
+		handled, r := g.CustomGenerator(t, packageStack, exitRecursion)
+
+		if handled {
+			return r
+		}
 	}
 
 	switch v := t.(type) {

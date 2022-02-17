@@ -90,7 +90,7 @@ func replaceFileHeader(obj *types.Object) {
 			continue
 		}
 
-		t, err := parser.GetMultipartUploadType(v.Type, v.RawTag)
+		t, err := parser.ValidateMultipartUploadType(v.Type, v.RawTag)
 
 		if err != nil || t == parser.UploadNone {
 			continue

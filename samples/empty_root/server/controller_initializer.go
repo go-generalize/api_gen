@@ -10,6 +10,7 @@ import (
 
 	apierror "github.com/go-generalize/api_gen/v2/samples/empty_root/server/pkg/apierror"
 	props "github.com/go-generalize/api_gen/v2/samples/empty_root/server/props"
+	"github.com/go-utils/echo-multipart-binder/mjbinder"
 	"github.com/go-utils/echo-multipart-binder/mpbinder"
 	"github.com/labstack/echo/v4"
 )
@@ -35,6 +36,7 @@ func NewControllers(
 ) *Controllers {
 	ctrl := &Controllers{}
 
+	e.Binder = mjbinder.NewMultipartJSONBinder(mpbinder.NewMultipartFileBinder(e.Binder))
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			for _, m := range ctrl.middlewares {

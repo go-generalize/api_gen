@@ -140,6 +140,9 @@ class {{ $elem.Name }} {
 		}
 
 		const reqHeader = {
+			{{- if  and (ne $method.Method "GET") (not $method.Multipart) }}
+			'Content-Type': 'application/json',
+			{{- end }}
 			...this.headers,
 			...headers,
 			...mockHeaders,
@@ -256,7 +259,6 @@ export class APIClient {
 		}
 
 		const headers: {[key: string]: string} =  {
-			'Content-Type': 'application/json',
 			...commonHeaders,
 		};
 
@@ -412,6 +414,9 @@ export class APIClient {
 {{- 		end }}
 {{-       end }}
 				headers: {
+					{{- if  and (ne $method.Method "GET") (not $method.Multipart) }}
+					'Content-Type': 'application/json',
+					{{- end }}
 					...this.headers,
 					...headers,
 					...mockHeaders,

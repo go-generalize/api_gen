@@ -87,14 +87,17 @@ class {{ $elem.Name }} {
       param.{{ $field.StructField }}.forEach((http.MultipartFile file) {
         request.files.add(http.MultipartFile(
           '{{ $field.MultipartField }}', file.finalize(), file.length,
-          filename: file.filename, contentType: file.contentType
+          filename: file.filename ?? 'untitled', contentType: file.contentType
         ));
       });
 {{ else }}
+    if (param.{{ $field.StructField }} != null) {
+      final file = param.{{ $field.StructField }}!;
       request.files.add(http.MultipartFile(
-        '{{ $field.MultipartField }}', param.{{ $field.StructField }}.finalize(), param.{{ $field.StructField }}.length,
-        filename: param.{{ $field.StructField }}.filename, contentType: param.{{ $field.StructField }}.contentType
+        '{{ $field.MultipartField }}', file.finalize(), file.length,
+        filename: file.filename ?? 'untitled', contentType: file.contentType
       ));
+    }
 {{- end }}
 {{- end }}
     final resp = await client.send(request);
@@ -215,7 +218,7 @@ class APIClient {
       param.{{ $field.StructField }}!.forEach((http.MultipartFile file) {
         request.files.add(http.MultipartFile(
           '{{ $field.MultipartField }}', file.finalize(), file.length,
-          filename: file.filename, contentType: file.contentType
+          filename: file.filename ?? 'untitled', contentType: file.contentType
         ));
       });
     }
@@ -224,7 +227,7 @@ class APIClient {
       final file = param.{{ $field.StructField }}!;
       request.files.add(http.MultipartFile(
         '{{ $field.MultipartField }}', file.finalize(), file.length,
-        filename: file.filename, contentType: file.contentType
+        filename: file.filename ?? 'untitled', contentType: file.contentType
       ));
     }
 {{- end }}

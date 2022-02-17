@@ -42,7 +42,7 @@ func GetFileFields(obj *go2tstypes.Object) (res []FileField, err error) {
 	res = make([]FileField, 0)
 
 	for k, v := range obj.Entries {
-		t, err := GetMultipartUploadType(v.Type, v.RawTag)
+		t, err := ValidateMultipartUploadType(v.Type, v.RawTag)
 
 		if err != nil {
 			return nil, xerrors.Errorf("in %s: %w", v.RawName, err)
@@ -72,7 +72,7 @@ func GetFileFields(obj *go2tstypes.Object) (res []FileField, err error) {
 func hasMultipartUpload(t *go2tstypes.Object) (bool, error) {
 	found := false
 	for _, v := range t.Entries {
-		res, err := GetMultipartUploadType(v.Type, v.RawTag)
+		res, err := ValidateMultipartUploadType(v.Type, v.RawTag)
 
 		if err != nil {
 			return false, xerrors.Errorf("in %s: %w", v.RawName, err)
@@ -92,13 +92,29 @@ const (
 	UploadMultipleFiles
 )
 
+// ValidateMultipartUploadType checks t is *multipart.FileHeader or []*multipart.FileHeader
+// And validate form tag
+func ValidateMultipartUploadType(t go2tstypes.Type, tag string) (MultipartUploadType, error) {
+	ut := GetMultipartUploadType(t)
+
+	if ut == UploadNone {
+		return UploadNone, nil
+	}
+
+	if reflect.StructTag(tag).Get(FormTagKey) == "" {
+		return UploadNone, xerrors.Errorf("'%s' tag for MultipartHeader is not set", FormTagKey)
+	}
+
+	return ut, nil
+}
+
 // GetMultipartUploadType checks t is *multipart.FileHeader or []*multipart.FileHeader
 // Multipart data in map are not supported
-func GetMultipartUploadType(t go2tstypes.Type, tag string) (MultipartUploadType, error) {
+func GetMultipartUploadType(t go2tstypes.Type) MultipartUploadType {
 	nullable, ok := t.(*go2tstypes.Nullable)
 
 	if !ok {
-		return UploadNone, nil
+		return UploadNone
 	}
 
 	switch t := nullable.Inner.(type) {
@@ -106,29 +122,21 @@ func GetMultipartUploadType(t go2tstypes.Type, tag string) (MultipartUploadType,
 		_, ok := t.Inner.(*go2tstypes.Nullable)
 
 		if !ok {
-			return UploadNone, nil
+			return UploadNone
 		}
 
-		r, err := GetMultipartUploadType(t.Inner, tag)
-
-		if err != nil {
-			return UploadNone, err
-		}
+		r := GetMultipartUploadType(t.Inner)
 
 		if r == UploadSingleFile {
-			return UploadMultipleFiles, nil
+			return UploadMultipleFiles
 		}
 
-		return UploadNone, nil
+		return UploadNone
 	case *MultipartHeader:
-		if reflect.StructTag(tag).Get(FormTagKey) == "" {
-			return UploadNone, xerrors.Errorf("'%s' tag for MultipartHeader is not set", FormTagKey)
-		}
-
-		return UploadSingleFile, nil
+		return UploadSingleFile
 	}
 
-	return UploadNone, nil
+	return UploadNone
 }
 
 func replacer(t types.Type) go2tstypes.Type {

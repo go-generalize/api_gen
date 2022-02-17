@@ -25,7 +25,7 @@ require (
 	github.com/go-generalize/go-dartfmt v0.1.1
 	github.com/go-generalize/go-easyparser v0.2.0
 	github.com/go-generalize/go2dart v0.5.0
-	github.com/go-utils/echo-multipart-binder v0.0.0-20220124071423-447cb3183214
+	github.com/go-utils/echo-multipart-binder v0.2.0
 	github.com/swaggo/swag v1.7.8
 )
 
@@ -40,6 +40,7 @@ require (
 	github.com/go-openapi/spec v0.20.4 // indirect
 	github.com/go-openapi/swag v0.19.15 // indirect
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/labstack/gommon v0.3.1 // indirect
@@ -50,5 +51,6 @@ require (
 	github.com/valyala/fasttemplate v1.2.1 // indirect
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

@@ -696,6 +696,7 @@ class ServiceUser2Client {
 		}
 
 		const reqHeader = {
+			'Content-Type': 'application/json',
 			...this.headers,
 			...headers,
 			...mockHeaders,
@@ -854,6 +855,7 @@ class ServiceUser2Client {
 		}
 
 		const reqHeader = {
+			'Content-Type': 'application/json',
 			...this.headers,
 			...headers,
 			...mockHeaders,
@@ -933,6 +935,7 @@ class ServiceUser2Client {
 		}
 
 		const reqHeader = {
+			'Content-Type': 'application/json',
 			...this.headers,
 			...headers,
 			...mockHeaders,
@@ -1195,6 +1198,7 @@ class ServiceUser2UserIDJobIDClient {
 		}
 
 		const reqHeader = {
+			'Content-Type': 'application/json',
 			...this.headers,
 			...headers,
 			...mockHeaders,
@@ -1400,6 +1404,7 @@ class ServiceUserClient {
 		}
 
 		const reqHeader = {
+			'Content-Type': 'application/json',
 			...this.headers,
 			...headers,
 			...mockHeaders,
@@ -1479,6 +1484,7 @@ class ServiceUserClient {
 		}
 
 		const reqHeader = {
+			'Content-Type': 'application/json',
 			...this.headers,
 			...headers,
 			...mockHeaders,
@@ -1559,7 +1565,6 @@ export class APIClient {
 		}
 
 		const headers: {[key: string]: string} =  {
-			'Content-Type': 'application/json',
 			...commonHeaders,
 		};
 
@@ -1866,6 +1871,7 @@ export class APIClient {
 				method: "POST",
 				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
 				headers: {
+					'Content-Type': 'application/json',
 					...this.headers,
 					...headers,
 					...mockHeaders,
