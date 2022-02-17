@@ -39,7 +39,7 @@ func (ctrl *postCreateTableController) PostCreateTable(
 			fmt.Println("files", f.Filename, f.Size)
 		}
 	}
-	fmt.Println(*req)
+	fmt.Println(req.ID)
 
 	return &types.PostCreateTableResponse{
 		ID: "id",
