@@ -3,7 +3,7 @@ module github.com/go-generalize/api_gen/v2
 go 1.17
 
 require (
-	github.com/go-generalize/go2go v0.0.0-20210311170338-9701de42e3ad
+	github.com/go-generalize/go2go v0.1.0
 	github.com/go-generalize/go2ts v1.6.0
 	github.com/go-utils/count v0.0.1
 	github.com/go-utils/gopackages v0.0.0-20210218102646-e7d1f0008968

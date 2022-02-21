@@ -130,8 +130,8 @@ github.com/go-generalize/go-easyparser v0.2.0 h1:BAkuf9qkgIX1rm2nMVT3HiXO787Tnja
 github.com/go-generalize/go-easyparser v0.2.0/go.mod h1:I+Ifnjzw7UNzxkENknQQY9yB2gsz9RekzAbKLYq/Dzw=
 github.com/go-generalize/go2dart v0.5.0 h1:o0axiDk6cQK1irTgp6fE6CHOatLq+psF2cBXhdKh4k4=
 github.com/go-generalize/go2dart v0.5.0/go.mod h1:peqHvoBnlWmpJPoYaIyGBditWFaNZ6jR0ywbIRNdY8o=
-github.com/go-generalize/go2go v0.0.0-20210311170338-9701de42e3ad h1:9oYY/ZcAf3VVRhxaxolqoTVprrx9A7N8INWAfWCRwBc=
-github.com/go-generalize/go2go v0.0.0-20210311170338-9701de42e3ad/go.mod h1:YCmZm0ss4r71rT/Q6AgK4vre4tSFfJ1W/eDHWsmnLCc=
+github.com/go-generalize/go2go v0.1.0 h1:BqCWA5ifMkEsvKTxcMuiSfu5zuMPg1j2eQVOhz2ievY=
+github.com/go-generalize/go2go v0.1.0/go.mod h1:lYuZa6CIQf8p4uNaojvN9zktOdkjU6+REKwIflYVLEM=
 github.com/go-generalize/go2ts v1.0.5-0.20210311100632-95c274e947f1/go.mod h1:075q+zcpc6IjwYy9WpJpY+M9ssbEA6uccjzWwr59t3M=
 github.com/go-generalize/go2ts v1.6.0 h1:a+ysTs5xVX3MT0nrAk8sEO8pGBgCPOF2LywW92JmQIY=
 github.com/go-generalize/go2ts v1.6.0/go.mod h1:TjBIzrW+K1EZCbLkh32OL1ramp54lFpVImiK6jmZvBs=
@@ -157,8 +157,6 @@ github.com/go-sourcemap/sourcemap v2.1.3+incompatible/go.mod h1:F8jJfvm2KbVjc5Nq
 github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/melR3HDY=
 github.com/go-utils/count v0.0.1 h1:mt55LmS+NgZjldyZx5IQqpXcmbV1Zzsh+EtxSNW9YeM=
 github.com/go-utils/count v0.0.1/go.mod h1:jTOK09i9ez7PdsTjscdN+iDrXGq5YkDTDYuiVy7hRZw=
-github.com/go-utils/echo-multipart-binder v0.2.0 h1:4mb3NaQTDrbpawFUOAU+URpmaz4f8WNdpEGPzT2Vcaw=
-github.com/go-utils/echo-multipart-binder v0.2.0/go.mod h1:I9RUOS+h5TPFy96MURphPO1Yxe7nSUz0v3i0sanPU0U=
 github.com/go-utils/echo-multipart-binder v0.2.1 h1:LFBdsPG6eTuuO8DEUT2LZBz2Tb3wEk+1+ZmiE85Tcs8=
 github.com/go-utils/echo-multipart-binder v0.2.1/go.mod h1:I9RUOS+h5TPFy96MURphPO1Yxe7nSUz0v3i0sanPU0U=
 github.com/go-utils/gopackages v0.0.0-20210218102646-e7d1f0008968 h1:sHm78LgJXVdlQPfpmVq4tLmssocz+tda7NJgdH6LJFY=
