@@ -4,8 +4,6 @@
 
 package types
 
-import ()
-
 type GetStaticPageRequest struct {
 }
 
