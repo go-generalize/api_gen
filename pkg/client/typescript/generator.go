@@ -25,7 +25,9 @@ func NewGenerator(gr *parser.Group, version string) Generator {
 
 // GenerateClient generates a TypeScript client for api_gen
 func (g *generator) GenerateClient() (string, error) {
-	g.generateGroup(g.root)
+	if _, err := g.generateGroup(g.root); err != nil {
+		return "", xerrors.Errorf("failed to generate group: %w", err)
+	}
 	g.sort()
 
 	tmpl, err := template.ParseFS(clientTSTemplate, "templates/api.ts.tmpl")

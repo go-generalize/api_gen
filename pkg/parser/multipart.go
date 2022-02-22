@@ -9,6 +9,8 @@ import (
 	"golang.org/x/xerrors"
 )
 
+const fileHeaderType = `mime/multipart.FileHeader`
+
 // FormTagKey is a tag key for fields uploaded in multipart
 const FormTagKey = "form"
 
@@ -26,7 +28,7 @@ func (uf *MultipartHeader) UsedAsMapKey() bool {
 
 // String returns this type in string representation
 func (uf *MultipartHeader) String() string {
-	return "mime/multipart.FileHeader"
+	return fileHeaderType
 }
 
 // FileField is a result type for GetFileFields
@@ -87,8 +89,11 @@ func hasMultipartUpload(t *go2tstypes.Object) (bool, error) {
 type MultipartUploadType int
 
 const (
+	// UploadNone means no the field is not a file
 	UploadNone MultipartUploadType = iota
+	// UploadSingleFile means the field is a file
 	UploadSingleFile
+	// UploadMultipleFiles means the field is a slice of files
 	UploadMultipleFiles
 )
 
@@ -146,7 +151,7 @@ func replacer(t types.Type) go2tstypes.Type {
 		return nil
 	}
 
-	if named.String() == "mime/multipart.FileHeader" {
+	if named.String() == fileHeaderType {
 		return &MultipartHeader{}
 	}
 

@@ -100,7 +100,6 @@ func replaceFileHeader(obj *types.Object) {
 			v.Type = &types.Object{
 				Name: fileHeaderName,
 			}
-
 		} else {
 			v.Type =
 				&types.Array{
@@ -108,7 +107,6 @@ func replaceFileHeader(obj *types.Object) {
 						Name: fileHeaderName,
 					},
 				}
-
 		}
 		v.Optional = true
 
