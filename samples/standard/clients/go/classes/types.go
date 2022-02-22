@@ -5,6 +5,7 @@
 package types
 
 import (
+	external_3524d37 "github.com/go-generalize/multipart-util"
 	"time"
 )
 
@@ -19,10 +20,12 @@ type GetResponse struct {
 }
 
 type PostCreateTableRequest struct {
-	Flag int
-	ID   string
-	Map  map[int]int `json:"map"`
-	Text string
+	File  *external_3524d37.MultipartPayload   `form:"file" json:"-"`
+	Files []*external_3524d37.MultipartPayload `form:"files" json:"-"`
+	Flag  int
+	ID    string
+	Map   map[int]int `json:"map"`
+	Text  string
 }
 
 type PostCreateTableResponse struct {

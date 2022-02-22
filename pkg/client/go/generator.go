@@ -13,6 +13,7 @@ import (
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
 	"github.com/go-generalize/api_gen/v2/pkg/util"
 	"github.com/iancoleman/strcase"
+	"golang.org/x/xerrors"
 )
 
 //go:embed templates/client.go.tmpl
@@ -39,11 +40,13 @@ func NewGenerator(gr *parser.Group, typesDirImportPath, packageName, version str
 }
 
 type endpoint struct {
-	Name     string
-	Method   string
-	Path     string
-	Request  string
-	Response string
+	Name            string
+	Method          string
+	Path            string
+	Request         string
+	Response        string
+	MultipartUpload bool
+	FileFields      []parser.FileField
 }
 
 type group struct {
@@ -53,12 +56,13 @@ type group struct {
 }
 
 type generator struct {
-	PackageName string
-	Groups      []*group
-	imports     map[string]string
-	Imports     []importPair
-	Version     string
-	Root        *group
+	PackageName     string
+	Groups          []*group
+	imports         map[string]string
+	Imports         []importPair
+	Version         string
+	Root            *group
+	MultipartUpload bool
 
 	baseGroup          *parser.Group
 	typesDirImportPath string
@@ -70,8 +74,14 @@ type importPair struct {
 
 // GenerateClient generates a Go client for api_gen
 func (g *generator) GenerateClient() (string, error) {
+	var err error
+
 	g.imports = make(map[string]string)
-	g.Root = g.generateGroup(g.baseGroup)
+	g.Root, err = g.generateGroup(g.baseGroup)
+
+	if err != nil {
+		return "", xerrors.Errorf("failed to convert groups/endpoints: %w", err)
+	}
 
 	for k, v := range g.imports {
 		// Overwrite import path to ./classes
@@ -87,14 +97,20 @@ func (g *generator) GenerateClient() (string, error) {
 		return g.Imports[i].Path+g.Imports[i].Path < g.Imports[j].Path+g.Imports[j].Path
 	})
 
-	tmpl, err := template.ParseFS(clientGoTemplate, "templates/client.go.tmpl")
+	tmpl, err := template.New("client.go.tmpl").Funcs(
+		template.FuncMap{
+			"IsArrayMultipleUpload": func(f parser.FileField) bool {
+				return f.Type == parser.UploadMultipleFiles
+			},
+		},
+	).ParseFS(clientGoTemplate, "templates/client.go.tmpl")
 
 	if err != nil {
 		return "", err
 	}
 
 	buf := bytes.NewBuffer(nil)
-	if err := tmpl.Execute(buf, g); err != nil {
+	if err := tmpl.ExecuteTemplate(buf, "client.go.tmpl", g); err != nil {
 		return "", err
 	}
 
@@ -107,7 +123,7 @@ func (g *generator) GenerateClient() (string, error) {
 	return string(formatted), nil
 }
 
-func (g *generator) generateEndpoint(ep *parser.Endpoint) *endpoint {
+func (g *generator) generateEndpoint(ep *parser.Endpoint) (*endpoint, error) {
 	gen := &endpoint{}
 
 	gen.Method = string(ep.Method)
@@ -122,6 +138,20 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint) *endpoint {
 
 		return path
 	})
+
+	if ep.UseMultipartUpload {
+		g.MultipartUpload = true
+		gen.MultipartUpload = true
+
+		fields, err := parser.GetFileFields(ep.RequestGo2tsPayload)
+
+		if err != nil {
+			return nil, xerrors.Errorf("failed to get file fields: %w", err)
+		}
+
+		gen.FileFields = fields
+	}
+
 	fullPath = `"` + fullPath + `"`
 
 	gen.Path = fullPath
@@ -132,10 +162,10 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint) *endpoint {
 	gen.Request = fmt.Sprintf("%s.%s", importAlias, ep.RequestPayloadName)
 	gen.Response = fmt.Sprintf("%s.%s", importAlias, ep.ResponsePayloadName)
 
-	return gen
+	return gen, nil
 }
 
-func (g *generator) generateGroup(gr *parser.Group) *group {
+func (g *generator) generateGroup(gr *parser.Group) (*group, error) {
 	gen := &group{}
 
 	p := gr.GetFullPath("_", func(rawPath, path, placeholder string) string {
@@ -158,15 +188,27 @@ func (g *generator) generateGroup(gr *parser.Group) *group {
 
 	gen.Children = make([]*group, 0, len(gr.Children))
 	for i := range gr.Children {
-		gen.Children = append(gen.Children, g.generateGroup(gr.Children[i]))
+		gr, err := g.generateGroup(gr.Children[i])
+
+		if err != nil {
+			return nil, xerrors.Errorf("failed to generate group(%s): %w", gr.Children[i].Name, err)
+		}
+
+		gen.Children = append(gen.Children, gr)
 	}
 
 	gen.Endpoints = make([]*endpoint, 0, len(gr.Endpoints))
 	for i := range gr.Endpoints {
-		gen.Endpoints = append(gen.Endpoints, g.generateEndpoint(gr.Endpoints[i]))
+		ep, err := g.generateEndpoint(gr.Endpoints[i])
+
+		if err != nil {
+			return nil, xerrors.Errorf("failed to generate endpoint(%s): %w", gr.Endpoints[i].RawPath, err)
+		}
+
+		gen.Endpoints = append(gen.Endpoints, ep)
 	}
 
 	g.Groups = append(g.Groups, gen)
 
-	return gen
+	return gen, nil
 }

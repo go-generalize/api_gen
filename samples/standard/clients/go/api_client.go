@@ -4,11 +4,18 @@
 package client
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/go-generalize/multipart-util"
+	"github.com/go-utils/echo-multipart-binder/mjbinder"
+	"io"
+	"mime/multipart"
 	"net/http"
+	"net/textproto"
 	"net/url"
+	"strings"
 
 	root "github.com/go-generalize/api_gen/v2/samples/standard/clients/go/classes"
 	_service "github.com/go-generalize/api_gen/v2/samples/standard/clients/go/classes/service"
@@ -19,6 +26,12 @@ import (
 	_service_user2__userID "github.com/go-generalize/api_gen/v2/samples/standard/clients/go/classes/service/user2/_userID"
 	_service_user2__userID__JobID "github.com/go-generalize/api_gen/v2/samples/standard/clients/go/classes/service/user2/_userID/_JobID"
 )
+
+var quoteEscaper = strings.NewReplacer("\\", "\\\\", `"`, "\\\"")
+
+func escapeQuotes(s string) string {
+	return quoteEscaper.Replace(s)
+}
 
 type Group_service_groups_common struct {
 	apiClient *APIClient
@@ -42,7 +55,7 @@ func newGroup_service_groups(client *APIClient) *Group_service_groups {
 	}
 }
 
-func (g *Group_service_groups) GetGroups(reqPayload *_service_groups.GetGroupsRequest) (respPayload *_service_groups.GetGroupsResponse, err error) {
+func (g *Group_service_groups) GetGroups(reqPayload *_service_groups.GetGroupsRequest) (respPayload *_service_groups.GetGroupsResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
@@ -59,6 +72,19 @@ func (g *Group_service_groups) GetGroups(reqPayload *_service_groups.GetGroupsRe
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
 
 	respPayload = &_service_groups.GetGroupsResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
@@ -78,7 +104,7 @@ func newGroup_service_static_page(client *APIClient) *Group_service_static_page 
 	}
 }
 
-func (g *Group_service_static_page) GetStaticPage(reqPayload *_service_static_page.GetStaticPageRequest) (respPayload *_service_static_page.GetStaticPageResponse, err error) {
+func (g *Group_service_static_page) GetStaticPage(reqPayload *_service_static_page.GetStaticPageRequest) (respPayload *_service_static_page.GetStaticPageResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
@@ -95,6 +121,19 @@ func (g *Group_service_static_page) GetStaticPage(reqPayload *_service_static_pa
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
 
 	respPayload = &_service_static_page.GetStaticPageResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
@@ -124,7 +163,7 @@ func newGroup_service_user(client *APIClient) *Group_service_user {
 	}
 }
 
-func (g *Group_service_user) Get(reqPayload *_service_user.GetRequest) (respPayload *_service_user.GetResponse, err error) {
+func (g *Group_service_user) Get(reqPayload *_service_user.GetRequest) (respPayload *_service_user.GetResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
@@ -142,6 +181,19 @@ func (g *Group_service_user) Get(reqPayload *_service_user.GetRequest) (respPayl
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
 	respPayload = &_service_user.GetResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
@@ -150,7 +202,7 @@ func (g *Group_service_user) Get(reqPayload *_service_user.GetRequest) (respPayl
 	return respPayload, nil
 }
 
-func (g *Group_service_user) PostUpdateUserName(reqPayload *_service_user.PostUpdateUserNameRequest) (respPayload *_service_user.PostUpdateUserNameResponse, err error) {
+func (g *Group_service_user) PostUpdateUserName(reqPayload *_service_user.PostUpdateUserNameRequest) (respPayload *_service_user.PostUpdateUserNameResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
@@ -170,6 +222,19 @@ func (g *Group_service_user) PostUpdateUserName(reqPayload *_service_user.PostUp
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
 	respPayload = &_service_user.PostUpdateUserNameResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
@@ -178,7 +243,7 @@ func (g *Group_service_user) PostUpdateUserName(reqPayload *_service_user.PostUp
 	return respPayload, nil
 }
 
-func (g *Group_service_user) PostUpdateUserPassword(reqPayload *_service_user.PostUpdateUserPasswordRequest) (respPayload *_service_user.PostUpdateUserPasswordResponse, err error) {
+func (g *Group_service_user) PostUpdateUserPassword(reqPayload *_service_user.PostUpdateUserPasswordRequest) (respPayload *_service_user.PostUpdateUserPasswordResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
@@ -198,6 +263,19 @@ func (g *Group_service_user) PostUpdateUserPassword(reqPayload *_service_user.Po
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
 	respPayload = &_service_user.PostUpdateUserPasswordResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
@@ -216,7 +294,7 @@ func newGroup_service_user2__userID__JobID(client *APIClient) *Group_service_use
 	}
 }
 
-func (g *Group_service_user2__userID__JobID) PutJob(reqPayload *_service_user2__userID__JobID.PutJobRequest) (respPayload *_service_user2__userID__JobID.PutJobResponse, err error) {
+func (g *Group_service_user2__userID__JobID) PutJob(reqPayload *_service_user2__userID__JobID.PutJobRequest) (respPayload *_service_user2__userID__JobID.PutJobResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
@@ -235,6 +313,19 @@ func (g *Group_service_user2__userID__JobID) PutJob(reqPayload *_service_user2__
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
 
 	respPayload = &_service_user2__userID__JobID.PutJobResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
@@ -256,7 +347,7 @@ func newGroup_service_user2__userID(client *APIClient) *Group_service_user2__use
 	}
 }
 
-func (g *Group_service_user2__userID) GetUserJobGet(reqPayload *_service_user2__userID.GetUserJobGetRequest) (respPayload *_service_user2__userID.GetUserJobGetResponse, err error) {
+func (g *Group_service_user2__userID) GetUserJobGet(reqPayload *_service_user2__userID.GetUserJobGetRequest) (respPayload *_service_user2__userID.GetUserJobGetResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
@@ -273,6 +364,19 @@ func (g *Group_service_user2__userID) GetUserJobGet(reqPayload *_service_user2__
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
 
 	respPayload = &_service_user2__userID.GetUserJobGetResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
@@ -294,7 +398,7 @@ func newGroup_service_user2(client *APIClient) *Group_service_user2 {
 	}
 }
 
-func (g *Group_service_user2) DeleteUser(reqPayload *_service_user2.DeleteUserRequest) (respPayload *_service_user2.DeleteUserResponse, err error) {
+func (g *Group_service_user2) DeleteUser(reqPayload *_service_user2.DeleteUserRequest) (respPayload *_service_user2.DeleteUserResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
@@ -314,6 +418,19 @@ func (g *Group_service_user2) DeleteUser(reqPayload *_service_user2.DeleteUserRe
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
 	respPayload = &_service_user2.DeleteUserResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
@@ -322,7 +439,7 @@ func (g *Group_service_user2) DeleteUser(reqPayload *_service_user2.DeleteUserRe
 	return respPayload, nil
 }
 
-func (g *Group_service_user2) GetUser(reqPayload *_service_user2.GetUserRequest) (respPayload *_service_user2.GetUserResponse, err error) {
+func (g *Group_service_user2) GetUser(reqPayload *_service_user2.GetUserRequest) (respPayload *_service_user2.GetUserResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
@@ -340,6 +457,19 @@ func (g *Group_service_user2) GetUser(reqPayload *_service_user2.GetUserRequest)
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
 	respPayload = &_service_user2.GetUserResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
@@ -348,7 +478,7 @@ func (g *Group_service_user2) GetUser(reqPayload *_service_user2.GetUserRequest)
 	return respPayload, nil
 }
 
-func (g *Group_service_user2) PostUpdateUserName(reqPayload *_service_user2.PostUpdateUserNameRequest) (respPayload *_service_user2.PostUpdateUserNameResponse, err error) {
+func (g *Group_service_user2) PostUpdateUserName(reqPayload *_service_user2.PostUpdateUserNameRequest) (respPayload *_service_user2.PostUpdateUserNameResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
@@ -368,6 +498,19 @@ func (g *Group_service_user2) PostUpdateUserName(reqPayload *_service_user2.Post
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
 	respPayload = &_service_user2.PostUpdateUserNameResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
@@ -376,7 +519,7 @@ func (g *Group_service_user2) PostUpdateUserName(reqPayload *_service_user2.Post
 	return respPayload, nil
 }
 
-func (g *Group_service_user2) PostUpdateUserPassword(reqPayload *_service_user2.PostUpdateUserPasswordRequest) (respPayload *_service_user2.PostUpdateUserPasswordResponse, err error) {
+func (g *Group_service_user2) PostUpdateUserPassword(reqPayload *_service_user2.PostUpdateUserPasswordRequest) (respPayload *_service_user2.PostUpdateUserPasswordResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
@@ -395,6 +538,19 @@ func (g *Group_service_user2) PostUpdateUserPassword(reqPayload *_service_user2.
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
 
 	respPayload = &_service_user2.PostUpdateUserPasswordResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
@@ -424,7 +580,7 @@ func newGroup_service(client *APIClient) *Group_service {
 	}
 }
 
-func (g *Group_service) GetArticle(reqPayload *_service.GetArticleRequest) (respPayload *_service.GetArticleResponse, err error) {
+func (g *Group_service) GetArticle(reqPayload *_service.GetArticleRequest) (respPayload *_service.GetArticleResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
@@ -441,6 +597,19 @@ func (g *Group_service) GetArticle(reqPayload *_service.GetArticleRequest) (resp
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
 
 	respPayload = &_service.GetArticleResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
@@ -462,7 +631,7 @@ func newGroup(client *APIClient) *Group {
 	}
 }
 
-func (g *Group) Get(reqPayload *root.GetRequest) (respPayload *root.GetResponse, err error) {
+func (g *Group) Get(reqPayload *root.GetRequest) (respPayload *root.GetResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
@@ -480,6 +649,19 @@ func (g *Group) Get(reqPayload *root.GetRequest) (respPayload *root.GetResponse,
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
 	respPayload = &root.GetResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
@@ -488,18 +670,86 @@ func (g *Group) Get(reqPayload *root.GetRequest) (respPayload *root.GetResponse,
 	return respPayload, nil
 }
 
-func (g *Group) PostCreateTable(reqPayload *root.PostCreateTableRequest) (respPayload *root.PostCreateTableResponse, err error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
-		return nil, err
-	}
+func (g *Group) PostCreateTable(reqPayload *root.PostCreateTableRequest) (respPayload *root.PostCreateTableResponse, retErr error) {
+	br, bw := io.Pipe()
+	buffered := bufio.NewWriter(bw)
+	mw := multipart.NewWriter(buffered)
 
-	req, err := http.NewRequest("POST", g.apiClient.base+"/create_table", buf)
+	finished := make(chan bool)
+	var chanError error
+	defer func() {
+		<-finished
+		if chanError != nil {
+			retErr = fmt.Errorf("creating payload error is %+v: %w", chanError, retErr)
+		}
+	}()
+
+	go func() {
+		chanError = func() error {
+			defer close(finished)
+			defer bw.Close()
+			defer buffered.Flush()
+			defer mw.Close()
+
+			addField := func(fieldName string, payload *multipartutil.MultipartPayload) error {
+				if payload == nil {
+					return nil
+				}
+
+				header := payload.MIMEHeader
+
+				if header == nil {
+					header = textproto.MIMEHeader{}
+				}
+
+				header.Set("Content-Disposition",
+					fmt.Sprintf(`form-data; name="%s"; filename="%s"`,
+						escapeQuotes(fieldName), escapeQuotes(payload.Filename)))
+				if header.Get("Content-Type") != "" {
+					header.Set("Content-Type", "application/octet-stream")
+				}
+
+				w, err := mw.CreatePart(header)
+
+				if err != nil {
+					return fmt.Errorf("failed to create a part for %s: %w", fieldName, err)
+				}
+
+				_, err = io.Copy(w, payload.Data)
+
+				if err != nil {
+					return fmt.Errorf("failed to copy data for %s: %w", fieldName, err)
+				}
+
+				return nil
+			}
+			addField(`file`, reqPayload.File)
+			for _, f := range reqPayload.Files {
+				addField(`files`, f)
+			}
+
+			w, err := mw.CreatePart(mjbinder.CreateJSONRequestMIMEHeader())
+
+			if err != nil {
+				return fmt.Errorf("failed to create a part for JSON payload: %w", err)
+			}
+
+			err = json.NewEncoder(w).Encode(reqPayload)
+
+			if err != nil {
+				return fmt.Errorf("failed to encode JSON payload: %w", err)
+			}
+
+			return nil
+		}()
+	}()
+
+	req, err := http.NewRequest("POST", g.apiClient.base+"/create_table", br)
 	if err != nil {
 		return nil, err
 	}
 
-	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Content-Type", mw.FormDataContentType())
 
 	resp, err := g.apiClient.client.Do(req)
 
@@ -507,6 +757,19 @@ func (g *Group) PostCreateTable(reqPayload *root.PostCreateTableRequest) (respPa
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
 
 	respPayload = &root.PostCreateTableResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
@@ -516,7 +779,7 @@ func (g *Group) PostCreateTable(reqPayload *root.PostCreateTableRequest) (respPa
 	return respPayload, nil
 }
 
-func (g *Group) PostCreateUser(reqPayload *root.PostCreateUserRequest) (respPayload *root.PostCreateUserResponse, err error) {
+func (g *Group) PostCreateUser(reqPayload *root.PostCreateUserRequest) (respPayload *root.PostCreateUserResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
@@ -535,6 +798,19 @@ func (g *Group) PostCreateUser(reqPayload *root.PostCreateUserRequest) (respPayl
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
 
 	respPayload = &root.PostCreateUserResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
@@ -576,11 +852,20 @@ func NewClient(client http.Client, base string) *APIClient {
 		client: client,
 		base:   base,
 	}
-	if c.base[len(c.base)-1] == '/' {
+	if len(c.base) != 0 && c.base[len(c.base)-1] == '/' {
 		c.base = c.base[:len(c.base)-1]
 	}
 
 	c.Group = newGroup(c)
 
 	return c
+}
+
+type APIError struct {
+	StatusCode int
+	Data       []byte
+}
+
+func (e APIError) Error() string {
+	return fmt.Sprintf("The server returned an error: %d", e.StatusCode)
 }
