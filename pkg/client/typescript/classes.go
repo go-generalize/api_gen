@@ -84,8 +84,8 @@ func replaceFileHeaderAll(t map[string]types.Type) {
 
 func replaceFileHeader(obj *types.Object) {
 	for k, v := range obj.Entries {
-		if obj, ok := v.Type.(*types.Object); ok {
-			replaceFileHeader(obj)
+		if o, ok := v.Type.(*types.Object); ok {
+			replaceFileHeader(o)
 
 			continue
 		}
