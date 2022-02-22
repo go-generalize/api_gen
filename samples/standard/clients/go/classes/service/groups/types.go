@@ -20,8 +20,8 @@ type GetGroupsRequest struct {
 }
 
 type GetGroupsResponse struct {
-	Companies   *[]Company
-	Departments *[]Department
+	Companies   []Company
+	Departments []Department
 }
 
 type Metadata struct {

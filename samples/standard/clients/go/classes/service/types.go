@@ -14,7 +14,7 @@ type GetArticleRequest struct {
 
 type GetArticleResponse struct {
 	Body        string
-	Group       *[]string
+	Group       []string
 	ID          int
 	RequestTime time.Time
 }

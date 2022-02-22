@@ -38,7 +38,7 @@ type PostCreateUserRequest struct {
 	Gender   int
 	ID       string `param:"id"`
 	Password string
-	Roles    *[]*Role
+	Roles    []*Role
 }
 
 type PostCreateUserResponse struct {
@@ -51,7 +51,7 @@ type PostCreateUserResponse struct {
 type Role struct {
 	ID             int
 	Name           string
-	RecursionRoles *[]Role
+	RecursionRoles []Role
 }
 
 type CreatedType int
