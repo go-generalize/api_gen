@@ -26,6 +26,7 @@ type GetGroupsResponse struct {
 
 type Metadata struct {
 	CreatedAt time.Time
+	DeletedAt *time.Time
 	ID        string
 	Name      string
 	UpdatedAt time.Time

@@ -65,11 +65,18 @@ class {{ $elem.Name }} {
 {{- 	end }}
 	}
 
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+	getRequestObject(obj: any, routingPath: string[], isGET: boolean): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
+			if (isGET && obj[key] == null) {
+				return;
+			}
 			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
+				let val = obj[key];
+				if (isGET) {
+					val = val.toString();
+				}
+				res[key] = val;
 			}
 		});
 		return res;
@@ -161,7 +168,7 @@ class {{ $elem.Name }} {
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
 {{- 	if eq $method.Method "GET" }}
-		const url = `${this.baseURL}{{ $method.Endpoint }}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
+		const url = `${this.baseURL}{{ $method.Endpoint }}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
 {{- 	else }}
 		const url = `${this.baseURL}{{ $method.Endpoint }}`;
 {{-      end }}
@@ -176,7 +183,7 @@ class {{ $elem.Name }} {
 
 					body.append(
 						'x-multipart-json-binder-request-json',
-						new Blob(JSON.stringify(this.getRequestObject(param, excludeParams)), {type: 'application/json'}),
+						new Blob(JSON.stringify(this.getRequestObject(param, excludeParams, false)), {type: 'application/json'}),
 						'x-multipart-json-binder-request-json'
 					);
 {{- range $index, $field := $method.FileFields }}
@@ -189,7 +196,7 @@ class {{ $elem.Name }} {
 					return body;
 				})(),
 {{-			else }}
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
 {{- 		end }}
 {{-     end }}
 				headers: reqHeader,
@@ -289,11 +296,18 @@ export class APIClient {
 {{- 	end }}
 	}
 
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+	getRequestObject(obj: any, routingPath: string[], isGET: boolean): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
+			if (isGET && obj[key] == null) {
+				return;
+			}
 			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
+				let val = obj[key];
+				if (isGET) {
+					val = val.toString();
+				}
+				res[key] = val;
 			}
 		});
 		return res;
@@ -382,7 +396,7 @@ export class APIClient {
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
 {{- 	if eq $method.Method "GET" }}
-		const url = `${this.baseURL}{{ $method.Endpoint }}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams))).toString();
+		const url = `${this.baseURL}{{ $method.Endpoint }}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
 {{- 	else }}
 		const url = `${this.baseURL}{{ $method.Endpoint }}`;
 {{      end }}
@@ -397,7 +411,7 @@ export class APIClient {
 
 					body.append(
 						'x-multipart-json-binder-request-json',
-						new Blob([JSON.stringify(this.getRequestObject(param, excludeParams))], {type: 'application/json'}),
+						new Blob([JSON.stringify(this.getRequestObject(param, excludeParams, false))], {type: 'application/json'}),
 						'x-multipart-json-binder-request-json'
 					);
 {{- range $index, $field := $method.FileFields }}
@@ -410,7 +424,7 @@ export class APIClient {
 					return body;
 				})(),
 {{-			else }}
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
 {{- 		end }}
 {{-       end }}
 				headers: {

@@ -17,10 +17,19 @@ class FooBarClient {
   );
 
   Map<String, dynamic> getRequestObject(
-      Map<String, dynamic> obj, List<String> routingPath) {
-    final copied = {...obj};
+      Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
+    final Map<String, dynamic> copied = {};
 
-    copied.removeWhere((key, value) => routingPath.contains(key));
+    obj.forEach((key, value) {
+      if (routingPath.contains(key))
+        return;
+      else if (isGET) {
+        if (value == null) return;
+        copied[key] = value.toString();
+        return;
+      }
+      copied[key] = value;
+    });
 
     return copied;
   }
@@ -44,7 +53,7 @@ class FooBarClient {
     final resp = await client.post(
       Uri.parse(url),
       headers: headers,
-      body: jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+      body: jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
     );
 
     if (resp.statusCode ~/ 100 != 2) {
@@ -75,10 +84,19 @@ class FooClient {
   }
 
   Map<String, dynamic> getRequestObject(
-      Map<String, dynamic> obj, List<String> routingPath) {
-    final copied = {...obj};
+      Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
+    final Map<String, dynamic> copied = {};
 
-    copied.removeWhere((key, value) => routingPath.contains(key));
+    obj.forEach((key, value) {
+      if (routingPath.contains(key))
+        return;
+      else if (isGET) {
+        if (value == null) return;
+        copied[key] = value.toString();
+        return;
+      }
+      copied[key] = value;
+    });
 
     return copied;
   }
@@ -117,10 +135,19 @@ class APIClient {
   }
 
   Map<String, dynamic> getRequestObject(
-      Map<String, dynamic> obj, List<String> routingPath) {
-    final copied = {...obj};
+      Map<String, dynamic> obj, List<String> routingPath, bool isGET) {
+    final Map<String, dynamic> copied = {};
 
-    copied.removeWhere((key, value) => routingPath.contains(key));
+    obj.forEach((key, value) {
+      if (routingPath.contains(key))
+        return;
+      else if (isGET) {
+        if (value == null) return;
+        copied[key] = value.toString();
+        return;
+      }
+      copied[key] = value;
+    });
 
     return copied;
   }

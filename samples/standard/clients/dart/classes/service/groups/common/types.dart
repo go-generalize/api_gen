@@ -21,12 +21,14 @@ class MetadataConverter
 
 class Metadata {
   DateTime createdAt;
+  DateTime? deletedAt;
   String id;
   String name;
   DateTime updatedAt;
 
   Metadata({
     required this.createdAt,
+    this.deletedAt,
     this.id = '',
     this.name = '',
     required this.updatedAt,
@@ -36,6 +38,9 @@ class Metadata {
     return Metadata(
       createdAt: const external_2c4f542.DateTimeConverter()
           .fromJson(json['CreatedAt']),
+      deletedAt: const external_2c4f542.NullableConverter<DateTime, String>(
+              external_2c4f542.DateTimeConverter())
+          .fromJson(json['DeletedAt']),
       id: const external_2c4f542.DoNothingConverter<String>()
           .fromJson(json['ID']),
       name: const external_2c4f542.DoNothingConverter<String>()
@@ -48,6 +53,9 @@ class Metadata {
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'CreatedAt': const external_2c4f542.DateTimeConverter().toJson(createdAt),
+      'DeletedAt': const external_2c4f542.NullableConverter<DateTime, String>(
+              external_2c4f542.DateTimeConverter())
+          .toJson(deletedAt),
       'ID': const external_2c4f542.DoNothingConverter<String>().toJson(id),
       'Name': const external_2c4f542.DoNothingConverter<String>().toJson(name),
       'UpdatedAt': const external_2c4f542.DateTimeConverter().toJson(updatedAt),

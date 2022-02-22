@@ -43,11 +43,18 @@ class FooBarClient {
 		this.afterMiddleware = middleware.afterMiddleware!;
 	}
 
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+	getRequestObject(obj: any, routingPath: string[], isGET: boolean): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
+			if (isGET && obj[key] == null) {
+				return;
+			}
 			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
+				let val = obj[key];
+				if (isGET) {
+					val = val.toString();
+				}
+				res[key] = val;
 			}
 		});
 		return res;
@@ -140,7 +147,7 @@ class FooBarClient {
 			url,
 			{
 				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams)),
+				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
 				headers: reqHeader,
 				...reqOption,
 			}
@@ -182,11 +189,18 @@ class FooClient {
 		);
 	}
 
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+	getRequestObject(obj: any, routingPath: string[], isGET: boolean): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
+			if (isGET && obj[key] == null) {
+				return;
+			}
 			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
+				let val = obj[key];
+				if (isGET) {
+					val = val.toString();
+				}
+				res[key] = val;
 			}
 		});
 		return res;
@@ -285,11 +299,18 @@ export class APIClient {
 		);
 	}
 
-	getRequestObject(obj: any, routingPath: string[]): { [key: string]: any } {
+	getRequestObject(obj: any, routingPath: string[], isGET: boolean): { [key: string]: any } {
 		let res: { [key: string]: any } = {};
 		Object.keys(obj).forEach((key) => {
+			if (isGET && obj[key] == null) {
+				return;
+			}
 			if (routingPath.indexOf(key) === -1) {
-				res[key] = obj[key];
+				let val = obj[key];
+				if (isGET) {
+					val = val.toString();
+				}
+				res[key] = val;
 			}
 		});
 		return res;

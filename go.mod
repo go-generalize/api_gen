@@ -24,9 +24,9 @@ require (
 	github.com/fatih/structtag v1.2.0
 	github.com/go-generalize/go-dartfmt v0.1.1
 	github.com/go-generalize/go-easyparser v0.2.0
-	github.com/go-generalize/go2dart v0.5.0
+	github.com/go-generalize/go2dart v0.5.1
 	github.com/go-utils/echo-multipart-binder v0.2.1
-	github.com/swaggo/swag v1.7.8
+	github.com/swaggo/swag v1.7.9
 )
 
 require (

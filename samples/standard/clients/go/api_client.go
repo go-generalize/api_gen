@@ -834,6 +834,9 @@ func encodeQuery(v interface{}) (string, error) {
 
 	val := url.Values{}
 	for k, v := range dict {
+		if v == nil {
+			continue
+		}
 		val.Set(k, fmt.Sprint(v))
 	}
 
