@@ -18,6 +18,7 @@ for t in ${targets[@]}; do
     mkdir -p server clients
     cd server && api_gen s ../api
     cd ../clients
+    # cd clients
     for c in ${clients[@]}; do
         mkdir -p ${c}
         pushd ${c}
@@ -27,7 +28,7 @@ for t in ${targets[@]}; do
         popd
     done
     cd ../
-    ${SWAG} init --parseDependency
+    # ${SWAG} init --parseDependency
 
     popd
 done

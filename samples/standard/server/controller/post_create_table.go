@@ -4,6 +4,8 @@
 package controller
 
 import (
+	"fmt"
+
 	types "github.com/go-generalize/api_gen/v2/samples/standard/api"
 	props "github.com/go-generalize/api_gen/v2/samples/standard/server/props"
 	"github.com/labstack/echo/v4"

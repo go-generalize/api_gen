@@ -154,7 +154,7 @@ class APIClient {
 }
 
 class ApiError extends Error {
-  final http.Response response;
+  final http.BaseResponse response;
 
   ApiError(this.response);
 

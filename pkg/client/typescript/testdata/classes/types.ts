@@ -11,6 +11,8 @@ export type GetResponse = {
 	Data: string;
 }
 export type PostCreateTableRequest = {
+	File?: File | Blob;
+	Files?: (File | Blob)[];
 	Flag: number;
 	ID: string;
 	Text: string;

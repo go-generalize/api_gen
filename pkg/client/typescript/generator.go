@@ -12,6 +12,7 @@ import (
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
 	"github.com/go-generalize/api_gen/v2/pkg/util"
 	"github.com/iancoleman/strcase"
+	"golang.org/x/xerrors"
 )
 
 // NewGenerator returns a new client-side TypeScript library generator
@@ -24,7 +25,9 @@ func NewGenerator(gr *parser.Group, version string) Generator {
 
 // GenerateClient generates a TypeScript client for api_gen
 func (g *generator) GenerateClient() (string, error) {
-	g.generateGroup(g.root)
+	if _, err := g.generateGroup(g.root); err != nil {
+		return "", xerrors.Errorf("failed to generate group: %w", err)
+	}
 	g.sort()
 
 	tmpl, err := template.ParseFS(clientTSTemplate, "templates/api.ts.tmpl")
@@ -41,11 +44,12 @@ func (g *generator) GenerateClient() (string, error) {
 	return buf.String(), nil
 }
 
-func (g *generator) generateEndpoint(ep *parser.Endpoint) (*endpointType, []importPair) {
+func (g *generator) generateEndpoint(ep *parser.Endpoint) (*endpointType, []importPair, error) {
 	endpoint := &endpointType{
 		Method:    strings.ToUpper(string(ep.Method)),
 		HasFields: len(ep.ResponsePayload.Fields.List) != 0,
 		Name:      strings.ToLower(string(ep.Method)) + strcase.ToCamel(ep.Path),
+		Multipart: ep.UseMultipartUpload,
 	}
 
 	endpoint.Endpoint = ep.GetFullPath("/", func(rawPath, path, placeholder string) string {
@@ -98,19 +102,40 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint) (*endpointType, []impo
 		urlParams[param] = jsonKey
 	}
 
-	endpoint.URLParams = make([]string, 0, 3)
+	endpoint.ExcludedParams = make([]string, 0, 3)
 	ep.GetFullPath("", func(rawPath, path, placeholder string) string {
 		if placeholder == "" {
 			return ""
 		}
 
-		endpoint.URLParams = append(endpoint.URLParams, urlParams[placeholder])
+		endpoint.ExcludedParams = append(endpoint.ExcludedParams, urlParams[placeholder])
 
 		return ""
 	})
 
-	sort.Slice(endpoint.URLParams, func(i, j int) bool {
-		return endpoint.URLParams[i] < endpoint.URLParams[j]
+	fields, err := parser.GetFileFields(ep.RequestGo2tsPayload)
+
+	if err != nil {
+		return nil, nil, xerrors.Errorf("failed to get file fields: %w", err)
+	}
+
+	fileFields := make([]fileField, 0, len(fields))
+
+	for _, v := range fields {
+		endpoint.ExcludedParams = append(endpoint.ExcludedParams, v.Key)
+
+		isArray := v.Type == parser.UploadMultipleFiles
+		fileFields = append(fileFields, fileField{
+			MultipartField: v.FormTag,
+			StructField:    v.Key,
+			IsArray:        isArray,
+		})
+	}
+
+	endpoint.FileFields = fileFields
+
+	sort.Slice(endpoint.ExcludedParams, func(i, j int) bool {
+		return endpoint.ExcludedParams[i] < endpoint.ExcludedParams[j]
 	})
 
 	typeAliasPrefix := ep.GetParent().GetFullPath("", func(rawPath, path, placeholder string) string {
@@ -129,10 +154,10 @@ func (g *generator) generateEndpoint(ep *parser.Endpoint) (*endpointType, []impo
 			Name:   ep.ResponsePayloadName,
 			NameAs: endpoint.ResponseType,
 		},
-	}
+	}, nil
 }
 
-func (g *generator) generateGroup(gr *parser.Group) childrenType {
+func (g *generator) generateGroup(gr *parser.Group) (*childrenType, error) {
 	client := clientType{}
 
 	className := strcase.ToCamel(gr.GetFullPath("_", func(rawPath, path, placeholder string) string {
@@ -149,7 +174,11 @@ func (g *generator) generateGroup(gr *parser.Group) childrenType {
 
 	client.Methods = make([]*endpointType, 0, len(gr.Endpoints))
 	for _, e := range gr.Endpoints {
-		ep, ips := g.generateEndpoint(e)
+		ep, ips, err := g.generateEndpoint(e)
+
+		if err != nil {
+			return nil, xerrors.Errorf("failed to generate endpoint %s: %w", e.RawPath, err)
+		}
 
 		client.Methods = append(client.Methods, ep)
 
@@ -158,9 +187,15 @@ func (g *generator) generateGroup(gr *parser.Group) childrenType {
 		}
 	}
 
-	client.Children = make([]childrenType, 0, len(gr.Children))
+	client.Children = make([]*childrenType, 0, len(gr.Children))
 	for _, child := range gr.Children {
-		client.Children = append(client.Children, g.generateGroup(child))
+		ch, err := g.generateGroup(child)
+
+		if err != nil {
+			return nil, xerrors.Errorf("failed to process %s: %w", child.RawPath, err)
+		}
+
+		client.Children = append(client.Children, ch)
 	}
 
 	// Update global variables
@@ -172,10 +207,10 @@ func (g *generator) generateGroup(gr *parser.Group) childrenType {
 		g.ChildrenClients = append(g.ChildrenClients, &client)
 	}
 
-	return childrenType{
+	return &childrenType{
 		Name:      gr.RawPath,
 		ClassName: className,
-	}
+	}, nil
 }
 
 func (g *generator) sort() {

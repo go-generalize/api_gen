@@ -88,7 +88,25 @@ func (g *Generator) generateMockJSON(gr *parser.Group, generatedIn string) error
 		types[k] = v
 	}
 
-	if err := go2json.NewGenerator(types).Generate(generatedIn); err != nil {
+	gen := go2json.NewGenerator(types)
+
+	gen.CustomGenerator = func(t go2tstypes.Type, packageStack []string, exitRecursion bool) (bool, interface{}) {
+		ut := parser.GetMultipartUploadType(t)
+
+		if ut == parser.UploadNone {
+			return false, nil
+		}
+
+		if ut == parser.UploadSingleFile {
+			return true, nil
+		} else if ut == parser.UploadMultipleFiles {
+			return true, []interface{}{}
+		}
+
+		panic("unreachable")
+	}
+
+	if err := gen.Generate(generatedIn); err != nil {
 		return xerrors.Errorf("failed to generate mock json: %w", err)
 	}
 

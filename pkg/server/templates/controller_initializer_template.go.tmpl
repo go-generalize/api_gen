@@ -9,6 +9,8 @@ import (
 	"strings"
 
 	props "{{ .ControllerPropsPackage }}"
+	"github.com/go-utils/echo-multipart-binder/mpbinder"
+	"github.com/go-utils/echo-multipart-binder/mjbinder"
 	"github.com/labstack/echo/v4"
 	apierror "{{ .ApiErrorPackage }}"
 )
@@ -34,6 +36,7 @@ func NewControllers(
 ) *Controllers {
 	ctrl := &Controllers{}
 
+	e.Binder = mjbinder.NewMultipartJSONBinder(mpbinder.NewMultipartFileBinder(e.Binder))
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			for _, m := range ctrl.middlewares {

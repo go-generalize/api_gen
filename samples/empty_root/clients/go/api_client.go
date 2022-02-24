@@ -9,9 +9,16 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 
 	_foo_bar "github.com/go-generalize/api_gen/v2/samples/empty_root/clients/go/classes/foo/bar"
 )
+
+var quoteEscaper = strings.NewReplacer("\\", "\\\\", `"`, "\\\"")
+
+func escapeQuotes(s string) string {
+	return quoteEscaper.Replace(s)
+}
 
 type Group_foo_bar struct {
 	apiClient *APIClient
@@ -23,7 +30,7 @@ func newGroup_foo_bar(client *APIClient) *Group_foo_bar {
 	}
 }
 
-func (g *Group_foo_bar) PostUser(reqPayload *_foo_bar.PostUserRequest) (respPayload *_foo_bar.PostUserResponse, err error) {
+func (g *Group_foo_bar) PostUser(reqPayload *_foo_bar.PostUserRequest) (respPayload *_foo_bar.PostUserResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
@@ -42,6 +49,19 @@ func (g *Group_foo_bar) PostUser(reqPayload *_foo_bar.PostUserRequest) (respPayl
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
 
 	respPayload = &_foo_bar.PostUserResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
@@ -110,11 +130,20 @@ func NewClient(client http.Client, base string) *APIClient {
 		client: client,
 		base:   base,
 	}
-	if c.base[len(c.base)-1] == '/' {
+	if len(c.base) != 0 && c.base[len(c.base)-1] == '/' {
 		c.base = c.base[:len(c.base)-1]
 	}
 
 	c.Group = newGroup(c)
 
 	return c
+}
+
+type APIError struct {
+	StatusCode int
+	Data       []byte
+}
+
+func (e APIError) Error() string {
+	return fmt.Sprintf("the server returned an error: %d", e.StatusCode)
 }

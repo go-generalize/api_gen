@@ -3,6 +3,9 @@
 // generated version: {{ .AppVersion }}
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+{{- if .ImportHTTPParser }}
+import 'package:http_parser/http_parser.dart' as http_parser;
+{{- end }}
 {{- range $index, $elem := .Imports }}
 import '{{ $elem.Path }}.dart' as {{ $elem.Alias }};
 {{- end }}
@@ -81,6 +84,32 @@ class {{ $elem.Name }} {
       Uri.parse(url),
       headers: headers,
     );
+{{- else if $method.Multipart }}
+    final request = http.MultipartRequest('{{ $method.Method }}', Uri.parse(url))
+      ..headers = headers
+      ..files.add(http.MultipartFile.fromString(
+        'x-multipart-json-binder-request-json', jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
+        filename: 'x-multipart-json-binder-request-json', contentType: http_parser.MediaType.parse('application/json')
+      ));
+{{- range $index, $field := $method.FileFields }}
+{{ if $field.IsArray }}
+      param.{{ $field.StructField }}.forEach((http.MultipartFile file) {
+        request.files.add(http.MultipartFile(
+          '{{ $field.MultipartField }}', file.finalize(), file.length,
+          filename: file.filename ?? 'untitled', contentType: file.contentType
+        ));
+      });
+{{ else }}
+    if (param.{{ $field.StructField }} != null) {
+      final file = param.{{ $field.StructField }}!;
+      request.files.add(http.MultipartFile(
+        '{{ $field.MultipartField }}', file.finalize(), file.length,
+        filename: file.filename ?? 'untitled', contentType: file.contentType
+      ));
+    }
+{{- end }}
+{{- end }}
+    final resp = await client.send(request);
 {{- else }}
     final resp = await client.{{ toLower $method.Method }}(
       Uri.parse(url),
@@ -94,7 +123,7 @@ class {{ $elem.Name }} {
 		}
 
 {{- if eq .HasFields true }}
-		final res = {{ $method.ResponseType }}.fromJson(jsonDecode(resp.body));
+		final res = {{ $method.ResponseType }}.fromJson(jsonDecode({{if .Multipart}}await resp.stream.bytesToString(){{else}}resp.body{{end}}));
 {{- else }}
 		final res = {{ $method.ResponseType }}();
 {{- end }}
@@ -194,6 +223,34 @@ class APIClient {
       Uri.parse(url),
       headers: headers,
     );
+{{- else if $method.Multipart }}
+    final request = http.MultipartRequest('{{ $method.Method }}', Uri.parse(url))
+      ..headers.addAll(headers)
+      ..files.add(http.MultipartFile.fromString(
+        'x-multipart-json-binder-request-json', jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+        filename: 'x-multipart-json-binder-request-json', contentType: http_parser.MediaType.parse('application/json')
+      ));
+{{- range $index, $field := $method.FileFields }}
+{{ if $field.IsArray }}
+    if (param.{{ $field.StructField }} != null) {
+      param.{{ $field.StructField }}!.forEach((http.MultipartFile file) {
+        request.files.add(http.MultipartFile(
+          '{{ $field.MultipartField }}', file.finalize(), file.length,
+          filename: file.filename ?? 'untitled', contentType: file.contentType
+        ));
+      });
+    }
+{{ else }}
+    if (param.{{ $field.StructField }} != null) {
+      final file = param.{{ $field.StructField }}!;
+      request.files.add(http.MultipartFile(
+        '{{ $field.MultipartField }}', file.finalize(), file.length,
+        filename: file.filename ?? 'untitled', contentType: file.contentType
+      ));
+    }
+{{- end }}
+{{- end }}
+    final resp = await client.send(request);
 {{- else }}
     final resp = await client.{{ toLower $method.Method }}(
       Uri.parse(url),
@@ -207,7 +264,7 @@ class APIClient {
 		}
 
 {{- if eq .HasFields true }}
-		final res = {{ $method.ResponseType }}.fromJson(jsonDecode(resp.body));
+		final res = {{ $method.ResponseType }}.fromJson(jsonDecode({{if .Multipart}}await resp.stream.bytesToString(){{else}}resp.body{{end}}));
 {{- else }}
 		final res = {{ $method.ResponseType }}();
 {{- end }}
@@ -218,7 +275,7 @@ class APIClient {
 }
 
 class ApiError extends Error {
-	final http.Response response;
+	final http.BaseResponse response;
 
 	ApiError(this.response);
 

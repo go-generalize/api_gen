@@ -350,6 +350,7 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 	if err != nil {
 		return nil, xerrors.Errorf("failed to initialize %s: %w", dir, err)
 	}
+	psr.Replacer = replacer
 
 	parsed, err := psr.Parse()
 
@@ -435,6 +436,13 @@ func (p *parser) updateEndpoint(v *Endpoint, reqRespTypes map[string]go2tstypes.
 	}
 	v.RequestGo2tsPayload = reqObj
 
+	var err error
+	v.UseMultipartUpload, err = hasMultipartUpload(reqObj)
+
+	if err != nil {
+		return xerrors.Errorf("invalid file field in the request type: %w", err)
+	}
+
 	res, ok := reqRespTypes[v.ResponsePayloadName]
 	if !ok {
 		return xerrors.Errorf("response type is not found from types parsed by go2ts: %s", v.ResponsePayloadName)
@@ -445,7 +453,6 @@ func (p *parser) updateEndpoint(v *Endpoint, reqRespTypes map[string]go2tstypes.
 	}
 	v.ResponseGo2tsPayload = resObj
 
-	var err error
 	v.GetFullPath("", func(rawPath, path, placeholder string) string {
 		if placeholder != "" {
 			queryParamField := util.FindStructField(v.RequestGo2tsPayload, QueryParamTag, placeholder)

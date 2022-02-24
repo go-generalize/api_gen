@@ -22,12 +22,19 @@ type Generator interface {
 	GenerateTypes(fn func(relPath, code string) error) error
 }
 
+type fileField struct {
+	MultipartField, StructField string
+	IsArray                     bool
+}
+
 type endpointType struct {
 	Name                      string
 	RequestType, ResponseType string
 	Method, Endpoint          string
 	URLParams                 []string
 	HasFields                 bool
+	Multipart                 bool
+	FileFields                []fileField
 }
 
 type childrenType struct {
@@ -51,8 +58,9 @@ type generator struct {
 	AppVersion string
 	Imports    []importType
 	clientType
-	ChildrenClients []*clientType
-	OutputDir       string
+	ChildrenClients  []*clientType
+	OutputDir        string
+	ImportHTTPParser bool
 }
 
 var _ Generator = &generator{}

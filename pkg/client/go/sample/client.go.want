@@ -4,59 +4,64 @@
 package client
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/go-generalize/multipart-util"
+	"github.com/go-utils/echo-multipart-binder/mjbinder"
+	"io"
+	"mime/multipart"
 	"net/http"
+	"net/textproto"
 	"net/url"
+	"strings"
 
-	_api "root/api"
-	_api_service "root/api/service"
-	_api_service_groups "root/api/service/groups"
-	_api_service_static_page "root/api/service/static_page"
-	_api_service_user "root/api/service/user"
-	_api_service_user2 "root/api/service/user2"
-	_api_service_user2__userID "root/api/service/user2/_userID"
-	_api_service_user2__userID__JobID "root/api/service/user2/_userID/_JobID"
-	_clients_go_classes "root/clients/go/classes"
-	_clients_go_classes_service "root/clients/go/classes/service"
-	_clients_go_classes_service_groups "root/clients/go/classes/service/groups"
-	_clients_go_classes_service_static_page "root/clients/go/classes/service/static_page"
-	_clients_go_classes_service_user "root/clients/go/classes/service/user"
-	_clients_go_classes_service_user2 "root/clients/go/classes/service/user2"
-	_clients_go_classes_service_user2__userID "root/clients/go/classes/service/user2/_userID"
-	_clients_go_classes_service_user2__userID__JobID "root/clients/go/classes/service/user2/_userID/_JobID"
+	root "root"
+	_service "root/service"
+	_service_groups "root/service/groups"
+	_service_static_page "root/service/static_page"
+	_service_user "root/service/user"
+	_service_user2 "root/service/user2"
+	_service_user2__userID "root/service/user2/_userID"
+	_service_user2__userID__JobID "root/service/user2/_userID/_JobID"
 )
 
-type Group_api_service_groups_common struct {
+var quoteEscaper = strings.NewReplacer("\\", "\\\\", `"`, "\\\"")
+
+func escapeQuotes(s string) string {
+	return quoteEscaper.Replace(s)
+}
+
+type Group_service_groups_common struct {
 	apiClient *APIClient
 }
 
-func newGroup_api_service_groups_common(client *APIClient) *Group_api_service_groups_common {
-	return &Group_api_service_groups_common{
+func newGroup_service_groups_common(client *APIClient) *Group_service_groups_common {
+	return &Group_service_groups_common{
 		apiClient: client,
 	}
 }
 
-type Group_api_service_groups struct {
-	Common    *Group_api_service_groups_common
+type Group_service_groups struct {
+	Common    *Group_service_groups_common
 	apiClient *APIClient
 }
 
-func newGroup_api_service_groups(client *APIClient) *Group_api_service_groups {
-	return &Group_api_service_groups{
+func newGroup_service_groups(client *APIClient) *Group_service_groups {
+	return &Group_service_groups{
 		apiClient: client,
-		Common:    newGroup_api_service_groups_common(client),
+		Common:    newGroup_service_groups_common(client),
 	}
 }
 
-func (g *Group_api_service_groups) GetGroups(reqPayload *_api_service_groups.GetGroupsRequest) (respPayload *_api_service_groups.GetGroupsResponse, err error) {
+func (g *Group_service_groups) GetGroups(reqPayload *_service_groups.GetGroupsRequest) (respPayload *_service_groups.GetGroupsResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("GET", g.apiClient.base+"/api/service/groups/groups"+"?"+query, nil)
+	req, err := http.NewRequest("GET", g.apiClient.base+"/service/groups/groups"+"?"+query, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +73,20 @@ func (g *Group_api_service_groups) GetGroups(reqPayload *_api_service_groups.Get
 	}
 	defer resp.Body.Close()
 
-	respPayload = &_api_service_groups.GetGroupsResponse{}
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
+	respPayload = &_service_groups.GetGroupsResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}
@@ -76,23 +94,23 @@ func (g *Group_api_service_groups) GetGroups(reqPayload *_api_service_groups.Get
 	return respPayload, nil
 }
 
-type Group_api_service_static_page struct {
+type Group_service_static_page struct {
 	apiClient *APIClient
 }
 
-func newGroup_api_service_static_page(client *APIClient) *Group_api_service_static_page {
-	return &Group_api_service_static_page{
+func newGroup_service_static_page(client *APIClient) *Group_service_static_page {
+	return &Group_service_static_page{
 		apiClient: client,
 	}
 }
 
-func (g *Group_api_service_static_page) GetStaticPage(reqPayload *_api_service_static_page.GetStaticPageRequest) (respPayload *_api_service_static_page.GetStaticPageResponse, err error) {
+func (g *Group_service_static_page) GetStaticPage(reqPayload *_service_static_page.GetStaticPageRequest) (respPayload *_service_static_page.GetStaticPageResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("GET", g.apiClient.base+"/api/service/static_page/static_page"+"?"+query, nil)
+	req, err := http.NewRequest("GET", g.apiClient.base+"/service/static_page/static_page"+"?"+query, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +122,20 @@ func (g *Group_api_service_static_page) GetStaticPage(reqPayload *_api_service_s
 	}
 	defer resp.Body.Close()
 
-	respPayload = &_api_service_static_page.GetStaticPageResponse{}
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
+	respPayload = &_service_static_page.GetStaticPageResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}
@@ -112,33 +143,33 @@ func (g *Group_api_service_static_page) GetStaticPage(reqPayload *_api_service_s
 	return respPayload, nil
 }
 
-type Group_api_service_table struct {
+type Group_service_table struct {
 	apiClient *APIClient
 }
 
-func newGroup_api_service_table(client *APIClient) *Group_api_service_table {
-	return &Group_api_service_table{
+func newGroup_service_table(client *APIClient) *Group_service_table {
+	return &Group_service_table{
 		apiClient: client,
 	}
 }
 
-type Group_api_service_user struct {
+type Group_service_user struct {
 	apiClient *APIClient
 }
 
-func newGroup_api_service_user(client *APIClient) *Group_api_service_user {
-	return &Group_api_service_user{
+func newGroup_service_user(client *APIClient) *Group_service_user {
+	return &Group_service_user{
 		apiClient: client,
 	}
 }
 
-func (g *Group_api_service_user) Get(reqPayload *_api_service_user.GetRequest) (respPayload *_api_service_user.GetResponse, err error) {
+func (g *Group_service_user) Get(reqPayload *_service_user.GetRequest) (respPayload *_service_user.GetResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("GET", g.apiClient.base+"/api/service/user/"+"?"+query, nil)
+	req, err := http.NewRequest("GET", g.apiClient.base+"/service/user/"+"?"+query, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -150,7 +181,20 @@ func (g *Group_api_service_user) Get(reqPayload *_api_service_user.GetRequest) (
 	}
 	defer resp.Body.Close()
 
-	respPayload = &_api_service_user.GetResponse{}
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
+	respPayload = &_service_user.GetResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}
@@ -158,13 +202,13 @@ func (g *Group_api_service_user) Get(reqPayload *_api_service_user.GetRequest) (
 	return respPayload, nil
 }
 
-func (g *Group_api_service_user) PostUpdateUserName(reqPayload *_api_service_user.PostUpdateUserNameRequest) (respPayload *_api_service_user.PostUpdateUserNameResponse, err error) {
+func (g *Group_service_user) PostUpdateUserName(reqPayload *_service_user.PostUpdateUserNameRequest) (respPayload *_service_user.PostUpdateUserNameResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", g.apiClient.base+"/api/service/user/update_user_name", buf)
+	req, err := http.NewRequest("POST", g.apiClient.base+"/service/user/update_user_name", buf)
 	if err != nil {
 		return nil, err
 	}
@@ -178,7 +222,20 @@ func (g *Group_api_service_user) PostUpdateUserName(reqPayload *_api_service_use
 	}
 	defer resp.Body.Close()
 
-	respPayload = &_api_service_user.PostUpdateUserNameResponse{}
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
+	respPayload = &_service_user.PostUpdateUserNameResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}
@@ -186,13 +243,13 @@ func (g *Group_api_service_user) PostUpdateUserName(reqPayload *_api_service_use
 	return respPayload, nil
 }
 
-func (g *Group_api_service_user) PostUpdateUserPassword(reqPayload *_api_service_user.PostUpdateUserPasswordRequest) (respPayload *_api_service_user.PostUpdateUserPasswordResponse, err error) {
+func (g *Group_service_user) PostUpdateUserPassword(reqPayload *_service_user.PostUpdateUserPasswordRequest) (respPayload *_service_user.PostUpdateUserPasswordResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", g.apiClient.base+"/api/service/user/update_user_password", buf)
+	req, err := http.NewRequest("POST", g.apiClient.base+"/service/user/update_user_password", buf)
 	if err != nil {
 		return nil, err
 	}
@@ -206,7 +263,20 @@ func (g *Group_api_service_user) PostUpdateUserPassword(reqPayload *_api_service
 	}
 	defer resp.Body.Close()
 
-	respPayload = &_api_service_user.PostUpdateUserPasswordResponse{}
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
+	respPayload = &_service_user.PostUpdateUserPasswordResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}
@@ -214,23 +284,23 @@ func (g *Group_api_service_user) PostUpdateUserPassword(reqPayload *_api_service
 	return respPayload, nil
 }
 
-type Group_api_service_user2__userID__JobID struct {
+type Group_service_user2__userID__JobID struct {
 	apiClient *APIClient
 }
 
-func newGroup_api_service_user2__userID__JobID(client *APIClient) *Group_api_service_user2__userID__JobID {
-	return &Group_api_service_user2__userID__JobID{
+func newGroup_service_user2__userID__JobID(client *APIClient) *Group_service_user2__userID__JobID {
+	return &Group_service_user2__userID__JobID{
 		apiClient: client,
 	}
 }
 
-func (g *Group_api_service_user2__userID__JobID) PutJob(reqPayload *_api_service_user2__userID__JobID.PutJobRequest) (respPayload *_api_service_user2__userID__JobID.PutJobResponse, err error) {
+func (g *Group_service_user2__userID__JobID) PutJob(reqPayload *_service_user2__userID__JobID.PutJobRequest) (respPayload *_service_user2__userID__JobID.PutJobResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("PUT", g.apiClient.base+"/api/service/user2/"+fmt.Sprint(reqPayload.UserID)+"/"+fmt.Sprint(reqPayload.JobID)+"/job", buf)
+	req, err := http.NewRequest("PUT", g.apiClient.base+"/service/user2/"+fmt.Sprint(reqPayload.UserID)+"/"+fmt.Sprint(reqPayload.JobID)+"/job", buf)
 	if err != nil {
 		return nil, err
 	}
@@ -244,7 +314,20 @@ func (g *Group_api_service_user2__userID__JobID) PutJob(reqPayload *_api_service
 	}
 	defer resp.Body.Close()
 
-	respPayload = &_api_service_user2__userID__JobID.PutJobResponse{}
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
+	respPayload = &_service_user2__userID__JobID.PutJobResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}
@@ -252,25 +335,25 @@ func (g *Group_api_service_user2__userID__JobID) PutJob(reqPayload *_api_service
 	return respPayload, nil
 }
 
-type Group_api_service_user2__userID struct {
-	JobID     *Group_api_service_user2__userID__JobID
+type Group_service_user2__userID struct {
+	JobID     *Group_service_user2__userID__JobID
 	apiClient *APIClient
 }
 
-func newGroup_api_service_user2__userID(client *APIClient) *Group_api_service_user2__userID {
-	return &Group_api_service_user2__userID{
+func newGroup_service_user2__userID(client *APIClient) *Group_service_user2__userID {
+	return &Group_service_user2__userID{
 		apiClient: client,
-		JobID:     newGroup_api_service_user2__userID__JobID(client),
+		JobID:     newGroup_service_user2__userID__JobID(client),
 	}
 }
 
-func (g *Group_api_service_user2__userID) GetUserJobGet(reqPayload *_api_service_user2__userID.GetUserJobGetRequest) (respPayload *_api_service_user2__userID.GetUserJobGetResponse, err error) {
+func (g *Group_service_user2__userID) GetUserJobGet(reqPayload *_service_user2__userID.GetUserJobGetRequest) (respPayload *_service_user2__userID.GetUserJobGetResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("GET", g.apiClient.base+"/api/service/user2/"+fmt.Sprint(reqPayload.UserID)+"/user_job_get"+"?"+query, nil)
+	req, err := http.NewRequest("GET", g.apiClient.base+"/service/user2/"+fmt.Sprint(reqPayload.UserID)+"/user_job_get"+"?"+query, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -282,7 +365,20 @@ func (g *Group_api_service_user2__userID) GetUserJobGet(reqPayload *_api_service
 	}
 	defer resp.Body.Close()
 
-	respPayload = &_api_service_user2__userID.GetUserJobGetResponse{}
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
+	respPayload = &_service_user2__userID.GetUserJobGetResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}
@@ -290,25 +386,25 @@ func (g *Group_api_service_user2__userID) GetUserJobGet(reqPayload *_api_service
 	return respPayload, nil
 }
 
-type Group_api_service_user2 struct {
-	UserID    *Group_api_service_user2__userID
+type Group_service_user2 struct {
+	UserID    *Group_service_user2__userID
 	apiClient *APIClient
 }
 
-func newGroup_api_service_user2(client *APIClient) *Group_api_service_user2 {
-	return &Group_api_service_user2{
+func newGroup_service_user2(client *APIClient) *Group_service_user2 {
+	return &Group_service_user2{
 		apiClient: client,
-		UserID:    newGroup_api_service_user2__userID(client),
+		UserID:    newGroup_service_user2__userID(client),
 	}
 }
 
-func (g *Group_api_service_user2) DeleteUser(reqPayload *_api_service_user2.DeleteUserRequest) (respPayload *_api_service_user2.DeleteUserResponse, err error) {
+func (g *Group_service_user2) DeleteUser(reqPayload *_service_user2.DeleteUserRequest) (respPayload *_service_user2.DeleteUserResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("DELETE", g.apiClient.base+"/api/service/user2/"+fmt.Sprint(reqPayload.ID)+"", buf)
+	req, err := http.NewRequest("DELETE", g.apiClient.base+"/service/user2/"+fmt.Sprint(reqPayload.ID)+"", buf)
 	if err != nil {
 		return nil, err
 	}
@@ -322,7 +418,20 @@ func (g *Group_api_service_user2) DeleteUser(reqPayload *_api_service_user2.Dele
 	}
 	defer resp.Body.Close()
 
-	respPayload = &_api_service_user2.DeleteUserResponse{}
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
+	respPayload = &_service_user2.DeleteUserResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}
@@ -330,13 +439,13 @@ func (g *Group_api_service_user2) DeleteUser(reqPayload *_api_service_user2.Dele
 	return respPayload, nil
 }
 
-func (g *Group_api_service_user2) GetUser(reqPayload *_api_service_user2.GetUserRequest) (respPayload *_api_service_user2.GetUserResponse, err error) {
+func (g *Group_service_user2) GetUser(reqPayload *_service_user2.GetUserRequest) (respPayload *_service_user2.GetUserResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("GET", g.apiClient.base+"/api/service/user2/"+fmt.Sprint(reqPayload.ID)+""+"?"+query, nil)
+	req, err := http.NewRequest("GET", g.apiClient.base+"/service/user2/"+fmt.Sprint(reqPayload.ID)+""+"?"+query, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -348,7 +457,20 @@ func (g *Group_api_service_user2) GetUser(reqPayload *_api_service_user2.GetUser
 	}
 	defer resp.Body.Close()
 
-	respPayload = &_api_service_user2.GetUserResponse{}
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
+	respPayload = &_service_user2.GetUserResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}
@@ -356,13 +478,13 @@ func (g *Group_api_service_user2) GetUser(reqPayload *_api_service_user2.GetUser
 	return respPayload, nil
 }
 
-func (g *Group_api_service_user2) PostUpdateUserName(reqPayload *_api_service_user2.PostUpdateUserNameRequest) (respPayload *_api_service_user2.PostUpdateUserNameResponse, err error) {
+func (g *Group_service_user2) PostUpdateUserName(reqPayload *_service_user2.PostUpdateUserNameRequest) (respPayload *_service_user2.PostUpdateUserNameResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", g.apiClient.base+"/api/service/user2/update_user_name", buf)
+	req, err := http.NewRequest("POST", g.apiClient.base+"/service/user2/update_user_name", buf)
 	if err != nil {
 		return nil, err
 	}
@@ -376,7 +498,20 @@ func (g *Group_api_service_user2) PostUpdateUserName(reqPayload *_api_service_us
 	}
 	defer resp.Body.Close()
 
-	respPayload = &_api_service_user2.PostUpdateUserNameResponse{}
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
+	respPayload = &_service_user2.PostUpdateUserNameResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}
@@ -384,13 +519,13 @@ func (g *Group_api_service_user2) PostUpdateUserName(reqPayload *_api_service_us
 	return respPayload, nil
 }
 
-func (g *Group_api_service_user2) PostUpdateUserPassword(reqPayload *_api_service_user2.PostUpdateUserPasswordRequest) (respPayload *_api_service_user2.PostUpdateUserPasswordResponse, err error) {
+func (g *Group_service_user2) PostUpdateUserPassword(reqPayload *_service_user2.PostUpdateUserPasswordRequest) (respPayload *_service_user2.PostUpdateUserPasswordResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", g.apiClient.base+"/api/service/user2/update_user_password", buf)
+	req, err := http.NewRequest("POST", g.apiClient.base+"/service/user2/update_user_password", buf)
 	if err != nil {
 		return nil, err
 	}
@@ -404,7 +539,20 @@ func (g *Group_api_service_user2) PostUpdateUserPassword(reqPayload *_api_servic
 	}
 	defer resp.Body.Close()
 
-	respPayload = &_api_service_user2.PostUpdateUserPasswordResponse{}
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
+	respPayload = &_service_user2.PostUpdateUserPasswordResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}
@@ -412,33 +560,33 @@ func (g *Group_api_service_user2) PostUpdateUserPassword(reqPayload *_api_servic
 	return respPayload, nil
 }
 
-type Group_api_service struct {
-	Groups     *Group_api_service_groups
-	StaticPage *Group_api_service_static_page
-	Table      *Group_api_service_table
-	User       *Group_api_service_user
-	User2      *Group_api_service_user2
+type Group_service struct {
+	Groups     *Group_service_groups
+	StaticPage *Group_service_static_page
+	Table      *Group_service_table
+	User       *Group_service_user
+	User2      *Group_service_user2
 	apiClient  *APIClient
 }
 
-func newGroup_api_service(client *APIClient) *Group_api_service {
-	return &Group_api_service{
+func newGroup_service(client *APIClient) *Group_service {
+	return &Group_service{
 		apiClient:  client,
-		Groups:     newGroup_api_service_groups(client),
-		StaticPage: newGroup_api_service_static_page(client),
-		Table:      newGroup_api_service_table(client),
-		User:       newGroup_api_service_user(client),
-		User2:      newGroup_api_service_user2(client),
+		Groups:     newGroup_service_groups(client),
+		StaticPage: newGroup_service_static_page(client),
+		Table:      newGroup_service_table(client),
+		User:       newGroup_service_user(client),
+		User2:      newGroup_service_user2(client),
 	}
 }
 
-func (g *Group_api_service) GetArticle(reqPayload *_api_service.GetArticleRequest) (respPayload *_api_service.GetArticleResponse, err error) {
+func (g *Group_service) GetArticle(reqPayload *_service.GetArticleRequest) (respPayload *_service.GetArticleResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("GET", g.apiClient.base+"/api/service/article"+"?"+query, nil)
+	req, err := http.NewRequest("GET", g.apiClient.base+"/service/article"+"?"+query, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -450,1424 +598,226 @@ func (g *Group_api_service) GetArticle(reqPayload *_api_service.GetArticleReques
 	}
 	defer resp.Body.Close()
 
-	respPayload = &_api_service.GetArticleResponse{}
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
+	respPayload = &_service.GetArticleResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
 		return nil, err
 	}
 
 	return respPayload, nil
-}
-
-type Group_api struct {
-	Service   *Group_api_service
-	apiClient *APIClient
-}
-
-func newGroup_api(client *APIClient) *Group_api {
-	return &Group_api{
-		apiClient: client,
-		Service:   newGroup_api_service(client),
-	}
-}
-
-func (g *Group_api) Get(reqPayload *_api.GetRequest) (respPayload *_api.GetResponse, err error) {
-	query, err := encodeQuery(reqPayload)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", g.apiClient.base+"/api/"+"?"+query, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_api.GetResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-func (g *Group_api) PostCreateTable(reqPayload *_api.PostCreateTableRequest) (respPayload *_api.PostCreateTableResponse, err error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", g.apiClient.base+"/api/create_table", buf)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_api.PostCreateTableResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-func (g *Group_api) PostCreateUser(reqPayload *_api.PostCreateUserRequest) (respPayload *_api.PostCreateUserResponse, err error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", g.apiClient.base+"/api/create_user", buf)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_api.PostCreateUserResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-type Group_clients_dart_classes_service_groups_common struct {
-	apiClient *APIClient
-}
-
-func newGroup_clients_dart_classes_service_groups_common(client *APIClient) *Group_clients_dart_classes_service_groups_common {
-	return &Group_clients_dart_classes_service_groups_common{
-		apiClient: client,
-	}
-}
-
-type Group_clients_dart_classes_service_groups struct {
-	Common    *Group_clients_dart_classes_service_groups_common
-	apiClient *APIClient
-}
-
-func newGroup_clients_dart_classes_service_groups(client *APIClient) *Group_clients_dart_classes_service_groups {
-	return &Group_clients_dart_classes_service_groups{
-		apiClient: client,
-		Common:    newGroup_clients_dart_classes_service_groups_common(client),
-	}
-}
-
-type Group_clients_dart_classes_service_static_page struct {
-	apiClient *APIClient
-}
-
-func newGroup_clients_dart_classes_service_static_page(client *APIClient) *Group_clients_dart_classes_service_static_page {
-	return &Group_clients_dart_classes_service_static_page{
-		apiClient: client,
-	}
-}
-
-type Group_clients_dart_classes_service_table struct {
-	apiClient *APIClient
-}
-
-func newGroup_clients_dart_classes_service_table(client *APIClient) *Group_clients_dart_classes_service_table {
-	return &Group_clients_dart_classes_service_table{
-		apiClient: client,
-	}
-}
-
-type Group_clients_dart_classes_service_user struct {
-	apiClient *APIClient
-}
-
-func newGroup_clients_dart_classes_service_user(client *APIClient) *Group_clients_dart_classes_service_user {
-	return &Group_clients_dart_classes_service_user{
-		apiClient: client,
-	}
-}
-
-type Group_clients_dart_classes_service_user2__userID__JobID struct {
-	apiClient *APIClient
-}
-
-func newGroup_clients_dart_classes_service_user2__userID__JobID(client *APIClient) *Group_clients_dart_classes_service_user2__userID__JobID {
-	return &Group_clients_dart_classes_service_user2__userID__JobID{
-		apiClient: client,
-	}
-}
-
-type Group_clients_dart_classes_service_user2__userID struct {
-	JobID     *Group_clients_dart_classes_service_user2__userID__JobID
-	apiClient *APIClient
-}
-
-func newGroup_clients_dart_classes_service_user2__userID(client *APIClient) *Group_clients_dart_classes_service_user2__userID {
-	return &Group_clients_dart_classes_service_user2__userID{
-		apiClient: client,
-		JobID:     newGroup_clients_dart_classes_service_user2__userID__JobID(client),
-	}
-}
-
-type Group_clients_dart_classes_service_user2 struct {
-	UserID    *Group_clients_dart_classes_service_user2__userID
-	apiClient *APIClient
-}
-
-func newGroup_clients_dart_classes_service_user2(client *APIClient) *Group_clients_dart_classes_service_user2 {
-	return &Group_clients_dart_classes_service_user2{
-		apiClient: client,
-		UserID:    newGroup_clients_dart_classes_service_user2__userID(client),
-	}
-}
-
-type Group_clients_dart_classes_service struct {
-	Groups     *Group_clients_dart_classes_service_groups
-	StaticPage *Group_clients_dart_classes_service_static_page
-	Table      *Group_clients_dart_classes_service_table
-	User       *Group_clients_dart_classes_service_user
-	User2      *Group_clients_dart_classes_service_user2
-	apiClient  *APIClient
-}
-
-func newGroup_clients_dart_classes_service(client *APIClient) *Group_clients_dart_classes_service {
-	return &Group_clients_dart_classes_service{
-		apiClient:  client,
-		Groups:     newGroup_clients_dart_classes_service_groups(client),
-		StaticPage: newGroup_clients_dart_classes_service_static_page(client),
-		Table:      newGroup_clients_dart_classes_service_table(client),
-		User:       newGroup_clients_dart_classes_service_user(client),
-		User2:      newGroup_clients_dart_classes_service_user2(client),
-	}
-}
-
-type Group_clients_dart_classes struct {
-	Service   *Group_clients_dart_classes_service
-	apiClient *APIClient
-}
-
-func newGroup_clients_dart_classes(client *APIClient) *Group_clients_dart_classes {
-	return &Group_clients_dart_classes{
-		apiClient: client,
-		Service:   newGroup_clients_dart_classes_service(client),
-	}
-}
-
-type Group_clients_dart struct {
-	Classes   *Group_clients_dart_classes
-	apiClient *APIClient
-}
-
-func newGroup_clients_dart(client *APIClient) *Group_clients_dart {
-	return &Group_clients_dart{
-		apiClient: client,
-		Classes:   newGroup_clients_dart_classes(client),
-	}
-}
-
-type Group_clients_go_classes_service_groups struct {
-	apiClient *APIClient
-}
-
-func newGroup_clients_go_classes_service_groups(client *APIClient) *Group_clients_go_classes_service_groups {
-	return &Group_clients_go_classes_service_groups{
-		apiClient: client,
-	}
-}
-
-func (g *Group_clients_go_classes_service_groups) GetGroups(reqPayload *_clients_go_classes_service_groups.GetGroupsRequest) (respPayload *_clients_go_classes_service_groups.GetGroupsResponse, err error) {
-	query, err := encodeQuery(reqPayload)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", g.apiClient.base+"/clients/go/classes/service/groups/groups"+"?"+query, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes_service_groups.GetGroupsResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-type Group_clients_go_classes_service_static_page struct {
-	apiClient *APIClient
-}
-
-func newGroup_clients_go_classes_service_static_page(client *APIClient) *Group_clients_go_classes_service_static_page {
-	return &Group_clients_go_classes_service_static_page{
-		apiClient: client,
-	}
-}
-
-func (g *Group_clients_go_classes_service_static_page) GetStaticPage(reqPayload *_clients_go_classes_service_static_page.GetStaticPageRequest) (respPayload *_clients_go_classes_service_static_page.GetStaticPageResponse, err error) {
-	query, err := encodeQuery(reqPayload)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", g.apiClient.base+"/clients/go/classes/service/static_page/static_page"+"?"+query, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes_service_static_page.GetStaticPageResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-type Group_clients_go_classes_service_user struct {
-	apiClient *APIClient
-}
-
-func newGroup_clients_go_classes_service_user(client *APIClient) *Group_clients_go_classes_service_user {
-	return &Group_clients_go_classes_service_user{
-		apiClient: client,
-	}
-}
-
-func (g *Group_clients_go_classes_service_user) Get(reqPayload *_clients_go_classes_service_user.GetRequest) (respPayload *_clients_go_classes_service_user.GetResponse, err error) {
-	query, err := encodeQuery(reqPayload)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", g.apiClient.base+"/clients/go/classes/service/user/"+"?"+query, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes_service_user.GetResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-func (g *Group_clients_go_classes_service_user) PostUpdateUserName(reqPayload *_clients_go_classes_service_user.PostUpdateUserNameRequest) (respPayload *_clients_go_classes_service_user.PostUpdateUserNameResponse, err error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", g.apiClient.base+"/clients/go/classes/service/user/update_user_name", buf)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes_service_user.PostUpdateUserNameResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-func (g *Group_clients_go_classes_service_user) PostUpdateUserPassword(reqPayload *_clients_go_classes_service_user.PostUpdateUserPasswordRequest) (respPayload *_clients_go_classes_service_user.PostUpdateUserPasswordResponse, err error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", g.apiClient.base+"/clients/go/classes/service/user/update_user_password", buf)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes_service_user.PostUpdateUserPasswordResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-type Group_clients_go_classes_service_user2__userID__JobID struct {
-	apiClient *APIClient
-}
-
-func newGroup_clients_go_classes_service_user2__userID__JobID(client *APIClient) *Group_clients_go_classes_service_user2__userID__JobID {
-	return &Group_clients_go_classes_service_user2__userID__JobID{
-		apiClient: client,
-	}
-}
-
-func (g *Group_clients_go_classes_service_user2__userID__JobID) PutJob(reqPayload *_clients_go_classes_service_user2__userID__JobID.PutJobRequest) (respPayload *_clients_go_classes_service_user2__userID__JobID.PutJobResponse, err error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("PUT", g.apiClient.base+"/clients/go/classes/service/user2/"+fmt.Sprint(reqPayload.UserID)+"/"+fmt.Sprint(reqPayload.JobID)+"/job", buf)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes_service_user2__userID__JobID.PutJobResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-type Group_clients_go_classes_service_user2__userID struct {
-	JobID     *Group_clients_go_classes_service_user2__userID__JobID
-	apiClient *APIClient
-}
-
-func newGroup_clients_go_classes_service_user2__userID(client *APIClient) *Group_clients_go_classes_service_user2__userID {
-	return &Group_clients_go_classes_service_user2__userID{
-		apiClient: client,
-		JobID:     newGroup_clients_go_classes_service_user2__userID__JobID(client),
-	}
-}
-
-func (g *Group_clients_go_classes_service_user2__userID) GetUserJobGet(reqPayload *_clients_go_classes_service_user2__userID.GetUserJobGetRequest) (respPayload *_clients_go_classes_service_user2__userID.GetUserJobGetResponse, err error) {
-	query, err := encodeQuery(reqPayload)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", g.apiClient.base+"/clients/go/classes/service/user2/"+fmt.Sprint(reqPayload.UserID)+"/user_job_get"+"?"+query, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes_service_user2__userID.GetUserJobGetResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-type Group_clients_go_classes_service_user2 struct {
-	UserID    *Group_clients_go_classes_service_user2__userID
-	apiClient *APIClient
-}
-
-func newGroup_clients_go_classes_service_user2(client *APIClient) *Group_clients_go_classes_service_user2 {
-	return &Group_clients_go_classes_service_user2{
-		apiClient: client,
-		UserID:    newGroup_clients_go_classes_service_user2__userID(client),
-	}
-}
-
-func (g *Group_clients_go_classes_service_user2) DeleteUser(reqPayload *_clients_go_classes_service_user2.DeleteUserRequest) (respPayload *_clients_go_classes_service_user2.DeleteUserResponse, err error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("DELETE", g.apiClient.base+"/clients/go/classes/service/user2/user", buf)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes_service_user2.DeleteUserResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-func (g *Group_clients_go_classes_service_user2) GetUser(reqPayload *_clients_go_classes_service_user2.GetUserRequest) (respPayload *_clients_go_classes_service_user2.GetUserResponse, err error) {
-	query, err := encodeQuery(reqPayload)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", g.apiClient.base+"/clients/go/classes/service/user2/user"+"?"+query, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes_service_user2.GetUserResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-func (g *Group_clients_go_classes_service_user2) PostUpdateUserName(reqPayload *_clients_go_classes_service_user2.PostUpdateUserNameRequest) (respPayload *_clients_go_classes_service_user2.PostUpdateUserNameResponse, err error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", g.apiClient.base+"/clients/go/classes/service/user2/update_user_name", buf)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes_service_user2.PostUpdateUserNameResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-func (g *Group_clients_go_classes_service_user2) PostUpdateUserPassword(reqPayload *_clients_go_classes_service_user2.PostUpdateUserPasswordRequest) (respPayload *_clients_go_classes_service_user2.PostUpdateUserPasswordResponse, err error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", g.apiClient.base+"/clients/go/classes/service/user2/update_user_password", buf)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes_service_user2.PostUpdateUserPasswordResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-type Group_clients_go_classes_service struct {
-	Groups     *Group_clients_go_classes_service_groups
-	StaticPage *Group_clients_go_classes_service_static_page
-	User       *Group_clients_go_classes_service_user
-	User2      *Group_clients_go_classes_service_user2
-	apiClient  *APIClient
-}
-
-func newGroup_clients_go_classes_service(client *APIClient) *Group_clients_go_classes_service {
-	return &Group_clients_go_classes_service{
-		apiClient:  client,
-		Groups:     newGroup_clients_go_classes_service_groups(client),
-		StaticPage: newGroup_clients_go_classes_service_static_page(client),
-		User:       newGroup_clients_go_classes_service_user(client),
-		User2:      newGroup_clients_go_classes_service_user2(client),
-	}
-}
-
-func (g *Group_clients_go_classes_service) GetArticle(reqPayload *_clients_go_classes_service.GetArticleRequest) (respPayload *_clients_go_classes_service.GetArticleResponse, err error) {
-	query, err := encodeQuery(reqPayload)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", g.apiClient.base+"/clients/go/classes/service/article"+"?"+query, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes_service.GetArticleResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-type Group_clients_go_classes struct {
-	Service   *Group_clients_go_classes_service
-	apiClient *APIClient
-}
-
-func newGroup_clients_go_classes(client *APIClient) *Group_clients_go_classes {
-	return &Group_clients_go_classes{
-		apiClient: client,
-		Service:   newGroup_clients_go_classes_service(client),
-	}
-}
-
-func (g *Group_clients_go_classes) Get(reqPayload *_clients_go_classes.GetRequest) (respPayload *_clients_go_classes.GetResponse, err error) {
-	query, err := encodeQuery(reqPayload)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", g.apiClient.base+"/clients/go/classes/"+"?"+query, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes.GetResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-func (g *Group_clients_go_classes) PostCreateTable(reqPayload *_clients_go_classes.PostCreateTableRequest) (respPayload *_clients_go_classes.PostCreateTableResponse, err error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", g.apiClient.base+"/clients/go/classes/create_table", buf)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes.PostCreateTableResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-func (g *Group_clients_go_classes) PostCreateUser(reqPayload *_clients_go_classes.PostCreateUserRequest) (respPayload *_clients_go_classes.PostCreateUserResponse, err error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", g.apiClient.base+"/clients/go/classes/create_user", buf)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-
-	resp, err := g.apiClient.client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	respPayload = &_clients_go_classes.PostCreateUserResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
-		return nil, err
-	}
-
-	return respPayload, nil
-}
-
-type Group_clients_go struct {
-	Classes   *Group_clients_go_classes
-	apiClient *APIClient
-}
-
-func newGroup_clients_go(client *APIClient) *Group_clients_go {
-	return &Group_clients_go{
-		apiClient: client,
-		Classes:   newGroup_clients_go_classes(client),
-	}
-}
-
-type Group_clients_ts_classes_service_groups struct {
-	apiClient *APIClient
-}
-
-func newGroup_clients_ts_classes_service_groups(client *APIClient) *Group_clients_ts_classes_service_groups {
-	return &Group_clients_ts_classes_service_groups{
-		apiClient: client,
-	}
-}
-
-type Group_clients_ts_classes_service_static_page struct {
-	apiClient *APIClient
-}
-
-func newGroup_clients_ts_classes_service_static_page(client *APIClient) *Group_clients_ts_classes_service_static_page {
-	return &Group_clients_ts_classes_service_static_page{
-		apiClient: client,
-	}
-}
-
-type Group_clients_ts_classes_service_user struct {
-	apiClient *APIClient
-}
-
-func newGroup_clients_ts_classes_service_user(client *APIClient) *Group_clients_ts_classes_service_user {
-	return &Group_clients_ts_classes_service_user{
-		apiClient: client,
-	}
-}
-
-type Group_clients_ts_classes_service_user2__userID__JobID struct {
-	apiClient *APIClient
-}
-
-func newGroup_clients_ts_classes_service_user2__userID__JobID(client *APIClient) *Group_clients_ts_classes_service_user2__userID__JobID {
-	return &Group_clients_ts_classes_service_user2__userID__JobID{
-		apiClient: client,
-	}
-}
-
-type Group_clients_ts_classes_service_user2__userID struct {
-	JobID     *Group_clients_ts_classes_service_user2__userID__JobID
-	apiClient *APIClient
-}
-
-func newGroup_clients_ts_classes_service_user2__userID(client *APIClient) *Group_clients_ts_classes_service_user2__userID {
-	return &Group_clients_ts_classes_service_user2__userID{
-		apiClient: client,
-		JobID:     newGroup_clients_ts_classes_service_user2__userID__JobID(client),
-	}
-}
-
-type Group_clients_ts_classes_service_user2 struct {
-	UserID    *Group_clients_ts_classes_service_user2__userID
-	apiClient *APIClient
-}
-
-func newGroup_clients_ts_classes_service_user2(client *APIClient) *Group_clients_ts_classes_service_user2 {
-	return &Group_clients_ts_classes_service_user2{
-		apiClient: client,
-		UserID:    newGroup_clients_ts_classes_service_user2__userID(client),
-	}
-}
-
-type Group_clients_ts_classes_service struct {
-	Groups     *Group_clients_ts_classes_service_groups
-	StaticPage *Group_clients_ts_classes_service_static_page
-	User       *Group_clients_ts_classes_service_user
-	User2      *Group_clients_ts_classes_service_user2
-	apiClient  *APIClient
-}
-
-func newGroup_clients_ts_classes_service(client *APIClient) *Group_clients_ts_classes_service {
-	return &Group_clients_ts_classes_service{
-		apiClient:  client,
-		Groups:     newGroup_clients_ts_classes_service_groups(client),
-		StaticPage: newGroup_clients_ts_classes_service_static_page(client),
-		User:       newGroup_clients_ts_classes_service_user(client),
-		User2:      newGroup_clients_ts_classes_service_user2(client),
-	}
-}
-
-type Group_clients_ts_classes struct {
-	Service   *Group_clients_ts_classes_service
-	apiClient *APIClient
-}
-
-func newGroup_clients_ts_classes(client *APIClient) *Group_clients_ts_classes {
-	return &Group_clients_ts_classes{
-		apiClient: client,
-		Service:   newGroup_clients_ts_classes_service(client),
-	}
-}
-
-type Group_clients_ts struct {
-	Classes   *Group_clients_ts_classes
-	apiClient *APIClient
-}
-
-func newGroup_clients_ts(client *APIClient) *Group_clients_ts {
-	return &Group_clients_ts{
-		apiClient: client,
-		Classes:   newGroup_clients_ts_classes(client),
-	}
-}
-
-type Group_clients struct {
-	Dart      *Group_clients_dart
-	Go        *Group_clients_go
-	Ts        *Group_clients_ts
-	apiClient *APIClient
-}
-
-func newGroup_clients(client *APIClient) *Group_clients {
-	return &Group_clients{
-		apiClient: client,
-		Dart:      newGroup_clients_dart(client),
-		Go:        newGroup_clients_go(client),
-		Ts:        newGroup_clients_ts(client),
-	}
-}
-
-type Group_docs struct {
-	apiClient *APIClient
-}
-
-func newGroup_docs(client *APIClient) *Group_docs {
-	return &Group_docs{
-		apiClient: client,
-	}
-}
-
-type Group_server_controller_service_groups struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_controller_service_groups(client *APIClient) *Group_server_controller_service_groups {
-	return &Group_server_controller_service_groups{
-		apiClient: client,
-	}
-}
-
-type Group_server_controller_service_static_page struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_controller_service_static_page(client *APIClient) *Group_server_controller_service_static_page {
-	return &Group_server_controller_service_static_page{
-		apiClient: client,
-	}
-}
-
-type Group_server_controller_service_user struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_controller_service_user(client *APIClient) *Group_server_controller_service_user {
-	return &Group_server_controller_service_user{
-		apiClient: client,
-	}
-}
-
-type Group_server_controller_service_user2__userID__JobID struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_controller_service_user2__userID__JobID(client *APIClient) *Group_server_controller_service_user2__userID__JobID {
-	return &Group_server_controller_service_user2__userID__JobID{
-		apiClient: client,
-	}
-}
-
-type Group_server_controller_service_user2__userID struct {
-	JobID     *Group_server_controller_service_user2__userID__JobID
-	apiClient *APIClient
-}
-
-func newGroup_server_controller_service_user2__userID(client *APIClient) *Group_server_controller_service_user2__userID {
-	return &Group_server_controller_service_user2__userID{
-		apiClient: client,
-		JobID:     newGroup_server_controller_service_user2__userID__JobID(client),
-	}
-}
-
-type Group_server_controller_service_user2 struct {
-	UserID    *Group_server_controller_service_user2__userID
-	apiClient *APIClient
-}
-
-func newGroup_server_controller_service_user2(client *APIClient) *Group_server_controller_service_user2 {
-	return &Group_server_controller_service_user2{
-		apiClient: client,
-		UserID:    newGroup_server_controller_service_user2__userID(client),
-	}
-}
-
-type Group_server_controller_service struct {
-	Groups     *Group_server_controller_service_groups
-	StaticPage *Group_server_controller_service_static_page
-	User       *Group_server_controller_service_user
-	User2      *Group_server_controller_service_user2
-	apiClient  *APIClient
-}
-
-func newGroup_server_controller_service(client *APIClient) *Group_server_controller_service {
-	return &Group_server_controller_service{
-		apiClient:  client,
-		Groups:     newGroup_server_controller_service_groups(client),
-		StaticPage: newGroup_server_controller_service_static_page(client),
-		User:       newGroup_server_controller_service_user(client),
-		User2:      newGroup_server_controller_service_user2(client),
-	}
-}
-
-type Group_server_controller struct {
-	Service   *Group_server_controller_service
-	apiClient *APIClient
-}
-
-func newGroup_server_controller(client *APIClient) *Group_server_controller {
-	return &Group_server_controller{
-		apiClient: client,
-		Service:   newGroup_server_controller_service(client),
-	}
-}
-
-type Group_server_mock_controller_service_groups struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_controller_service_groups(client *APIClient) *Group_server_mock_controller_service_groups {
-	return &Group_server_mock_controller_service_groups{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_controller_service_static_page struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_controller_service_static_page(client *APIClient) *Group_server_mock_controller_service_static_page {
-	return &Group_server_mock_controller_service_static_page{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_controller_service_user struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_controller_service_user(client *APIClient) *Group_server_mock_controller_service_user {
-	return &Group_server_mock_controller_service_user{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_controller_service_user2__userID__JobID struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_controller_service_user2__userID__JobID(client *APIClient) *Group_server_mock_controller_service_user2__userID__JobID {
-	return &Group_server_mock_controller_service_user2__userID__JobID{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_controller_service_user2__userID struct {
-	JobID     *Group_server_mock_controller_service_user2__userID__JobID
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_controller_service_user2__userID(client *APIClient) *Group_server_mock_controller_service_user2__userID {
-	return &Group_server_mock_controller_service_user2__userID{
-		apiClient: client,
-		JobID:     newGroup_server_mock_controller_service_user2__userID__JobID(client),
-	}
-}
-
-type Group_server_mock_controller_service_user2 struct {
-	UserID    *Group_server_mock_controller_service_user2__userID
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_controller_service_user2(client *APIClient) *Group_server_mock_controller_service_user2 {
-	return &Group_server_mock_controller_service_user2{
-		apiClient: client,
-		UserID:    newGroup_server_mock_controller_service_user2__userID(client),
-	}
-}
-
-type Group_server_mock_controller_service struct {
-	Groups     *Group_server_mock_controller_service_groups
-	StaticPage *Group_server_mock_controller_service_static_page
-	User       *Group_server_mock_controller_service_user
-	User2      *Group_server_mock_controller_service_user2
-	apiClient  *APIClient
-}
-
-func newGroup_server_mock_controller_service(client *APIClient) *Group_server_mock_controller_service {
-	return &Group_server_mock_controller_service{
-		apiClient:  client,
-		Groups:     newGroup_server_mock_controller_service_groups(client),
-		StaticPage: newGroup_server_mock_controller_service_static_page(client),
-		User:       newGroup_server_mock_controller_service_user(client),
-		User2:      newGroup_server_mock_controller_service_user2(client),
-	}
-}
-
-type Group_server_mock_controller struct {
-	Service   *Group_server_mock_controller_service
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_controller(client *APIClient) *Group_server_mock_controller {
-	return &Group_server_mock_controller{
-		apiClient: client,
-		Service:   newGroup_server_mock_controller_service(client),
-	}
-}
-
-type Group_server_mock_json_get_ struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_get_(client *APIClient) *Group_server_mock_json_get_ {
-	return &Group_server_mock_json_get_{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_json_post_create_table struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_post_create_table(client *APIClient) *Group_server_mock_json_post_create_table {
-	return &Group_server_mock_json_post_create_table{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_json_post_create_user struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_post_create_user(client *APIClient) *Group_server_mock_json_post_create_user {
-	return &Group_server_mock_json_post_create_user{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_json_service_get_article struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_service_get_article(client *APIClient) *Group_server_mock_json_service_get_article {
-	return &Group_server_mock_json_service_get_article{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_json_service_groups_get_groups struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_service_groups_get_groups(client *APIClient) *Group_server_mock_json_service_groups_get_groups {
-	return &Group_server_mock_json_service_groups_get_groups{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_json_service_groups struct {
-	GetGroups *Group_server_mock_json_service_groups_get_groups
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_service_groups(client *APIClient) *Group_server_mock_json_service_groups {
-	return &Group_server_mock_json_service_groups{
-		apiClient: client,
-		GetGroups: newGroup_server_mock_json_service_groups_get_groups(client),
-	}
-}
-
-type Group_server_mock_json_service_static_page_get_static_page struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_service_static_page_get_static_page(client *APIClient) *Group_server_mock_json_service_static_page_get_static_page {
-	return &Group_server_mock_json_service_static_page_get_static_page{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_json_service_static_page struct {
-	GetStaticPage *Group_server_mock_json_service_static_page_get_static_page
-	apiClient     *APIClient
-}
-
-func newGroup_server_mock_json_service_static_page(client *APIClient) *Group_server_mock_json_service_static_page {
-	return &Group_server_mock_json_service_static_page{
-		apiClient:     client,
-		GetStaticPage: newGroup_server_mock_json_service_static_page_get_static_page(client),
-	}
-}
-
-type Group_server_mock_json_service_user_get_ struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_service_user_get_(client *APIClient) *Group_server_mock_json_service_user_get_ {
-	return &Group_server_mock_json_service_user_get_{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_json_service_user_post_update_user_name struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_service_user_post_update_user_name(client *APIClient) *Group_server_mock_json_service_user_post_update_user_name {
-	return &Group_server_mock_json_service_user_post_update_user_name{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_json_service_user_post_update_user_password struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_service_user_post_update_user_password(client *APIClient) *Group_server_mock_json_service_user_post_update_user_password {
-	return &Group_server_mock_json_service_user_post_update_user_password{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_json_service_user struct {
-	Get                    *Group_server_mock_json_service_user_get_
-	PostUpdateUserName     *Group_server_mock_json_service_user_post_update_user_name
-	PostUpdateUserPassword *Group_server_mock_json_service_user_post_update_user_password
-	apiClient              *APIClient
-}
-
-func newGroup_server_mock_json_service_user(client *APIClient) *Group_server_mock_json_service_user {
-	return &Group_server_mock_json_service_user{
-		apiClient:              client,
-		Get:                    newGroup_server_mock_json_service_user_get_(client),
-		PostUpdateUserName:     newGroup_server_mock_json_service_user_post_update_user_name(client),
-		PostUpdateUserPassword: newGroup_server_mock_json_service_user_post_update_user_password(client),
-	}
-}
-
-type Group_server_mock_json_service_user2__userID__JobID_put_job struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_service_user2__userID__JobID_put_job(client *APIClient) *Group_server_mock_json_service_user2__userID__JobID_put_job {
-	return &Group_server_mock_json_service_user2__userID__JobID_put_job{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_json_service_user2__userID__JobID struct {
-	PutJob    *Group_server_mock_json_service_user2__userID__JobID_put_job
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_service_user2__userID__JobID(client *APIClient) *Group_server_mock_json_service_user2__userID__JobID {
-	return &Group_server_mock_json_service_user2__userID__JobID{
-		apiClient: client,
-		PutJob:    newGroup_server_mock_json_service_user2__userID__JobID_put_job(client),
-	}
-}
-
-type Group_server_mock_json_service_user2__userID_get_user_job_get struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_service_user2__userID_get_user_job_get(client *APIClient) *Group_server_mock_json_service_user2__userID_get_user_job_get {
-	return &Group_server_mock_json_service_user2__userID_get_user_job_get{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_json_service_user2__userID struct {
-	JobID         *Group_server_mock_json_service_user2__userID__JobID
-	GetUserJobGet *Group_server_mock_json_service_user2__userID_get_user_job_get
-	apiClient     *APIClient
-}
-
-func newGroup_server_mock_json_service_user2__userID(client *APIClient) *Group_server_mock_json_service_user2__userID {
-	return &Group_server_mock_json_service_user2__userID{
-		apiClient:     client,
-		JobID:         newGroup_server_mock_json_service_user2__userID__JobID(client),
-		GetUserJobGet: newGroup_server_mock_json_service_user2__userID_get_user_job_get(client),
-	}
-}
-
-type Group_server_mock_json_service_user2_delete_user struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_service_user2_delete_user(client *APIClient) *Group_server_mock_json_service_user2_delete_user {
-	return &Group_server_mock_json_service_user2_delete_user{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_json_service_user2_get_user struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_service_user2_get_user(client *APIClient) *Group_server_mock_json_service_user2_get_user {
-	return &Group_server_mock_json_service_user2_get_user{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_json_service_user2_post_update_user_name struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_service_user2_post_update_user_name(client *APIClient) *Group_server_mock_json_service_user2_post_update_user_name {
-	return &Group_server_mock_json_service_user2_post_update_user_name{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_json_service_user2_post_update_user_password struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_mock_json_service_user2_post_update_user_password(client *APIClient) *Group_server_mock_json_service_user2_post_update_user_password {
-	return &Group_server_mock_json_service_user2_post_update_user_password{
-		apiClient: client,
-	}
-}
-
-type Group_server_mock_json_service_user2 struct {
-	UserID                 *Group_server_mock_json_service_user2__userID
-	DeleteUser             *Group_server_mock_json_service_user2_delete_user
-	GetUser                *Group_server_mock_json_service_user2_get_user
-	PostUpdateUserName     *Group_server_mock_json_service_user2_post_update_user_name
-	PostUpdateUserPassword *Group_server_mock_json_service_user2_post_update_user_password
-	apiClient              *APIClient
-}
-
-func newGroup_server_mock_json_service_user2(client *APIClient) *Group_server_mock_json_service_user2 {
-	return &Group_server_mock_json_service_user2{
-		apiClient:              client,
-		UserID:                 newGroup_server_mock_json_service_user2__userID(client),
-		DeleteUser:             newGroup_server_mock_json_service_user2_delete_user(client),
-		GetUser:                newGroup_server_mock_json_service_user2_get_user(client),
-		PostUpdateUserName:     newGroup_server_mock_json_service_user2_post_update_user_name(client),
-		PostUpdateUserPassword: newGroup_server_mock_json_service_user2_post_update_user_password(client),
-	}
-}
-
-type Group_server_mock_json_service struct {
-	GetArticle *Group_server_mock_json_service_get_article
-	Groups     *Group_server_mock_json_service_groups
-	StaticPage *Group_server_mock_json_service_static_page
-	User       *Group_server_mock_json_service_user
-	User2      *Group_server_mock_json_service_user2
-	apiClient  *APIClient
-}
-
-func newGroup_server_mock_json_service(client *APIClient) *Group_server_mock_json_service {
-	return &Group_server_mock_json_service{
-		apiClient:  client,
-		GetArticle: newGroup_server_mock_json_service_get_article(client),
-		Groups:     newGroup_server_mock_json_service_groups(client),
-		StaticPage: newGroup_server_mock_json_service_static_page(client),
-		User:       newGroup_server_mock_json_service_user(client),
-		User2:      newGroup_server_mock_json_service_user2(client),
-	}
-}
-
-type Group_server_mock_json struct {
-	Get             *Group_server_mock_json_get_
-	PostCreateTable *Group_server_mock_json_post_create_table
-	PostCreateUser  *Group_server_mock_json_post_create_user
-	Service         *Group_server_mock_json_service
-	apiClient       *APIClient
-}
-
-func newGroup_server_mock_json(client *APIClient) *Group_server_mock_json {
-	return &Group_server_mock_json{
-		apiClient:       client,
-		Get:             newGroup_server_mock_json_get_(client),
-		PostCreateTable: newGroup_server_mock_json_post_create_table(client),
-		PostCreateUser:  newGroup_server_mock_json_post_create_user(client),
-		Service:         newGroup_server_mock_json_service(client),
-	}
-}
-
-type Group_server_mock struct {
-	Controller *Group_server_mock_controller
-	Json       *Group_server_mock_json
-	apiClient  *APIClient
-}
-
-func newGroup_server_mock(client *APIClient) *Group_server_mock {
-	return &Group_server_mock{
-		apiClient:  client,
-		Controller: newGroup_server_mock_controller(client),
-		Json:       newGroup_server_mock_json(client),
-	}
-}
-
-type Group_server_pkg_apierror struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_pkg_apierror(client *APIClient) *Group_server_pkg_apierror {
-	return &Group_server_pkg_apierror{
-		apiClient: client,
-	}
-}
-
-type Group_server_pkg struct {
-	Apierror  *Group_server_pkg_apierror
-	apiClient *APIClient
-}
-
-func newGroup_server_pkg(client *APIClient) *Group_server_pkg {
-	return &Group_server_pkg{
-		apiClient: client,
-		Apierror:  newGroup_server_pkg_apierror(client),
-	}
-}
-
-type Group_server_props struct {
-	apiClient *APIClient
-}
-
-func newGroup_server_props(client *APIClient) *Group_server_props {
-	return &Group_server_props{
-		apiClient: client,
-	}
-}
-
-type Group_server struct {
-	Controller *Group_server_controller
-	Mock       *Group_server_mock
-	Pkg        *Group_server_pkg
-	Props      *Group_server_props
-	apiClient  *APIClient
-}
-
-func newGroup_server(client *APIClient) *Group_server {
-	return &Group_server{
-		apiClient:  client,
-		Controller: newGroup_server_controller(client),
-		Mock:       newGroup_server_mock(client),
-		Pkg:        newGroup_server_pkg(client),
-		Props:      newGroup_server_props(client),
-	}
 }
 
 type Group struct {
-	Api       *Group_api
-	Clients   *Group_clients
-	Docs      *Group_docs
-	Server    *Group_server
+	Service   *Group_service
 	apiClient *APIClient
 }
 
 func newGroup(client *APIClient) *Group {
 	return &Group{
 		apiClient: client,
-		Api:       newGroup_api(client),
-		Clients:   newGroup_clients(client),
-		Docs:      newGroup_docs(client),
-		Server:    newGroup_server(client),
+		Service:   newGroup_service(client),
 	}
+}
+
+func (g *Group) Get(reqPayload *root.GetRequest) (respPayload *root.GetResponse, retErr error) {
+	query, err := encodeQuery(reqPayload)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", g.apiClient.base+"/"+"?"+query, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := g.apiClient.client.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
+	respPayload = &root.GetResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
+		return nil, err
+	}
+
+	return respPayload, nil
+}
+
+func (g *Group) PostCreateTable(reqPayload *root.PostCreateTableRequest) (respPayload *root.PostCreateTableResponse, retErr error) {
+	br, bw := io.Pipe()
+	buffered := bufio.NewWriter(bw)
+	mw := multipart.NewWriter(buffered)
+
+	finished := make(chan bool)
+	var chanError error
+	defer func() {
+		<-finished
+		if chanError != nil {
+			retErr = fmt.Errorf("creating payload error is %+v: %w", chanError, retErr)
+		}
+	}()
+
+	go func() {
+		chanError = func() error {
+			defer close(finished)
+			defer bw.Close()
+			defer buffered.Flush()
+			defer mw.Close()
+
+			addField := func(fieldName string, payload *multipartutil.MultipartPayload) error {
+				if payload == nil {
+					return nil
+				}
+
+				header := payload.MIMEHeader
+
+				if header == nil {
+					header = textproto.MIMEHeader{}
+				}
+
+				header.Set("Content-Disposition",
+					fmt.Sprintf(`form-data; name="%s"; filename="%s"`,
+						escapeQuotes(fieldName), escapeQuotes(payload.Filename)))
+				if header.Get("Content-Type") != "" {
+					header.Set("Content-Type", "application/octet-stream")
+				}
+
+				w, err := mw.CreatePart(header)
+
+				if err != nil {
+					return fmt.Errorf("failed to create a part for %s: %w", fieldName, err)
+				}
+
+				_, err = io.Copy(w, payload.Data)
+
+				if err != nil {
+					return fmt.Errorf("failed to copy data for %s: %w", fieldName, err)
+				}
+
+				return nil
+			}
+			addField(`file`, reqPayload.File)
+			for _, f := range reqPayload.Files {
+				addField(`files`, f)
+			}
+
+			w, err := mw.CreatePart(mjbinder.CreateJSONRequestMIMEHeader())
+
+			if err != nil {
+				return fmt.Errorf("failed to create a part for JSON payload: %w", err)
+			}
+
+			err = json.NewEncoder(w).Encode(reqPayload)
+
+			if err != nil {
+				return fmt.Errorf("failed to encode JSON payload: %w", err)
+			}
+
+			return nil
+		}()
+	}()
+
+	req, err := http.NewRequest("POST", g.apiClient.base+"/create_table", br)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", mw.FormDataContentType())
+
+	resp, err := g.apiClient.client.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
+	respPayload = &root.PostCreateTableResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
+		return nil, err
+	}
+
+	return respPayload, nil
+}
+
+func (g *Group) PostCreateUser(reqPayload *root.PostCreateUserRequest) (respPayload *root.PostCreateUserResponse, retErr error) {
+	buf := bytes.NewBuffer(nil)
+	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", g.apiClient.base+"/create_user", buf)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+
+	resp, err := g.apiClient.client.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode/100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Data:       b,
+		}
+	}
+
+	respPayload = &root.PostCreateUserResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
+		return nil, err
+	}
+
+	return respPayload, nil
 }
 
 func encodeQuery(v interface{}) (string, error) {
@@ -1905,11 +855,20 @@ func NewClient(client http.Client, base string) *APIClient {
 		client: client,
 		base:   base,
 	}
-	if c.base[len(c.base)-1] == '/' {
+	if len(c.base) != 0 && c.base[len(c.base)-1] == '/' {
 		c.base = c.base[:len(c.base)-1]
 	}
 
 	c.Group = newGroup(c)
 
 	return c
+}
+
+type APIError struct {
+	StatusCode int
+	Data       []byte
+}
+
+func (e APIError) Error() string {
+	return fmt.Sprintf("the server returned an error: %d", e.StatusCode)
 }

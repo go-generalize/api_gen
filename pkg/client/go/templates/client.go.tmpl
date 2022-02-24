@@ -9,11 +9,26 @@ import (
 	"net/url"
 	"net/http"
 	"encoding/json"
+	"strings"
+{{- if .MultipartUpload }}
+	"io"
+	"bufio"
+	"net/textproto"
+	"mime/multipart"
+	"github.com/go-utils/echo-multipart-binder/mjbinder"
+	"github.com/go-generalize/multipart-util"
+{{- end }}
 
 {{ range $idx, $elem := .Imports }}
 	{{$elem.Alias}} "{{$elem.Path}}"
 {{- end}}
 )
+
+var quoteEscaper = strings.NewReplacer("\\", "\\\\", `"`, "\\\"")
+
+func escapeQuotes(s string) string {
+	return quoteEscaper.Replace(s)
+}
 
 {{ range $index, $elem := .Groups }}
 type {{ $elem.Name }} struct {
@@ -33,7 +48,7 @@ func new{{ $elem.Name }}(client *APIClient) *{{ $elem.Name }} {
 }
 
 {{ range $index, $e := $elem.Endpoints }}
-func (g *{{ $elem.Name }}) {{$e.Name}}(reqPayload *{{$e.Request}}) (respPayload *{{$e.Response}}, err error) {
+func (g *{{ $elem.Name }}) {{$e.Name}}(reqPayload *{{$e.Request}}) (respPayload *{{$e.Response}}, retErr error) {
 {{- if eq $e.Method "GET"}}
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
@@ -42,18 +57,106 @@ func (g *{{ $elem.Name }}) {{$e.Name}}(reqPayload *{{$e.Request}}) (respPayload 
 
 	req, err := http.NewRequest("{{$e.Method}}", g.apiClient.base + {{$e.Path}} + "?" + query, nil)
 {{- else}}
+{{- if $e.MultipartUpload }}
+	br, bw := io.Pipe()
+	buffered := bufio.NewWriter(bw)
+	mw := multipart.NewWriter(buffered)
+
+	finished := make(chan bool)
+	var chanError error
+	defer func() {
+		<-finished
+		if chanError != nil {
+			retErr = fmt.Errorf("creating payload error is %+v: %w", chanError, retErr)
+		}
+	}()
+
+	go func() {
+		chanError = func() error {
+			defer close(finished)
+			defer bw.Close()
+			defer buffered.Flush()
+			defer mw.Close()
+
+			addField := func(fieldName string, payload *multipartutil.MultipartPayload) error {
+				if payload == nil {
+					return nil
+				}
+
+				header := payload.MIMEHeader
+					
+				if header == nil {
+					header = textproto.MIMEHeader{}
+				}
+
+				header.Set("Content-Disposition",
+					fmt.Sprintf(`form-data; name="%s"; filename="%s"`,
+						escapeQuotes(fieldName), escapeQuotes(payload.Filename)))
+				if header.Get("Content-Type") != "" {
+					header.Set("Content-Type", "application/octet-stream")
+				}
+
+				w, err := mw.CreatePart(header)
+
+				if err != nil {
+					return fmt.Errorf("failed to create a part for %s: %w", fieldName, err)
+				}
+
+				_, err = io.Copy(w, payload.Data)
+
+				if err != nil {
+					return fmt.Errorf("failed to copy data for %s: %w", fieldName, err)
+				}
+
+				return nil
+			}
+
+			{{- range $field := $e.FileFields }}
+			{{- if IsArrayMultipleUpload $field }}
+			for _, f := range reqPayload.{{ $field.Value.RawName }} {
+				addField(`{{ $field.FormTag }}`, f)
+			}
+			{{- else }}
+			addField(`{{ $field.FormTag }}`, reqPayload.{{ $field.Value.RawName }})
+			{{- end }}			
+			{{- end }}
+
+			w, err := mw.CreatePart(mjbinder.CreateJSONRequestMIMEHeader())
+
+			if err != nil {
+				return fmt.Errorf("failed to create a part for JSON payload: %w", err)
+			}
+
+			err = json.NewEncoder(w).Encode(reqPayload)
+
+			if err != nil {
+				return fmt.Errorf("failed to encode JSON payload: %w", err)
+			}
+
+			return nil
+		}()
+	}()
+
+	req, err := http.NewRequest("{{$e.Method}}", g.apiClient.base + {{$e.Path}}, br)
+
+{{- else }}
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
 	}
 
 	req, err := http.NewRequest("{{$e.Method}}", g.apiClient.base + {{$e.Path}}, buf)
+{{- end }}
 {{- end}}
 	if err != nil {
 		return nil, err
 	}
 {{ if ne $e.Method "GET"}}
+{{- if $e.MultipartUpload }}
+	req.Header.Add("Content-Type", mw.FormDataContentType())
+{{- else }}
 	req.Header.Add("Content-Type", "application/json")
+{{- end }}
 {{ end }}
 	resp, err := g.apiClient.client.Do(req)
 
@@ -61,6 +164,19 @@ func (g *{{ $elem.Name }}) {{$e.Name}}(reqPayload *{{$e.Request}}) (respPayload 
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode / 100 != 2 {
+		b, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			return nil, fmt.Errorf("status code is %d: %w", resp.StatusCode, err)
+		}
+
+		return nil, &APIError {
+			StatusCode: resp.StatusCode,
+			Data: b,
+		}
+	}
 
 	respPayload = &{{$e.Response}}{}
 	if err := json.NewDecoder(resp.Body).Decode(respPayload); err != nil {
@@ -107,11 +223,20 @@ func NewClient(client http.Client, base string) *APIClient {
 		client: client,
 		base:   base,
 	}
-	if c.base[len(c.base) - 1] == '/' {
+	if len(c.base) != 0 && c.base[len(c.base) - 1] == '/' {
 		c.base = c.base[:len(c.base) - 1]
 	}
 
 	c.{{.Root.Name}} = new{{.Root.Name}}(c)
 
 	return c
+}
+
+type APIError struct {
+	StatusCode int
+	Data       []byte
+}
+
+func (e APIError) Error() string {
+	return fmt.Sprintf("the server returned an error: %d", e.StatusCode)
 }

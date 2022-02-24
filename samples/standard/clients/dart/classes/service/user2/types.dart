@@ -2,96 +2,12 @@
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
 // generated version: (devel)
 
-abstract class JsonConverter<T, S> {
-  const JsonConverter();
-
-  T fromJson(dynamic json);
-  S toJson(T object);
-}
-
-class ListConverter<T, Base> implements JsonConverter<List<T>, List<Base>> {
-  const ListConverter(this.internalConverter);
-
-  final JsonConverter<T, Base> internalConverter;
-
-  @override
-  List<T> fromJson(dynamic arr) {
-    return List<dynamic>.from(arr)
-        .map((e) => internalConverter.fromJson(e))
-        .toList();
-  }
-
-  @override
-  List<Base> toJson(List<T> arr) {
-    return arr.map((e) => internalConverter.toJson(e)).toList();
-  }
-}
-
-class MapConverter<K, T, Base>
-    implements JsonConverter<Map<K, T>, Map<K, Base>> {
-  const MapConverter(this.internalConverter);
-
-  final JsonConverter<T, Base> internalConverter;
-
-  @override
-  Map<K, T> fromJson(dynamic m) {
-    return Map<K, dynamic>.from(m).map(
-        (key, value) => MapEntry<K, T>(key, internalConverter.fromJson(value)));
-  }
-
-  @override
-  Map<K, Base> toJson(Map<K, T> m) {
-    return m.map((key, value) =>
-        MapEntry<K, Base>(key, internalConverter.toJson(value)));
-  }
-}
-
-class DateTimeConverter implements JsonConverter<DateTime, String> {
-  const DateTimeConverter();
-
-  @override
-  DateTime fromJson(dynamic s) {
-    return DateTime.parse(s as String);
-  }
-
-  @override
-  String toJson(DateTime dt) {
-    return dt.toUtc().toIso8601String();
-  }
-}
-
-class NullableConverter<T, Base> implements JsonConverter<T?, Base?> {
-  const NullableConverter(this.internalConverter);
-
-  final JsonConverter<T, Base> internalConverter;
-
-  @override
-  T? fromJson(dynamic s) {
-    return s == null ? null : internalConverter.fromJson(s);
-  }
-
-  @override
-  Base? toJson(T? dt) {
-    return dt == null ? null : internalConverter.toJson(dt);
-  }
-}
-
-class DoNothingConverter<T> implements JsonConverter<T, T> {
-  const DoNothingConverter();
-
-  @override
-  T fromJson(dynamic s) {
-    return s as T;
-  }
-
-  @override
-  T toJson(T d) {
-    return d;
-  }
-}
+import '../../../common.dart' as external_1ad882c;
 
 class DeleteUserRequestConverter
-    implements JsonConverter<DeleteUserRequest, Map<String, dynamic>> {
+    implements
+        external_1ad882c
+            .JsonConverter<DeleteUserRequest, Map<String, dynamic>> {
   const DeleteUserRequestConverter();
 
   @override
@@ -114,19 +30,22 @@ class DeleteUserRequest {
 
   factory DeleteUserRequest.fromJson(Map<String, dynamic> json) {
     return DeleteUserRequest(
-      id: const DoNothingConverter<String>().fromJson(json['id']),
+      id: const external_1ad882c.DoNothingConverter<String>()
+          .fromJson(json['id']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'id': const DoNothingConverter<String>().toJson(id),
+      'id': const external_1ad882c.DoNothingConverter<String>().toJson(id),
     };
   }
 }
 
 class DeleteUserResponseConverter
-    implements JsonConverter<DeleteUserResponse, Map<String, dynamic>> {
+    implements
+        external_1ad882c
+            .JsonConverter<DeleteUserResponse, Map<String, dynamic>> {
   const DeleteUserResponseConverter();
 
   @override
@@ -153,7 +72,7 @@ class DeleteUserResponse {
 }
 
 class EmbeddingConverter
-    implements JsonConverter<Embedding, Map<String, dynamic>> {
+    implements external_1ad882c.JsonConverter<Embedding, Map<String, dynamic>> {
   const EmbeddingConverter();
 
   @override
@@ -176,19 +95,21 @@ class Embedding {
 
   factory Embedding.fromJson(Map<String, dynamic> json) {
     return Embedding(
-      page: const DoNothingConverter<String>().fromJson(json['page']),
+      page: const external_1ad882c.DoNothingConverter<String>()
+          .fromJson(json['page']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'page': const DoNothingConverter<String>().toJson(page),
+      'page': const external_1ad882c.DoNothingConverter<String>().toJson(page),
     };
   }
 }
 
 class GetUserRequestConverter
-    implements JsonConverter<GetUserRequest, Map<String, dynamic>> {
+    implements
+        external_1ad882c.JsonConverter<GetUserRequest, Map<String, dynamic>> {
   const GetUserRequestConverter();
 
   @override
@@ -215,25 +136,28 @@ class GetUserRequest {
 
   factory GetUserRequest.fromJson(Map<String, dynamic> json) {
     return GetUserRequest(
-      id: const DoNothingConverter<String>().fromJson(json['id']),
-      page: const DoNothingConverter<String>().fromJson(json['page']),
-      searchRequest:
-          const DoNothingConverter<String>().fromJson(json['search_request']),
+      id: const external_1ad882c.DoNothingConverter<String>()
+          .fromJson(json['id']),
+      page: const external_1ad882c.DoNothingConverter<String>()
+          .fromJson(json['page']),
+      searchRequest: const external_1ad882c.DoNothingConverter<String>()
+          .fromJson(json['search_request']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'id': const DoNothingConverter<String>().toJson(id),
-      'page': const DoNothingConverter<String>().toJson(page),
-      'search_request':
-          const DoNothingConverter<String>().toJson(searchRequest),
+      'id': const external_1ad882c.DoNothingConverter<String>().toJson(id),
+      'page': const external_1ad882c.DoNothingConverter<String>().toJson(page),
+      'search_request': const external_1ad882c.DoNothingConverter<String>()
+          .toJson(searchRequest),
     };
   }
 }
 
 class GetUserResponseConverter
-    implements JsonConverter<GetUserResponse, Map<String, dynamic>> {
+    implements
+        external_1ad882c.JsonConverter<GetUserResponse, Map<String, dynamic>> {
   const GetUserResponseConverter();
 
   @override
@@ -260,24 +184,30 @@ class GetUserResponse {
 
   factory GetUserResponse.fromJson(Map<String, dynamic> json) {
     return GetUserResponse(
-      id: const DoNothingConverter<String>().fromJson(json['ID']),
-      requestTime: const DateTimeConverter().fromJson(json['RequestTime']),
-      searchRequest:
-          const DoNothingConverter<String>().fromJson(json['SearchRequest']),
+      id: const external_1ad882c.DoNothingConverter<String>()
+          .fromJson(json['ID']),
+      requestTime: const external_1ad882c.DateTimeConverter()
+          .fromJson(json['RequestTime']),
+      searchRequest: const external_1ad882c.DoNothingConverter<String>()
+          .fromJson(json['SearchRequest']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'ID': const DoNothingConverter<String>().toJson(id),
-      'RequestTime': const DateTimeConverter().toJson(requestTime),
-      'SearchRequest': const DoNothingConverter<String>().toJson(searchRequest),
+      'ID': const external_1ad882c.DoNothingConverter<String>().toJson(id),
+      'RequestTime':
+          const external_1ad882c.DateTimeConverter().toJson(requestTime),
+      'SearchRequest': const external_1ad882c.DoNothingConverter<String>()
+          .toJson(searchRequest),
     };
   }
 }
 
 class PostUpdateUserNameRequestConverter
-    implements JsonConverter<PostUpdateUserNameRequest, Map<String, dynamic>> {
+    implements
+        external_1ad882c
+            .JsonConverter<PostUpdateUserNameRequest, Map<String, dynamic>> {
   const PostUpdateUserNameRequestConverter();
 
   @override
@@ -300,19 +230,22 @@ class PostUpdateUserNameRequest {
 
   factory PostUpdateUserNameRequest.fromJson(Map<String, dynamic> json) {
     return PostUpdateUserNameRequest(
-      name: const DoNothingConverter<String>().fromJson(json['Name']),
+      name: const external_1ad882c.DoNothingConverter<String>()
+          .fromJson(json['Name']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Name': const DoNothingConverter<String>().toJson(name),
+      'Name': const external_1ad882c.DoNothingConverter<String>().toJson(name),
     };
   }
 }
 
 class PostUpdateUserNameResponseConverter
-    implements JsonConverter<PostUpdateUserNameResponse, Map<String, dynamic>> {
+    implements
+        external_1ad882c
+            .JsonConverter<PostUpdateUserNameResponse, Map<String, dynamic>> {
   const PostUpdateUserNameResponseConverter();
 
   @override
@@ -339,24 +272,31 @@ class PostUpdateUserNameResponse {
 
   factory PostUpdateUserNameResponse.fromJson(Map<String, dynamic> json) {
     return PostUpdateUserNameResponse(
-      message: const DoNothingConverter<String>().fromJson(json['Message']),
-      requestTime: const DateTimeConverter().fromJson(json['RequestTime']),
-      status: const DoNothingConverter<bool>().fromJson(json['Status']),
+      message: const external_1ad882c.DoNothingConverter<String>()
+          .fromJson(json['Message']),
+      requestTime: const external_1ad882c.DateTimeConverter()
+          .fromJson(json['RequestTime']),
+      status: const external_1ad882c.DoNothingConverter<bool>()
+          .fromJson(json['Status']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Message': const DoNothingConverter<String>().toJson(message),
-      'RequestTime': const DateTimeConverter().toJson(requestTime),
-      'Status': const DoNothingConverter<bool>().toJson(status),
+      'Message':
+          const external_1ad882c.DoNothingConverter<String>().toJson(message),
+      'RequestTime':
+          const external_1ad882c.DateTimeConverter().toJson(requestTime),
+      'Status':
+          const external_1ad882c.DoNothingConverter<bool>().toJson(status),
     };
   }
 }
 
 class PostUpdateUserPasswordRequestConverter
     implements
-        JsonConverter<PostUpdateUserPasswordRequest, Map<String, dynamic>> {
+        external_1ad882c.JsonConverter<PostUpdateUserPasswordRequest,
+            Map<String, dynamic>> {
   const PostUpdateUserPasswordRequestConverter();
 
   @override
@@ -381,24 +321,27 @@ class PostUpdateUserPasswordRequest {
 
   factory PostUpdateUserPasswordRequest.fromJson(Map<String, dynamic> json) {
     return PostUpdateUserPasswordRequest(
-      password: const DoNothingConverter<String>().fromJson(json['Password']),
-      passwordConfirm:
-          const DoNothingConverter<String>().fromJson(json['PasswordConfirm']),
+      password: const external_1ad882c.DoNothingConverter<String>()
+          .fromJson(json['Password']),
+      passwordConfirm: const external_1ad882c.DoNothingConverter<String>()
+          .fromJson(json['PasswordConfirm']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Password': const DoNothingConverter<String>().toJson(password),
-      'PasswordConfirm':
-          const DoNothingConverter<String>().toJson(passwordConfirm),
+      'Password':
+          const external_1ad882c.DoNothingConverter<String>().toJson(password),
+      'PasswordConfirm': const external_1ad882c.DoNothingConverter<String>()
+          .toJson(passwordConfirm),
     };
   }
 }
 
 class PostUpdateUserPasswordResponseConverter
     implements
-        JsonConverter<PostUpdateUserPasswordResponse, Map<String, dynamic>> {
+        external_1ad882c.JsonConverter<PostUpdateUserPasswordResponse,
+            Map<String, dynamic>> {
   const PostUpdateUserPasswordResponseConverter();
 
   @override
@@ -426,17 +369,23 @@ class PostUpdateUserPasswordResponse {
 
   factory PostUpdateUserPasswordResponse.fromJson(Map<String, dynamic> json) {
     return PostUpdateUserPasswordResponse(
-      message: const DoNothingConverter<String>().fromJson(json['Message']),
-      requestTime: const DateTimeConverter().fromJson(json['RequestTime']),
-      status: const DoNothingConverter<bool>().fromJson(json['Status']),
+      message: const external_1ad882c.DoNothingConverter<String>()
+          .fromJson(json['Message']),
+      requestTime: const external_1ad882c.DateTimeConverter()
+          .fromJson(json['RequestTime']),
+      status: const external_1ad882c.DoNothingConverter<bool>()
+          .fromJson(json['Status']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Message': const DoNothingConverter<String>().toJson(message),
-      'RequestTime': const DateTimeConverter().toJson(requestTime),
-      'Status': const DoNothingConverter<bool>().toJson(status),
+      'Message':
+          const external_1ad882c.DoNothingConverter<String>().toJson(message),
+      'RequestTime':
+          const external_1ad882c.DateTimeConverter().toJson(requestTime),
+      'Status':
+          const external_1ad882c.DoNothingConverter<bool>().toJson(status),
     };
   }
 }

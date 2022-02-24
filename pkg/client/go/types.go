@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"path/filepath"
 
+	"github.com/fatih/structtag"
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
+	"github.com/go-generalize/go-easyparser/types"
 	"github.com/go-generalize/go2go"
 	"golang.org/x/xerrors"
 )
@@ -38,13 +40,34 @@ func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string
 		return nil
 	}
 
+	replaceFileHeaderAll(gr.ParsedTypes)
+
 	endpointStructs := make([]string, 0, 20)
 	for _, ep := range gr.Endpoints {
 		endpointStructs = append(endpointStructs, gr.ImportPath+"."+ep.RequestPayloadName)
 		endpointStructs = append(endpointStructs, gr.ImportPath+"."+ep.ResponsePayloadName)
 	}
 
-	code, err := go2go.NewGenerator(gr.ParsedTypes, endpointStructs).Generate()
+	gen := go2go.NewGenerator(gr.ParsedTypes, endpointStructs)
+
+	gen.ExternalGenerator = func(t types.Type) (*go2go.GeneratedType, bool) {
+		o, ok := t.(*types.Object)
+
+		if !ok {
+			return nil, false
+		}
+
+		if o.Name == fileHeaderName {
+			return &go2go.GeneratedType{
+				Path: "github.com/go-generalize/multipart-util",
+				Name: "MultipartPayload",
+			}, true
+		}
+
+		return nil, false
+	}
+
+	code, err := gen.Generate()
 
 	if err != nil {
 		return xerrors.Errorf("failed to initialize new go2go generator: %w", err)
@@ -62,4 +85,71 @@ func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string
 	}
 
 	return nil
+}
+
+const fileHeaderName = "mime/multipart.FileHeader"
+
+func replaceFileHeaderAll(t map[string]types.Type) {
+	for _, v := range t {
+		v, ok := v.(*types.Object)
+
+		if !ok {
+			continue
+		}
+
+		replaceFileHeader(v)
+	}
+}
+
+func replaceFileHeader(obj *types.Object) {
+	for k, v := range obj.Entries {
+		if o, ok := v.Type.(*types.Object); ok {
+			replaceFileHeader(o)
+
+			continue
+		}
+
+		tags, err := structtag.Parse(v.RawTag)
+
+		if err != nil {
+			continue
+		}
+
+		jsonTag, err := tags.Get("json")
+
+		if err != nil {
+			jsonTag = &structtag.Tag{
+				Key:  "json",
+				Name: "-",
+			}
+		}
+		// nolint:errcheck
+		tags.Set(jsonTag)
+
+		t, err := parser.ValidateMultipartUploadType(v.Type, v.RawTag)
+
+		if err != nil || t == parser.UploadNone {
+			continue
+		}
+
+		if t == parser.UploadSingleFile {
+			v.Type = &types.Nullable{
+				Inner: &types.Object{
+					Name: fileHeaderName,
+				},
+			}
+		} else {
+			v.Type = &types.Array{
+				Inner: &types.Nullable{
+					Inner: &types.Object{
+						Name: fileHeaderName,
+					},
+				},
+			}
+		}
+
+		v.RawTag = tags.String()
+
+		obj.Entries[k] = v
+	}
 }

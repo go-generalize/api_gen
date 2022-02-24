@@ -58,9 +58,10 @@ func getMethodType(structName string) MethodType {
 type Endpoint struct {
 	parentGroup *Group
 
-	Method        MethodType
-	RawPath, Path string
-	Placeholder   string
+	Method             MethodType
+	RawPath, Path      string
+	Placeholder        string
+	UseMultipartUpload bool
 
 	RequestPayloadName   string
 	ResponsePayloadName  string

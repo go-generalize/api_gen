@@ -6,7 +6,9 @@ import (
 	"path/filepath"
 
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
+	"github.com/go-generalize/go-easyparser/types"
 	go2tsgenerator "github.com/go-generalize/go2ts/pkg/generator"
+	go2tstypes "github.com/go-generalize/go2ts/pkg/types"
 	"golang.org/x/xerrors"
 )
 
@@ -21,6 +23,8 @@ func (g *generator) GenerateTypes(fn func(relPath, code string) error) error {
 	return nil
 }
 
+const fileHeaderName = "mime/multipart.FileHeader"
+
 func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string) error) error {
 	for _, child := range gr.Children {
 		if err := g.generateTypes(child, fn); err != nil {
@@ -32,7 +36,25 @@ func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string
 		return nil
 	}
 
-	code := go2tsgenerator.NewGenerator(gr.ParsedTypes).Generate()
+	replaceFileHeaderAll(gr.ParsedTypes)
+
+	gen := go2tsgenerator.NewGenerator(gr.ParsedTypes)
+
+	gen.CustomGenerator = func(t go2tstypes.Type) (generated string, union bool) {
+		o, ok := t.(*go2tstypes.Object)
+
+		if !ok {
+			return "", false
+		}
+
+		if o.Name == fileHeaderName {
+			return "File | Blob", true
+		}
+
+		return "", false
+	}
+
+	code := gen.Generate()
 
 	relative := gr.GetFullPath(string(filepath.Separator), func(rawPath, path, placeholder string) string {
 		return rawPath
@@ -46,4 +68,48 @@ func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string
 	}
 
 	return nil
+}
+
+func replaceFileHeaderAll(t map[string]types.Type) {
+	for _, v := range t {
+		v, ok := v.(*types.Object)
+
+		if !ok {
+			continue
+		}
+
+		replaceFileHeader(v)
+	}
+}
+
+func replaceFileHeader(obj *types.Object) {
+	for k, v := range obj.Entries {
+		if o, ok := v.Type.(*types.Object); ok {
+			replaceFileHeader(o)
+
+			continue
+		}
+
+		t, err := parser.ValidateMultipartUploadType(v.Type, v.RawTag)
+
+		if err != nil || t == parser.UploadNone {
+			continue
+		}
+
+		if t == parser.UploadSingleFile {
+			v.Type = &types.Object{
+				Name: fileHeaderName,
+			}
+		} else {
+			v.Type =
+				&types.Array{
+					Inner: &types.Object{
+						Name: fileHeaderName,
+					},
+				}
+		}
+		v.Optional = true
+
+		obj.Entries[k] = v
+	}
 }

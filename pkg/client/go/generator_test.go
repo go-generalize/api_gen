@@ -14,7 +14,7 @@ func TestGenerate(t *testing.T) {
 		baseDirImportPath string
 		packageName       string
 	}
-	group, err := parser.Parse("../../../samples/standard")
+	group, err := parser.Parse("../../../samples/standard/api")
 
 	if err != nil {
 		t.Fatal(err)
