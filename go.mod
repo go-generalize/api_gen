@@ -26,7 +26,7 @@ require (
 	github.com/go-generalize/go-easyparser v0.2.0
 	github.com/go-generalize/go2dart v0.5.1
 	github.com/go-utils/echo-multipart-binder v0.2.1
-	github.com/swaggo/swag v1.7.9
+	github.com/swaggo/swag v1.8.0
 )
 
 require (
