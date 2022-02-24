@@ -145,5 +145,5 @@ type APIError struct {
 }
 
 func (e APIError) Error() string {
-	return fmt.Sprintf("The server returned an error: %d", e.StatusCode)
+	return fmt.Sprintf("the server returned an error: %d", e.StatusCode)
 }
