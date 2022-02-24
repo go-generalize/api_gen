@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"sort"
 
-	go2tstypes "github.com/go-generalize/go2ts/pkg/types"
+	eptypes "github.com/go-generalize/go-easyparser/types"
 	"golang.org/x/xerrors"
 )
 
@@ -16,10 +16,10 @@ const FormTagKey = "form"
 
 //MultipartHeader is mime/multipart.FileHeader
 type MultipartHeader struct {
-	go2tstypes.Common
+	eptypes.Common
 }
 
-var _ go2tstypes.Type = &MultipartHeader{}
+var _ eptypes.Type = &MultipartHeader{}
 
 // UsedAsMapKey returns whether this type can be used as the key for map
 func (uf *MultipartHeader) UsedAsMapKey() bool {
@@ -34,13 +34,13 @@ func (uf *MultipartHeader) String() string {
 // FileField is a result type for GetFileFields
 type FileField struct {
 	Key     string
-	Value   go2tstypes.ObjectEntry
+	Value   eptypes.ObjectEntry
 	FormTag string
 	Type    MultipartUploadType
 }
 
 // GetFileFields returns fields for files
-func GetFileFields(obj *go2tstypes.Object) (res []FileField, err error) {
+func GetFileFields(obj *eptypes.Object) (res []FileField, err error) {
 	res = make([]FileField, 0)
 
 	for k, v := range obj.Entries {
@@ -71,7 +71,7 @@ func GetFileFields(obj *go2tstypes.Object) (res []FileField, err error) {
 
 // hasMultipartUpload checks t has *multipart.FileHeader or []*multipart.FileHeader
 // Multipart data in map are not supported
-func hasMultipartUpload(t *go2tstypes.Object) (bool, error) {
+func hasMultipartUpload(t *eptypes.Object) (bool, error) {
 	found := false
 	for _, v := range t.Entries {
 		res, err := ValidateMultipartUploadType(v.Type, v.RawTag)
@@ -99,7 +99,7 @@ const (
 
 // ValidateMultipartUploadType checks t is *multipart.FileHeader or []*multipart.FileHeader
 // And validate form tag
-func ValidateMultipartUploadType(t go2tstypes.Type, tag string) (MultipartUploadType, error) {
+func ValidateMultipartUploadType(t eptypes.Type, tag string) (MultipartUploadType, error) {
 	ut := GetMultipartUploadType(t)
 
 	if ut == UploadNone {
@@ -115,16 +115,16 @@ func ValidateMultipartUploadType(t go2tstypes.Type, tag string) (MultipartUpload
 
 // GetMultipartUploadType checks t is *multipart.FileHeader or []*multipart.FileHeader
 // Multipart data in map are not supported
-func GetMultipartUploadType(t go2tstypes.Type) MultipartUploadType {
-	nullable, ok := t.(*go2tstypes.Nullable)
+func GetMultipartUploadType(t eptypes.Type) MultipartUploadType {
+	nullable, ok := t.(*eptypes.Nullable)
 
 	if !ok {
 		return UploadNone
 	}
 
 	switch t := nullable.Inner.(type) {
-	case *go2tstypes.Array:
-		_, ok := t.Inner.(*go2tstypes.Nullable)
+	case *eptypes.Array:
+		_, ok := t.Inner.(*eptypes.Nullable)
 
 		if !ok {
 			return UploadNone
@@ -144,7 +144,7 @@ func GetMultipartUploadType(t go2tstypes.Type) MultipartUploadType {
 	return UploadNone
 }
 
-func replacer(t types.Type) go2tstypes.Type {
+func replacer(t types.Type) eptypes.Type {
 	named, ok := t.(*types.Named)
 
 	if !ok {
