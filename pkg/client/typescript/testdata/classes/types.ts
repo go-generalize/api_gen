@@ -16,7 +16,7 @@ export type PostCreateTableRequest = {
 	Flag: number;
 	ID: string;
 	Text: string;
-	map: {[key: number]: number};
+	map: {[key: number]: number} | null;
 }
 export type PostCreateTableResponse = {
 	ID: string;

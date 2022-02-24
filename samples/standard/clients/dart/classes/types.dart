@@ -193,7 +193,7 @@ class PostCreateTableRequest {
   List<external_d8d61af.MultipartFile>? files;
   int flag;
   String id;
-  Map<int, int> map;
+  Map<int, int>? map;
   String text;
 
   PostCreateTableRequest({
@@ -201,7 +201,7 @@ class PostCreateTableRequest {
     this.files,
     this.flag = 0,
     this.id = '',
-    this.map = const {},
+    this.map,
     this.text = '',
   });
 
@@ -211,8 +211,10 @@ class PostCreateTableRequest {
           .fromJson(json['Flag']),
       id: const external_9298cca.DoNothingConverter<String>()
           .fromJson(json['ID']),
-      map: const external_9298cca.MapConverter<int, int, int>(
-              external_9298cca.DoNothingConverter<int>())
+      map: const external_9298cca
+                  .NullableConverter<Map<int, int>, Map<int, int>>(
+              external_9298cca.MapConverter<int, int, int>(
+                  external_9298cca.DoNothingConverter<int>()))
           .fromJson(json['map']),
       text: const external_9298cca.DoNothingConverter<String>()
           .fromJson(json['Text']),
@@ -223,8 +225,10 @@ class PostCreateTableRequest {
     return <String, dynamic>{
       'Flag': const external_9298cca.DoNothingConverter<int>().toJson(flag),
       'ID': const external_9298cca.DoNothingConverter<String>().toJson(id),
-      'map': const external_9298cca.MapConverter<int, int, int>(
-              external_9298cca.DoNothingConverter<int>())
+      'map': const external_9298cca
+                  .NullableConverter<Map<int, int>, Map<int, int>>(
+              external_9298cca.MapConverter<int, int, int>(
+                  external_9298cca.DoNothingConverter<int>()))
           .toJson(map),
       'Text': const external_9298cca.DoNothingConverter<String>().toJson(text),
     };

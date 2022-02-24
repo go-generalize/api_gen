@@ -15,8 +15,8 @@ import (
 	"github.com/go-generalize/api_gen/v2/pkg/agerrors"
 	"github.com/go-generalize/api_gen/v2/pkg/common"
 	"github.com/go-generalize/api_gen/v2/pkg/util"
-	go2tsparser "github.com/go-generalize/go2ts/pkg/parser"
-	go2tstypes "github.com/go-generalize/go2ts/pkg/types"
+	epparser "github.com/go-generalize/go-easyparser"
+	eptypes "github.com/go-generalize/go-easyparser/types"
 	"github.com/go-utils/gopackages"
 	"github.com/iancoleman/strcase"
 	"golang.org/x/sync/errgroup"
@@ -246,8 +246,8 @@ func (p *parser) parseFile(dir, fileName string, fset *token.FileSet, file *ast.
 	return eps, nil
 }
 
-func (p *parser) extractReqRespTypes(parsed map[string]go2tstypes.Type, basePackage string) map[string]go2tstypes.Type {
-	results := make(map[string]go2tstypes.Type)
+func (p *parser) extractReqRespTypes(parsed map[string]eptypes.Type, basePackage string) map[string]eptypes.Type {
+	results := make(map[string]eptypes.Type)
 	for key, pkg := range parsed {
 		if !strings.HasPrefix(key, basePackage+".") {
 			continue
@@ -345,12 +345,13 @@ func (p *parser) parsePackage(dir string) (*Group, error) {
 		return gr, nil
 	}
 
-	psr, err := go2tsparser.NewParser(dir, common.ParserFilter)
+	psr, err := epparser.NewParser(dir, common.ParserFilter)
 
 	if err != nil {
 		return nil, xerrors.Errorf("failed to initialize %s: %w", dir, err)
 	}
 	psr.Replacer = replacer
+	psr.ForceMapNonNullable = os.Getenv("API_GEN_MAP_NON_NULLABLE") == "1"
 
 	parsed, err := psr.Parse()
 
@@ -420,7 +421,7 @@ var (
 	errNilReqRespPayload = fmt.Errorf("request or response payload is nil")
 )
 
-func (p *parser) updateEndpoint(v *Endpoint, reqRespTypes map[string]go2tstypes.Type) error {
+func (p *parser) updateEndpoint(v *Endpoint, reqRespTypes map[string]eptypes.Type) error {
 	if v.RequestPayload == nil ||
 		v.ResponsePayload == nil {
 		return nil
@@ -430,7 +431,7 @@ func (p *parser) updateEndpoint(v *Endpoint, reqRespTypes map[string]go2tstypes.
 	if !ok {
 		return xerrors.Errorf("request type is not found from types parsed by go2ts: %s", v.RequestPayloadName)
 	}
-	reqObj, ok := req.(*go2tstypes.Object)
+	reqObj, ok := req.(*eptypes.Object)
 	if !ok {
 		return xerrors.Errorf("request type is not object: %s", v.RequestPayloadName)
 	}
@@ -447,7 +448,7 @@ func (p *parser) updateEndpoint(v *Endpoint, reqRespTypes map[string]go2tstypes.
 	if !ok {
 		return xerrors.Errorf("response type is not found from types parsed by go2ts: %s", v.ResponsePayloadName)
 	}
-	resObj, ok := res.(*go2tstypes.Object)
+	resObj, ok := res.(*eptypes.Object)
 	if !ok {
 		return xerrors.Errorf("response type is not object: %s", v.ResponsePayloadName)
 	}

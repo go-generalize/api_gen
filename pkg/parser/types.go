@@ -6,7 +6,7 @@ import (
 	"go/token"
 	"strings"
 
-	go2tstypes "github.com/go-generalize/go2ts/pkg/types"
+	eptypes "github.com/go-generalize/go-easyparser/types"
 )
 
 // MethodType represents methods for HTTP
@@ -67,8 +67,8 @@ type Endpoint struct {
 	ResponsePayloadName  string
 	RequestPayload       *ast.StructType
 	ResponsePayload      *ast.StructType
-	RequestGo2tsPayload  *go2tstypes.Object
-	ResponseGo2tsPayload *go2tstypes.Object
+	RequestGo2tsPayload  *eptypes.Object
+	ResponseGo2tsPayload *eptypes.Object
 
 	SwagComments []string
 
@@ -95,7 +95,7 @@ type Group struct {
 	RawPath, Path string
 	Dir           string
 	Placeholder   string
-	ParsedTypes   map[string]go2tstypes.Type
+	ParsedTypes   map[string]eptypes.Type
 
 	Children  []*Group
 	Endpoints []*Endpoint

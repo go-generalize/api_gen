@@ -13,17 +13,17 @@ require (
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/spf13/cobra v1.3.0
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
-	golang.org/x/net v0.0.0-20210913180222-943fd674d43e // indirect
+	golang.org/x/net v0.0.0-20211015210444-4f30a5c0130f // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	golang.org/x/sys v0.0.0-20211205182925-97ca703d548d // indirect
-	golang.org/x/tools v0.1.7 // indirect
+	golang.org/x/tools v0.1.9 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 )
 
 require (
 	github.com/fatih/structtag v1.2.0
 	github.com/go-generalize/go-dartfmt v0.1.1
-	github.com/go-generalize/go-easyparser v0.2.0
+	github.com/go-generalize/go-easyparser v0.3.0
 	github.com/go-generalize/go2dart v0.5.1
 	github.com/go-utils/echo-multipart-binder v0.2.1
 	github.com/swaggo/swag v1.8.0
