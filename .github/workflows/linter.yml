@@ -27,7 +27,7 @@ jobs:
             exit 1
           fi
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
+        uses: golangci/golangci-lint-action@v3
         with:
           args: "--config=.github/.golangci.yml"
           skip-go-installation: true
