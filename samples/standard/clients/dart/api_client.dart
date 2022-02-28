@@ -847,7 +847,7 @@ class APIClient {
       ..headers.addAll(headers)
       ..files.add(http.MultipartFile.fromString(
           'x-multipart-json-binder-request-json',
-          jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+          jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
           filename: 'x-multipart-json-binder-request-json',
           contentType: http_parser.MediaType.parse('application/json')));
 
