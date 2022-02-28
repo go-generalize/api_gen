@@ -227,7 +227,7 @@ class APIClient {
     final request = http.MultipartRequest('{{ $method.Method }}', Uri.parse(url))
       ..headers.addAll(headers)
       ..files.add(http.MultipartFile.fromString(
-        'x-multipart-json-binder-request-json', jsonEncode(getRequestObject(param.toJson(), excludeParams)),
+        'x-multipart-json-binder-request-json', jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
         filename: 'x-multipart-json-binder-request-json', contentType: http_parser.MediaType.parse('application/json')
       ));
 {{- range $index, $field := $method.FileFields }}
