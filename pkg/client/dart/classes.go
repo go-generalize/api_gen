@@ -138,21 +138,25 @@ func replaceFileHeader(obj *types.Object) {
 			continue
 		}
 
-		jsonTag, err := tags.Get("json")
-
-		if err != nil {
-			jsonTag = &structtag.Tag{
-				Key:  "json",
-				Name: "-",
-			}
-		}
 		// nolint:errcheck
-		tags.Set(jsonTag)
+		jsonTag, _ := tags.Get("json")
 
 		t, err := parser.ValidateMultipartUploadType(v.Type, v.RawTag)
 
 		if err != nil || t == parser.UploadNone {
 			continue
+		}
+
+		if jsonTag == nil {
+			jsonTag = &structtag.Tag{
+				Key:  "json",
+				Name: "-",
+			}
+
+			// nolint:errcheck
+			tags.Set(jsonTag)
+		} else {
+			jsonTag.Name = "-"
 		}
 
 		if t == parser.UploadSingleFile {

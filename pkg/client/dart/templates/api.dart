@@ -86,19 +86,21 @@ class {{ $elem.Name }} {
     );
 {{- else if $method.Multipart }}
     final request = http.MultipartRequest('{{ $method.Method }}', Uri.parse(url))
-      ..headers = headers
+      ..headers.addAll(headers)
       ..files.add(http.MultipartFile.fromString(
         'x-multipart-json-binder-request-json', jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
         filename: 'x-multipart-json-binder-request-json', contentType: http_parser.MediaType.parse('application/json')
       ));
 {{- range $index, $field := $method.FileFields }}
 {{ if $field.IsArray }}
-      param.{{ $field.StructField }}.forEach((http.MultipartFile file) {
+    if (param.{{ $field.StructField }} != null) {
+      param.{{ $field.StructField }}!.forEach((http.MultipartFile file) {
         request.files.add(http.MultipartFile(
           '{{ $field.MultipartField }}', file.finalize(), file.length,
           filename: file.filename ?? 'untitled', contentType: file.contentType
         ));
       });
+    }
 {{ else }}
     if (param.{{ $field.StructField }} != null) {
       final file = param.{{ $field.StructField }}!;
