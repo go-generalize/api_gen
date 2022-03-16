@@ -20,6 +20,8 @@ export type GetUserResponse = {
 	SearchRequest: string;
 }
 export type PostUpdateUserNameRequest = {
+	File?: File | Blob;
+	Files?: (File | Blob)[];
 	Name: string;
 }
 export type PostUpdateUserNameResponse = {
