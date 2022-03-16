@@ -889,7 +889,7 @@ class ServiceUser2Client {
 			options = arg1.options;
 		}
 
-	    const excludeParams: string[] = [];
+	    const excludeParams: string[] = ['File', 'Files', ];
 	    let mockHeaders: {[key: string]: string} = {};
 	    if (options && options['mock_option']) {
 			mockHeaders['Api-Gen-Option'] = JSON.stringify(options['mock_option']);
@@ -897,7 +897,6 @@ class ServiceUser2Client {
 		}
 
 		const reqHeader = {
-			'Content-Type': 'application/json',
 			...this.headers,
 			...headers,
 			...mockHeaders,
@@ -920,7 +919,22 @@ class ServiceUser2Client {
 			url,
 			{
 				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
+				body: (() => {
+					const body = new FormData();
+
+					body.append(
+						'x-multipart-json-binder-request-json',
+						new Blob([JSON.stringify(this.getRequestObject(param, excludeParams, false))], {type: 'application/json'}),
+						'x-multipart-json-binder-request-json'
+					);
+					if (param.File !== undefined) {
+						body.append('file', param.File);
+					}
+					if (param.Files !== undefined) {
+						param.Files.filter(f => f !== undefined).forEach(f => body.append('files', f));
+					}
+					return body;
+				})(),
 				headers: reqHeader,
 				...reqOption,
 			}
@@ -1851,8 +1865,12 @@ export class APIClient {
 						new Blob([JSON.stringify(this.getRequestObject(param, excludeParams, false))], {type: 'application/json'}),
 						'x-multipart-json-binder-request-json'
 					);
-					body.append('file', param.File);
-					param.Files.forEach(f => body.append('files', f));
+					if (param.File !== undefined) {
+						body.append('file', param.File);
+					}
+					if (param.Files !== undefined) {
+						param.Files.filter(f => f !== undefined).forEach(f => body.append('files', f));
+					}
 					return body;
 				})(),
 				headers: {

@@ -3,6 +3,7 @@
 // generated version: (devel)
 
 import '../../../common.dart' as external_1ad882c;
+import 'package:http/http.dart' as external_d8d61af;
 
 class DeleteUserRequestConverter
     implements
@@ -222,9 +223,13 @@ class PostUpdateUserNameRequestConverter
 }
 
 class PostUpdateUserNameRequest {
+  external_d8d61af.MultipartFile? file;
+  List<external_d8d61af.MultipartFile>? files;
   String name;
 
   PostUpdateUserNameRequest({
+    this.file,
+    this.files,
     this.name = '',
   });
 

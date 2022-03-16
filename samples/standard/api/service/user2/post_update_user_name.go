@@ -1,11 +1,16 @@
 // Package user2 ...
 package user2
 
-import "time"
+import (
+	"mime/multipart"
+	"time"
+)
 
 // PostUpdateUserNameRequest ...
 type PostUpdateUserNameRequest struct {
-	Name string
+	Name  string
+	File  *multipart.FileHeader   `form:"file"`
+	Files []*multipart.FileHeader `form:"files"`
 }
 
 // PostUpdateUserNameResponse ...

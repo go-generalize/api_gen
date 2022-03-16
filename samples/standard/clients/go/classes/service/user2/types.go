@@ -5,6 +5,7 @@
 package types
 
 import (
+	external_3524d37 "github.com/go-generalize/multipart-util"
 	"time"
 )
 
@@ -32,7 +33,9 @@ type GetUserResponse struct {
 }
 
 type PostUpdateUserNameRequest struct {
-	Name string
+	File  *external_3524d37.MultipartPayload   `form:"file" json:"-"`
+	Files []*external_3524d37.MultipartPayload `form:"files" json:"-"`
+	Name  string
 }
 
 type PostUpdateUserNameResponse struct {

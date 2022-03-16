@@ -430,17 +430,37 @@ class ServiceUser2Client {
     }
     final url = baseURL + '/service/user2/update_user_name';
 
-    final resp = await client.post(
-      Uri.parse(url),
-      headers: headers,
-      body: jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
-    );
+    final request = http.MultipartRequest('POST', Uri.parse(url))
+      ..headers.addAll(headers)
+      ..files.add(http.MultipartFile.fromString(
+          'x-multipart-json-binder-request-json',
+          jsonEncode(getRequestObject(param.toJson(), excludeParams, false)),
+          filename: 'x-multipart-json-binder-request-json',
+          contentType: http_parser.MediaType.parse('application/json')));
+
+    if (param.file != null) {
+      final file = param.file!;
+      request.files.add(http.MultipartFile('file', file.finalize(), file.length,
+          filename: file.filename ?? 'untitled',
+          contentType: file.contentType));
+    }
+
+    if (param.files != null) {
+      param.files!.forEach((http.MultipartFile file) {
+        request.files.add(http.MultipartFile(
+            'files', file.finalize(), file.length,
+            filename: file.filename ?? 'untitled',
+            contentType: file.contentType));
+      });
+    }
+
+    final resp = await client.send(request);
 
     if (resp.statusCode ~/ 100 != 2) {
       throw ApiError(resp);
     }
     final res = types__service_user_2.PostUpdateUserNameResponse.fromJson(
-        jsonDecode(resp.body));
+        jsonDecode(await resp.stream.bytesToString()));
 
     return res;
   }

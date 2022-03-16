@@ -479,17 +479,85 @@ func (g *Group_service_user2) GetUser(reqPayload *_service_user2.GetUserRequest)
 }
 
 func (g *Group_service_user2) PostUpdateUserName(reqPayload *_service_user2.PostUpdateUserNameRequest) (respPayload *_service_user2.PostUpdateUserNameResponse, retErr error) {
-	buf := bytes.NewBuffer(nil)
-	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
-		return nil, err
-	}
+	br, bw := io.Pipe()
+	buffered := bufio.NewWriter(bw)
+	mw := multipart.NewWriter(buffered)
 
-	req, err := http.NewRequest("POST", g.apiClient.base+"/service/user2/update_user_name", buf)
+	finished := make(chan bool)
+	var chanError error
+	defer func() {
+		<-finished
+		if chanError != nil {
+			retErr = fmt.Errorf("creating payload error is %+v: %w", chanError, retErr)
+		}
+	}()
+
+	go func() {
+		chanError = func() error {
+			defer close(finished)
+			defer bw.Close()
+			defer buffered.Flush()
+			defer mw.Close()
+
+			addField := func(fieldName string, payload *multipartutil.MultipartPayload) error {
+				if payload == nil {
+					return nil
+				}
+
+				header := payload.MIMEHeader
+
+				if header == nil {
+					header = textproto.MIMEHeader{}
+				}
+
+				header.Set("Content-Disposition",
+					fmt.Sprintf(`form-data; name="%s"; filename="%s"`,
+						escapeQuotes(fieldName), escapeQuotes(payload.Filename)))
+				if header.Get("Content-Type") != "" {
+					header.Set("Content-Type", "application/octet-stream")
+				}
+
+				w, err := mw.CreatePart(header)
+
+				if err != nil {
+					return fmt.Errorf("failed to create a part for %s: %w", fieldName, err)
+				}
+
+				_, err = io.Copy(w, payload.Data)
+
+				if err != nil {
+					return fmt.Errorf("failed to copy data for %s: %w", fieldName, err)
+				}
+
+				return nil
+			}
+			addField(`file`, reqPayload.File)
+			for _, f := range reqPayload.Files {
+				addField(`files`, f)
+			}
+
+			w, err := mw.CreatePart(mjbinder.CreateJSONRequestMIMEHeader())
+
+			if err != nil {
+				return fmt.Errorf("failed to create a part for JSON payload: %w", err)
+			}
+
+			err = json.NewEncoder(w).Encode(reqPayload)
+
+			if err != nil {
+				return fmt.Errorf("failed to encode JSON payload: %w", err)
+			}
+
+			return nil
+		}()
+	}()
+
+	req, err := http.NewRequest("POST", g.apiClient.base+"/service/user2/update_user_name", br)
 	if err != nil {
 		return nil, err
 	}
 
-	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Content-Type", mw.FormDataContentType())
 
 	resp, err := g.apiClient.client.Do(req)
 
