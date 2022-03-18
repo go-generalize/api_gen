@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/tebeka/selenium"
+	"github.com/tebeka/selenium/chrome"
 )
 
 // SeleniumUtil is a utility for selenium.
@@ -25,7 +26,12 @@ func NewSeleniumUtil(t *testing.T) *SeleniumUtil {
 		t.Fatal(err)
 	}
 
+	chrCaps := chrome.Capabilities{
+		Args: []string{"--headless"},
+	}
+
 	caps := selenium.Capabilities{"browserName": "chrome"}
+	caps.AddChrome(chrCaps)
 	wd, err := selenium.NewRemote(caps, fmt.Sprintf("http://localhost:%d/wd/hub", port))
 	if err != nil {
 		svc.Stop()
