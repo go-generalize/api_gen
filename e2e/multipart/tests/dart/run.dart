@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
+import 'package:http/http.dart';
 import '../../clients/dart/api_client.dart' as api_client;
 import '../../clients/dart/classes/types.dart' as types;
 import '../../clients/dart/classes/_param/types.dart' as ptypes;
@@ -16,5 +15,9 @@ void main(List<String> args) async {
   ];
   req.Payload = 'payload';
 
-  await client.postA(req);
+  final result = await client.postA(req);
+
+  if (result.Message != "OK") {
+    throw "Unexpected result: " + result.Message;
+  }
 }
