@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import '../../clients/dart/api_client.dart' as api_client;
-import '../../clients/dart/classes/types' as types;
-import '../../clients/dart/classes/_param/types' as ptypes;
+import '../../clients/dart/classes/types.dart' as types;
+import '../../clients/dart/classes/_param/types.dart' as ptypes;
 
 void main(List<String> args) async {
   final client = api_client.APIClient(args[0]);
