@@ -66,11 +66,15 @@ func runAPIGenClient(t *testing.T, target string, clients ...string) {
 	}
 }
 
-func TestStandard(t *testing.T) {
+func TestMultipart(t *testing.T) {
 	t.Helper()
 
 	runAPIGenServer(t, "multipart")
 	runAPIGenClient(t, "multipart", "ts", "dart", "go")
+
+	if os.Getenv("E2E_API_GENERATE_ONLY") == "1" {
+		return
+	}
 
 	e2eutil.RunCommandWithModifier(t, func(cmd *exec.Cmd) {
 		cmd.Env = append(os.Environ(), "E2E_API_GEN_ROOT_DIR="+wd)

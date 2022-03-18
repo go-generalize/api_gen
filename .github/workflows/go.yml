@@ -45,6 +45,9 @@ jobs:
       with:
         go-version: 1.17
       id: go
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
     - uses: nanasess/setup-chromedriver@v1
     - uses: actions/checkout@v2
 
@@ -55,8 +58,22 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-go-
 
-
-    - name: Run E2e tests
+    - name: Run E2E tests
       run: |
         make bootstrap
         make e2e       
+
+    - name: Run 
+
+    - name: Ensure samples are generated
+      env:
+        TZ: Asia/Tokyo
+      run: |
+        make gen_samples
+        
+        clean=$(git status | grep "nothing to commit" || true)
+        if [ -z "$clean" ]; then
+          git diff
+          echo 'Please run "make gen_samples"'
+          exit 1
+        fi
