@@ -63,8 +63,6 @@ jobs:
         make bootstrap
         make e2e       
 
-    - name: Run 
-
     - name: Ensure samples are generated
       env:
         TZ: Asia/Tokyo
