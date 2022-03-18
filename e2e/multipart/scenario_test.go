@@ -34,5 +34,8 @@ func TestTypeScript(t *testing.T) {
 }
 
 func TestDart(t *testing.T) {
-	e2eutil.RunCommand(t, "dart", "run", "./tests/dart/run.dart")
+	addr, stop := e2eutil.StartServer(t, nil, controller.NewControllers)
+	defer stop()
+
+	e2eutil.RunCommand(t, "dart", "run", "./tests/dart/run.dart", addr)
 }
