@@ -67,8 +67,6 @@ func runAPIGenClient(t *testing.T, target string, clients ...string) {
 }
 
 func TestMultipart(t *testing.T) {
-	t.Helper()
-
 	runAPIGenServer(t, "multipart")
 	runAPIGenClient(t, "multipart", "ts", "dart", "go")
 
