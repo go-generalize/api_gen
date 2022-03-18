@@ -11,7 +11,7 @@ init: bootstrap
 .PHONY: bootstrap
 bootstrap:
 	# Installed in ./bin
-	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.43.0
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.45.0
 	GOBIN=${PWD}/bin go install github.com/swaggo/swag/cmd/swag@v1.7.4
 
 .PHONY: test
