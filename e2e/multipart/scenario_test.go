@@ -34,7 +34,5 @@ func TestTypeScript(t *testing.T) {
 }
 
 func TestDart(t *testing.T) {
-	rootDir := os.Getenv("E2E_API_GEN_ROOT_DIR")
-
 	e2eutil.RunCommand(t, "dart", "run", "./tests/dart/run.dart")
 }
