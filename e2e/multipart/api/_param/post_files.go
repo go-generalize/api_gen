@@ -10,4 +10,5 @@ type PostBRequest struct {
 }
 
 type PostBResponse struct {
+	Message string `json:"message"`
 }
