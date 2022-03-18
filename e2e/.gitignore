@@ -1,0 +1,9 @@
+*/clients/*/
+*/controller/mock
+*/controller/pkg
+*/controller/props
+*/controller/*.go
+node_modules/
+*.js
+*.js.map
+!webpack.config.js
