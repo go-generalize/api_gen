@@ -48,6 +48,9 @@ jobs:
     - uses: actions/setup-node@v2
       with:
         node-version: '16'
+    - uses: dart-lang/setup-dart@v1
+      with:
+        sdk: "2.14.4"
     - uses: nanasess/setup-chromedriver@v1.0.5
     - uses: actions/checkout@v2
 

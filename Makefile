@@ -22,6 +22,7 @@ test:
 e2e: api_gen
 	cd e2e && \
 	npm ci && \
+	dart pub get && \
 	go test -v ./...
 
 .PHONY: api_gen
