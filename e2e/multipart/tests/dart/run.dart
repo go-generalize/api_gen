@@ -3,8 +3,8 @@ import '../../clients/dart/api_client.dart' as api_client;
 import '../../clients/dart/classes/types.dart' as types;
 import '../../clients/dart/classes/_param/types.dart' as ptypes;
 
-void postA(String baseURL) async {
-  final client = api_client.APIClient(args[0]);
+Future<void> postA(String baseURL) async {
+  final client = api_client.APIClient(baseURL);
 
   final req = types.PostARequest();
 
@@ -22,8 +22,8 @@ void postA(String baseURL) async {
   }
 }
 
-void postB(String baseURL) async {
-  final client = api_client.APIClient(args[0]);
+Future<void> postB(String baseURL) async {
+  final client = api_client.APIClient(baseURL);
 
   final req = ptypes.PostBRequest();
 
