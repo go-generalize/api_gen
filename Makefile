@@ -18,6 +18,10 @@ bootstrap:
 test:
 	go test ./... -v
 
+.PHONY: e2e
+e2e:
+	cd e2e && go test -v ./...
+
 .PHONY: api_gen
 api_gen:
 	go build -o ./bin/api_gen ./cmd/api_gen
