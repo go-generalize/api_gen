@@ -8,16 +8,16 @@ void main(List<String> args) async {
 
   final req = types.PostARequest();
 
-  req.File = MultipartFile.fromString('', '1');
-  req.Files = [
+  req.file = MultipartFile.fromString('', '1');
+  req.files = [
     MultipartFile.fromString('', '0', filename: '0.txt'),
     MultipartFile.fromString('', '1', filename: '1.txt'),
   ];
-  req.Payload = 'payload';
+  req.payload = 'payload';
 
   final result = await client.postA(req);
 
-  if (result.Message != "OK") {
-    throw "Unexpected result: " + result.Message;
+  if (result.message != "OK") {
+    throw "Unexpected result: " + result.message;
   }
 }
