@@ -9,15 +9,15 @@ import (
 	"github.com/go-gneralize/api_gen/v2/e2e/e2eutil"
 )
 
-var apiGenCommand = func() string {
-	if cmd := os.Getenv("E2E_API_GEN_COMMAND"); cmd != "" {
-		return cmd
-	}
-
-	return "../bin/api_gen"
-}()
-
 var (
+	apiGenCommand = func() string {
+		if cmd := os.Getenv("E2E_API_GEN_COMMAND"); cmd != "" {
+			return cmd
+		}
+
+		return "../bin/api_gen"
+	}()
+
 	wd = func() string {
 		wd, err := os.Getwd()
 

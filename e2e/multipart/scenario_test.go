@@ -11,6 +11,7 @@ import (
 
 	"github.com/go-gneralize/api_gen/v2/e2e/e2eutil"
 	"github.com/go-gneralize/api_gen/v2/e2e/multipart/controller"
+	gotests "github.com/go-gneralize/api_gen/v2/e2e/multipart/tests/go"
 )
 
 func TestTypeScript(t *testing.T) {
@@ -34,8 +35,15 @@ func TestTypeScript(t *testing.T) {
 }
 
 func TestDart(t *testing.T) {
+	// addr, stop := e2eutil.StartServer(t, nil, controller.NewControllers)
+	// defer stop()
+
+	// e2eutil.RunCommand(t, "dart", "run", "./tests/dart/run.dart", addr)
+}
+
+func TestGo(t *testing.T) {
 	addr, stop := e2eutil.StartServer(t, nil, controller.NewControllers)
 	defer stop()
 
-	e2eutil.RunCommand(t, "dart", "run", "./tests/dart/run.dart", addr)
+	gotests.TestGoClient(t, addr)
 }
