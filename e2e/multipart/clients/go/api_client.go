@@ -63,6 +63,10 @@ func (g *Group__param) PostB(reqPayload *__param.PostBRequest) (respPayload *__p
 					return nil
 				}
 
+				if payload.Filename == "" {
+					payload.Filename = "untitled"
+				}
+
 				header := payload.MIMEHeader
 
 				if header == nil {
@@ -182,6 +186,10 @@ func (g *Group) PostA(reqPayload *root.PostARequest) (respPayload *root.PostARes
 			addField := func(fieldName string, payload *multipartutil.MultipartPayload) error {
 				if payload == nil {
 					return nil
+				}
+
+				if payload.Filename == "" {
+					payload.Filename = "untitled"
 				}
 
 				header := payload.MIMEHeader
