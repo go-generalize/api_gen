@@ -76,6 +76,7 @@ issues:
       source: "//go:generate "
 
 run:
+  go: 1.18
   skip-dirs:
     - test/testdata_etc
     - internal/cache

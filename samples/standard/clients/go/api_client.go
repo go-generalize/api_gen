@@ -504,6 +504,10 @@ func (g *Group_service_user2) PostUpdateUserName(reqPayload *_service_user2.Post
 					return nil
 				}
 
+				if payload.Filename == "" {
+					payload.Filename = "untitled"
+				}
+
 				header := payload.MIMEHeader
 
 				if header == nil {
@@ -762,6 +766,10 @@ func (g *Group) PostCreateTable(reqPayload *root.PostCreateTableRequest) (respPa
 			addField := func(fieldName string, payload *multipartutil.MultipartPayload) error {
 				if payload == nil {
 					return nil
+				}
+
+				if payload.Filename == "" {
+					payload.Filename = "untitled"
 				}
 
 				header := payload.MIMEHeader

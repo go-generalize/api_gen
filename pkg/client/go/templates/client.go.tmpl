@@ -83,6 +83,10 @@ func (g *{{ $elem.Name }}) {{$e.Name}}(reqPayload *{{$e.Request}}) (respPayload 
 					return nil
 				}
 
+				if payload.Filename == "" {
+					payload.Filename = "untitled"
+				}
+
 				header := payload.MIMEHeader
 					
 				if header == nil {

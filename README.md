@@ -92,6 +92,9 @@ client.foo.bar.postUpdateUser({id: 'id'})
 ### client-side
 [ENGLISH](./docs/client_en.md)/[日本語](./docs/client_ja.md)
 
+### For Developers
+[Development Guide](./docs/development.md)
+
 ## License
 - Under the MIT License
 - Copyright (c) 2020-2021 go-generalize
