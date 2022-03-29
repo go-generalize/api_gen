@@ -1,7 +1,7 @@
 package e2eutil
 
 import (
-	"io/ioutil"
+	"os"
 	"testing"
 )
 
@@ -9,7 +9,7 @@ import (
 func ReadFile(t *testing.T, path string) string {
 	t.Helper()
 
-	b, err := ioutil.ReadFile(path)
+	b, err := os.ReadFile(path)
 	if err != nil {
 		t.Fatal(err)
 	}
