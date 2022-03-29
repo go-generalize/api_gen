@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// RunCommand loads a file from the given path.
+// ReadFile loads a file from the given path.
 func ReadFile(t *testing.T, path string) string {
 	t.Helper()
 
