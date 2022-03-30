@@ -2,12 +2,12 @@
 // DO NOT EDIT THIS CODE BY YOUR OWN HANDS
 // generated version: {{ .AppVersion }}
 {{- range $index, $elem := .Imports }}
-{{- if ne (len $elem.Pairs) 0}}
+{{- if ne (len $elem.Pairs) 0 }}
 
 import {{ "{" }}
 {{ range $i, $pair := $elem.Pairs }}	{{ $pair.Name }} as {{ $pair.NameAs }},
 {{ end }}{{ "}" }} from '{{ $elem.Path }}';
-{{- end}}
+{{- end }}
 {{- end }}
 
 export interface MiddlewareContext {
@@ -159,7 +159,7 @@ class {{ $elem.Name }} {
 			...options,
 		};
 		const context: MiddlewareContext = {
-			httpMethod: '{{$method.Method}}',
+			httpMethod: '{{ $method.Method }}',
 			endpoint: `${this.baseURL}{{ $method.Endpoint }}`,
 			request: param,
 			baseURL: this.baseURL,
@@ -190,7 +190,7 @@ class {{ $elem.Name }} {
 					if (param.{{ $field.StructField }} !== undefined) {
 {{- if $field.IsArray }}
 						param.{{ $field.StructField }}.filter(f => f !== undefined).forEach(f => body.append('{{ $field.MultipartField }}', f));
-{{- else}}
+{{- else }}
 						body.append('{{ $field.MultipartField }}', param.{{ $field.StructField }});
 {{- end }}
 					}
@@ -389,7 +389,7 @@ export class APIClient {
 			...options,
 		};
 		const context: MiddlewareContext = {
-			httpMethod: '{{$method.Method}}',
+			httpMethod: '{{ $method.Method }}',
 			endpoint: `${this.baseURL}{{ $method.Endpoint }}`,
 			request: param,
 			baseURL: this.baseURL,
@@ -420,7 +420,7 @@ export class APIClient {
 					if (param.{{ $field.StructField }} !== undefined) {
 {{- if $field.IsArray }}
 						param.{{ $field.StructField }}.filter(f => f !== undefined).forEach(f => body.append('{{ $field.MultipartField }}', f));
-{{- else}}
+{{- else }}
 						body.append('{{ $field.MultipartField }}', param.{{ $field.StructField }});
 {{- end }}
 					}
