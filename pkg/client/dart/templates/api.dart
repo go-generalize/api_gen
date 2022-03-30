@@ -125,7 +125,7 @@ class {{ $elem.Name }} {
 		}
 
 {{- if eq .HasFields true }}
-		final res = {{ $method.ResponseType }}.fromJson(jsonDecode({{if .Multipart}}await resp.stream.bytesToString(){{else}}resp.body{{end}}));
+		final res = {{ $method.ResponseType }}.fromJson(jsonDecode({{ if .Multipart }}await resp.stream.bytesToString(){{ else }}resp.body{{ end }}));
 {{- else }}
 		final res = {{ $method.ResponseType }}();
 {{- end }}
@@ -266,7 +266,7 @@ class APIClient {
 		}
 
 {{- if eq .HasFields true }}
-		final res = {{ $method.ResponseType }}.fromJson(jsonDecode({{if .Multipart}}await resp.stream.bytesToString(){{else}}resp.body{{end}}));
+		final res = {{ $method.ResponseType }}.fromJson(jsonDecode({{ if .Multipart }}await resp.stream.bytesToString(){{ else }}resp.body{{ end }}));
 {{- else }}
 		final res = {{ $method.ResponseType }}();
 {{- end }}
