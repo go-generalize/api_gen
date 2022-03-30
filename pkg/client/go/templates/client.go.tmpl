@@ -4,19 +4,26 @@
 package {{.PackageName}}
 
 import (
-	"fmt"
+{{- if .MultipartUpload }}
+	"bufio"
+{{- end }}
 	"bytes"
-	"net/url"
-	"net/http"
 	"encoding/json"
+	"fmt"
+	"io"
+{{- if .MultipartUpload }}
+	"mime/multipart"
+{{- end }}
+	"net/http"
+{{- if .MultipartUpload }}
+	"net/textproto"
+{{- end }}
+	"net/url"
 	"strings"
 {{- if .MultipartUpload }}
-	"io"
-	"bufio"
-	"net/textproto"
-	"mime/multipart"
-	"github.com/go-utils/echo-multipart-binder/mjbinder"
+
 	"github.com/go-generalize/multipart-util"
+	"github.com/go-utils/echo-multipart-binder/mjbinder"
 {{- end }}
 
 {{ range $idx, $elem := .Imports }}
