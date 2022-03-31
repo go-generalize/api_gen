@@ -15,9 +15,9 @@ func TestGenerate(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_ = os.RemoveAll("./testfiles")
+	_ = os.RemoveAll("./testdir/output")
 
-	gen, err := NewGenerator(gr, "./testfiles", "main", "devel")
+	gen, err := NewGenerator(gr, "./testdir/output", "main", "devel")
 
 	if err != nil {
 		t.Fatal(err)
