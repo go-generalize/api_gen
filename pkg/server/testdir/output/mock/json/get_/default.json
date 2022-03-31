@@ -1,0 +1,13 @@
+{
+    "meta": {
+        "status": 200,
+        "match_request": {
+            "Enum": "string",
+            "Param": "string",
+            "Time": "2006-01-02T15:04:05+09:00"
+        }
+    },
+    "payload": {
+        "Data": "string"
+    }
+}

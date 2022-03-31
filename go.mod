@@ -32,5 +32,3 @@ require (
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/text v0.3.7 // indirect
 )
-
-replace github.com/go-generalize/api_gen/v2/samples => ./samples
