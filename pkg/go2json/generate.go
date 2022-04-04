@@ -163,7 +163,10 @@ func (g *Generator) Generate(dir string) error {
 
 		rc := []rune(c)
 		opName := strcase.ToSnake(string(rc[len(httpMethod):]))
-		opJSONDir := filepath.Join(dir+"/", fmt.Sprintf("%s_%s/", httpMethod, opName))
+		if len(opName) > 0 {
+			opName = "_" + opName
+		}
+		opJSONDir := filepath.Join(dir+"/", fmt.Sprintf("%s%s/", httpMethod, opName))
 		{
 			if i, err := os.Stat(opJSONDir); err == nil {
 				if !i.IsDir() {
