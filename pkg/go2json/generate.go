@@ -105,21 +105,21 @@ func (g *Generator) Generate(dir string) error {
 			requestName := strings.TrimSuffix(structName, "Request")
 			if _, ok := typeSets[requestName]; ok {
 				typeSets[requestName].Request = t
-			} else {
-				typeSets[requestName] = &GenerateSet{
-					Request:  t,
-					Response: nil,
-				}
+				continue
+			}
+			typeSets[requestName] = &GenerateSet{
+				Request:  t,
+				Response: nil,
 			}
 		} else if strings.HasSuffix(structName, "Response") {
 			requestName := strings.TrimSuffix(structName, "Response")
 			if _, ok := typeSets[requestName]; ok {
 				typeSets[requestName].Response = t
-			} else {
-				typeSets[requestName] = &GenerateSet{
-					Request:  nil,
-					Response: t,
-				}
+				continue
+			}
+			typeSets[requestName] = &GenerateSet{
+				Request:  nil,
+				Response: t,
 			}
 		}
 	}
@@ -154,10 +154,11 @@ func (g *Generator) Generate(dir string) error {
 		}
 		uc := strings.ToUpper(c)
 		for _, h := range httpMethods {
-			if strings.HasPrefix(uc, h) {
-				httpMethod = strings.ToLower(h)
-				break
+			if !strings.HasPrefix(uc, h) {
+				continue
 			}
+			httpMethod = strings.ToLower(h)
+			break
 		}
 
 		rc := []rune(c)
