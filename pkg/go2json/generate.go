@@ -4,7 +4,6 @@ package go2json
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -178,7 +177,7 @@ func (g *Generator) Generate(dir string) error {
 		}
 
 		jsonPath := filepath.Join(opJSONDir, "/default.json")
-		err = ioutil.WriteFile(jsonPath, jsonByte, 0664)
+		err = os.WriteFile(jsonPath, jsonByte, 0664)
 		if err != nil {
 			return xerrors.Errorf("Write mock json error in %s: %w", jsonPath, err)
 		}
