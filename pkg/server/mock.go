@@ -12,7 +12,7 @@ import (
 
 	go2json "github.com/go-generalize/api_gen/v2/pkg/go2json"
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
-	go2tstypes "github.com/go-generalize/go2ts/pkg/types"
+	"github.com/go-generalize/go-easyparser/types"
 	"github.com/iancoleman/strcase"
 	"golang.org/x/xerrors"
 )
@@ -75,7 +75,7 @@ func (g *Generator) generateMockJSON(gr *parser.Group, generatedIn string) error
 		}
 	}
 
-	types := map[string]go2tstypes.Type{}
+	typeMaps := map[string]types.Type{}
 	for k, v := range gr.ParsedTypes {
 		if !strings.HasPrefix(k, gr.ImportPath+".") {
 			continue
@@ -85,12 +85,12 @@ func (g *Generator) generateMockJSON(gr *parser.Group, generatedIn string) error
 			continue
 		}
 
-		types[k] = v
+		typeMaps[k] = v
 	}
 
-	gen := go2json.NewGenerator(types)
+	gen := go2json.NewGenerator(typeMaps)
 
-	gen.CustomGenerator = func(t go2tstypes.Type, packageStack []string, exitRecursion bool) (bool, interface{}) {
+	gen.CustomGenerator = func(t types.Type, packageStack []string, exitRecursion bool) (bool, interface{}) {
 		ut := parser.GetMultipartUploadType(t)
 
 		if ut == parser.UploadNone {

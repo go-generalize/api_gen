@@ -1,11 +1,11 @@
 package common
 
 import (
-	go2tsparser "github.com/go-generalize/go2ts/pkg/parser"
+	parser "github.com/go-generalize/go-easyparser"
 )
 
 // ParserFilter is a common filter of go2ts parser for api_gen
-func ParserFilter(opt *go2tsparser.FilterOpt) bool {
+func ParserFilter(opt *parser.FilterOpt) bool {
 	if opt.Dependency {
 		return true
 	}

@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	tstypes "github.com/go-generalize/go2ts/pkg/types"
-	"github.com/go-generalize/go2ts/pkg/util"
+	"github.com/go-generalize/go-easyparser/types"
+	"github.com/go-generalize/go-easyparser/util"
 	"github.com/iancoleman/strcase"
 	"golang.org/x/xerrors"
 )
@@ -26,15 +26,15 @@ var (
 
 // Generator go struct->json
 type Generator struct {
-	types   map[string]tstypes.Type
+	types   map[string]types.Type
 	altPkgs map[string]string
 
 	BasePackage     string
-	CustomGenerator func(t tstypes.Type, packageStack []string, exitRecursion bool) (bool, interface{})
+	CustomGenerator func(t types.Type, packageStack []string, exitRecursion bool) (bool, interface{})
 }
 
 // NewGenerator Generator constructor
-func NewGenerator(types map[string]tstypes.Type) *Generator {
+func NewGenerator(types map[string]types.Type) *Generator {
 	return &Generator{
 		types:   types,
 		altPkgs: make(map[string]string),
@@ -45,7 +45,7 @@ func NewGenerator(types map[string]tstypes.Type) *Generator {
 func (g *Generator) Generate(dir string) error {
 	type entry struct {
 		key string
-		typ tstypes.Type
+		typ types.Type
 	}
 
 	entries := make([]*entry, 0, len(g.types))
@@ -71,7 +71,7 @@ func (g *Generator) Generate(dir string) error {
 
 	used := map[string]struct{}{}
 	for i, e := range entries {
-		obj, ok := e.typ.(*tstypes.Object)
+		obj, ok := e.typ.(*types.Object)
 
 		if !ok {
 			continue
@@ -187,7 +187,7 @@ func (g *Generator) Generate(dir string) error {
 	return nil
 }
 
-func (g *Generator) generateType(t tstypes.Type, packageStack []string, exitRecursion bool) interface{} {
+func (g *Generator) generateType(t types.Type, packageStack []string, exitRecursion bool) interface{} {
 	if t == nil {
 		return nil
 	}
@@ -201,27 +201,27 @@ func (g *Generator) generateType(t tstypes.Type, packageStack []string, exitRecu
 	}
 
 	switch v := t.(type) {
-	case *tstypes.Array:
+	case *types.Array:
 		return g.generateArray(v, packageStack, exitRecursion)
-	case *tstypes.Object:
+	case *types.Object:
 		return g.generateObject(v, packageStack, exitRecursion)
-	case *tstypes.String:
+	case *types.String:
 		return "string"
-	case *tstypes.Number:
+	case *types.Number:
 		return 1234
-	case *tstypes.Boolean:
+	case *types.Boolean:
 		return true
-	case *tstypes.Date:
+	case *types.Date:
 		return fixedTime
-	case *tstypes.Nullable:
+	case *types.Nullable:
 		if exitRecursion {
 			return nil
 		}
 
 		return g.generateType(v.Inner, packageStack, false)
-	case *tstypes.Any:
+	case *types.Any:
 		return "any"
-	case *tstypes.Map:
+	case *types.Map:
 		return g.generateMap(v, packageStack, exitRecursion)
 	default:
 		panic("unsupported")

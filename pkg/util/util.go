@@ -3,11 +3,11 @@ package util
 import (
 	"reflect"
 
-	go2tstypes "github.com/go-generalize/go2ts/pkg/types"
+	"github.com/go-generalize/go-easyparser/types"
 )
 
 // GetStructField gets the field name or matching tagged name
-func GetStructField(e *go2tstypes.ObjectEntry, tag string) string {
+func GetStructField(e *types.ObjectEntry, tag string) string {
 	if e.RawTag != "" {
 		key, found := reflect.StructTag(e.RawTag).Lookup(tag)
 
@@ -20,7 +20,7 @@ func GetStructField(e *go2tstypes.ObjectEntry, tag string) string {
 }
 
 // FindStructField finds the field for struct matching the name
-func FindStructField(strct *go2tstypes.Object, tag, name string) string {
+func FindStructField(strct *types.Object, tag, name string) string {
 	for _, field := range strct.Entries {
 		key := GetStructField(&field, tag)
 
