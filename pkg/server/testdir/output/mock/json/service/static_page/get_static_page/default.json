@@ -1,0 +1,10 @@
+{
+    "meta": {
+        "status": 200,
+        "match_request": {}
+    },
+    "payload": {
+        "body": "string",
+        "title": "string"
+    }
+}
