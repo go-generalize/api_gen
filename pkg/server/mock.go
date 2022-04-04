@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	go2json "github.com/go-generalize/api_gen/v2/pkg/go2json"
+	"github.com/go-generalize/api_gen/v2/pkg/go2json"
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
 	"github.com/go-generalize/go-easyparser/types"
 	"github.com/iancoleman/strcase"
