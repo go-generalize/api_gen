@@ -8,7 +8,6 @@ import (
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
 	"github.com/go-generalize/go-easyparser/types"
 	go2tsgenerator "github.com/go-generalize/go2ts/pkg/generator"
-	go2tstypes "github.com/go-generalize/go2ts/pkg/types"
 	"golang.org/x/xerrors"
 )
 
@@ -40,8 +39,8 @@ func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string
 
 	gen := go2tsgenerator.NewGenerator(gr.ParsedTypes)
 
-	gen.CustomGenerator = func(t go2tstypes.Type) (generated string, union bool) {
-		o, ok := t.(*go2tstypes.Object)
+	gen.CustomGenerator = func(t types.Type) (generated string, union bool) {
+		o, ok := t.(*types.Object)
 
 		if !ok {
 			return "", false

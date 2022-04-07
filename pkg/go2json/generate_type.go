@@ -1,7 +1,7 @@
 // Package go2json ...
 package go2json
 
-import tstypes "github.com/go-generalize/go2ts/pkg/types"
+import "github.com/go-generalize/go-easyparser/types"
 
 // MockPayload ...
 type MockPayload interface{}
@@ -20,6 +20,6 @@ type MockMeta struct {
 
 // GenerateSet ...
 type GenerateSet struct {
-	Request  tstypes.Type
-	Response tstypes.Type
+	Request  types.Type
+	Response types.Type
 }
