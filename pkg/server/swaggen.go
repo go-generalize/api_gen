@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
-	"github.com/go-generalize/go2ts/pkg/types"
+	"github.com/go-generalize/go-easyparser/types"
 )
 
 func (g *Generator) generateSwagComment(ep *parser.Endpoint) string {

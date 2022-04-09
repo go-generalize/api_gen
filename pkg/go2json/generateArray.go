@@ -5,24 +5,24 @@ import (
 	"sort"
 	"strings"
 
-	tstypes "github.com/go-generalize/go2ts/pkg/types"
+	"github.com/go-generalize/go-easyparser/types"
 	"github.com/go-utils/count"
 )
 
-func (g *Generator) generateArray(typ *tstypes.Array, packageStack []string, exitRecursion bool) interface{} {
+func (g *Generator) generateArray(typ *types.Array, packageStack []string, exitRecursion bool) interface{} {
 	item := g.generateType(typ.Inner, packageStack, exitRecursion)
 	return []interface{}{item, item, item}
 }
 
-func (g *Generator) generateMap(obj *tstypes.Map, packageStack []string, exitRecursion bool) interface{} {
+func (g *Generator) generateMap(obj *types.Map, packageStack []string, exitRecursion bool) interface{} {
 	key := g.generateType(obj.Key, packageStack, exitRecursion)
 	val := g.generateType(obj.Value, packageStack, exitRecursion)
 	switch obj.Key.(type) {
-	case *tstypes.String:
+	case *types.String:
 		return map[string]interface{}{
 			key.(string): val,
 		}
-	case *tstypes.Number:
+	case *types.Number:
 		return map[int]interface{}{
 			key.(int): val,
 		}
@@ -30,7 +30,7 @@ func (g *Generator) generateMap(obj *tstypes.Map, packageStack []string, exitRec
 	panic("map key is `string` or `number`")
 }
 
-func (g *Generator) generateObject(obj *tstypes.Object, packageStack []string, exitRecursion bool) interface{} {
+func (g *Generator) generateObject(obj *types.Object, packageStack []string, exitRecursion bool) interface{} {
 	sp := strings.Split(obj.Name, ".")
 	name := sp[len(sp)-1]
 
@@ -47,7 +47,7 @@ func (g *Generator) generateObject(obj *tstypes.Object, packageStack []string, e
 
 	type entry struct {
 		Name     string
-		Type     tstypes.Type
+		Type     types.Type
 		Optional bool
 	}
 
