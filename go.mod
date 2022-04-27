@@ -7,7 +7,7 @@ require (
 	github.com/go-generalize/go2ts v1.6.0
 	github.com/go-utils/count v0.0.1
 	github.com/go-utils/gopackages v0.0.0-20210218102646-e7d1f0008968
-	github.com/google/go-cmp v0.5.7
+	github.com/google/go-cmp v0.5.8
 	github.com/iancoleman/strcase v0.2.0
 	github.com/spf13/cobra v1.4.0
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
