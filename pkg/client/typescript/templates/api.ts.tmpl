@@ -34,6 +34,15 @@ export interface middlewareSet {
 }
 {{- range $index, $elem := .ChildrenClients }}
 
+const filterNullableParam = (param: Object) => {
+    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
+        if (!param[key]) {
+            delete param[key];
+        }
+    });
+    return param;
+}
+
 class {{ $elem.Name }} {
 	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
 	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
@@ -128,6 +137,8 @@ class {{ $elem.Name }} {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterNullableParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -161,14 +172,14 @@ class {{ $elem.Name }} {
 		const context: MiddlewareContext = {
 			httpMethod: '{{ $method.Method }}',
 			endpoint: `${this.baseURL}{{ $method.Endpoint }}`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
 {{- 	if eq $method.Method "GET" }}
-		const url = `${this.baseURL}{{ $method.Endpoint }}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
+		const url = `${this.baseURL}{{ $method.Endpoint }}?` + (new URLSearchParams(this.getRequestObject(filteredParam, excludeParams, true))).toString();
 {{- 	else }}
 		const url = `${this.baseURL}{{ $method.Endpoint }}`;
 {{-      end }}
@@ -183,13 +194,13 @@ class {{ $elem.Name }} {
 
 					body.append(
 						'x-multipart-json-binder-request-json',
-						new Blob([JSON.stringify(this.getRequestObject(param, excludeParams, false))], {type: 'application/json'}),
+						new Blob([JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false))], {type: 'application/json'}),
 						'x-multipart-json-binder-request-json'
 					);
 {{- range $index, $field := $method.FileFields }}
-					if (param.{{ $field.StructField }} !== undefined) {
+					if (filteredParam.{{ $field.StructField }} !== undefined) {
 {{- if $field.IsArray }}
-						param.{{ $field.StructField }}.filter(f => f !== undefined).forEach(f => body.append('{{ $field.MultipartField }}', f));
+						filteredParam.{{ $field.StructField }}.filter(f => f !== undefined).forEach(f => body.append('{{ $field.MultipartField }}', f));
 {{- else }}
 						body.append('{{ $field.MultipartField }}', param.{{ $field.StructField }});
 {{- end }}
@@ -198,7 +209,7 @@ class {{ $elem.Name }} {
 					return body;
 				})(),
 {{-			else }}
-				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
+				body: JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false)),
 {{- 		end }}
 {{-     end }}
 				headers: reqHeader,
