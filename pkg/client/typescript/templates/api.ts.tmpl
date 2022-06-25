@@ -107,7 +107,7 @@ class {{ $elem.Name }} {
 {{- 	range $index, $method := $elem.Methods }}
 
 	async {{ $method.Name }}(
-		param: {{ $method.RequestType }},
+		param{{ if eq $method.HasReqFields false }}?{{ end }}: {{ $method.RequestType }},
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
@@ -115,18 +115,23 @@ class {{ $elem.Name }} {
 	): Promise<{{ $method.ResponseType }}>;
 	/** @deprecated */
 	async {{ $method.Name }}(
-		param: {{ $method.RequestType }},
+		param{{ if eq $method.HasReqFields false }}?{{ end }}: {{ $method.RequestType }},
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<{{ $method.ResponseType }}>;
 
 	async {{ $method.Name }}(
-		param: {{ $method.RequestType }},
+		param{{ if eq $method.HasReqFields false }}?{{ end }}: {{ $method.RequestType }},
 		arg1?: any,
 		arg2?: any
 	): Promise<{{ $method.ResponseType }}> {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
+{{-     if eq $method.HasReqFields false }}
+		if (!param) {
+			param = {};
+		}
+{{-     end }}
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -210,7 +215,7 @@ class {{ $elem.Name }} {
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
-{{- 	if eq .HasFields true }}
+{{- 	if eq .HasResFields true }}
 		const res = (await resp.json()) as {{ $method.ResponseType }};
 {{- 	else }}
 		await resp.text();
@@ -340,7 +345,7 @@ export class APIClient {
 {{- range $index, $method := .Methods }}
 
 	async {{ $method.Name }}(
-		param: {{ $method.RequestType }},
+		param{{ if eq $method.HasReqFields false }}?{{ end }}: {{ $method.RequestType }},
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
@@ -348,18 +353,23 @@ export class APIClient {
 	): Promise<{{ $method.ResponseType }}>;
 	/** @deprecated */
 	async {{ $method.Name }}(
-		param: {{ $method.RequestType }},
+		param{{ if eq $method.HasReqFields false }}?{{ end }}: {{ $method.RequestType }},
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<{{ $method.ResponseType }}>;
 
 	async {{ $method.Name }}(
-		param: {{ $method.RequestType }},
+		param{{ if eq $method.HasReqFields false }}?{{ end }}: {{ $method.RequestType }},
 		arg1?: any,
 		arg2?: any
 	): Promise<{{ $method.ResponseType }}> {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
+{{-     if eq $method.HasReqFields false }}
+		if (!param) {
+			param = {};
+		}
+{{-     end }}
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -449,7 +459,7 @@ export class APIClient {
 			throw new ApiError(resp, responseText);
 		}
 
-{{- if eq .HasFields true }}
+{{- if eq .HasResFields true }}
 		const res = (await resp.json()) as {{ $method.ResponseType }};
 {{- else }}
 		await resp.text();
