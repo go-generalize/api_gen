@@ -89,7 +89,7 @@ class ParamClient {
 	}
 
 	async postB(
-		param: ParamPostBRequest?,
+		param: ParamPostBRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
@@ -97,21 +97,18 @@ class ParamClient {
 	): Promise<ParamPostBResponse>;
 	/** @deprecated */
 	async postB(
-		param: ParamPostBRequest?,
+		param: ParamPostBRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ParamPostBResponse>;
 
 	async postB(
-		param: ParamPostBRequest?,
+		param: ParamPostBRequest,
 		arg1?: any,
 		arg2?: any
 	): Promise<ParamPostBResponse> {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
-		if (!param) {
-			param = {};
-		}
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -296,7 +293,7 @@ export class APIClient {
 	}
 
 	async postA(
-		param: PostARequest?,
+		param: PostARequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
@@ -304,21 +301,18 @@ export class APIClient {
 	): Promise<PostAResponse>;
 	/** @deprecated */
 	async postA(
-		param: PostARequest?,
+		param: PostARequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<PostAResponse>;
 
 	async postA(
-		param: PostARequest?,
+		param: PostARequest,
 		arg1?: any,
 		arg2?: any
 	): Promise<PostAResponse> {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
-		if (!param) {
-			param = {};
-		}
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
