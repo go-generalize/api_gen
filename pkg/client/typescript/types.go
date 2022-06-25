@@ -32,7 +32,8 @@ type endpointType struct {
 	RequestType, ResponseType string
 	Method, Endpoint          string
 	ExcludedParams            []string
-	HasFields                 bool
+	HasResFields              bool
+	HasReqFields              bool
 	Multipart                 bool
 	FileFields                []fileField
 }
