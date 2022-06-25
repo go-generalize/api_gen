@@ -84,7 +84,7 @@ class FooBarClient {
 	}
 
 	async postUser(
-		param: FooBarPostUserRequest,
+		param?: FooBarPostUserRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
@@ -92,18 +92,21 @@ class FooBarClient {
 	): Promise<FooBarPostUserResponse>;
 	/** @deprecated */
 	async postUser(
-		param: FooBarPostUserRequest,
+		param?: FooBarPostUserRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<FooBarPostUserResponse>;
 
 	async postUser(
-		param: FooBarPostUserRequest,
+		param?: FooBarPostUserRequest,
 		arg1?: any,
 		arg2?: any
 	): Promise<FooBarPostUserResponse> {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
+		if (!param) {
+			param = {};
+		}
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||

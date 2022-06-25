@@ -315,7 +315,7 @@ class ServiceGroupsClient {
 	}
 
 	async getGroups(
-		param: ServiceGroupsGetGroupsRequest,
+		param?: ServiceGroupsGetGroupsRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
@@ -323,18 +323,21 @@ class ServiceGroupsClient {
 	): Promise<ServiceGroupsGetGroupsResponse>;
 	/** @deprecated */
 	async getGroups(
-		param: ServiceGroupsGetGroupsRequest,
+		param?: ServiceGroupsGetGroupsRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceGroupsGetGroupsResponse>;
 
 	async getGroups(
-		param: ServiceGroupsGetGroupsRequest,
+		param?: ServiceGroupsGetGroupsRequest,
 		arg1?: any,
 		arg2?: any
 	): Promise<ServiceGroupsGetGroupsResponse> {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
+		if (!param) {
+			param = {};
+		}
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -501,7 +504,7 @@ class ServiceStaticPageClient {
 	}
 
 	async getStaticPage(
-		param: ServiceStaticPageGetStaticPageRequest,
+		param?: ServiceStaticPageGetStaticPageRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
@@ -509,18 +512,21 @@ class ServiceStaticPageClient {
 	): Promise<ServiceStaticPageGetStaticPageResponse>;
 	/** @deprecated */
 	async getStaticPage(
-		param: ServiceStaticPageGetStaticPageRequest,
+		param?: ServiceStaticPageGetStaticPageRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceStaticPageGetStaticPageResponse>;
 
 	async getStaticPage(
-		param: ServiceStaticPageGetStaticPageRequest,
+		param?: ServiceStaticPageGetStaticPageRequest,
 		arg1?: any,
 		arg2?: any
 	): Promise<ServiceStaticPageGetStaticPageResponse> {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
+		if (!param) {
+			param = {};
+		}
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1362,7 +1368,7 @@ class ServiceUserClient {
 	}
 
 	async get(
-		param: ServiceUserGetRequest,
+		param?: ServiceUserGetRequest,
 		options?: {
 			headers?: {[key: string]: string},
 			options?: {[key: string]: any}
@@ -1370,18 +1376,21 @@ class ServiceUserClient {
 	): Promise<ServiceUserGetResponse>;
 	/** @deprecated */
 	async get(
-		param: ServiceUserGetRequest,
+		param?: ServiceUserGetRequest,
 		headers?: {[key: string]: string},
 		options?: {[key: string]: any}
 	): Promise<ServiceUserGetResponse>;
 
 	async get(
-		param: ServiceUserGetRequest,
+		param?: ServiceUserGetRequest,
 		arg1?: any,
 		arg2?: any
 	): Promise<ServiceUserGetResponse> {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
+		if (!param) {
+			param = {};
+		}
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||

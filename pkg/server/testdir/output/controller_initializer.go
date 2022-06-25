@@ -56,6 +56,7 @@ func NewControllers(
 					return
 				}
 
+				c.Logger().Errorf("process panic: %#v\n", recoverErr)
 				debug.PrintStack()
 
 				if httpErr, ok := recoverErr.(*echo.HTTPError); ok {

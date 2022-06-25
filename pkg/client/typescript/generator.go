@@ -46,10 +46,11 @@ func (g *generator) GenerateClient() (string, error) {
 
 func (g *generator) generateEndpoint(ep *parser.Endpoint) (*endpointType, []importPair, error) {
 	endpoint := &endpointType{
-		Method:    strings.ToUpper(string(ep.Method)),
-		HasFields: len(ep.ResponsePayload.Fields.List) != 0,
-		Name:      strings.ToLower(string(ep.Method)) + strcase.ToCamel(ep.Path),
-		Multipart: ep.UseMultipartUpload,
+		Method:       strings.ToUpper(string(ep.Method)),
+		HasResFields: len(ep.ResponsePayload.Fields.List) != 0,
+		HasReqFields: len(ep.RequestPayload.Fields.List) != 0,
+		Name:         strings.ToLower(string(ep.Method)) + strcase.ToCamel(ep.Path),
+		Multipart:    ep.UseMultipartUpload,
 	}
 
 	endpoint.Endpoint = ep.GetFullPath("/", func(rawPath, path, placeholder string) string {
