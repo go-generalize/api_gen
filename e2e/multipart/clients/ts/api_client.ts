@@ -35,6 +35,15 @@ export interface middlewareSet {
 	afterMiddleware?: ApiClientMiddlewareFunc[];
 }
 
+const filterNullableParam = (param: Object) => {
+    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
+        if (!param[key]) {
+            delete param[key];
+        }
+    });
+    return param;
+}
+
 class ParamClient {
 	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
 	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
@@ -110,6 +119,8 @@ class ParamClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterNullableParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -140,7 +151,7 @@ class ParamClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'POST',
 			endpoint: `${this.baseURL}/${encodeURI(param.Param.toString())}/b`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
@@ -156,14 +167,14 @@ class ParamClient {
 
 					body.append(
 						'x-multipart-json-binder-request-json',
-						new Blob([JSON.stringify(this.getRequestObject(param, excludeParams, false))], {type: 'application/json'}),
+						new Blob([JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false))], {type: 'application/json'}),
 						'x-multipart-json-binder-request-json'
 					);
-					if (param.File !== undefined) {
+					if (filteredParam.File !== undefined) {
 						body.append('file', param.File);
 					}
-					if (param.Files !== undefined) {
-						param.Files.filter(f => f !== undefined).forEach(f => body.append('files', f));
+					if (filteredParam.Files !== undefined) {
+						filteredParam.Files.filter(f => f !== undefined).forEach(f => body.append('files', f));
 					}
 					return body;
 				})(),

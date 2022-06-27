@@ -79,6 +79,15 @@ export interface middlewareSet {
 	afterMiddleware?: ApiClientMiddlewareFunc[];
 }
 
+const filterNullableParam = (param: Object) => {
+    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
+        if (!param[key]) {
+            delete param[key];
+        }
+    });
+    return param;
+}
+
 class ServiceClient {
 	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
 	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
@@ -193,6 +202,8 @@ class ServiceClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterNullableParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -223,13 +234,13 @@ class ServiceClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'GET',
 			endpoint: `${this.baseURL}/service/article`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/service/article?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
+		const url = `${this.baseURL}/service/article?` + (new URLSearchParams(this.getRequestObject(filteredParam, excludeParams, true))).toString();
 		const resp = await fetch(
 			url,
 			{
@@ -248,6 +259,15 @@ class ServiceClient {
 		await this.callMiddleware(this.afterMiddleware, context);
 		return res;
 	}
+}
+
+const filterNullableParam = (param: Object) => {
+    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
+        if (!param[key]) {
+            delete param[key];
+        }
+    });
+    return param;
 }
 
 class ServiceGroupsClient {
@@ -336,6 +356,8 @@ class ServiceGroupsClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterNullableParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -366,13 +388,13 @@ class ServiceGroupsClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'GET',
 			endpoint: `${this.baseURL}/service/groups/groups`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/service/groups/groups?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
+		const url = `${this.baseURL}/service/groups/groups?` + (new URLSearchParams(this.getRequestObject(filteredParam, excludeParams, true))).toString();
 		const resp = await fetch(
 			url,
 			{
@@ -391,6 +413,15 @@ class ServiceGroupsClient {
 		await this.callMiddleware(this.afterMiddleware, context);
 		return res;
 	}
+}
+
+const filterNullableParam = (param: Object) => {
+    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
+        if (!param[key]) {
+            delete param[key];
+        }
+    });
+    return param;
 }
 
 class ServiceGroupsCommonClient {
@@ -445,6 +476,15 @@ class ServiceGroupsCommonClient {
 			}
 		}
 	}
+}
+
+const filterNullableParam = (param: Object) => {
+    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
+        if (!param[key]) {
+            delete param[key];
+        }
+    });
+    return param;
 }
 
 class ServiceStaticPageClient {
@@ -522,6 +562,8 @@ class ServiceStaticPageClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterNullableParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -552,13 +594,13 @@ class ServiceStaticPageClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'GET',
 			endpoint: `${this.baseURL}/service/static_page/static_page`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/service/static_page/static_page?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
+		const url = `${this.baseURL}/service/static_page/static_page?` + (new URLSearchParams(this.getRequestObject(filteredParam, excludeParams, true))).toString();
 		const resp = await fetch(
 			url,
 			{
@@ -577,6 +619,15 @@ class ServiceStaticPageClient {
 		await this.callMiddleware(this.afterMiddleware, context);
 		return res;
 	}
+}
+
+const filterNullableParam = (param: Object) => {
+    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
+        if (!param[key]) {
+            delete param[key];
+        }
+    });
+    return param;
 }
 
 class ServiceTableClient {
@@ -631,6 +682,15 @@ class ServiceTableClient {
 			}
 		}
 	}
+}
+
+const filterNullableParam = (param: Object) => {
+    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
+        if (!param[key]) {
+            delete param[key];
+        }
+    });
+    return param;
 }
 
 class ServiceUser2Client {
@@ -719,6 +779,8 @@ class ServiceUser2Client {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterNullableParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -750,7 +812,7 @@ class ServiceUser2Client {
 		const context: MiddlewareContext = {
 			httpMethod: 'DELETE',
 			endpoint: `${this.baseURL}/service/user2/${encodeURI(param.id.toString())}`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
@@ -761,7 +823,7 @@ class ServiceUser2Client {
 			url,
 			{
 				method: "DELETE",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
+				body: JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false)),
 				headers: reqHeader,
 				...reqOption,
 			}
@@ -800,6 +862,8 @@ class ServiceUser2Client {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterNullableParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -830,13 +894,13 @@ class ServiceUser2Client {
 		const context: MiddlewareContext = {
 			httpMethod: 'GET',
 			endpoint: `${this.baseURL}/service/user2/${encodeURI(param.id.toString())}`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/service/user2/${encodeURI(param.id.toString())}?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
+		const url = `${this.baseURL}/service/user2/${encodeURI(param.id.toString())}?` + (new URLSearchParams(this.getRequestObject(filteredParam, excludeParams, true))).toString();
 		const resp = await fetch(
 			url,
 			{
@@ -878,6 +942,8 @@ class ServiceUser2Client {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterNullableParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -908,7 +974,7 @@ class ServiceUser2Client {
 		const context: MiddlewareContext = {
 			httpMethod: 'POST',
 			endpoint: `${this.baseURL}/service/user2/update_user_name`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
@@ -924,14 +990,14 @@ class ServiceUser2Client {
 
 					body.append(
 						'x-multipart-json-binder-request-json',
-						new Blob([JSON.stringify(this.getRequestObject(param, excludeParams, false))], {type: 'application/json'}),
+						new Blob([JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false))], {type: 'application/json'}),
 						'x-multipart-json-binder-request-json'
 					);
-					if (param.File !== undefined) {
+					if (filteredParam.File !== undefined) {
 						body.append('file', param.File);
 					}
-					if (param.Files !== undefined) {
-						param.Files.filter(f => f !== undefined).forEach(f => body.append('files', f));
+					if (filteredParam.Files !== undefined) {
+						filteredParam.Files.filter(f => f !== undefined).forEach(f => body.append('files', f));
 					}
 					return body;
 				})(),
@@ -972,6 +1038,8 @@ class ServiceUser2Client {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterNullableParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -1003,7 +1071,7 @@ class ServiceUser2Client {
 		const context: MiddlewareContext = {
 			httpMethod: 'POST',
 			endpoint: `${this.baseURL}/service/user2/update_user_password`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
@@ -1014,7 +1082,7 @@ class ServiceUser2Client {
 			url,
 			{
 				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
+				body: JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false)),
 				headers: reqHeader,
 				...reqOption,
 			}
@@ -1029,6 +1097,15 @@ class ServiceUser2Client {
 		await this.callMiddleware(this.afterMiddleware, context);
 		return res;
 	}
+}
+
+const filterNullableParam = (param: Object) => {
+    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
+        if (!param[key]) {
+            delete param[key];
+        }
+    });
+    return param;
 }
 
 class ServiceUser2UserIDClient {
@@ -1117,6 +1194,8 @@ class ServiceUser2UserIDClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterNullableParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -1147,13 +1226,13 @@ class ServiceUser2UserIDClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'GET',
 			endpoint: `${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/user_job_get`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/user_job_get?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
+		const url = `${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/user_job_get?` + (new URLSearchParams(this.getRequestObject(filteredParam, excludeParams, true))).toString();
 		const resp = await fetch(
 			url,
 			{
@@ -1172,6 +1251,15 @@ class ServiceUser2UserIDClient {
 		await this.callMiddleware(this.afterMiddleware, context);
 		return res;
 	}
+}
+
+const filterNullableParam = (param: Object) => {
+    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
+        if (!param[key]) {
+            delete param[key];
+        }
+    });
+    return param;
 }
 
 class ServiceUser2UserIDJobIDClient {
@@ -1249,6 +1337,8 @@ class ServiceUser2UserIDJobIDClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterNullableParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -1280,7 +1370,7 @@ class ServiceUser2UserIDJobIDClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'PUT',
 			endpoint: `${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/${encodeURI(param.JobID.toString())}/job`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
@@ -1291,7 +1381,7 @@ class ServiceUser2UserIDJobIDClient {
 			url,
 			{
 				method: "PUT",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
+				body: JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false)),
 				headers: reqHeader,
 				...reqOption,
 			}
@@ -1306,6 +1396,15 @@ class ServiceUser2UserIDJobIDClient {
 		await this.callMiddleware(this.afterMiddleware, context);
 		return res;
 	}
+}
+
+const filterNullableParam = (param: Object) => {
+    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
+        if (!param[key]) {
+            delete param[key];
+        }
+    });
+    return param;
 }
 
 class ServiceUserClient {
@@ -1383,6 +1482,8 @@ class ServiceUserClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterNullableParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -1413,13 +1514,13 @@ class ServiceUserClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'GET',
 			endpoint: `${this.baseURL}/service/user/`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/service/user/?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
+		const url = `${this.baseURL}/service/user/?` + (new URLSearchParams(this.getRequestObject(filteredParam, excludeParams, true))).toString();
 		const resp = await fetch(
 			url,
 			{
@@ -1462,6 +1563,8 @@ class ServiceUserClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterNullableParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -1493,7 +1596,7 @@ class ServiceUserClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'POST',
 			endpoint: `${this.baseURL}/service/user/update_user_name`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
@@ -1504,7 +1607,7 @@ class ServiceUserClient {
 			url,
 			{
 				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
+				body: JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false)),
 				headers: reqHeader,
 				...reqOption,
 			}
@@ -1542,6 +1645,8 @@ class ServiceUserClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterNullableParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -1573,7 +1678,7 @@ class ServiceUserClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'POST',
 			endpoint: `${this.baseURL}/service/user/update_user_password`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
@@ -1584,7 +1689,7 @@ class ServiceUserClient {
 			url,
 			{
 				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
+				body: JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false)),
 				headers: reqHeader,
 				...reqOption,
 			}

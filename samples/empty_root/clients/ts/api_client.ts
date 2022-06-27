@@ -30,6 +30,15 @@ export interface middlewareSet {
 	afterMiddleware?: ApiClientMiddlewareFunc[];
 }
 
+const filterNullableParam = (param: Object) => {
+    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
+        if (!param[key]) {
+            delete param[key];
+        }
+    });
+    return param;
+}
+
 class FooBarClient {
 	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
 	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
@@ -105,6 +114,8 @@ class FooBarClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterNullableParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -136,7 +147,7 @@ class FooBarClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'POST',
 			endpoint: `${this.baseURL}/foo/bar/user`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
@@ -147,7 +158,7 @@ class FooBarClient {
 			url,
 			{
 				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
+				body: JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false)),
 				headers: reqHeader,
 				...reqOption,
 			}
@@ -163,6 +174,15 @@ class FooBarClient {
 		await this.callMiddleware(this.afterMiddleware, context);
 		return res;
 	}
+}
+
+const filterNullableParam = (param: Object) => {
+    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
+        if (!param[key]) {
+            delete param[key];
+        }
+    });
+    return param;
 }
 
 class FooClient {
