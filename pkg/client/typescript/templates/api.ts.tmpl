@@ -198,7 +198,7 @@ class {{ $elem.Name }} {
 {{- range $index, $field := $method.FileFields }}
 					if (filteredParam.{{ $field.StructField }} !== undefined) {
 {{- if $field.IsArray }}
-						filteredParam.{{ $field.StructField }}.filter(f => f !== undefined).forEach(f => body.append('{{ $field.MultipartField }}', f));
+						filteredParam.{{ $field.StructField }}.filter((f: unknown) => f !== undefined).forEach((f: File | Blob) => body.append('{{ $field.MultipartField }}', f));
 {{- else }}
 						body.append('{{ $field.MultipartField }}', filteredParam.{{ $field.StructField }});
 {{- end }}
@@ -430,7 +430,7 @@ export class APIClient {
 {{- range $index, $field := $method.FileFields }}
 					if (filteredParam.{{ $field.StructField }} !== undefined) {
 {{- if $field.IsArray }}
-						filteredParam.{{ $field.StructField }}.filter(f => f !== undefined).forEach(f => body.append('{{ $field.MultipartField }}', f));
+						filteredParam.{{ $field.StructField }}.filter((f: unknown) => f !== undefined).forEach((f: File | Blob) => body.append('{{ $field.MultipartField }}', f));
 {{- else }}
 						body.append('{{ $field.MultipartField }}', filteredParam.{{ $field.StructField }});
 {{- end }}
