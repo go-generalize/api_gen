@@ -35,12 +35,10 @@ export interface middlewareSet {
 {{- range $index, $elem := .ChildrenClients }}
 
 const filterNullableParam = (param: Object) => {
-    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
-        if (!param[key]) {
-            delete param[key];
-        }
-    });
-    return param;
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
 }
 
 class {{ $elem.Name }} {
