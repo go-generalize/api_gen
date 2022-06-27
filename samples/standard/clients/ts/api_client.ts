@@ -946,7 +946,7 @@ class ServiceUser2Client {
 						'x-multipart-json-binder-request-json'
 					);
 					if (filteredParam.File !== undefined) {
-						body.append('file', param.File);
+						body.append('file', filteredParam.File);
 					}
 					if (filteredParam.Files !== undefined) {
 						filteredParam.Files.filter(f => f !== undefined).forEach(f => body.append('files', f));
@@ -1762,6 +1762,8 @@ export class APIClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterUndefinedParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -1845,6 +1847,8 @@ export class APIClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterUndefinedParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -1896,7 +1900,7 @@ export class APIClient {
 						'x-multipart-json-binder-request-json'
 					);
 					if (param.File !== undefined) {
-						body.append('file', param.File);
+						body.append('file', filteredParam.File);
 					}
 					if (param.Files !== undefined) {
 						param.Files.filter(f => f !== undefined).forEach(f => body.append('files', f));
@@ -1944,6 +1948,8 @@ export class APIClient {
 	): Promise<PostCreateUserResponse> {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
+
+		const filteredParam= filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
