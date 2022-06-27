@@ -62,6 +62,7 @@ const filterUndefinedParam = (param: Object) => {
 		.filter(([_key, value]) => typeof value !== 'undefined')
 	);
 }
+
 export interface MiddlewareContext {
 	httpMethod: string;
 	endpoint: string;
@@ -199,7 +200,7 @@ class ServiceClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -344,7 +345,7 @@ class ServiceGroupsClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -532,7 +533,7 @@ class ServiceStaticPageClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -731,7 +732,7 @@ class ServiceUser2Client {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -814,7 +815,7 @@ class ServiceUser2Client {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -894,7 +895,7 @@ class ServiceUser2Client {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -990,7 +991,7 @@ class ServiceUser2Client {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1137,7 +1138,7 @@ class ServiceUser2UserIDClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1271,7 +1272,7 @@ class ServiceUser2UserIDJobIDClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1407,7 +1408,7 @@ class ServiceUserClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1488,7 +1489,7 @@ class ServiceUserClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1570,7 +1571,7 @@ class ServiceUserClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1762,7 +1763,7 @@ export class APIClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1847,7 +1848,7 @@ export class APIClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1949,7 +1950,7 @@ export class APIClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
