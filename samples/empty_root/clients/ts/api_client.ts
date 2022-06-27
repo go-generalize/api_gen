@@ -30,13 +30,11 @@ export interface middlewareSet {
 	afterMiddleware?: ApiClientMiddlewareFunc[];
 }
 
-const filterNullableParam = (param: Object) => {
-    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
-        if (!param[key]) {
-            delete param[key];
-        }
-    });
-    return param;
+const filterUndefinedParam = (param: Object) => {
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
 }
 
 class FooBarClient {
@@ -114,7 +112,7 @@ class FooBarClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterNullableParam(param);
+		const filteredParam= filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -176,13 +174,11 @@ class FooBarClient {
 	}
 }
 
-const filterNullableParam = (param: Object) => {
-    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
-        if (!param[key]) {
-            delete param[key];
-        }
-    });
-    return param;
+const filterUndefinedParam = (param: Object) => {
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
 }
 
 class FooClient {

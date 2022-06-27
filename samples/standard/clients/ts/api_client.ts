@@ -79,13 +79,11 @@ export interface middlewareSet {
 	afterMiddleware?: ApiClientMiddlewareFunc[];
 }
 
-const filterNullableParam = (param: Object) => {
-    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
-        if (!param[key]) {
-            delete param[key];
-        }
-    });
-    return param;
+const filterUndefinedParam = (param: Object) => {
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
 }
 
 class ServiceClient {
@@ -202,7 +200,7 @@ class ServiceClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterNullableParam(param);
+		const filteredParam= filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -261,13 +259,11 @@ class ServiceClient {
 	}
 }
 
-const filterNullableParam = (param: Object) => {
-    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
-        if (!param[key]) {
-            delete param[key];
-        }
-    });
-    return param;
+const filterUndefinedParam = (param: Object) => {
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
 }
 
 class ServiceGroupsClient {
@@ -356,7 +352,7 @@ class ServiceGroupsClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterNullableParam(param);
+		const filteredParam= filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -415,13 +411,11 @@ class ServiceGroupsClient {
 	}
 }
 
-const filterNullableParam = (param: Object) => {
-    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
-        if (!param[key]) {
-            delete param[key];
-        }
-    });
-    return param;
+const filterUndefinedParam = (param: Object) => {
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
 }
 
 class ServiceGroupsCommonClient {
@@ -478,13 +472,11 @@ class ServiceGroupsCommonClient {
 	}
 }
 
-const filterNullableParam = (param: Object) => {
-    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
-        if (!param[key]) {
-            delete param[key];
-        }
-    });
-    return param;
+const filterUndefinedParam = (param: Object) => {
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
 }
 
 class ServiceStaticPageClient {
@@ -562,7 +554,7 @@ class ServiceStaticPageClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterNullableParam(param);
+		const filteredParam= filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -621,13 +613,11 @@ class ServiceStaticPageClient {
 	}
 }
 
-const filterNullableParam = (param: Object) => {
-    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
-        if (!param[key]) {
-            delete param[key];
-        }
-    });
-    return param;
+const filterUndefinedParam = (param: Object) => {
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
 }
 
 class ServiceTableClient {
@@ -684,13 +674,11 @@ class ServiceTableClient {
 	}
 }
 
-const filterNullableParam = (param: Object) => {
-    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
-        if (!param[key]) {
-            delete param[key];
-        }
-    });
-    return param;
+const filterUndefinedParam = (param: Object) => {
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
 }
 
 class ServiceUser2Client {
@@ -779,7 +767,7 @@ class ServiceUser2Client {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterNullableParam(param);
+		const filteredParam= filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -862,7 +850,7 @@ class ServiceUser2Client {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterNullableParam(param);
+		const filteredParam= filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -942,7 +930,7 @@ class ServiceUser2Client {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterNullableParam(param);
+		const filteredParam= filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1038,7 +1026,7 @@ class ServiceUser2Client {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterNullableParam(param);
+		const filteredParam= filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1099,13 +1087,11 @@ class ServiceUser2Client {
 	}
 }
 
-const filterNullableParam = (param: Object) => {
-    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
-        if (!param[key]) {
-            delete param[key];
-        }
-    });
-    return param;
+const filterUndefinedParam = (param: Object) => {
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
 }
 
 class ServiceUser2UserIDClient {
@@ -1194,7 +1180,7 @@ class ServiceUser2UserIDClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterNullableParam(param);
+		const filteredParam= filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1253,13 +1239,11 @@ class ServiceUser2UserIDClient {
 	}
 }
 
-const filterNullableParam = (param: Object) => {
-    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
-        if (!param[key]) {
-            delete param[key];
-        }
-    });
-    return param;
+const filterUndefinedParam = (param: Object) => {
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
 }
 
 class ServiceUser2UserIDJobIDClient {
@@ -1337,7 +1321,7 @@ class ServiceUser2UserIDJobIDClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterNullableParam(param);
+		const filteredParam= filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1398,13 +1382,11 @@ class ServiceUser2UserIDJobIDClient {
 	}
 }
 
-const filterNullableParam = (param: Object) => {
-    (Object.keys(param) as (keyof typeof param)[]).forEach((key) => {
-        if (!param[key]) {
-            delete param[key];
-        }
-    });
-    return param;
+const filterUndefinedParam = (param: Object) => {
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
 }
 
 class ServiceUserClient {
@@ -1482,7 +1464,7 @@ class ServiceUserClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterNullableParam(param);
+		const filteredParam= filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1563,7 +1545,7 @@ class ServiceUserClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterNullableParam(param);
+		const filteredParam= filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1645,7 +1627,7 @@ class ServiceUserClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterNullableParam(param);
+		const filteredParam= filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
