@@ -1795,13 +1795,13 @@ export class APIClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'GET',
 			endpoint: `${this.baseURL}/`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
+		const url = `${this.baseURL}/?` + (new URLSearchParams(this.getRequestObject(filteredParam, excludeParams, true))).toString();
 		const resp = await fetch(
 			url,
 			{
@@ -1880,7 +1880,7 @@ export class APIClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'POST',
 			endpoint: `${this.baseURL}/create_table`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
@@ -1897,14 +1897,14 @@ export class APIClient {
 
 					body.append(
 						'x-multipart-json-binder-request-json',
-						new Blob([JSON.stringify(this.getRequestObject(param, excludeParams, false))], {type: 'application/json'}),
+						new Blob([JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false))], {type: 'application/json'}),
 						'x-multipart-json-binder-request-json'
 					);
-					if (param.File !== undefined) {
+					if (filteredParam.File !== undefined) {
 						body.append('file', filteredParam.File);
 					}
-					if (param.Files !== undefined) {
-						param.Files.filter(f => f !== undefined).forEach(f => body.append('files', f));
+					if (filteredParam.Files !== undefined) {
+						filteredParam.Files.filter(f => f !== undefined).forEach(f => body.append('files', f));
 					}
 					return body;
 				})(),
@@ -1982,7 +1982,7 @@ export class APIClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'POST',
 			endpoint: `${this.baseURL}/create_user`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
@@ -1994,7 +1994,7 @@ export class APIClient {
 			url,
 			{
 				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
+				body: JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false)),
 				headers: {
 					'Content-Type': 'application/json',
 					...this.headers,
