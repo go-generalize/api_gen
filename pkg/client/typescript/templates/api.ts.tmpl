@@ -34,7 +34,7 @@ export interface middlewareSet {
 }
 {{- range $index, $elem := .ChildrenClients }}
 
-const filterNullableParam = (param: Object) => {
+const filterUndefinedParam = (param: Object) => {
 	return Object.fromEntries(
 		Object.entries(param)
 		.filter(([_key, value]) => typeof value !== 'undefined')
@@ -135,7 +135,7 @@ class {{ $elem.Name }} {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterNullableParam(param);
+		const filteredParam= filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
