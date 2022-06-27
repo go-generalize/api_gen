@@ -172,7 +172,7 @@ class ParamClient {
 						body.append('file', filteredParam.File);
 					}
 					if (filteredParam.Files !== undefined) {
-						filteredParam.Files.filter(f => f !== undefined).forEach(f => body.append('files', f));
+						filteredParam.Files.filter((f: unknown) => f !== undefined).forEach((f: File | Blob) => body.append('files', f));
 					}
 					return body;
 				})(),
@@ -379,7 +379,7 @@ export class APIClient {
 						body.append('file', filteredParam.File);
 					}
 					if (filteredParam.Files !== undefined) {
-						filteredParam.Files.filter(f => f !== undefined).forEach(f => body.append('files', f));
+						filteredParam.Files.filter((f: unknown) => f !== undefined).forEach((f: File | Blob) => body.append('files', f));
 					}
 					return body;
 				})(),
