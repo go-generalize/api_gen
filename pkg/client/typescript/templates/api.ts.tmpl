@@ -199,7 +199,7 @@ class {{ $elem.Name }} {
 {{- if $field.IsArray }}
 						filteredParam.{{ $field.StructField }}.filter(f => f !== undefined).forEach(f => body.append('{{ $field.MultipartField }}', f));
 {{- else }}
-						body.append('{{ $field.MultipartField }}', param.{{ $field.StructField }});
+						body.append('{{ $field.MultipartField }}', filteredParam.{{ $field.StructField }});
 {{- end }}
 					}
 {{- end }}
@@ -369,6 +369,8 @@ export class APIClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam= filterUndefinedParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -429,7 +431,7 @@ export class APIClient {
 {{- if $field.IsArray }}
 						param.{{ $field.StructField }}.filter(f => f !== undefined).forEach(f => body.append('{{ $field.MultipartField }}', f));
 {{- else }}
-						body.append('{{ $field.MultipartField }}', param.{{ $field.StructField }});
+						body.append('{{ $field.MultipartField }}', filteredParam.{{ $field.StructField }});
 {{- end }}
 					}
 {{- end }}
