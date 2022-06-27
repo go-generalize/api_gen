@@ -56,6 +56,12 @@ import {
 	PostCreateUserResponse as PostCreateUserResponse,
 } from './classes/types';
 
+const filterUndefinedParam = (param: Object) => {
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
+}
 export interface MiddlewareContext {
 	httpMethod: string;
 	endpoint: string;
@@ -77,13 +83,6 @@ export type ApiClientMiddlewareFunc = (context: MiddlewareContext) => Promise<Mi
 export interface middlewareSet {
 	beforeMiddleware?: ApiClientMiddlewareFunc[];
 	afterMiddleware?: ApiClientMiddlewareFunc[];
-}
-
-const filterUndefinedParam = (param: Object) => {
-	return Object.fromEntries(
-		Object.entries(param)
-		.filter(([_key, value]) => typeof value !== 'undefined')
-	);
 }
 
 class ServiceClient {
@@ -259,13 +258,6 @@ class ServiceClient {
 	}
 }
 
-const filterUndefinedParam = (param: Object) => {
-	return Object.fromEntries(
-		Object.entries(param)
-		.filter(([_key, value]) => typeof value !== 'undefined')
-	);
-}
-
 class ServiceGroupsClient {
 	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
 	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
@@ -411,13 +403,6 @@ class ServiceGroupsClient {
 	}
 }
 
-const filterUndefinedParam = (param: Object) => {
-	return Object.fromEntries(
-		Object.entries(param)
-		.filter(([_key, value]) => typeof value !== 'undefined')
-	);
-}
-
 class ServiceGroupsCommonClient {
 	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
 	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
@@ -470,13 +455,6 @@ class ServiceGroupsCommonClient {
 			}
 		}
 	}
-}
-
-const filterUndefinedParam = (param: Object) => {
-	return Object.fromEntries(
-		Object.entries(param)
-		.filter(([_key, value]) => typeof value !== 'undefined')
-	);
 }
 
 class ServiceStaticPageClient {
@@ -613,13 +591,6 @@ class ServiceStaticPageClient {
 	}
 }
 
-const filterUndefinedParam = (param: Object) => {
-	return Object.fromEntries(
-		Object.entries(param)
-		.filter(([_key, value]) => typeof value !== 'undefined')
-	);
-}
-
 class ServiceTableClient {
 	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
 	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
@@ -672,13 +643,6 @@ class ServiceTableClient {
 			}
 		}
 	}
-}
-
-const filterUndefinedParam = (param: Object) => {
-	return Object.fromEntries(
-		Object.entries(param)
-		.filter(([_key, value]) => typeof value !== 'undefined')
-	);
 }
 
 class ServiceUser2Client {
@@ -1087,13 +1051,6 @@ class ServiceUser2Client {
 	}
 }
 
-const filterUndefinedParam = (param: Object) => {
-	return Object.fromEntries(
-		Object.entries(param)
-		.filter(([_key, value]) => typeof value !== 'undefined')
-	);
-}
-
 class ServiceUser2UserIDClient {
 	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
 	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
@@ -1239,13 +1196,6 @@ class ServiceUser2UserIDClient {
 	}
 }
 
-const filterUndefinedParam = (param: Object) => {
-	return Object.fromEntries(
-		Object.entries(param)
-		.filter(([_key, value]) => typeof value !== 'undefined')
-	);
-}
-
 class ServiceUser2UserIDJobIDClient {
 	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
 	private afterMiddleware: ApiClientMiddlewareFunc[] = [];
@@ -1380,13 +1330,6 @@ class ServiceUser2UserIDJobIDClient {
 		await this.callMiddleware(this.afterMiddleware, context);
 		return res;
 	}
-}
-
-const filterUndefinedParam = (param: Object) => {
-	return Object.fromEntries(
-		Object.entries(param)
-		.filter(([_key, value]) => typeof value !== 'undefined')
-	);
 }
 
 class ServiceUserClient {

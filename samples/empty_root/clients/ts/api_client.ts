@@ -7,6 +7,12 @@ import {
 	PostUserResponse as FooBarPostUserResponse,
 } from './classes/foo/bar/types';
 
+const filterUndefinedParam = (param: Object) => {
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
+}
 export interface MiddlewareContext {
 	httpMethod: string;
 	endpoint: string;
@@ -28,13 +34,6 @@ export type ApiClientMiddlewareFunc = (context: MiddlewareContext) => Promise<Mi
 export interface middlewareSet {
 	beforeMiddleware?: ApiClientMiddlewareFunc[];
 	afterMiddleware?: ApiClientMiddlewareFunc[];
-}
-
-const filterUndefinedParam = (param: Object) => {
-	return Object.fromEntries(
-		Object.entries(param)
-		.filter(([_key, value]) => typeof value !== 'undefined')
-	);
 }
 
 class FooBarClient {
@@ -172,13 +171,6 @@ class FooBarClient {
 		await this.callMiddleware(this.afterMiddleware, context);
 		return res;
 	}
-}
-
-const filterUndefinedParam = (param: Object) => {
-	return Object.fromEntries(
-		Object.entries(param)
-		.filter(([_key, value]) => typeof value !== 'undefined')
-	);
 }
 
 class FooClient {

@@ -10,6 +10,12 @@ import {{ "{" }}
 {{- end }}
 {{- end }}
 
+const filterUndefinedParam = (param: Object) => {
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
+}
 export interface MiddlewareContext {
 	httpMethod: string;
 	endpoint: string;
@@ -33,13 +39,6 @@ export interface middlewareSet {
 	afterMiddleware?: ApiClientMiddlewareFunc[];
 }
 {{- range $index, $elem := .ChildrenClients }}
-
-const filterUndefinedParam = (param: Object) => {
-	return Object.fromEntries(
-		Object.entries(param)
-		.filter(([_key, value]) => typeof value !== 'undefined')
-	);
-}
 
 class {{ $elem.Name }} {
 	private beforeMiddleware: ApiClientMiddlewareFunc[] = [];
