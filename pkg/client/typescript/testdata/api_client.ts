@@ -1176,7 +1176,7 @@ class ServiceUser2UserIDClient {
 			options: reqOption,
 		};
 		await this.callMiddleware(this.beforeMiddleware, context);
-		const url = `${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/user_job_get?` + (new URLSearchParams(this.getRequestObject(param, excludeParams, true))).toString();
+		const url = `${this.baseURL}/service/user2/${encodeURI(param.UserID.toString())}/user_job_get?` + (new URLSearchParams(this.getRequestObject(filteredParam, excludeParams, true))).toString();
 		const resp = await fetch(
 			url,
 			{
@@ -1763,7 +1763,7 @@ export class APIClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1848,7 +1848,7 @@ export class APIClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
-		const filteredParam= filterUndefinedParam(param);
+		const filteredParam = filterUndefinedParam(param);
 
 		if (
 			arg2 !== undefined || arg1 === undefined ||
@@ -1880,7 +1880,7 @@ export class APIClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'POST',
 			endpoint: `${this.baseURL}/create_table`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
@@ -1897,14 +1897,14 @@ export class APIClient {
 
 					body.append(
 						'x-multipart-json-binder-request-json',
-						new Blob([JSON.stringify(this.getRequestObject(param, excludeParams, false))], {type: 'application/json'}),
+						new Blob([JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false))], {type: 'application/json'}),
 						'x-multipart-json-binder-request-json'
 					);
-					if (param.File !== undefined) {
-						body.append('file', param.File);
+					if (filteredParam.File !== undefined) {
+						body.append('file', filteredParam.File);
 					}
-					if (param.Files !== undefined) {
-						param.Files.filter(f => f !== undefined).forEach(f => body.append('files', f));
+					if (filteredParam.Files !== undefined) {
+						filteredParam.Files.filter(f => f !== undefined).forEach(f => body.append('files', f));
 					}
 					return body;
 				})(),
@@ -1950,6 +1950,8 @@ export class APIClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam = filterUndefinedParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -1980,7 +1982,7 @@ export class APIClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'POST',
 			endpoint: `${this.baseURL}/create_user`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
@@ -1992,7 +1994,7 @@ export class APIClient {
 			url,
 			{
 				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
+				body: JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false)),
 				headers: {
 					'Content-Type': 'application/json',
 					...this.headers,
