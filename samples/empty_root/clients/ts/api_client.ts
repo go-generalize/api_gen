@@ -7,6 +7,13 @@ import {
 	PostUserResponse as FooBarPostUserResponse,
 } from './classes/foo/bar/types';
 
+const filterUndefinedParam = (param: Object) => {
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
+}
+
 export interface MiddlewareContext {
 	httpMethod: string;
 	endpoint: string;
@@ -108,6 +115,8 @@ class FooBarClient {
 			param = {};
 		}
 
+		const filteredParam = filterUndefinedParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -139,7 +148,7 @@ class FooBarClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'POST',
 			endpoint: `${this.baseURL}/foo/bar/user`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
@@ -150,7 +159,7 @@ class FooBarClient {
 			url,
 			{
 				method: "POST",
-				body: JSON.stringify(this.getRequestObject(param, excludeParams, false)),
+				body: JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false)),
 				headers: reqHeader,
 				...reqOption,
 			}

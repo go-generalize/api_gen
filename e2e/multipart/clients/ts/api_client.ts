@@ -12,6 +12,13 @@ import {
 	PostAResponse as PostAResponse,
 } from './classes/types';
 
+const filterUndefinedParam = (param: Object) => {
+	return Object.fromEntries(
+		Object.entries(param)
+		.filter(([_key, value]) => typeof value !== 'undefined')
+	);
+}
+
 export interface MiddlewareContext {
 	httpMethod: string;
 	endpoint: string;
@@ -110,6 +117,8 @@ class ParamClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam = filterUndefinedParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -140,7 +149,7 @@ class ParamClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'POST',
 			endpoint: `${this.baseURL}/${encodeURI(param.Param.toString())}/b`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
@@ -156,14 +165,14 @@ class ParamClient {
 
 					body.append(
 						'x-multipart-json-binder-request-json',
-						new Blob([JSON.stringify(this.getRequestObject(param, excludeParams, false))], {type: 'application/json'}),
+						new Blob([JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false))], {type: 'application/json'}),
 						'x-multipart-json-binder-request-json'
 					);
-					if (param.File !== undefined) {
-						body.append('file', param.File);
+					if (filteredParam.File !== undefined) {
+						body.append('file', filteredParam.File);
 					}
-					if (param.Files !== undefined) {
-						param.Files.filter(f => f !== undefined).forEach(f => body.append('files', f));
+					if (filteredParam.Files !== undefined) {
+						filteredParam.Files.filter((f: unknown) => f !== undefined).forEach((f: File | Blob) => body.append('files', f));
 					}
 					return body;
 				})(),
@@ -314,6 +323,8 @@ export class APIClient {
 		let headers: {[key: string]: string} | undefined;
 		let options: {[key: string]: any} | undefined;
 
+		const filteredParam = filterUndefinedParam(param);
+
 		if (
 			arg2 !== undefined || arg1 === undefined ||
 			Object.values(arg1).filter(v => typeof v !== 'string').length === 0
@@ -344,7 +355,7 @@ export class APIClient {
 		const context: MiddlewareContext = {
 			httpMethod: 'POST',
 			endpoint: `${this.baseURL}/a`,
-			request: param,
+			request: filteredParam,
 			baseURL: this.baseURL,
 			headers: reqHeader,
 			options: reqOption,
@@ -361,14 +372,14 @@ export class APIClient {
 
 					body.append(
 						'x-multipart-json-binder-request-json',
-						new Blob([JSON.stringify(this.getRequestObject(param, excludeParams, false))], {type: 'application/json'}),
+						new Blob([JSON.stringify(this.getRequestObject(filteredParam, excludeParams, false))], {type: 'application/json'}),
 						'x-multipart-json-binder-request-json'
 					);
-					if (param.File !== undefined) {
-						body.append('file', param.File);
+					if (filteredParam.File !== undefined) {
+						body.append('file', filteredParam.File);
 					}
-					if (param.Files !== undefined) {
-						param.Files.filter(f => f !== undefined).forEach(f => body.append('files', f));
+					if (filteredParam.Files !== undefined) {
+						filteredParam.Files.filter((f: unknown) => f !== undefined).forEach((f: File | Blob) => body.append('files', f));
 					}
 					return body;
 				})(),
