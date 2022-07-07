@@ -22,6 +22,7 @@ export interface MiddlewareContext {
 	endpoint: string;
 	request: unknown;
 	response?: unknown;
+	responseBody?: string;
 	baseURL: string;
 	headers: {[key: string]: string};
 	options: {[key: string]: any};
@@ -220,12 +221,15 @@ class {{ $elem.Name }} {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseBody = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
-			const responseText = await resp.text();
+			await this.callMiddleware(this.afterMiddleware, context);
 			throw new ApiError(resp, responseText);
 		}
 {{- 	if eq .HasResFields true }}
-		const res = (await resp.json()) as {{ $method.ResponseType }};
+		const res = JSON.parse(responseText) as {{ $method.ResponseType }};
 {{- 	else }}
 		await resp.text();
 		const res = {} as {{ $method.ResponseType }};
@@ -465,13 +469,16 @@ export class APIClient {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseBody = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
-			const responseText = await resp.text();
+			await this.callMiddleware(this.afterMiddleware, context);
 			throw new ApiError(resp, responseText);
 		}
 
 {{- if eq .HasResFields true }}
-		const res = (await resp.json()) as {{ $method.ResponseType }};
+		const res = JSON.parse(responseText) as {{ $method.ResponseType }};
 {{- else }}
 		await resp.text();
 		const res = {} as {{ $method.ResponseType }};
