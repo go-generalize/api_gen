@@ -24,7 +24,7 @@ export interface MiddlewareContext {
 	endpoint: string;
 	request: unknown;
 	response?: unknown;
-	responseText: string;
+	responseText?: string;
 	baseURL: string;
 	headers: {[key: string]: string};
 	options: {[key: string]: any};
@@ -189,7 +189,7 @@ class ParamClient {
 			await this.callMiddleware(this.afterMiddleware, context);
 			throw new ApiError(resp, responseText);
 		}
-		const res = (await resp.json()) as ParamPostBResponse;
+		const res = JSON.parse(responseText) as ParamPostBResponse;
 		context.response = res;
 		await this.callMiddleware(this.afterMiddleware, context);
 		return res;
@@ -404,7 +404,7 @@ export class APIClient {
 			await this.callMiddleware(this.afterMiddleware, context);
 			throw new ApiError(resp, responseText);
 		}
-		const res = (await resp.json()) as PostAResponse;
+		const res = JSON.parse(responseText) as PostAResponse;
 		context.response = res;
 		await this.callMiddleware(this.afterMiddleware, context);
 		return res;
