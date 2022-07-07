@@ -249,6 +249,7 @@ class ServiceClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
+			await this.callMiddleware(this.afterMiddleware, context);
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
@@ -397,6 +398,7 @@ class ServiceGroupsClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
+			await this.callMiddleware(this.afterMiddleware, context);
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
@@ -588,6 +590,7 @@ class ServiceStaticPageClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
+			await this.callMiddleware(this.afterMiddleware, context);
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
@@ -789,6 +792,7 @@ class ServiceUser2Client {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
+			await this.callMiddleware(this.afterMiddleware, context);
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
@@ -870,6 +874,7 @@ class ServiceUser2Client {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
+			await this.callMiddleware(this.afterMiddleware, context);
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
@@ -966,6 +971,7 @@ class ServiceUser2Client {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
+			await this.callMiddleware(this.afterMiddleware, context);
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
@@ -1048,6 +1054,7 @@ class ServiceUser2Client {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
+			await this.callMiddleware(this.afterMiddleware, context);
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
@@ -1193,6 +1200,7 @@ class ServiceUser2UserIDClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
+			await this.callMiddleware(this.afterMiddleware, context);
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
@@ -1329,6 +1337,7 @@ class ServiceUser2UserIDJobIDClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
+			await this.callMiddleware(this.afterMiddleware, context);
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
@@ -1466,6 +1475,7 @@ class ServiceUserClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
+			await this.callMiddleware(this.afterMiddleware, context);
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
@@ -1549,6 +1559,7 @@ class ServiceUserClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
+			await this.callMiddleware(this.afterMiddleware, context);
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
@@ -1631,6 +1642,7 @@ class ServiceUserClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
+			await this.callMiddleware(this.afterMiddleware, context);
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
