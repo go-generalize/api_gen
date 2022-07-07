@@ -68,6 +68,7 @@ export interface MiddlewareContext {
 	endpoint: string;
 	request: unknown;
 	response?: unknown;
+	responseText: string;
 	baseURL: string;
 	headers: {[key: string]: string};
 	options: {[key: string]: any};
@@ -248,9 +249,11 @@ class ServiceClient {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseText = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
-			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
 		const res = (await resp.json()) as ServiceGetArticleResponse;
@@ -397,9 +400,11 @@ class ServiceGroupsClient {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseText = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
-			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
 		const res = (await resp.json()) as ServiceGroupsGetGroupsResponse;
@@ -589,9 +594,11 @@ class ServiceStaticPageClient {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseText = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
-			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
 		const res = (await resp.json()) as ServiceStaticPageGetStaticPageResponse;
@@ -791,9 +798,11 @@ class ServiceUser2Client {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseText = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
-			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
 		await resp.text();
@@ -873,9 +882,11 @@ class ServiceUser2Client {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseText = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
-			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
 		const res = (await resp.json()) as ServiceUser2GetUserResponse;
@@ -970,9 +981,11 @@ class ServiceUser2Client {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseText = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
-			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
 		const res = (await resp.json()) as ServiceUser2PostUpdateUserNameResponse;
@@ -1053,9 +1066,11 @@ class ServiceUser2Client {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseText = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
-			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
 		const res = (await resp.json()) as ServiceUser2PostUpdateUserPasswordResponse;
@@ -1199,9 +1214,11 @@ class ServiceUser2UserIDClient {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseText = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
-			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
 		const res = (await resp.json()) as ServiceUser2UserIDGetUserJobGetResponse;
@@ -1336,9 +1353,11 @@ class ServiceUser2UserIDJobIDClient {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseText = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
-			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
 		const res = (await resp.json()) as ServiceUser2UserIDJobIDPutJobResponse;
@@ -1474,9 +1493,11 @@ class ServiceUserClient {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseText = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
-			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
 		await resp.text();
@@ -1558,9 +1579,11 @@ class ServiceUserClient {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseText = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
-			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
 		const res = (await resp.json()) as ServiceUserPostUpdateUserNameResponse;
@@ -1641,9 +1664,11 @@ class ServiceUserClient {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseText = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
-			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
 		const res = (await resp.json()) as ServiceUserPostUpdateUserPasswordResponse;
@@ -1837,9 +1862,11 @@ export class APIClient {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseText = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
-			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
 		const res = (await resp.json()) as GetResponse;
@@ -1940,9 +1967,11 @@ export class APIClient {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseText = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
-			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
 		const res = (await resp.json()) as PostCreateTableResponse;
@@ -2029,9 +2058,11 @@ export class APIClient {
 			}
 		);
 
+		const responseText = await resp.text();
+		context.responseText = responseText;
+
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
-			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
 		const res = (await resp.json()) as PostCreateUserResponse;
