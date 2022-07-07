@@ -229,7 +229,7 @@ class {{ $elem.Name }} {
 			throw new ApiError(resp, responseText);
 		}
 {{- 	if eq .HasResFields true }}
-		const res = (await resp.json()) as {{ $method.ResponseType }};
+		const res = JSON.parse(responseText) as {{ $method.ResponseType }};
 {{- 	else }}
 		await resp.text();
 		const res = {} as {{ $method.ResponseType }};
@@ -478,7 +478,7 @@ export class APIClient {
 		}
 
 {{- if eq .HasResFields true }}
-		const res = (await resp.json()) as {{ $method.ResponseType }};
+		const res = JSON.parse(responseText) as {{ $method.ResponseType }};
 {{- else }}
 		await resp.text();
 		const res = {} as {{ $method.ResponseType }};
