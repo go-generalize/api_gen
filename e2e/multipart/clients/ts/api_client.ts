@@ -24,7 +24,7 @@ export interface MiddlewareContext {
 	endpoint: string;
 	request: unknown;
 	response?: unknown;
-	responseText?: string;
+	responseBody?: string;
 	baseURL: string;
 	headers: {[key: string]: string};
 	options: {[key: string]: any};
@@ -183,7 +183,7 @@ class ParamClient {
 		);
 
 		const responseText = await resp.text();
-		context.responseText = responseText;
+		context.responseBody = responseText;
 
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
@@ -398,7 +398,7 @@ export class APIClient {
 		);
 
 		const responseText = await resp.text();
-		context.responseText = responseText;
+		context.responseBody = responseText;
 
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
