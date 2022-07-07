@@ -19,7 +19,7 @@ export interface MiddlewareContext {
 	endpoint: string;
 	request: unknown;
 	response?: unknown;
-	responseText: string;
+	responseText?: string;
 	baseURL: string;
 	headers: {[key: string]: string};
 	options: {[key: string]: any};
