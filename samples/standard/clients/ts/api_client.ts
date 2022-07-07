@@ -1838,7 +1838,7 @@ export class APIClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-    		await this.callMiddleware(this.afterMiddleware, context);
+			await this.callMiddleware(this.afterMiddleware, context);
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
@@ -1941,7 +1941,7 @@ export class APIClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-    		await this.callMiddleware(this.afterMiddleware, context);
+			await this.callMiddleware(this.afterMiddleware, context);
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
@@ -2030,7 +2030,7 @@ export class APIClient {
 		);
 
 		if (Math.floor(resp.status / 100) !== 2) {
-    		await this.callMiddleware(this.afterMiddleware, context);
+			await this.callMiddleware(this.afterMiddleware, context);
 			const responseText = await resp.text();
 			throw new ApiError(resp, responseText);
 		}
