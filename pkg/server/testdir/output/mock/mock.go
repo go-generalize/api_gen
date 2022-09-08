@@ -7,6 +7,7 @@ import (
 )
 
 // MockJSONFS provides embed.FS for mock json
+//
 //go:embed json/*
 var MockJSONFS embed.FS
 
