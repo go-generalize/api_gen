@@ -14,7 +14,7 @@ const fileHeaderType = `mime/multipart.FileHeader`
 // FormTagKey is a tag key for fields uploaded in multipart
 const FormTagKey = "form"
 
-//MultipartHeader is mime/multipart.FileHeader
+// MultipartHeader is mime/multipart.FileHeader
 type MultipartHeader struct {
 	eptypes.Common
 }
