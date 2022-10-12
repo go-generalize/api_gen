@@ -9,7 +9,7 @@ require (
 	github.com/go-utils/gopackages v0.0.0-20210218102646-e7d1f0008968
 	github.com/google/go-cmp v0.5.9
 	github.com/iancoleman/strcase v0.2.0
-	github.com/spf13/cobra v1.5.0
+	github.com/spf13/cobra v1.6.0
 	golang.org/x/sync v0.0.0-20220929204114-8fcdb60fdcc0
 	golang.org/x/sys v0.0.0-20221006211917-84dc82d7e875 // indirect
 	golang.org/x/tools v0.1.12 // indirect
