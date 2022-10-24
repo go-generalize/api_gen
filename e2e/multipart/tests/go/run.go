@@ -1,6 +1,7 @@
 package test
 
 import (
+	"context"
 	"net/http"
 	"net/textproto"
 	"strings"
@@ -42,7 +43,7 @@ func postA(t *testing.T, client *client.APIClient) {
 		Payload: "payload",
 	}
 
-	result, err := client.PostA(payload)
+	result, err := client.PostA(context.Background(), payload)
 
 	if err != nil {
 		t.Fatal(err)
@@ -83,7 +84,7 @@ func paramPostB(t *testing.T, client *client.APIClient) {
 		Param:   "param",
 	}
 
-	result, err := client.Param.PostB(payload)
+	result, err := client.Param.PostB(context.Background(), payload)
 
 	if err != nil {
 		t.Fatal(err)
