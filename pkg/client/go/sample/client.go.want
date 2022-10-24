@@ -7,6 +7,7 @@ package client
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -57,7 +58,7 @@ func newGroup_service_groups(client *APIClient) *Group_service_groups {
 	}
 }
 
-func (g *Group_service_groups) GetGroups(reqPayload *_service_groups.GetGroupsRequest) (respPayload *_service_groups.GetGroupsResponse, retErr error) {
+func (g *Group_service_groups) GetGroups(ctx context.Context, reqPayload *_service_groups.GetGroupsRequest) (respPayload *_service_groups.GetGroupsResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
@@ -67,6 +68,8 @@ func (g *Group_service_groups) GetGroups(reqPayload *_service_groups.GetGroupsRe
 	if err != nil {
 		return nil, err
 	}
+
+	req = req.WithContext(ctx)
 
 	resp, err := g.apiClient.client.Do(req)
 
