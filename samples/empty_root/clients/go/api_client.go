@@ -6,6 +6,7 @@ package client
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -32,7 +33,7 @@ func newGroup_foo_bar(client *APIClient) *Group_foo_bar {
 	}
 }
 
-func (g *Group_foo_bar) PostUser(reqPayload *_foo_bar.PostUserRequest) (respPayload *_foo_bar.PostUserResponse, retErr error) {
+func (g *Group_foo_bar) PostUser(ctx context.Context, reqPayload *_foo_bar.PostUserRequest) (respPayload *_foo_bar.PostUserResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
@@ -44,6 +45,8 @@ func (g *Group_foo_bar) PostUser(reqPayload *_foo_bar.PostUserRequest) (respPayl
 	}
 
 	req.Header.Add("Content-Type", "application/json")
+
+	req = req.WithContext(ctx)
 
 	resp, err := g.apiClient.client.Do(req)
 
