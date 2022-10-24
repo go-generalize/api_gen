@@ -7,6 +7,7 @@ package client
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -57,7 +58,7 @@ func newGroup_service_groups(client *APIClient) *Group_service_groups {
 	}
 }
 
-func (g *Group_service_groups) GetGroups(reqPayload *_service_groups.GetGroupsRequest) (respPayload *_service_groups.GetGroupsResponse, retErr error) {
+func (g *Group_service_groups) GetGroups(ctx context.Context, reqPayload *_service_groups.GetGroupsRequest) (respPayload *_service_groups.GetGroupsResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
@@ -67,6 +68,8 @@ func (g *Group_service_groups) GetGroups(reqPayload *_service_groups.GetGroupsRe
 	if err != nil {
 		return nil, err
 	}
+
+	req = req.WithContext(ctx)
 
 	resp, err := g.apiClient.client.Do(req)
 
@@ -106,7 +109,7 @@ func newGroup_service_static_page(client *APIClient) *Group_service_static_page 
 	}
 }
 
-func (g *Group_service_static_page) GetStaticPage(reqPayload *_service_static_page.GetStaticPageRequest) (respPayload *_service_static_page.GetStaticPageResponse, retErr error) {
+func (g *Group_service_static_page) GetStaticPage(ctx context.Context, reqPayload *_service_static_page.GetStaticPageRequest) (respPayload *_service_static_page.GetStaticPageResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
@@ -116,6 +119,8 @@ func (g *Group_service_static_page) GetStaticPage(reqPayload *_service_static_pa
 	if err != nil {
 		return nil, err
 	}
+
+	req = req.WithContext(ctx)
 
 	resp, err := g.apiClient.client.Do(req)
 
@@ -165,7 +170,7 @@ func newGroup_service_user(client *APIClient) *Group_service_user {
 	}
 }
 
-func (g *Group_service_user) Get(reqPayload *_service_user.GetRequest) (respPayload *_service_user.GetResponse, retErr error) {
+func (g *Group_service_user) Get(ctx context.Context, reqPayload *_service_user.GetRequest) (respPayload *_service_user.GetResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
@@ -175,6 +180,8 @@ func (g *Group_service_user) Get(reqPayload *_service_user.GetRequest) (respPayl
 	if err != nil {
 		return nil, err
 	}
+
+	req = req.WithContext(ctx)
 
 	resp, err := g.apiClient.client.Do(req)
 
@@ -204,7 +211,7 @@ func (g *Group_service_user) Get(reqPayload *_service_user.GetRequest) (respPayl
 	return respPayload, nil
 }
 
-func (g *Group_service_user) PostUpdateUserName(reqPayload *_service_user.PostUpdateUserNameRequest) (respPayload *_service_user.PostUpdateUserNameResponse, retErr error) {
+func (g *Group_service_user) PostUpdateUserName(ctx context.Context, reqPayload *_service_user.PostUpdateUserNameRequest) (respPayload *_service_user.PostUpdateUserNameResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
@@ -216,6 +223,8 @@ func (g *Group_service_user) PostUpdateUserName(reqPayload *_service_user.PostUp
 	}
 
 	req.Header.Add("Content-Type", "application/json")
+
+	req = req.WithContext(ctx)
 
 	resp, err := g.apiClient.client.Do(req)
 
@@ -245,7 +254,7 @@ func (g *Group_service_user) PostUpdateUserName(reqPayload *_service_user.PostUp
 	return respPayload, nil
 }
 
-func (g *Group_service_user) PostUpdateUserPassword(reqPayload *_service_user.PostUpdateUserPasswordRequest) (respPayload *_service_user.PostUpdateUserPasswordResponse, retErr error) {
+func (g *Group_service_user) PostUpdateUserPassword(ctx context.Context, reqPayload *_service_user.PostUpdateUserPasswordRequest) (respPayload *_service_user.PostUpdateUserPasswordResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
@@ -257,6 +266,8 @@ func (g *Group_service_user) PostUpdateUserPassword(reqPayload *_service_user.Po
 	}
 
 	req.Header.Add("Content-Type", "application/json")
+
+	req = req.WithContext(ctx)
 
 	resp, err := g.apiClient.client.Do(req)
 
@@ -296,7 +307,7 @@ func newGroup_service_user2__userID__JobID(client *APIClient) *Group_service_use
 	}
 }
 
-func (g *Group_service_user2__userID__JobID) PutJob(reqPayload *_service_user2__userID__JobID.PutJobRequest) (respPayload *_service_user2__userID__JobID.PutJobResponse, retErr error) {
+func (g *Group_service_user2__userID__JobID) PutJob(ctx context.Context, reqPayload *_service_user2__userID__JobID.PutJobRequest) (respPayload *_service_user2__userID__JobID.PutJobResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
@@ -308,6 +319,8 @@ func (g *Group_service_user2__userID__JobID) PutJob(reqPayload *_service_user2__
 	}
 
 	req.Header.Add("Content-Type", "application/json")
+
+	req = req.WithContext(ctx)
 
 	resp, err := g.apiClient.client.Do(req)
 
@@ -349,7 +362,7 @@ func newGroup_service_user2__userID(client *APIClient) *Group_service_user2__use
 	}
 }
 
-func (g *Group_service_user2__userID) GetUserJobGet(reqPayload *_service_user2__userID.GetUserJobGetRequest) (respPayload *_service_user2__userID.GetUserJobGetResponse, retErr error) {
+func (g *Group_service_user2__userID) GetUserJobGet(ctx context.Context, reqPayload *_service_user2__userID.GetUserJobGetRequest) (respPayload *_service_user2__userID.GetUserJobGetResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
@@ -359,6 +372,8 @@ func (g *Group_service_user2__userID) GetUserJobGet(reqPayload *_service_user2__
 	if err != nil {
 		return nil, err
 	}
+
+	req = req.WithContext(ctx)
 
 	resp, err := g.apiClient.client.Do(req)
 
@@ -400,7 +415,7 @@ func newGroup_service_user2(client *APIClient) *Group_service_user2 {
 	}
 }
 
-func (g *Group_service_user2) DeleteUser(reqPayload *_service_user2.DeleteUserRequest) (respPayload *_service_user2.DeleteUserResponse, retErr error) {
+func (g *Group_service_user2) DeleteUser(ctx context.Context, reqPayload *_service_user2.DeleteUserRequest) (respPayload *_service_user2.DeleteUserResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
@@ -412,6 +427,8 @@ func (g *Group_service_user2) DeleteUser(reqPayload *_service_user2.DeleteUserRe
 	}
 
 	req.Header.Add("Content-Type", "application/json")
+
+	req = req.WithContext(ctx)
 
 	resp, err := g.apiClient.client.Do(req)
 
@@ -441,7 +458,7 @@ func (g *Group_service_user2) DeleteUser(reqPayload *_service_user2.DeleteUserRe
 	return respPayload, nil
 }
 
-func (g *Group_service_user2) GetUser(reqPayload *_service_user2.GetUserRequest) (respPayload *_service_user2.GetUserResponse, retErr error) {
+func (g *Group_service_user2) GetUser(ctx context.Context, reqPayload *_service_user2.GetUserRequest) (respPayload *_service_user2.GetUserResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
@@ -451,6 +468,8 @@ func (g *Group_service_user2) GetUser(reqPayload *_service_user2.GetUserRequest)
 	if err != nil {
 		return nil, err
 	}
+
+	req = req.WithContext(ctx)
 
 	resp, err := g.apiClient.client.Do(req)
 
@@ -480,7 +499,7 @@ func (g *Group_service_user2) GetUser(reqPayload *_service_user2.GetUserRequest)
 	return respPayload, nil
 }
 
-func (g *Group_service_user2) PostUpdateUserName(reqPayload *_service_user2.PostUpdateUserNameRequest) (respPayload *_service_user2.PostUpdateUserNameResponse, retErr error) {
+func (g *Group_service_user2) PostUpdateUserName(ctx context.Context, reqPayload *_service_user2.PostUpdateUserNameRequest) (respPayload *_service_user2.PostUpdateUserNameResponse, retErr error) {
 	br, bw := io.Pipe()
 	buffered := bufio.NewWriter(bw)
 	mw := multipart.NewWriter(buffered)
@@ -565,6 +584,8 @@ func (g *Group_service_user2) PostUpdateUserName(reqPayload *_service_user2.Post
 
 	req.Header.Add("Content-Type", mw.FormDataContentType())
 
+	req = req.WithContext(ctx)
+
 	resp, err := g.apiClient.client.Do(req)
 
 	if err != nil {
@@ -593,7 +614,7 @@ func (g *Group_service_user2) PostUpdateUserName(reqPayload *_service_user2.Post
 	return respPayload, nil
 }
 
-func (g *Group_service_user2) PostUpdateUserPassword(reqPayload *_service_user2.PostUpdateUserPasswordRequest) (respPayload *_service_user2.PostUpdateUserPasswordResponse, retErr error) {
+func (g *Group_service_user2) PostUpdateUserPassword(ctx context.Context, reqPayload *_service_user2.PostUpdateUserPasswordRequest) (respPayload *_service_user2.PostUpdateUserPasswordResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
@@ -605,6 +626,8 @@ func (g *Group_service_user2) PostUpdateUserPassword(reqPayload *_service_user2.
 	}
 
 	req.Header.Add("Content-Type", "application/json")
+
+	req = req.WithContext(ctx)
 
 	resp, err := g.apiClient.client.Do(req)
 
@@ -654,7 +677,7 @@ func newGroup_service(client *APIClient) *Group_service {
 	}
 }
 
-func (g *Group_service) GetArticle(reqPayload *_service.GetArticleRequest) (respPayload *_service.GetArticleResponse, retErr error) {
+func (g *Group_service) GetArticle(ctx context.Context, reqPayload *_service.GetArticleRequest) (respPayload *_service.GetArticleResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
@@ -664,6 +687,8 @@ func (g *Group_service) GetArticle(reqPayload *_service.GetArticleRequest) (resp
 	if err != nil {
 		return nil, err
 	}
+
+	req = req.WithContext(ctx)
 
 	resp, err := g.apiClient.client.Do(req)
 
@@ -705,7 +730,7 @@ func newGroup(client *APIClient) *Group {
 	}
 }
 
-func (g *Group) Get(reqPayload *root.GetRequest) (respPayload *root.GetResponse, retErr error) {
+func (g *Group) Get(ctx context.Context, reqPayload *root.GetRequest) (respPayload *root.GetResponse, retErr error) {
 	query, err := encodeQuery(reqPayload)
 	if err != nil {
 		return nil, err
@@ -715,6 +740,8 @@ func (g *Group) Get(reqPayload *root.GetRequest) (respPayload *root.GetResponse,
 	if err != nil {
 		return nil, err
 	}
+
+	req = req.WithContext(ctx)
 
 	resp, err := g.apiClient.client.Do(req)
 
@@ -744,7 +771,7 @@ func (g *Group) Get(reqPayload *root.GetRequest) (respPayload *root.GetResponse,
 	return respPayload, nil
 }
 
-func (g *Group) PostCreateTable(reqPayload *root.PostCreateTableRequest) (respPayload *root.PostCreateTableResponse, retErr error) {
+func (g *Group) PostCreateTable(ctx context.Context, reqPayload *root.PostCreateTableRequest) (respPayload *root.PostCreateTableResponse, retErr error) {
 	br, bw := io.Pipe()
 	buffered := bufio.NewWriter(bw)
 	mw := multipart.NewWriter(buffered)
@@ -829,6 +856,8 @@ func (g *Group) PostCreateTable(reqPayload *root.PostCreateTableRequest) (respPa
 
 	req.Header.Add("Content-Type", mw.FormDataContentType())
 
+	req = req.WithContext(ctx)
+
 	resp, err := g.apiClient.client.Do(req)
 
 	if err != nil {
@@ -857,7 +886,7 @@ func (g *Group) PostCreateTable(reqPayload *root.PostCreateTableRequest) (respPa
 	return respPayload, nil
 }
 
-func (g *Group) PostCreateUser(reqPayload *root.PostCreateUserRequest) (respPayload *root.PostCreateUserResponse, retErr error) {
+func (g *Group) PostCreateUser(ctx context.Context, reqPayload *root.PostCreateUserRequest) (respPayload *root.PostCreateUserResponse, retErr error) {
 	buf := bytes.NewBuffer(nil)
 	if err := json.NewEncoder(buf).Encode(reqPayload); err != nil {
 		return nil, err
@@ -869,6 +898,8 @@ func (g *Group) PostCreateUser(reqPayload *root.PostCreateUserRequest) (respPayl
 	}
 
 	req.Header.Add("Content-Type", "application/json")
+
+	req = req.WithContext(ctx)
 
 	resp, err := g.apiClient.client.Do(req)
 

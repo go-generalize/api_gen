@@ -7,6 +7,7 @@ package client
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -39,7 +40,7 @@ func newGroup__param(client *APIClient) *Group__param {
 	}
 }
 
-func (g *Group__param) PostB(reqPayload *__param.PostBRequest) (respPayload *__param.PostBResponse, retErr error) {
+func (g *Group__param) PostB(ctx context.Context, reqPayload *__param.PostBRequest) (respPayload *__param.PostBResponse, retErr error) {
 	br, bw := io.Pipe()
 	buffered := bufio.NewWriter(bw)
 	mw := multipart.NewWriter(buffered)
@@ -124,6 +125,8 @@ func (g *Group__param) PostB(reqPayload *__param.PostBRequest) (respPayload *__p
 
 	req.Header.Add("Content-Type", mw.FormDataContentType())
 
+	req = req.WithContext(ctx)
+
 	resp, err := g.apiClient.client.Do(req)
 
 	if err != nil {
@@ -164,7 +167,7 @@ func newGroup(client *APIClient) *Group {
 	}
 }
 
-func (g *Group) PostA(reqPayload *root.PostARequest) (respPayload *root.PostAResponse, retErr error) {
+func (g *Group) PostA(ctx context.Context, reqPayload *root.PostARequest) (respPayload *root.PostAResponse, retErr error) {
 	br, bw := io.Pipe()
 	buffered := bufio.NewWriter(bw)
 	mw := multipart.NewWriter(buffered)
@@ -248,6 +251,8 @@ func (g *Group) PostA(reqPayload *root.PostARequest) (respPayload *root.PostARes
 	}
 
 	req.Header.Add("Content-Type", mw.FormDataContentType())
+
+	req = req.WithContext(ctx)
 
 	resp, err := g.apiClient.client.Do(req)
 
