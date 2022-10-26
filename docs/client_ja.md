@@ -41,7 +41,6 @@ import (
 )
 
 func main() {
-
 	api_client := client.NewClient(http.Client{}, "")
 	req := _api_v1_school.PostUpdateUserRequest{}
 
