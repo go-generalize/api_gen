@@ -55,6 +55,53 @@ func main() {
 }
 ```
 
+## Dart
+
+Dartのクライアントライブラリを生成する。
+```
+Usage:
+  api_gen client dart [path] [flags]
+
+Aliases:
+  dart, flutter
+
+Flags:
+  -o, --file string   The directory to generate client library in (default "./")
+  -h, --help          help for dart
+```
+
+例
+```
+$  api_gen client go -o ./client/dart ./interfaces
+```
+
+サンプルコード
+```dart
+import 'dart:io';
+
+import "./api_client.dart";
+import 'package:http/http.dart' as http;
+import './classes/api/v1/school/types.dart' as types__api_v_1_school;
+
+main() async {
+    final http_client = http.Client();
+    final api_client = ApiClient(
+      'http://localhost:8080',
+      {
+        "Content-Type": "application/json"
+      },
+      http_client
+    );
+
+    final request = api_client.getRequestObject({}, [], true);
+    final feature_response = api_client.v1.school.postUpdateUser(
+      types__api_v_1_school.PostUpdateUserRequest(id: "lain")
+    );
+
+    print(await feature_response);
+}
+```
+
 ## TypeScript
 
 Typescript+fetchを利用したライブラリが生成される。  
