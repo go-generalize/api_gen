@@ -1,7 +1,61 @@
 # api_gen client
 
-`api_gen server` 向けの用意したフォルダに対して実行する。
-ライブラリは今いるディレクトリに対して生成される。
+```
+Usage:
+  api_gen client [command]
+
+Available Commands:
+  dart        Generate Dart client library
+  go          Generate go client library
+  typescript  Generate TypeScript client library
+```
+
+## Go
+
+Goのクライアントライブラリを生成する。
+```
+Usage:
+  api_gen client go [path] [flags]
+
+Flags:
+  -h, --help             help for go
+  -o, --output string    The directory to generated client library in (default "./")
+  -p, --package string   The package name of the generated library (default "client")
+```
+
+例
+```
+$ api_gen client go -o ./client/go ./interfaces
+```
+
+サンプルコード
+```go
+package main
+
+import (
+	"fmt"
+	"net/http"
+
+	client "example-code/frontend/go"
+	_api_v1_school "example-code/frontend/go/classes/api/v1/school"
+)
+
+func main() {
+
+	api_client := client.NewClient(http.Client{}, "")
+	req := _api_v1_school.PostUpdateUserRequest{}
+
+	res, err := api_client.Api.V1.School.PostUpdateUser(&req)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(res)
+}
+```
+
+## TypeScript
 
 Typescript+fetchを利用したライブラリが生成される。  
 
