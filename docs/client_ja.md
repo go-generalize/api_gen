@@ -41,16 +41,16 @@ import (
 )
 
 func main() {
-	api_client := client.NewClient(http.Client{}, "")
-	req := _api_v1_school.PostUpdateUserRequest{}
+	api_client := client.NewClient(http.Client{}, "http://localhost:8080")
+	req := _api_v1_school.PostUpdateUserRequest{ID: "4423"}
 
 	res, err := api_client.Api.V1.School.PostUpdateUser(&req)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error occurred: %w", err)
 		return
 	}
 
-	fmt.Println(res)
+	fmt.Println(*res)
 }
 ```
 
