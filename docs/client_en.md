@@ -48,7 +48,7 @@ func main() {
 
 	res, err := api_client.Api.V1.School.PostUpdateUser(&req)
 	if err != nil {
-		fmt.Println("Error occurred: %w", err)
+		fmt.Printf("error occurred: %+v\n", err)
 		return
 	}
 
