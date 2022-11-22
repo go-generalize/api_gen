@@ -11,7 +11,7 @@ import (
 
 type GetRequest struct {
 	Enum  Enum
-	Param string
+	Param string `example:"param param param"`
 	Time  time.Time
 }
 
