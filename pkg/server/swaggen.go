@@ -33,7 +33,9 @@ func (g *Generator) generateSwagComment(ep *parser.Endpoint) string {
 	for k, v := range obj.Entries {
 		t, attrs := getSwagType(v.Type)
 
-		param, ok := reflect.StructTag(v.RawTag).Lookup("param")
+		structTag := reflect.StructTag(v.RawTag)
+
+		param, ok := structTag.Lookup("param")
 		if !ok {
 			param = k
 		}
@@ -45,7 +47,7 @@ func (g *Generator) generateSwagComment(ep *parser.Endpoint) string {
 		if _, ok := placeholders[param]; ok {
 			params = append(params, fmt.Sprintf(`// @Param %s path %s %v "%s"%s`+"\n", param, t, true, k, attrs))
 		} else if ep.Method == parser.GET {
-			example, ok := reflect.StructTag(v.RawTag).Lookup("example")
+			example, ok := structTag.Lookup("example")
 			if !ok {
 				example = k
 			}
