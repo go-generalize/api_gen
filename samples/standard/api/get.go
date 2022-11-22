@@ -17,7 +17,7 @@ const (
 
 // GetRequest ...
 type GetRequest struct {
-	Param string
+	Param string `example:"param param param"`
 	Time  time.Time
 	Enum  Enum
 }
