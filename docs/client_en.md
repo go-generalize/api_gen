@@ -2,6 +2,108 @@
 
 Execute `api_gen client` for the same root directory as `api_gen server`.
 The library will generated in the current working directory.
+```
+Usage:
+  api_gen client [command]
+
+Available Commands:
+  dart        Generate Dart client library
+  go          Generate go client library
+  typescript  Generate TypeScript client library
+```
+
+## Go
+
+This command generates client library.
+```
+Usage:
+  api_gen client go [path] [flags]
+
+Flags:
+  -h, --help             help for go
+  -o, --output string    The directory to generated client library in (default "./")
+  -p, --package string   The package name of the generated library (default "client")
+```
+
+Example
+```
+$ api_gen client go -o ./client/go ./interfaces
+```
+
+Sample code
+```go
+package main
+
+import (
+	"fmt"
+	"net/http"
+
+	client "example-code/frontend/go"
+	_api_v1_school "example-code/frontend/go/classes/api/v1/school"
+)
+
+func main() {
+	api_client := client.NewClient(http.Client{}, "http://localhost:8080")
+	req := _api_v1_school.PostUpdateUserRequest{ID: "4423"}
+
+	res, err := api_client.Api.V1.School.PostUpdateUser(&req)
+	if err != nil {
+		fmt.Printf("error occurred: %+v\n", err)
+		return
+	}
+
+	fmt.Println(*res)
+}
+```
+
+## Dart
+
+This command generates client library.
+```
+Usage:
+  api_gen client dart [path] [flags]
+
+Aliases:
+  dart, flutter
+
+Flags:
+  -o, --file string   The directory to generate client library in (default "./")
+  -h, --help          help for dart
+```
+
+Example
+```
+$  api_gen client go -o ./client/dart ./interfaces
+```
+
+Sample code
+```dart
+import 'dart:io';
+
+import "./api_client.dart";
+import 'package:http/http.dart' as http;
+import './classes/api/v1/school/types.dart' as types__api_v_1_school;
+
+main() async {
+    final http_client = http.Client();
+    final api_client = ApiClient(
+      'http://localhost:8080',
+      {
+        "Content-Type": "application/json"
+      },
+      http_client
+    );
+
+    final request = api_client.getRequestObject({}, [], true);
+    final feature_response = api_client.v1.school.postUpdateUser(
+      types__api_v_1_school.PostUpdateUserRequest(id: "lain")
+    );
+
+    print(await feature_response);
+}
+```
+
+## TypeScript
 
 The library uses TypeScript+fetch API
 
