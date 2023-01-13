@@ -9,7 +9,7 @@ import (
 	"github.com/fatih/structtag"
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
 	"github.com/go-generalize/go-easyparser"
-	types "github.com/go-generalize/go-easyparser/types"
+	"github.com/go-generalize/go-easyparser/types"
 	go2dartgenerator "github.com/go-generalize/go2dart"
 	"golang.org/x/xerrors"
 )
