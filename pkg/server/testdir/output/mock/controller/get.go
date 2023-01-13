@@ -36,7 +36,7 @@ func NewGetController(cp interface{}) GetController {
 // @Accept json
 // @Produce json
 // @Param Enum query string true "Enum" Enums(A, B, C)
-// @Param Param query string true "Param"
+// @Param Param query string true "param param param"
 // @Param Time query string true "Time" Format(date-time)
 // @Success 200 {object} types.GetResponse
 // @Router / [get]

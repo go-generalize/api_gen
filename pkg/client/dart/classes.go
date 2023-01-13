@@ -8,8 +8,8 @@ import (
 
 	"github.com/fatih/structtag"
 	"github.com/go-generalize/api_gen/v2/pkg/parser"
-	types "github.com/go-generalize/go-easyparser/types"
-	util "github.com/go-generalize/go-easyparser/util"
+	"github.com/go-generalize/go-easyparser"
+	"github.com/go-generalize/go-easyparser/types"
 	go2dartgenerator "github.com/go-generalize/go2dart"
 	"golang.org/x/xerrors"
 )
@@ -76,7 +76,7 @@ func (g *generator) generateTypes(gr *parser.Group, fn func(relPath, code string
 			return nil
 		}
 
-		_, structName := util.SplitPackegeStruct(o.Name)
+		_, structName := easyparser.SplitPackageStruct(o.Name)
 
 		return &go2dartgenerator.ExternalImporter{
 			Path: filepath.Join(rel, "types.dart"),
@@ -153,8 +153,7 @@ func replaceFileHeader(obj *types.Object) {
 				Name: "-",
 			}
 
-			// nolint:errcheck
-			tags.Set(jsonTag)
+			_ = tags.Set(jsonTag)
 		} else {
 			jsonTag.Name = "-"
 		}

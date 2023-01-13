@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/go-generalize/go-easyparser"
 	"github.com/go-generalize/go-easyparser/types"
-	"github.com/go-generalize/go-easyparser/util"
 	"github.com/iancoleman/strcase"
 	"golang.org/x/xerrors"
 )
@@ -76,14 +76,14 @@ func (g *Generator) Generate(dir string) error {
 			continue
 		}
 
-		pkg, strct := util.SplitPackegeStruct(obj.Name)
+		pkg, strct := easyparser.SplitPackageStruct(obj.Name)
 		if _, ok := used[strct]; !ok {
 			g.altPkgs[obj.Name] = strct
 			used[strct] = struct{}{}
 			continue
 		}
 
-		p := util.GetPackageNameFromPath(pkg)
+		p := easyparser.GetPackageNameFromPath(pkg)
 		name := strcase.ToCamel(p + "_" + strct)
 
 		if _, ok := used[name]; !ok {
@@ -99,7 +99,7 @@ func (g *Generator) Generate(dir string) error {
 
 	typeSets := make(map[string]*GenerateSet)
 	for n, t := range g.types {
-		_, structName := util.SplitPackegeStruct(n)
+		_, structName := easyparser.SplitPackageStruct(n)
 
 		if strings.HasSuffix(structName, "Request") {
 			requestName := strings.TrimSuffix(structName, "Request")
