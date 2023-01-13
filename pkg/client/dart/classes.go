@@ -153,8 +153,7 @@ func replaceFileHeader(obj *types.Object) {
 				Name: "-",
 			}
 
-			// nolint:errcheck
-			tags.Set(jsonTag)
+			_ = tags.Set(jsonTag)
 		} else {
 			jsonTag.Name = "-"
 		}
