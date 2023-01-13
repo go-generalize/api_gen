@@ -175,7 +175,6 @@ class FooBarClient {
 			await this.callMiddleware(this.afterMiddleware, context);
 			throw new ApiError(resp, responseText);
 		}
-		await resp.text();
 		const res = {} as FooBarPostUserResponse;
 		context.response = res;
 		await this.callMiddleware(this.afterMiddleware, context);

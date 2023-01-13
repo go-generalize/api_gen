@@ -233,7 +233,6 @@ class {{ $elem.Name }} {
 {{- 	if eq .HasResFields true }}
 		const res = JSON.parse(responseText) as {{ $method.ResponseType }};
 {{- 	else }}
-		await resp.text();
 		const res = {} as {{ $method.ResponseType }};
 {{- 	end }}
 		context.response = res;
