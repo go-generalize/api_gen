@@ -21,6 +21,7 @@ export interface MiddlewareContext {
 	response?: unknown;
 	responseBody?: string;
 	responseHeaders?: Headers;
+	statusCode?: number;
 	baseURL: string;
 	headers: {[key: string]: string};
 	options: {[key: string]: any};
@@ -170,6 +171,7 @@ class FooBarClient {
 		const responseText = await resp.text();
 		context.responseBody = responseText;
 		context.responseHeaders = resp.headers;
+		context.statusCode = resp.status;
 
 		if (Math.floor(resp.status / 100) !== 2) {
 			await this.callMiddleware(this.afterMiddleware, context);
