@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/iancoleman/strcase"
 	"github.com/spf13/cobra"
 )
 
@@ -21,7 +20,6 @@ GitHub: https://github.com/go-generalize/api_gen/v2`,
 )
 
 func main() {
-	strcase.ConfigureAcronym("ID", "id")
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
