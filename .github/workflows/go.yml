@@ -51,7 +51,7 @@ jobs:
     - uses: dart-lang/setup-dart@v1
       with:
         sdk: "2.14.4"
-    - uses: nanasess/setup-chromedriver@v2.2.1
+    - uses: nanasess/setup-chromedriver@v2.2.2
     - uses: actions/checkout@v4
 
     - uses: actions/cache@v3
