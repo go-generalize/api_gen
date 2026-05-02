@@ -14,12 +14,12 @@ jobs:
       GO111MODULE: on
 
     steps:
-    - name: Set up Go 1.18
+    - name: Set up Go 1.23
       uses: actions/setup-go@v5
       with:
-        go-version: 1.18
+        go-version: '1.23'
       id: go
-    
+
     - uses: actions/checkout@v4
 
     - uses: actions/cache@v4
@@ -40,10 +40,10 @@ jobs:
       GO111MODULE: on
 
     steps:
-    - name: Set up Go 1.18
+    - name: Set up Go 1.23
       uses: actions/setup-go@v5
       with:
-        go-version: 1.18
+        go-version: '1.23'
       id: go
     - uses: actions/setup-node@v4
       with:
