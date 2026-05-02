@@ -3,7 +3,12 @@ linters-settings:
     threshold: 100
   errcheck:
     check-type-assertions: true
-    ignore: fmt:.*,io/ioutil:^Read.*,io:Close,os:Close,io/fs:Close
+    exclude-functions:
+      - fmt.*
+      - io/ioutil.Read.*
+      - io.Close
+      - os.Close
+      - io/fs.Close
   goconst:
     min-len: 2
     min-occurrences: 2
@@ -52,6 +57,11 @@ issues:
   exclude:
   - declaration of "(err|ctx)" shadows declaration at
   exclude-use-default: false
+  exclude-dirs:
+    - test/testdata_etc
+    - internal/cache
+    - internal/renameio
+    - internal/robustio
   exclude-rules:
     - path: cmd/api_gen/client/.*\.go
       linters:
@@ -68,13 +78,3 @@ issues:
 
 run:
   go: '1.24'
-  skip-dirs:
-    - test/testdata_etc
-    - internal/cache
-    - internal/renameio
-    - internal/robustio
-
-service:
-  golangci-lint-version: 1.23.x
-  prepare:
-    - echo "here I can run custom commands, but no preparation needed for this repo"
