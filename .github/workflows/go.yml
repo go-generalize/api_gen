@@ -14,12 +14,12 @@ jobs:
       GO111MODULE: on
 
     steps:
-    - name: Set up Go 1.18
+    - name: Set up Go 1.25
       uses: actions/setup-go@v5
       with:
-        go-version: 1.18
+        go-version: '1.25'
       id: go
-    
+
     - uses: actions/checkout@v4
 
     - uses: actions/cache@v4
@@ -40,14 +40,14 @@ jobs:
       GO111MODULE: on
 
     steps:
-    - name: Set up Go 1.18
+    - name: Set up Go 1.25
       uses: actions/setup-go@v5
       with:
-        go-version: 1.18
+        go-version: '1.25'
       id: go
     - uses: actions/setup-node@v4
       with:
-        node-version: '16'
+        node-version: '20'
     - uses: dart-lang/setup-dart@v1
       with:
         sdk: "2.14.4"
@@ -70,9 +70,12 @@ jobs:
         TZ: Asia/Tokyo
       run: |
         make gen_samples
-        
-        clean=$(git status | grep "nothing to commit" || true)
-        if [ -z "$clean" ]; then
+
+        # Exclude "generated version:" / "api_gen version:" comment lines from the diff check.
+        # These lines embed the binary version at build time and are expected to differ
+        # between a tagged release build and a local/CI build of an untagged commit.
+        real_diff=$(git diff | grep "^[+-]" | grep -v "^---\|^+++" | grep -v "generated version:\|api_gen version:" || true)
+        if [ -n "$real_diff" ]; then
           git diff
           echo 'Please run "make gen_samples"'
           exit 1

@@ -9,7 +9,7 @@ jobs:
         uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: 1.18
+          go-version: '1.25'
       - name: Install dependencies
         run: |
           go install golang.org/x/tools/cmd/goimports@latest
@@ -19,18 +19,20 @@ jobs:
           TZ: Asia/Tokyo
         run: |
           make gen_samples
-          
-          clean=$(git status | grep "nothing to commit" || true)
-          if [ -z "$clean" ]; then
+
+          # Exclude "generated version:" / "api_gen version:" comment lines from the diff check.
+          # These lines embed the binary version at build time and are expected to differ
+          # between a tagged release build and a local/CI build of an untagged commit.
+          real_diff=$(git diff | grep "^[+-]" | grep -v "^---\|^+++" | grep -v "generated version:\|api_gen version:" || true)
+          if [ -n "$real_diff" ]; then
             git diff
             echo 'Please run "make gen_samples"'
             exit 1
           fi
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v7
         with:
           args: "--config=.github/.golangci.yml"
-          version: v1.45.0
-          skip-go-installation: true
-          skip-pkg-cache: true
-          skip-build-cache: true
+          version: v2.12.1
+          only-new-issues: true
+          skip-cache: true

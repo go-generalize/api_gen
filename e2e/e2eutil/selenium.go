@@ -27,7 +27,14 @@ func NewSeleniumUtil(t *testing.T) *SeleniumUtil {
 	}
 
 	chrCaps := chrome.Capabilities{
-		Args: []string{"--headless"},
+		Args: []string{
+			"--headless",
+			// Chrome 112+ new headless mode enforces stricter CSP in about:blank context,
+			// which causes fetch() to fail with "TypeError: Failed to fetch" when
+			// ExecuteScriptAsync is called without first navigating to a page.
+			// --disable-web-security allows cross-origin fetch in headless test context.
+			"--disable-web-security",
+		},
 	}
 
 	caps := selenium.Capabilities{"browserName": "chrome"}
