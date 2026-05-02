@@ -30,10 +30,8 @@ jobs:
             exit 1
           fi
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v6
         with:
           args: "--config=.github/.golangci.yml"
-          version: v1.45.0
-          skip-go-installation: true
-          skip-pkg-cache: true
-          skip-build-cache: true
+          version: v1.64.8
+          skip-cache: true
