@@ -70,9 +70,12 @@ jobs:
         TZ: Asia/Tokyo
       run: |
         make gen_samples
-        
-        clean=$(git status | grep "nothing to commit" || true)
-        if [ -z "$clean" ]; then
+
+        # Exclude "generated version:" / "api_gen version:" comment lines from the diff check.
+        # These lines embed the binary version at build time and are expected to differ
+        # between a tagged release build and a local/CI build of an untagged commit.
+        real_diff=$(git diff | grep "^[+-]" | grep -v "^---\|^+++" | grep -v "generated version:\|api_gen version:" || true)
+        if [ -n "$real_diff" ]; then
           git diff
           echo 'Please run "make gen_samples"'
           exit 1
