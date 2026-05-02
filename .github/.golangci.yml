@@ -67,7 +67,7 @@ issues:
       source: "//go:generate "
 
 run:
-  go: '1.25'
+  go: '1.24'
   skip-dirs:
     - test/testdata_etc
     - internal/cache
