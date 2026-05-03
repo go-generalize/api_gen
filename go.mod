@@ -12,13 +12,13 @@ require (
 	github.com/spf13/cobra v1.8.0
 	golang.org/x/sync v0.20.0
 	golang.org/x/tools v0.44.0 // indirect
-	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2
+	golang.org/x/xerrors v0.0.0-20240716161551-93cc26a95ae9
 )
 
 require (
 	github.com/fatih/structtag v1.2.0
 	github.com/go-generalize/go-dartfmt v0.1.1
-	github.com/go-generalize/go-easyparser v0.3.3
+	github.com/go-generalize/go-easyparser v0.5.0
 	github.com/go-generalize/go2dart v0.5.1
 )
 
