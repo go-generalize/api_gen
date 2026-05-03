@@ -1,0 +1,15 @@
+{
+    "meta": {
+        "status": 200,
+        "match_request": {
+            "extra": {
+                "string": "any"
+            }
+        }
+    },
+    "payload": {
+        "data": {
+            "string": "any"
+        }
+    }
+}
